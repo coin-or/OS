@@ -169,7 +169,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="keyWord" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfKeyWords" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfKeyWords" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OtherInformation">
 		<xs:annotation>
@@ -178,7 +178,7 @@
 		<xs:sequence>
 			<xs:element name="other" type="OtherInfo" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherInfo" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherInfo" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OtherInfo">
 		<xs:annotation>
@@ -209,8 +209,8 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="MatchTypeValue">
-				<xs:attribute name="minNumber" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="maxNumber" type="xs:positiveInteger" use="optional"/>
+				<xs:attribute name="minNumber" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="maxNumber" type="PositiveInteger" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -222,7 +222,7 @@
 			<xs:extension base="MatchType">
 				<xs:attribute name="order" use="optional">
 					<xs:simpleType>
-						<xs:restriction base="xs:int">
+						<xs:restriction base="Integer">
 							<xs:minInclusive value="1"/>
 						</xs:restriction>
 					</xs:simpleType>
@@ -249,7 +249,7 @@
 		<xs:sequence>
 			<xs:element name="category" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCategories" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -264,8 +264,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="minNumber" type="xs:positiveInteger" use="optional" default="1"/>
-		<xs:attribute name="maxNumber" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="minNumber" type="PositiveInteger" use="optional" default="1"/>
+		<xs:attribute name="maxNumber" type="PositiveInteger" use="optional"/>
 		<xs:attribute name="link" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="Providernfo">
@@ -286,7 +286,7 @@
 		<xs:sequence>
 			<xs:element name="contact" type="Contact" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfContacts" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfContacts" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Contact">
 		<xs:annotation>
@@ -496,7 +496,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:int">
+			<xs:extension base="Integer">
 				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -524,7 +524,7 @@
 			<xs:element name="wsdlLocation" type="xs:string" minOccurs="0"/>
 			<xs:element name="version" type="xs:string" minOccurs="0"/>
 			<xs:element name="software" type="SoftwareInfo" minOccurs="0"/>
-			<xs:element name="maxJobs" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxJobs" type="Integer" default="-1" minOccurs="0"/>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="otherInformation" type="OtherInformation" minOccurs="0"/>
 		</xs:sequence>
@@ -715,7 +715,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="unit" use="optional" default="byte">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -741,12 +741,12 @@
 			<xs:element name="linearity" type="OptimizationVariableLinearityInfo"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="minNumberOfVariables" type="xs:nonNegativeInteger" use="optional" default="1">
+		<xs:attribute name="minNumberOfVariables" type="NonnegativeInteger" use="optional" default="1">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="maxNumberOfVariables" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="maxNumberOfVariables" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -801,12 +801,12 @@
 			<xs:element name="differentialbility" type="OptimizationObjectiveDifferentialbilityInfo"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="minNumberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1">
+		<xs:attribute name="minNumberOfObjectives" type="NonnegativeInteger" use="optional" default="1">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="maxNumberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1">
+		<xs:attribute name="maxNumberOfObjectives" type="NonnegativeInteger" use="optional" default="1">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -874,12 +874,12 @@
 			<xs:element name="differentialbility" type="OptimizationConstraintDifferentialbilityInfo"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="minNumberOfConstraints" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="minNumberOfConstraints" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="maxNumberOfConstraints" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="maxNumberOfConstraints" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -974,12 +974,12 @@
 			<xs:element name="size" type="OptimizationLinearConstraintCoefficientSizeInfo" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="minNumberOfValues" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="minNumberOfValues" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="maxNumberOfValues" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="maxNumberOfValues" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -990,10 +990,10 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="maxNumberOfRows" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfColumns" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfSpecifiedValues" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfNonzeroValues" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfRows" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfColumns" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfSpecifiedValues" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfNonzeroValues" type="NonnegativeInteger" minOccurs="0"/>
 			<xs:element name="maxDensity" default="1.0" minOccurs="0">
 				<xs:simpleType>
 					<xs:restriction base="xs:double">
@@ -1009,13 +1009,13 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="maxNumberOfQuadraticVariables" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfQuadraticObjectives" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfQuadraticConstraints" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfQuadraticVariables" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfQuadraticObjectives" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfQuadraticConstraints" type="NonnegativeInteger" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="minNumberOfQuadraticTerms" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="maxNumberOfQuadraticTerms" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="minNumberOfQuadraticTerms" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="maxNumberOfQuadraticTerms" type="NonnegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationNonlinearExpressionInfo">
 		<xs:annotation>
@@ -1023,17 +1023,17 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="nodes" type="OptimizationNlNodeInfo" minOccurs="0"/>
-			<xs:element name="maxNumberOfNonlinearVariables" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfNonlinearObjectives" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfNonlinearConstraints" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfNonlinearVariables" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfNonlinearObjectives" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfNonlinearConstraints" type="NonnegativeInteger" minOccurs="0"/>
 			<xs:element name="linearity" type="OptimizationNonlinearExpressionLinearityInfo" minOccurs="0"/>
 			<xs:element name="convexity" type="OptimizationNonlinearExpressionConvexityInfo" minOccurs="0"/>
 			<xs:element name="continuity" type="OptimizationNonlinearExpressionContinuityInfo" minOccurs="0"/>
 			<xs:element name="differentialbility" type="OptimizationNonlinearExpressionDifferentialbilityInfo" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="minNumberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="maxNumberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="minNumberOfNonlinearExpressions" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="maxNumberOfNonlinearExpressions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationNlNodeInfo">
 		<xs:annotation>
@@ -1051,35 +1051,35 @@
 		<xs:sequence>
 			<xs:element name="el" type="NlNodeEnumeration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="NumberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="NumberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationNlNodeStatistics">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:all>
-			<xs:element name="maxNumberOfExpressionRootNodes" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfAllNodes" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfArithmeticFunctions" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfElementaryFunctions" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfTrigonometricFunctions" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfStatisticsAndProbabilityFunctions" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="maxNumberOfTerminalNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfConstantNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfVariableNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfObjectiveNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfConstraintNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfParameterNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfRandomVariableNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfLogicAndRelationalNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfMatrixFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfQuadraticNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfSimNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfUserFNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfXPathNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfNoderefNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfArcRefNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfComplementsNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfExpressionRootNodes" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfAllNodes" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfArithmeticFunctions" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfElementaryFunctions" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfTrigonometricFunctions" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfStatisticsAndProbabilityFunctions" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfTerminalNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfConstantNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfVariableNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfObjectiveNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfConstraintNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfParameterNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfRandomVariableNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfLogicAndRelationalNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfMatrixFunctions" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfQuadraticNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfSimNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfUserFNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfXPathNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfNoderefNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfArcRefNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfComplementsNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="OptimizationNonlinearExpressionLinearityInfo">
@@ -1148,8 +1148,8 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="inputSize" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="outputSize" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="inputSize" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="outputSize" type="NonnegativeInteger" minOccurs="0"/>
 			<xs:element name="stochasticity" default="deterministic" minOccurs="0">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -1305,12 +1305,12 @@
 			<xs:element name="functionType" type="FunctionType" minOccurs="0"/>
 			<xs:element name="specialStructure" type="SpecialStructure" minOccurs="0"/>
 			<xs:element name="specialAlgorithm" type="SpecialAlgorithm" minOccurs="0"/>
-			<xs:element name="maxVariables" type="xs:int" default="-1" minOccurs="0"/>
-			<xs:element name="maxBinaryVariables" type="xs:int" default="-1" minOccurs="0"/>
-			<xs:element name="maxIntegerVariables" type="xs:int" default="-1" minOccurs="0"/>
-			<xs:element name="maxObjectives" type="xs:int" default="-1" minOccurs="0"/>
-			<xs:element name="maxConstraints" type="xs:int" default="-1" minOccurs="0"/>
-			<xs:element name="maxNonzeroLinearConstraintCoefficients" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxVariables" type="Integer" default="-1" minOccurs="0"/>
+			<xs:element name="maxBinaryVariables" type="Integer" default="-1" minOccurs="0"/>
+			<xs:element name="maxIntegerVariables" type="Integer" default="-1" minOccurs="0"/>
+			<xs:element name="maxObjectives" type="Integer" default="-1" minOccurs="0"/>
+			<xs:element name="maxConstraints" type="Integer" default="-1" minOccurs="0"/>
+			<xs:element name="maxNonzeroLinearConstraintCoefficients" type="Integer" default="-1" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>

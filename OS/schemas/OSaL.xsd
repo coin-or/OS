@@ -219,7 +219,7 @@
 			<xs:element name="keyWords" type="ProblemKeyWords" minOccurs="0"/>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherProblemAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfOtherProblemAnalyses" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -227,7 +227,7 @@
 	</xs:complexType>
 	<xs:complexType name="ProblemSize">
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="unit" type="GeneralEnumerationStorageUnit" use="optional" default="byte"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -258,12 +258,12 @@
 			<xs:element name="linearity" type="VariableLinearityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherVariableAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfVariables" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfOtherVariableAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfOtherVariableAnalyses" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -314,7 +314,7 @@
 		<xs:sequence>
 			<xs:element name="varIdx" type="NonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVarIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -334,8 +334,8 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -346,9 +346,9 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="optional"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -382,10 +382,10 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="init" type="xs:double" use="optional"/>
 		<xs:attribute name="initString" type="xs:string" use="optional"/>
-		<xs:attribute name="priority" type="xs:int" use="optional"/>
+		<xs:attribute name="priority" type="Integer" use="optional"/>
 		<xs:attribute name="fixed" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="fixedValue" type="xs:double" use="optional"/>
 		<xs:attribute name="fixedValueString" type="xs:string" use="optional"/>
@@ -401,12 +401,12 @@
 			<xs:element name="differentiability" type="ObjectiveDifferentiabilityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfObjectives" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfOtherObjectiveAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfOtherObjectiveAnalyses" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -467,17 +467,17 @@
 		<xs:sequence>
 			<xs:element name="objIdx" type="ObjectiveIndexesWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObjIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ObjIndexesWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
+			<xs:extension base="NegativeInteger">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -488,23 +488,23 @@
 		<xs:sequence>
 			<xs:element name="objIdx" type="ObjectiveIndexWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObjIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveIndexWithOrderAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
+			<xs:extension base="NegativeInteger">
 				<xs:attribute name="order" use="optional" default="1">
 					<xs:simpleType>
-						<xs:restriction base="xs:int">
+						<xs:restriction base="Integer">
 							<xs:minInclusive value="1"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -516,7 +516,7 @@
 		<xs:sequence>
 			<xs:element name="objIdx" type="NegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObjIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -536,8 +536,8 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfObj" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -548,9 +548,9 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="idx" type="NegativeInteger" use="optional"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -566,7 +566,7 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:int" use="optional"/>
+		<xs:attribute name="idx" type="Integer" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 		<xs:attribute name="shape" use="optional" default="linear">
@@ -627,12 +627,12 @@
 			<xs:element name="differentiability" type="ConstraintDifferentiabilityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfConstraints" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfOtherConstraintAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfOtherConstraintAnalyses" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -646,7 +646,7 @@
 			<xs:element name="convexity" type="ConstraintRegionConvexity" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintRegionAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherConstraintRegionAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfOtherConstraintRegionAnalyses" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -738,10 +738,10 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -752,23 +752,23 @@
 		<xs:sequence>
 			<xs:element name="conIdx" type="ConstraintIndexWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfConIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ConstraintIndexWithOrderAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="order" use="optional" default="1">
 					<xs:simpleType>
-						<xs:restriction base="xs:int">
+						<xs:restriction base="Integer">
 							<xs:minInclusive value="1"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -779,7 +779,7 @@
 		<xs:sequence>
 			<xs:element name="conIdx" type="IndexSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfConIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -800,8 +800,8 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -812,9 +812,9 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="optional"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -830,7 +830,7 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:int" use="optional"/>
+		<xs:attribute name="idx" type="Integer" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 		<xs:attribute name="type" use="optional">
@@ -845,7 +845,7 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="redundant" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="priority" type="xs:int" use="optional"/>
+		<xs:attribute name="priority" type="Integer" use="optional"/>
 		<xs:attribute name="shape" use="optional" default="linear">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -941,8 +941,8 @@
 			<xs:element name="size" type="LinearConstraintCoefficientSize" minOccurs="0"/>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="numberOfOtherLinearConstraintCoefficientAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfValues" type="NonnegativeInteger" use="optional"/>
+		<xs:attribute name="numberOfOtherLinearConstraintCoefficientAnalyses" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -953,10 +953,10 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="numberOfRows" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="numberOfColumns" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="numberOfSpecifiedValues" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="numberOfNonzeroValues" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="numberOfRows" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="numberOfColumns" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="numberOfSpecifiedValues" type="NonnegativeInteger" minOccurs="0"/>
+			<xs:element name="numberOfNonzeroValues" type="NonnegativeInteger" minOccurs="0"/>
 			<xs:element name="density" type="Probability" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -970,8 +970,8 @@
 			<xs:element name="constraints" type="NonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfOtherQuadraticCoefficientAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfQuadraticTerms" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherQuadraticCoefficientAnalyses" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -992,8 +992,8 @@
 			<xs:element name="differentiability" type="NonlinearExpressionDifferentiabilityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherNonlinearExpressionAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfOtherNonlinearExpressionAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfNonlinearExpressions" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherNonlinearExpressionAnalyses" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
@@ -1015,7 +1015,7 @@
 		<xs:sequence>
 			<xs:element name="el" type="NlNodeSetElement" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="NumberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="NumberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NlNodeSetElement">
 		<xs:annotation>
@@ -1023,7 +1023,7 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="count" type="NonnegativeInteger" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1032,28 +1032,28 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:all>
-			<xs:element name="numberOfExpressionRootNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfAllNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfArithmeticFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfElementaryFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfTrigonometricFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfStatisticsAndProbabilityFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfTerminalNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfConstantNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfVariableNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfObjectiveNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfConstraintNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfParameterNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfRandomVariableNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfLogicAndRelationalNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfMatrixFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfQuadraticNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfSimNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfUserFNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfXPathNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfNoderefNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfArcRefNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="numberOfComplementsNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfExpressionRootNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfAllNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfArithmeticFunctions" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfElementaryFunctions" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfTrigonometricFunctions" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfStatisticsAndProbabilityFunctions" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfTerminalNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfConstantNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfVariableNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfObjectiveNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfConstraintNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfParameterNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfRandomVariableNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfLogicAndRelationalNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfMatrixFunctions" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfQuadraticNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfSimNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfUserFNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfXPathNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfNoderefNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfArcRefNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="numberOfComplementsNodes" type="NonnegativeInteger" default="0" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionBoundednessAnalysis">
@@ -1123,16 +1123,16 @@
 		<xs:sequence>
 			<xs:element name="nlIdx" type="NonlinearExpressionIndex" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNlIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionIndex">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:int">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+			<xs:extension base="Integer">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1143,17 +1143,17 @@
 		<xs:sequence>
 			<xs:element name="nlIdx" type="NonlinearExpressionIndexWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNlIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionIndexWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:int">
+			<xs:extension base="Integer">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1164,23 +1164,23 @@
 		<xs:sequence>
 			<xs:element name="nlIdx" type="NonlinearExpressionIndexWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNlIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionIndexWithOrderAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:int">
+			<xs:extension base="Integer">
 				<xs:attribute name="order" use="optional" default="1">
 					<xs:simpleType>
-						<xs:restriction base="xs:int">
+						<xs:restriction base="Integer">
 							<xs:minInclusive value="1"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1191,7 +1191,7 @@
 		<xs:sequence>
 			<xs:element name="nlIdx" type="IndexSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNlIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -1212,8 +1212,8 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfNl" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -1225,7 +1225,7 @@
 		<xs:sequence>
 			<xs:element name="nlIdx" type="NonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNlIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -1235,9 +1235,9 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:int" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="idx" type="Integer" use="optional"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1257,17 +1257,17 @@
 						<xs:element name="el" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:simpleContent>
-									<xs:extension base="xs:nonNegativeInteger">
-										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+									<xs:extension base="NonnegativeInteger">
+										<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 									</xs:extension>
 								</xs:simpleContent>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
-					<xs:attribute name="numberVariables" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="startIndex" type="NonnegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="NonnegativeInteger" use="optional"/>
+					<xs:attribute name="numberVariables" type="NonnegativeInteger" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="quadCone" minOccurs="0" maxOccurs="unbounded">
@@ -1276,17 +1276,17 @@
 						<xs:element name="el" minOccurs="2" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:simpleContent>
-									<xs:extension base="xs:nonNegativeInteger">
-										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+									<xs:extension base="NonnegativeInteger">
+										<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 									</xs:extension>
 								</xs:simpleContent>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="numberVariables" type="xs:nonNegativeInteger" use="optional"/>
-					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="numberVariables" type="NonnegativeInteger" use="optional"/>
+					<xs:attribute name="startIndex" type="NonnegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="NonnegativeInteger" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="rotatedQuadCone" minOccurs="0" maxOccurs="unbounded">
@@ -1295,17 +1295,17 @@
 						<xs:element name="el" minOccurs="3" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:simpleContent>
-									<xs:extension base="xs:nonNegativeInteger">
-										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+									<xs:extension base="NonnegativeInteger">
+										<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 									</xs:extension>
 								</xs:simpleContent>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="numberVariables" type="xs:nonNegativeInteger" use="optional"/>
-					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="numberVariables" type="NonnegativeInteger" use="optional"/>
+					<xs:attribute name="startIndex" type="NonnegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="NonnegativeInteger" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
@@ -1323,7 +1323,7 @@
 		<xs:sequence>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="number" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="number" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticInformationAnalysis">
 		<xs:annotation>
@@ -1340,16 +1340,16 @@
 										<xs:element name="numberRandomElements">
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="el" type="xs:nonNegativeInteger"/>
-													<xs:element name="bound" type="xs:nonNegativeInteger"/>
-													<xs:element name="num" type="xs:nonNegativeInteger"/>
-													<xs:element name="node" type="xs:nonNegativeInteger"/>
-													<xs:element name="arc" type="xs:nonNegativeInteger"/>
+													<xs:element name="el" type="NonnegativeInteger"/>
+													<xs:element name="bound" type="NonnegativeInteger"/>
+													<xs:element name="num" type="NonnegativeInteger"/>
+													<xs:element name="node" type="NonnegativeInteger"/>
+													<xs:element name="arc" type="NonnegativeInteger"/>
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>
-									<xs:attribute name="numberPaths" type="xs:positiveInteger" use="required"/>
+									<xs:attribute name="numberPaths" type="PositiveInteger" use="required"/>
 								</xs:complexType>
 							</xs:element>
 							<xs:element name="scenarioTree">
@@ -1358,16 +1358,16 @@
 										<xs:element name="numberRandomElements">
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="el" type="xs:nonNegativeInteger"/>
-													<xs:element name="bound" type="xs:nonNegativeInteger"/>
-													<xs:element name="num" type="xs:nonNegativeInteger"/>
-													<xs:element name="node" type="xs:nonNegativeInteger"/>
-													<xs:element name="arc" type="xs:nonNegativeInteger"/>
+													<xs:element name="el" type="NonnegativeInteger"/>
+													<xs:element name="bound" type="NonnegativeInteger"/>
+													<xs:element name="num" type="NonnegativeInteger"/>
+													<xs:element name="node" type="NonnegativeInteger"/>
+													<xs:element name="arc" type="NonnegativeInteger"/>
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>
-									<xs:attribute name="numberNodes" type="xs:positiveInteger" use="required"/>
+									<xs:attribute name="numberNodes" type="PositiveInteger" use="required"/>
 								</xs:complexType>
 							</xs:element>
 						</xs:choice>
@@ -1382,9 +1382,9 @@
 										<xs:element name="numberDistributions">
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="univariate" type="xs:nonNegativeInteger"/>
-													<xs:element name="multivariate" type="xs:nonNegativeInteger"/>
-													<xs:element name="userDefined" type="xs:nonNegativeInteger"/>
+													<xs:element name="univariate" type="NonnegativeInteger"/>
+													<xs:element name="multivariate" type="NonnegativeInteger"/>
+													<xs:element name="userDefined" type="NonnegativeInteger"/>
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
@@ -1397,24 +1397,24 @@
 										<xs:element name="numberElementGroups">
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="singleElements" type="xs:nonNegativeInteger"/>
-													<xs:element name="simpleLinearTransformations" type="xs:nonNegativeInteger"/>
-													<xs:element name="historyDependences" type="xs:nonNegativeInteger"/>
+													<xs:element name="singleElements" type="NonnegativeInteger"/>
+													<xs:element name="simpleLinearTransformations" type="NonnegativeInteger"/>
+													<xs:element name="historyDependences" type="NonnegativeInteger"/>
 												</xs:sequence>
-												<xs:attribute name="num" type="xs:nonNegativeInteger"/>
+												<xs:attribute name="num" type="NonnegativeInteger"/>
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>
 									<xs:attribute name="rowIdx" use="optional">
 										<xs:simpleType>
-											<xs:restriction base="xs:int">
+											<xs:restriction base="Integer">
 												<xs:minInclusive value="-1"/>
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:attribute>
 									<xs:attribute name="colIdx" use="optional">
 										<xs:simpleType>
-											<xs:restriction base="xs:int">
+											<xs:restriction base="Integer">
 												<xs:minInclusive value="-2"/>
 											</xs:restriction>
 										</xs:simpleType>
@@ -1441,12 +1441,12 @@
 						<xs:element name="numberPenalties">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="simpleRecourse" type="xs:nonNegativeInteger"/>
-									<xs:element name="robustOptimization" type="xs:nonNegativeInteger"/>
-									<xs:element name="piecewiseLinearQuadratic" type="xs:nonNegativeInteger"/>
-									<xs:element name="userDefinedPenalty" type="xs:nonNegativeInteger"/>
+									<xs:element name="simpleRecourse" type="NonnegativeInteger"/>
+									<xs:element name="robustOptimization" type="NonnegativeInteger"/>
+									<xs:element name="piecewiseLinearQuadratic" type="NonnegativeInteger"/>
+									<xs:element name="userDefinedPenalty" type="NonnegativeInteger"/>
 								</xs:sequence>
-								<xs:attribute name="num" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="num" type="NonnegativeInteger"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1458,11 +1458,11 @@
 						<xs:element name="numberRiskMeasures">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="simpleChance" type="xs:nonNegativeInteger"/>
-									<xs:element name="jointChance" type="xs:nonNegativeInteger"/>
-									<xs:element name="integratedChance" type="xs:nonNegativeInteger"/>
+									<xs:element name="simpleChance" type="NonnegativeInteger"/>
+									<xs:element name="jointChance" type="NonnegativeInteger"/>
+									<xs:element name="integratedChance" type="NonnegativeInteger"/>
 								</xs:sequence>
-								<xs:attribute name="num" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="num" type="NonnegativeInteger"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1517,7 +1517,7 @@
 		<xs:sequence>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberData" type="xs:int"/>
+		<xs:attribute name="numberData" type="Integer"/>
 		<xs:attribute name="numberLevels"/>
 	</xs:complexType>
 	<xs:complexType name="XMLDataAnalysis">
@@ -1527,8 +1527,8 @@
 		<xs:sequence>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberData" type="xs:int" use="optional"/>
-		<xs:attribute name="numberLevels" type="xs:int" use="optional"/>
+		<xs:attribute name="numberData" type="Integer" use="optional"/>
+		<xs:attribute name="numberLevels" type="Integer" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="NetworkAndGraphAnalysis">
 		<xs:annotation>
@@ -1565,7 +1565,7 @@
 			</xs:element>
 			<xs:element name="nodes">
 				<xs:complexType>
-					<xs:attribute name="numberNodes" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="numberNodes" type="NonnegativeInteger" use="required"/>
 					<xs:attribute name="declaration" use="optional" default="list">
 						<xs:simpleType>
 							<xs:restriction base="xs:string">
@@ -1590,7 +1590,7 @@
 			</xs:element>
 			<xs:element name="arcs">
 				<xs:complexType>
-					<xs:attribute name="numberArcs" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="numberArcs" type="NonnegativeInteger" use="required"/>
 					<xs:attribute name="declaration" use="optional" default="list">
 						<xs:simpleType>
 							<xs:restriction base="xs:string">
@@ -1642,17 +1642,17 @@
 		<xs:sequence>
 			<xs:element name="el" type="NonNegativeIntWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonNegativeIntWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>NEW in release 2.2.1</xs:documentation>
 					</xs:annotation>
@@ -1667,23 +1667,23 @@
 		<xs:sequence>
 			<xs:element name="el" type="NonNegativeIntWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonNegativeIntWithOrderAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="order" use="optional" default="1">
 					<xs:simpleType>
-						<xs:restriction base="xs:int">
+						<xs:restriction base="Integer">
 							<xs:minInclusive value="1"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>NEW in release 2.2.1</xs:documentation>
 					</xs:annotation>
@@ -1698,17 +1698,17 @@
 		<xs:sequence>
 			<xs:element name="el" type="NegativeIntWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NegativeIntWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
+			<xs:extension base="NegativeInteger">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>NEW in release 2.2.1</xs:documentation>
 					</xs:annotation>
@@ -1723,23 +1723,23 @@
 		<xs:sequence>
 			<xs:element name="el" type="NegativeIntWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NegativeIntWithOrderAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
+			<xs:extension base="NegativeInteger">
 				<xs:attribute name="order" use="optional" default="1">
 					<xs:simpleType>
-						<xs:restriction base="xs:int">
+						<xs:restriction base="Integer">
 							<xs:minInclusive value="1"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>NEW in release 2.2.1</xs:documentation>
 					</xs:annotation>

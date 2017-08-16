@@ -611,7 +611,7 @@
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 				<xs:attribute name="distrIdx" type="xs:string" use="optional"/>
-				<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+				<xs:attribute name="distrVarIdx" type="NonnegativeInteger" use="optional" default="0"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3592,7 +3592,7 @@
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="distIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
 					</xs:annotation>
@@ -3617,7 +3617,7 @@
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="distIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
 					</xs:annotation>
@@ -3642,7 +3642,7 @@
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="distIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
 					</xs:annotation>
@@ -3667,7 +3667,7 @@
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="distIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
 					</xs:annotation>
@@ -3867,18 +3867,18 @@ Smallest representable positive number. </xs:documentation>
 				<xs:sequence minOccurs="0">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="optional"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -3917,7 +3917,7 @@ Returns the current value of the indicated objective</xs:documentation>
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+				<xs:attribute name="idx" type="NegativeInteger" use="optional" default="-1"/>
 				<xs:attribute name="valueType" type="ObjectiveReferenceValueType" use="optional" default="value">
 					<xs:annotation>
 						<xs:documentation>The value of the valueType attribute can be either of
@@ -3945,18 +3945,18 @@ Returns the current value of the indicated objective</xs:documentation>
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="optional"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -3987,7 +3987,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>refers to an index in the parameters section</xs:documentation>
 					</xs:annotation>
@@ -4007,7 +4007,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -4098,7 +4098,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
 					</xs:annotation>
@@ -4135,7 +4135,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
 					</xs:annotation>
@@ -4172,7 +4172,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
 					</xs:annotation>
@@ -4209,7 +4209,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLTNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
 					</xs:annotation>
@@ -4269,7 +4269,7 @@ Returns the current value of the indicated objective</xs:documentation>
 				<xs:sequence minOccurs="0">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="nodeID" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="nodeID" type="NonnegativeInteger" use="optional"/>
 				<xs:attribute name="propName" type="xs:string" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -4288,7 +4288,7 @@ Returns the current value of the indicated objective</xs:documentation>
 				<xs:sequence minOccurs="0">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="arcID" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="arcID" type="NonnegativeInteger" use="optional"/>
 				<xs:attribute name="propName" type="xs:string" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -5618,12 +5618,12 @@ Returns the current value of the indicated objective</xs:documentation>
 				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
-				<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="rowIdxStart" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>gives the row index of the top row of this block within the larger matrix </xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="colIdxStart" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>gives the column index of the leftmost column of this block within the larger matrix </xs:documentation>
 					</xs:annotation>
@@ -5652,11 +5652,11 @@ Returns the current value of the indicated objective</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
-				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
-				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="numberOfRows" type="PositiveInteger" use="required"/>
+				<xs:attribute name="numberOfColumns" type="PositiveInteger" use="required"/>
 				<xs:attribute name="numberOfBlocks" use="required">
 					<xs:simpleType>
-						<xs:restriction base="xs:nonNegativeInteger"/>
+						<xs:restriction base="NonnegativeInteger"/>
 					</xs:simpleType>
 				</xs:attribute>
 				<xs:attribute name="mergeType" use="optional" default="replace">
@@ -6088,7 +6088,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 				<xs:attribute name="id" type="xs:ID" use="optional">
 					<xs:annotation>
@@ -6109,7 +6109,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="useRV" type="xs:boolean">
 					<xs:annotation>
 						<xs:documentation>if "true", use the underlying random variable instead of stochastic vector. Default is "false".</xs:documentation>
@@ -6129,18 +6129,18 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -6165,7 +6165,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -6181,18 +6181,18 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -7052,18 +7052,18 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -7087,18 +7087,18 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -7122,18 +7122,18 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -7312,7 +7312,7 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLTNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -7327,18 +7327,18 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLTNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -7362,7 +7362,7 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLTNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -7377,18 +7377,18 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLTNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>

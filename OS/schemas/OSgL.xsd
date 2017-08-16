@@ -139,7 +139,7 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="idx" type="xs:int" use="required"/>
+				<xs:attribute name="idx" type="Integer" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -149,15 +149,15 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:int" use="required"/>
+				<xs:attribute name="idx" type="Integer" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="IntVectorEl">
 		<xs:simpleContent>
-			<xs:extension base="xs:int">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+			<xs:extension base="Integer">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>NEW in release 2.2.1</xs:documentation>
 					</xs:annotation>
@@ -177,7 +177,7 @@
 			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SizelessIntVector">
 		<xs:annotation>
@@ -190,9 +190,9 @@
 	</xs:complexType>
 	<xs:complexType name="NonNegativeIntVectorEl">
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+			<xs:extension base="NonnegativeInteger">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -208,7 +208,7 @@
 			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonNegativeIntVectorWithValueAndDescriptionAttribute">
 		<xs:annotation>
@@ -232,24 +232,24 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeSOSIntVectorEl">
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+			<xs:extension base="NonnegativeInteger">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
 					<xs:annotation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -273,9 +273,9 @@
 	</xs:complexType>
 	<xs:complexType name="PositiveIntVectorEl">
 		<xs:simpleContent>
-			<xs:extension base="xs:positiveInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+			<xs:extension base="PositiveInteger">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>NEW in release 2.2.1</xs:documentation>
 					</xs:annotation>
@@ -295,7 +295,7 @@
 			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SizelessPositiveIntVector">
 		<xs:annotation>
@@ -308,9 +308,9 @@
 	</xs:complexType>
 	<xs:complexType name="NegativeIntVectorEl">
 		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+			<xs:extension base="NegativeInteger">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>NEW in release 2.2.1</xs:documentation>
 					</xs:annotation>
@@ -330,7 +330,7 @@
 			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NegativeIntVectorWithValueAndDescriptionAttribute">
 		<xs:annotation>
@@ -355,7 +355,7 @@
 	<xs:complexType name="DoubleVectorEl">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:double" use="optional" default="0.0"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -372,7 +372,7 @@
 			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SizelessDoubleVector">
 		<xs:annotation>
@@ -386,7 +386,7 @@
 	<xs:complexType name="StringVectorEl">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -444,7 +444,7 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:base64Binary">
-				<xs:attribute name="sizeOf" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="sizeOf" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -459,7 +459,7 @@
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="values" type="SizelessDoubleVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SparseIntVector">
 		<xs:annotation>
@@ -472,7 +472,7 @@
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="values" type="SizelessIntVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SparseNonNegativeIntVector">
 		<xs:annotation>
@@ -485,7 +485,7 @@
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="values" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SparseNegativeIntVector">
 		<xs:annotation>
@@ -498,7 +498,7 @@
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="values" type="SizelessNegativeIntVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ListMatrix">
 		<xs:annotation>
@@ -516,7 +516,7 @@
 	<xs:complexType name="MPSMatrixColRow">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -524,12 +524,12 @@
 		<xs:sequence>
 			<xs:element name="row" type="MPSMatrixColRow" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MPSMatrixRowCol">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -537,7 +537,7 @@
 		<xs:sequence>
 			<xs:element name="col" type="MPSMatrixRowCol" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MPSMatrix">
 		<xs:annotation>
@@ -559,8 +559,8 @@
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="row" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="col" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="row" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="col" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixMarket">
@@ -581,9 +581,9 @@
 	</xs:complexType>
 	<xs:complexType name="BlockSizesEl">
 		<xs:simpleContent>
-			<xs:extension base="xs:int">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+			<xs:extension base="Integer">
+				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -601,8 +601,8 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="row" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="col" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="row" type="NonnegativeInteger" use="required"/>
+				<xs:attribute name="col" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -613,7 +613,7 @@
 		<xs:sequence>
 			<xs:element name="el" type="SemidefiniteMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="id" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SemidefiniteMatrix">
 		<xs:annotation>
@@ -622,7 +622,7 @@
 		<xs:sequence>
 			<xs:element name="block" type="SemidefiniteMatrixBlock" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="id" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SemidefiniteBlocks">
 		<xs:annotation>
@@ -632,15 +632,15 @@
 			<xs:element name="blockSizes" type="BlockSizes"/>
 			<xs:element name="matrix" type="SemidefiniteMatrix" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numMatrix" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numBlock" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numMatrix" type="PositiveInteger" use="required"/>
+		<xs:attribute name="numBlock" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UserFunction">
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:ID" use="required"/>
-		<xs:attribute name="numArg" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numArg" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>number of function arguments</xs:documentation>
 			</xs:annotation>
@@ -656,14 +656,14 @@
 			</xs:annotation>
 			<xs:element name="userFunction" type="UserFunction" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfUserFunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfUserFunctions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UserFunction_p">
 		<xs:sequence>
 			<xs:element ref="ExprNode"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:ID" use="required"/>
-		<xs:attribute name="numArg" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numArg" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>number of function arguments</xs:documentation>
 			</xs:annotation>
@@ -679,7 +679,7 @@
 			</xs:annotation>
 			<xs:element name="userFunction" type="UserFunction_p" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfUserFunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfUserFunctions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UserVariable">
 		<xs:sequence>
@@ -709,7 +709,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrices" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:group name="MatrixElementsGroup">
 		<xs:annotation>
@@ -869,8 +869,8 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="OSMatrix">
 		<xs:complexContent>
 			<xs:extension base="MatrixType">
-				<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
+				<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="name" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -878,7 +878,7 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="OSMatrixWithMatrixVarIdx">
 		<xs:complexContent>
 			<xs:extension base="OSMatrix">
-				<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="matrixVarIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>Must refer to a matrixVar defined in the problem instance (OsiL file).</xs:documentation>
 					</xs:annotation>
@@ -889,7 +889,7 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="OSMatrixWithMatrixObjIdx">
 		<xs:complexContent>
 			<xs:extension base="OSMatrix">
-				<xs:attribute name="matrixObjIdx" type="xs:negativeInteger" use="optional" default="-1">
+				<xs:attribute name="matrixObjIdx" type="NegativeInteger" use="optional" default="-1">
 					<xs:annotation>
 						<xs:documentation>Refers to a matrixObj defined in the problem instance (OsiL file).</xs:documentation>
 					</xs:annotation>
@@ -900,7 +900,7 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="OSMatrixWithMatrixConIdx">
 		<xs:complexContent>
 			<xs:extension base="OSMatrix">
-				<xs:attribute name="matrixConIdx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="matrixConIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>Must refer to a matrixCon defined in the problem instance (OsiL file).</xs:documentation>
 					</xs:annotation>
@@ -913,19 +913,19 @@ The result of this transformation is aligned with the top left corner of the tar
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="baseMatrixIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="baseMatrixIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>Must refer to a previously defined matrix in the global "matrices" section within this schema</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="baseMatrixStartRow" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="baseMatrixStartCol" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="baseMatrixEndRow" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Defaults to last row in the baseMatrix</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="baseMatrixEndCol" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Defaults to last column in the baseMatrix</xs:documentation>
 			</xs:annotation>
@@ -946,8 +946,8 @@ The result of this transformation is aligned with the top left corner of the tar
       realPart + i*imagPart</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="targetMatrixFirstRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="targetMatrixFirstCol" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="targetMatrixFirstRow" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="targetMatrixFirstCol" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>Can be used to shift the position of the base matrix within the target (parent). Default is (0,0)</xs:documentation>
 			</xs:annotation>
@@ -987,7 +987,7 @@ The result of this transformation is aligned with the top left corner of the tar
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="symmetry" type="SymmetryType"/>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixElements">
@@ -1027,7 +1027,7 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="ComplexMatrixElement">
 		<xs:attribute name="Re" type="xs:double" use="required"/>
 		<xs:attribute name="Im" type="xs:double" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="VarReferenceMatrixElements">
 		<xs:complexContent>
@@ -1084,7 +1084,7 @@ Each value must refer to an existing (core) objective index</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="ConReferenceMatrixElement">
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="valueType" use="optional" default="value">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -1095,8 +1095,8 @@ Each value must refer to an existing (core) objective index</xs:documentation>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="mult" type="xs:int"/>
-				<xs:attribute name="incr" type="xs:int" default="0"/>
+				<xs:attribute name="mult" type="Integer"/>
+				<xs:attribute name="incr" type="Integer" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1134,12 +1134,12 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVarIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElementTerm">
 		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -1170,7 +1170,7 @@ Each nonzero is a real-valued expression</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexValuedExpressions">
 		<xs:complexContent>
@@ -1198,7 +1198,7 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLCNode"/>
 		</xs:sequence>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="StringValuedMatrixElements">
 		<xs:complexContent>
@@ -1234,17 +1234,17 @@ Each nonzero is a complex-valued expression</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfBlocks" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixBlock">
 		<xs:complexContent>
 			<xs:extension base="MatrixType">
-				<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="blockRowIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>blockRowIdx must be at least 0 and less than colOffset array size</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="blockColIdx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="blockColIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>blockColIdx must be at least 0 and less than rowOffset array size</xs:documentation>
 					</xs:annotation>
@@ -1259,25 +1259,25 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		<xs:sequence>
 			<xs:element name="term" type="SingleVariablePolynomialTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="degree" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="degree" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="constant" type="xs:double" default="0.0"/>
-		<xs:attribute name="numberOfTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTerms" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SingleVariablePolynomialTerm">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="coef" type="xs:double" default="1.0"/>
-		<xs:attribute name="exponent" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="exponent" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MultiVariablePolynomial">
 		<xs:sequence>
 			<xs:element name="term" type="MultiVariablePolynomialTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="degree" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="degree" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="constant" type="xs:double" default="0.0"/>
-		<xs:attribute name="numberOfTerms" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="numberOfTerms" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVariables" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="MultiVariablePolynomialTerm">
 		<xs:annotation>
@@ -1287,14 +1287,14 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			<xs:element name="var" type="MultiVariablePolynomialTermVar"/>
 		</xs:sequence>
 		<xs:attribute name="coef" type="xs:double"/>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MultiVariablePolynomialTermVar">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="exponent" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="exponent" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="varIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Tensors">
 		<xs:annotation>
@@ -1306,7 +1306,7 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			</xs:annotation>
 			<xs:element name="tensor" type="Tensor" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensors" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensors" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Tensor" mixed="false">
 		<xs:annotation>
@@ -1324,9 +1324,9 @@ Each nonzero is a complex-valued expression</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="contravalence" type="xs:nonNegativeInteger" default="0"/>
-		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rank" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="contravalence" type="NonnegativeInteger" default="0"/>
+		<xs:attribute name="numberOfElements" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>
 	<xs:complexType name="tensorElement">
@@ -1341,7 +1341,7 @@ equal tensor rank</xs:documentation>
 			<xs:choice>
 				<xs:element name="constantValue" type="xs:double"/>
 				<xs:element name="complexValue" type="ComplexNumber"/>
-				<xs:element name="varReference" type="xs:nonNegativeInteger"/>
+				<xs:element name="varReference" type="NonnegativeInteger"/>
 				<xs:element name="realValuedExpression" type="RealValuedExpression"/>
 				<xs:element name="complexValuedExpression" type="ComplexValuedExpression"/>
 				<xs:element name="stringValue" type="xs:string"/>
@@ -1363,7 +1363,7 @@ equal tensor rank</xs:documentation>
 		<xs:sequence>
 			<xs:element name="jobID" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfJobIDs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfJobIDs" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DirectoriesAndFiles">
 		<xs:annotation>
@@ -1372,13 +1372,13 @@ equal tensor rank</xs:documentation>
 		<xs:sequence>
 			<xs:element name="path" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfPaths" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfPaths" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="PathPairs">
 		<xs:sequence>
 			<xs:element name="pathPair" type="PathPair" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfPathPairs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfPathPairs" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="PathPair">
 		<xs:attribute name="from" type="xs:string" use="required"/>
@@ -1392,7 +1392,7 @@ equal tensor rank</xs:documentation>
 		<xs:sequence>
 			<xs:element name="process" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfProcesses" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfProcesses" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="News">
 		<xs:annotation>
@@ -1569,13 +1569,6 @@ equal tensor rank</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="prob" type="Probability" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="required"/>
-		<!--
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="prob" type="Probability" use="required"/>
-			</xs:extension>
-		</xs:simpleContent>
--->
 	</xs:complexType>
 	<xs:complexType name="EmpiricalDiscrete">
 		<xs:annotation>
@@ -1584,7 +1577,7 @@ equal tensor rank</xs:documentation>
 		<xs:sequence>
 			<xs:element name="el" type="EmpiricalDiscreteElement" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="empiricalDiscrete" type="EmpiricalDiscrete">
 		<xs:annotation>
@@ -1595,7 +1588,7 @@ equal tensor rank</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="N" type="xs:positiveInteger" use="required">
+		<xs:attribute name="N" type="PositiveInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>Values are 1, 2, 3, ..., N with probability 1/N each.</xs:documentation>
 			</xs:annotation>
@@ -1625,7 +1618,7 @@ equal tensor rank</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="N" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="N" type="PositiveInteger" use="required"/>
 		<xs:attribute name="p" type="Probability" use="required"/>
 	</xs:complexType>
 	<xs:element name="binomial" type="Binomial">
@@ -1637,17 +1630,17 @@ equal tensor rank</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="N" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="N" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>Population size</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="M" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="M" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>number of successes in population</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="n" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="n" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>Size of sample</xs:documentation>
 			</xs:annotation>
@@ -1705,7 +1698,7 @@ support: {1, 2, 3,...}</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="r" type="xs:positiveInteger" use="required">
+		<xs:attribute name="r" type="PositiveInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>number of failures 
 until stopping</xs:documentation>
@@ -1842,7 +1835,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="lambda" type="PositiveDouble" use="required"/>
-		<xs:attribute name="n" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="n" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="erlang" type="Erlang">
 		<xs:annotation>
@@ -1943,7 +1936,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="df" type="xs:positiveInteger" use="required">
+		<xs:attribute name="df" type="PositiveInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>degrees of freedom</xs:documentation>
 			</xs:annotation>
@@ -2103,8 +2096,8 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfScenarios" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="multivariateDiscrete" type="MultivariateDiscrete">
 		<xs:annotation>
@@ -2135,8 +2128,8 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfScenarios" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="nonNumericMultivariateDiscrete" type="NonNumericMultivariateDiscrete">
 		<xs:annotation>
@@ -2154,7 +2147,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="N" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="N" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="multinomial" type="Multinomial">
 		<xs:annotation>
@@ -2168,7 +2161,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="el" type="Probability" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="N" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="N" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="negativeMultinomial" type="NegativeMultinomial">
 		<xs:annotation>
@@ -2206,7 +2199,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="multivariateNormal" type="MultivariateNormal">
 		<xs:annotation>
@@ -2229,8 +2222,8 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="dimension" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="degreesOfFreedom" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="dimension" type="PositiveInteger" use="required"/>
+		<xs:attribute name="degreesOfFreedom" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="multivariateT" type="MultivariateT">
 		<xs:annotation>
@@ -2248,7 +2241,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="N" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="N" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DirichletCategory">
 		<xs:attribute name="shape" type="NonNegativeDouble" use="required"/>
@@ -2271,7 +2264,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="mixtureDist" type="MixtureDist">
 		<xs:annotation>
@@ -2289,7 +2282,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="productDist" type="ProductDist">
 		<xs:annotation>
@@ -2307,7 +2300,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="maxDist" type="MaxDist">
 		<xs:annotation>
@@ -2325,7 +2318,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="sumDist" type="SumDist">
 		<xs:annotation>
@@ -2337,7 +2330,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="prob" type="Probability" use="required"/>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="matrixIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant with dimensions equal to numberOfRows and numberOfColumns and values conformal with valueType</xs:documentation>
 			</xs:annotation>
@@ -2354,9 +2347,9 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfScenarios" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="valueType" default="real">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -2376,19 +2369,19 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="locationMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="locationMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="rowScaleMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="rowScaleMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="colScaleMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="colScaleMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
 			</xs:annotation>
@@ -2403,24 +2396,24 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="locationMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="locationMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="rowMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="rowMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="colMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="colMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="degreesOfFreedom" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="degreesOfFreedom" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="matrixT" type="MatrixT">
 		<xs:annotation>
@@ -2431,13 +2424,13 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="degreesOfFreedom" type="xs:positiveInteger" use="required">
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="degreesOfFreedom" type="PositiveInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>must be at least "dimension"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="scaleMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="scaleMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
 			</xs:annotation>
@@ -2452,13 +2445,13 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="degreesOfFreedom" type="xs:positiveInteger" use="required">
+		<xs:attribute name="dimension" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="degreesOfFreedom" type="PositiveInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>must be at least :dimension"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="scaleMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="scaleMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
 			</xs:annotation>
@@ -2474,7 +2467,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="prob" type="Probability" use="required"/>
-		<xs:attribute name="tensorIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="tensorIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>tensor must be constant with dimensions and values conformal to definition</xs:documentation>
 			</xs:annotation>
@@ -2496,8 +2489,8 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfScenarios" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="rank" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="valueType" default="real">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -2517,22 +2510,22 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="dim" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="dim" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>dimension of the complex vector</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="meanVectorIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="meanVectorIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>referenced matrix must be if dimension 1x dim, constant, complex-valued</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="covarianceMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="covarianceMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, complex-valued, Hermitian positive semidefinite, dimensioned dim x dim</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="relationMtxIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="relationMtxIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>matrix must be constant, real-valued, symmetric, dimensioned dim x dim</xs:documentation>
 			</xs:annotation>
@@ -2557,7 +2550,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="el" type="NonNumericalDiscreteElement" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="nonNumericalDiscrete" type="NonNumericalDiscrete">
 		<xs:annotation>
@@ -2582,7 +2575,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="custom" type="CustomDistribution">
 		<xs:annotation>
@@ -2600,9 +2593,9 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="customMtxDist" type="CustomMatrixDistribution">
 		<xs:annotation>
@@ -2616,7 +2609,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="mean" type="DoubleVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger">
+		<xs:attribute name="idx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>If present, refers to a matrix of size 1 x "dimension"</xs:documentation>
 			</xs:annotation>
@@ -2629,7 +2622,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="cov" type="MatrixMarket" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="mtxIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>if present, must reference a symmetric, positive semidefinite matrix  </xs:documentation>
 			</xs:annotation>
@@ -2648,12 +2641,12 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string"/>
-		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="numberOfMatrices" type="NonnegativeInteger"/>
+		<xs:attribute name="numberOfItems" type="NonnegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMultivariateDistribution">
 		<xs:annotation>
@@ -2672,7 +2665,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="rv" type="GeneralDistributionRandomVariable" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMarginals" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMarginals" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionRandomVariableMoment">
 		<xs:annotation>
@@ -2681,7 +2674,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="order" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="order" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -2694,7 +2687,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="moment" type="GeneralDistributionRandomVariableMoment" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMoments" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMoments" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionRandomVariableQuantile">
 		<xs:annotation>
@@ -2729,7 +2722,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:element name="quantile" type="GeneralDistributionRandomVariableQuantile" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="quantileDiff" type="GeneralDistributionRandomVariableQuantileDiff" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfQuantiles" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfQuantiles" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionRandomVariableQuartile">
 		<xs:annotation>
@@ -2738,8 +2731,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="size" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="number" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="size" type="PositiveInteger" use="required"/>
+		<xs:attribute name="number" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -2751,9 +2744,9 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="size" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="number1" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="number2" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="size" type="PositiveInteger" use="required"/>
+		<xs:attribute name="number1" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="number2" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -2766,7 +2759,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:element name="quartile" type="GeneralDistributionRandomVariableQuartile" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="quartileDiff" type="GeneralDistributionRandomVariableQuartileDiff" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfQuantiles" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfQuantiles" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionRandomVariableInterval">
 		<xs:annotation>
@@ -2789,7 +2782,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="interval" type="GeneralDistributionRandomVariableInterval" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfIntervals" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfIntervals" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionRandomVariableCoefficientOfVariation">
 		<xs:annotation>
@@ -2863,8 +2856,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="row" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="col" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="row" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="col" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="Correlation" use="optional"/>
 		<xs:attribute name="lb" type="Correlation" use="optional"/>
 		<xs:attribute name="ub" type="Correlation" use="optional"/>
@@ -2892,8 +2885,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="row" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="col" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="row" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="col" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -2918,8 +2911,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="order" type="xs:nonNegativeInteger" use="optional" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="order" type="NonnegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionMultivariateMixedMomentRandomVariables">
 		<xs:annotation>
@@ -2969,10 +2962,10 @@ according to WolframMathWorld</xs:documentation>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="elementName" type="xs:string" use="optional"/>
-		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="elementIdx" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="attributeName" type="xs:string" use="optional"/>
 		<xs:attribute name="subElementName" type="xs:string" use="optional"/>
-		<xs:attribute name="subElementIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="subElementIdx" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="subElementAttributeName" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="valueString" type="xs:string" use="optional"/>
@@ -3039,8 +3032,8 @@ according to WolframMathWorld</xs:documentation>
 			<xs:element name="matrix" type="MatrixMarket"/>
 			<xs:element name="randomVariables" type="RandomVariables"/>
 		</xs:sequence>
-		<xs:attribute name="numberRows" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberColumns" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberRows" type="PositiveInteger" use="required"/>
+		<xs:attribute name="numberColumns" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="linearTransformation" type="LinearTransformation">
 		<xs:annotation>
@@ -3079,7 +3072,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="node" type="NetworkAndGraphNode" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberNodes" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberNodes" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="declaration" use="optional" default="list">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3109,8 +3102,8 @@ according to WolframMathWorld</xs:documentation>
 			<xs:element name="p" type="PropertyRef" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="tail" type="xs:int" use="optional"/>
-		<xs:attribute name="head" type="xs:int" use="optional"/>
+		<xs:attribute name="tail" type="Integer" use="optional"/>
+		<xs:attribute name="head" type="Integer" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="NetworkAndGraphArcs">
 		<xs:annotation>
@@ -3119,7 +3112,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="arc" type="NetworkAndGraphArc" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberArcs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberArcs" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="declartion" use="optional" default="list">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3226,7 +3219,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="tNode" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="tNode" type="NonnegativeInteger" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="costPropName" type="xs:IDREF" use="optional"/>
 	</xs:complexType>
@@ -3240,8 +3233,8 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="costPropName" type="xs:IDREF" use="required"/>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="shortestPath" type="ShortestPath">
 		<xs:annotation>
@@ -3253,8 +3246,8 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="capacityPropName" type="xs:IDREF" use="required"/>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="maximumFlow" type="MaximumFlow">
 		<xs:annotation>
@@ -3268,8 +3261,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="costPropName" type="xs:IDREF" use="required"/>
 		<xs:attribute name="capacityPropName" type="xs:IDREF" use="required"/>
 		<xs:attribute name="demandPropName" type="xs:IDREF" use="required"/>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="minimumCostFlow" type="MinimumCostFlow">
 		<xs:annotation>
@@ -3281,7 +3274,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="el" type="NonnegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MaximumMatchingRightSet">
@@ -3289,7 +3282,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="el" type="NonnegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MaximumMatching">
@@ -3311,7 +3304,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="el" type="NonnegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MinimumWeightMatchingRightSet">
@@ -3319,7 +3312,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="el" type="NonnegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MinimumWeightMatching">
@@ -3342,11 +3335,11 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="tNode" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="tNode" type="NonnegativeInteger" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="costPropName" type="xs:IDREF" use="required"/>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="optional"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:element name="tJoin" type="TJoin">
 		<xs:annotation>
@@ -3357,8 +3350,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="optional"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:element name="eulerPath" type="EulerPath">
 		<xs:annotation>
@@ -3369,8 +3362,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="optional"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:element name="hamiltonianPath" type="HamiltonianPath">
 		<xs:annotation>
@@ -3382,7 +3375,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="depot" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="depot" type="NonnegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="TravellingSalesPersonSubtours">
@@ -3390,7 +3383,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="tour" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="tour" type="NonnegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="TravellingSalesPersonTours">
@@ -3429,8 +3422,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="xPropName" type="xs:IDREF" use="optional"/>
 		<xs:attribute name="yPropName" type="xs:IDREF" use="optional"/>
 		<xs:attribute name="zPropName" type="xs:IDREF" use="optional"/>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="optional"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:element name="travellingSalesPerson" type="TravellingSalesPerson">
 		<xs:annotation>
@@ -3442,7 +3435,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="depot" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="depot" type="NonnegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="vehicleCapacity" type="NonNegativeDouble" use="required"/>
 		<xs:attribute name="demandPropName" type="xs:IDREF" use="required"/>
@@ -3520,8 +3513,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="optional"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:element name="vertexConnectivity" type="VertexConnectivity">
 		<xs:annotation>
@@ -3532,8 +3525,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="end" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="optional"/>
+		<xs:attribute name="end" type="NonnegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:element name="edgeConnectivity" type="EdgeConnectivity">
 		<xs:annotation>
@@ -3544,7 +3537,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="start" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="start" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="connectedComponents" type="ConnectedComponents">
 		<xs:annotation>
@@ -3589,8 +3582,8 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="costPropName" type="xs:IDREF" use="optional"/>
-		<xs:attribute name="numSubset" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="maxSubsetSize" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numSubset" type="PositiveInteger" use="required"/>
+		<xs:attribute name="maxSubsetSize" type="PositiveInteger" use="required"/>
 		<xs:attribute name="maxSubsetCost" type="xs:double" use="required"/>
 	</xs:complexType>
 	<xs:element name="graphPartition" type="GraphPartition">
@@ -3703,9 +3696,9 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="symmetry" type="SymmetryType" use="optional" default="none">
 			<xs:annotation>
@@ -3761,7 +3754,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>finalize</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:int">
+			<xs:extension base="Integer">
 				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -3843,7 +3836,7 @@ according to WolframMathWorld</xs:documentation>
 			</xs:element>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="varType" type="xs:string">
 			<xs:annotation>
 				<xs:documentation>use to declare a type for attributes value, lbValue, ubValue in "var" children</xs:documentation>
@@ -3864,7 +3857,7 @@ according to WolframMathWorld</xs:documentation>
 			</xs:element>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfObj" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="objType" type="xs:string">
 			<xs:annotation>
 				<xs:documentation>use to declare a type for value, constantValue, weightValue in "obj" children</xs:documentation>
@@ -3885,7 +3878,7 @@ according to WolframMathWorld</xs:documentation>
 			</xs:element>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="conType" type="xs:string">
 			<xs:annotation>
 				<xs:documentation>use to declare a type for attributes value, lbValue, ubValue in "con" children</xs:documentation>
@@ -3906,7 +3899,7 @@ according to WolframMathWorld</xs:documentation>
 			</xs:element>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
-		<xs:attribute name="numberOfSOS" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfSOS" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="OtherSOSOptionOrResult">
 		<xs:choice>
@@ -3921,14 +3914,14 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="enumType" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="varType" type="xs:string">
 			<xs:annotation>
 				<xs:documentation>use to declare a type for attributes value, lbValue, ubValue in "var" children</xs:documentation>
@@ -3949,10 +3942,10 @@ according to WolframMathWorld</xs:documentation>
 			</xs:element>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
-		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfMatrixVar" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixVarOptionOrResult">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
@@ -3972,10 +3965,10 @@ according to WolframMathWorld</xs:documentation>
 			</xs:element>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
-		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfMatrixObj" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixObjOptionOrResult">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
@@ -3995,10 +3988,10 @@ according to WolframMathWorld</xs:documentation>
 			</xs:element>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
-		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfMatrixCon" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixConOptionOrResult">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
@@ -4029,8 +4022,8 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="type" type="xs:string"/>
 		<xs:attribute name="solver" type="xs:string"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="numberOfMatrices" type="NonnegativeInteger"/>
+		<xs:attribute name="numberOfItems" type="NonnegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="OtherOptionOrResult" mixed="true">
 		<xs:attribute name="name" use="required">
@@ -4045,7 +4038,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="type" type="xs:string"/>
 	</xs:complexType>
 	<xs:complexType name="OtherOptionOrResultElementString">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
@@ -4053,7 +4046,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjOptionOrResultElementString">
-		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="idx" type="NegativeInteger" use="optional"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
@@ -4073,7 +4066,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="NonnegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:attributeGroup>
 	<xs:simpleType name="SymmetryType">

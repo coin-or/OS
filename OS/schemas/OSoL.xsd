@@ -144,7 +144,7 @@
 		<xs:sequence>
 			<xs:element name="other" type="OtherOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherOptions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherOptions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationOption">
 		<xs:annotation>
@@ -196,17 +196,17 @@
 			</xs:element>
 			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfVariables" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial values, etc.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfObjectives" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial objective values and bounds</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="optional" default="0">
+		<xs:attribute name="numberOfConstraints" type="NonnegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial dual values, etc.</xs:documentation>
 			</xs:annotation>
@@ -220,16 +220,16 @@
 			<xs:element name="integerVariableBranchingWeights" type="IntegerVariableBranchingWeights" minOccurs="0"/>
 			<xs:element name="other" type="OtherVariableOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherVariableOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherVariableOptions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitVariableValues">
 		<xs:sequence>
 			<xs:element name="var" type="InitVarValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitVarValue">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
@@ -237,10 +237,10 @@
 		<xs:sequence>
 			<xs:element name="var" type="InitVarValueString" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitVarValueString">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -251,10 +251,10 @@
 			</xs:annotation>
 			<xs:element name="var" type="BranchingWeight" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="BranchingWeight">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
@@ -265,16 +265,16 @@
 			<xs:element name="initialBasisStatus" type="BasisStatus" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherObjectiveOptions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjectiveValues">
 		<xs:sequence>
 			<xs:element name="obj" type="InitObjValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjValue">
-		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="idx" type="NegativeInteger" use="optional" default="-1"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
@@ -282,10 +282,10 @@
 		<xs:sequence>
 			<xs:element name="obj" type="InitObjBound" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjBound">
-		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="idx" type="NegativeInteger" use="optional" default="-1"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:double" use="optional" default="-INF"/>
 		<xs:attribute name="ubValue" type="xs:double" use="optional" default="INF"/>
@@ -297,16 +297,16 @@
 			<xs:element name="initialBasisStatus" type="BasisStatus" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherConstraintOptions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitConstraintValues">
 		<xs:sequence>
 			<xs:element name="con" type="InitConValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitConValue">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
@@ -314,10 +314,10 @@
 		<xs:sequence>
 			<xs:element name="con" type="InitDualVarValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitDualVarValue">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="lbDualValue" use="optional" default="0.0">
 			<xs:simpleType>
@@ -335,13 +335,13 @@
 			<xs:element name="sosVariableBranchingWeights" type="SOSVariableBranchingWeights" minOccurs="0"/>
 			<xs:element name="other" type="OtherSpecialOrderedSetsOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherSOSOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherSOSOptions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="SOSVariableBranchingWeights">
 		<xs:sequence>
 			<xs:element name="sos" type="SOSWeights" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSOS" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfSOS" type="PositiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOSWeights">
 		<xs:sequence>
@@ -350,9 +350,9 @@
 			</xs:annotation>
 			<xs:element name="var" type="BranchingWeight" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="sosIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="sosIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="groupWeight" type="xs:double" use="optional" default="1.0"/>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixProgrammingOption">
 		<xs:sequence>
@@ -361,52 +361,52 @@
 			<xs:element name="matrixConstraints" type="MatrixConstraintOption" minOccurs="0"/>
 			<xs:element name="other" type="SolverOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherMatrixProgrammingOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherMatrixProgrammingOptions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixVariableOption">
 		<xs:sequence>
 			<xs:element name="initialMatrixVariableValues" type="InitMatrixVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatrixVariableOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherMatrixVariableOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherMatrixVariableOptions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitMatrixVariableValues">
 		<xs:sequence>
 			<xs:element name="matrixVar" type="OSMatrixWithMatrixVarIdx" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixObjectiveOption">
 		<xs:sequence>
 			<xs:element name="initialMatrixObjectiveValues" type="InitMatrixObjectiveValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatrixObjectiveOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherMatrixObjectiveOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherMatrixObjectiveOptions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitMatrixObjectiveValues">
 		<xs:sequence>
 			<xs:element name="matrixObj" type="OSMatrixWithMatrixObjIdx" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixConstraintOption">
 		<xs:sequence>
 			<xs:element name="initialMatrixConstraintValues" type="InitMatrixConstraintValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatrixConstraintOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherMatrixConstraintOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherMatrixConstraintOptions" type="NonnegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitMatrixConstraintValues">
 		<xs:sequence>
 			<xs:element name="matrixCon" type="OSMatrixWithMatrixConIdx" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SolverOptions">
 		<xs:sequence>
 			<xs:element name="solverOption" type="SolverOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSolverOptions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:simpleType name="instanceLocationEnumeration">
 		<xs:restriction base="xs:string">

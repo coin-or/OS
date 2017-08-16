@@ -173,7 +173,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVariables" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Variable">
 		<xs:annotation>
@@ -192,12 +192,12 @@ J - semi-integer</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<!--Objectives: since version 1.0-->
 	<xs:complexType name="Objectives">
@@ -210,7 +210,7 @@ J - semi-integer</xs:documentation>
 			</xs:annotation>
 			<xs:element name="obj" type="Objective" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfObjectives" type="NonnegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="Objective">
 		<xs:annotation>
@@ -235,15 +235,15 @@ J - semi-integer</xs:documentation>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObjCoef" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 		<xs:attribute name="weight" type="xs:double" use="optional"/>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ObjCoef">
 		<xs:annotation>
@@ -251,7 +251,7 @@ J - semi-integer</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -266,7 +266,7 @@ J - semi-integer</xs:documentation>
 			</xs:annotation>
 			<xs:element name="con" type="Constraint" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfConstraints" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Constraint">
 		<xs:annotation>
@@ -276,12 +276,12 @@ J - semi-integer</xs:documentation>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<!--LinearConstraintCoefficients: since version 1.0 -->
 	<xs:complexType name="LinearConstraintCoefficients">
@@ -299,7 +299,7 @@ J - semi-integer</xs:documentation>
 			</xs:choice>
 			<xs:element name="value" type="SizelessDoubleVector"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<!--QuadraticCoefficients; since version 1.0 -->
 	<xs:complexType name="QuadraticCoefficients">
@@ -312,23 +312,23 @@ J - semi-integer</xs:documentation>
 			</xs:annotation>
 			<xs:element name="qTerm" type="QuadraticTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfQuadraticTerms" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="QuadraticTerm">
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the constraint or objective</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idxOne" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the first variable</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idxTwo" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the second variable</xs:documentation>
 			</xs:annotation>
@@ -355,7 +355,7 @@ quadratic term</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNonlinearExpressions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Nl">
 		<xs:annotation>
@@ -364,7 +364,7 @@ quadratic term</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>index of constraint or objective row</xs:documentation>
 			</xs:annotation>
@@ -395,7 +395,7 @@ quadratic term</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonlinearComplexValuedExpression">
 		<xs:annotation>
@@ -404,7 +404,7 @@ quadratic term</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLCNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>refers to existing complex-valued objectives (if negative) or complex-valued constraints (if nonnegative)</xs:documentation>
 			</xs:annotation>
@@ -448,7 +448,7 @@ quadratic term</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixVar">
 		<xs:sequence>
@@ -460,19 +460,19 @@ can be used, e.g., to set up Toeplitz or Cauchy matrices</xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="symmetry" type="SymmetryType" default="none">
 			<xs:annotation>
 				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="templateMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>matrix variable has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="varReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="varReferenceMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core variables instead of creation of new ones. 
 Note: only where template matrix indicates a nonzero.
@@ -484,33 +484,33 @@ If missing, all variables indicated  by the use of the template matrix are creat
 				<xs:documentation>same type for every newly created variable; default is 'C'; variables inherited from the core keep the type and bounds declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains varMtx - lbMtx; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubMtx - varMtx; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created variable; default is 0; variables inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDescriptors" type="NonnegativeInteger" default="0"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixVarOrConDescriptor" mixed="true">
 		<xs:attribute name="name" use="required">
@@ -532,45 +532,45 @@ If missing, all variables indicated  by the use of the template matrix are creat
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixObj">
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="symmetry" type="SymmetryType" default="none">
 			<xs:annotation>
 				<xs:documentation>e.g., if symmetry = "upper", only objectives in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="templateMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>matrix objective has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="objReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="objReferenceMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
 Note: only where template matrix indicates a nonzero.
 If missing, all objectives indicated  by the use of the template matrix are created fresh. </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="orderConeIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses only core objectives, orderConeIdx can be omitted and defaults to the corresponding orthant cone</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="constantMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>added to objective;        zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created objective; default is 0; objectives inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixConstraints">
 		<xs:sequence>
@@ -580,7 +580,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixCon">
 		<xs:sequence>
@@ -592,52 +592,52 @@ can be used, e.g., to set up Toeplitz matrices</xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="symmetry" type="SymmetryType" default="none">
 			<xs:annotation>
 				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="templateMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>matrix constraint has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="conReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="conReferenceMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
 Note: only where template matrix indicates a nonzero.
 If missing, all constraints indicated  by the use of the template matrix are created fresh.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains mtx expr - lbMtx; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubMatrixIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubMtx -  mtx expr; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created constraint; default is 0; constraints inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDescriptors" type="NonnegativeInteger" default="0"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixExpressions">
 		<xs:sequence>
@@ -647,7 +647,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixExpression">
 		<xs:annotation>
@@ -656,7 +656,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:sequence>
 			<xs:element ref="OSnLMNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>refers to existing matrix objective (if negative) or matrix constraint (if nonnegative)</xs:documentation>
 			</xs:annotation>
@@ -698,7 +698,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfComplexVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfComplexVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexVar">
 		<xs:annotation>
@@ -714,7 +714,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains var - lb; assumed all of C if missing</xs:documentation>
 			</xs:annotation>
@@ -729,18 +729,18 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ub - var; assumed all of C if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexObjectives">
 		<xs:annotation>
@@ -753,13 +753,13 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfComplexObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfComplexObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexObj">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="orderConeIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. </xs:documentation>
 			</xs:annotation>
@@ -775,12 +775,12 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexConstraints">
 		<xs:annotation>
@@ -793,7 +793,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfComplexCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfComplexCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexCon">
 		<xs:annotation>
@@ -809,7 +809,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				<xs:documentation>imaginary part of the lower bound</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains mtx expr - lbMtx; assumed all R^n if missing</xs:documentation>
 			</xs:annotation>
@@ -824,18 +824,18 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				<xs:documentation>imaginary part of the upper bound</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubMtx -  mtx expr; assumed all of C if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexExpressions">
 		<xs:annotation>
@@ -848,7 +848,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexExpression">
 		<xs:annotation>
@@ -857,7 +857,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:sequence>
 			<xs:element ref="OSnLCNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>refers to existing complex objectives (if negative) or complex constraints (if nonnegative)</xs:documentation>
 			</xs:annotation>
@@ -897,11 +897,11 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TensorVar">
 		<xs:sequence>
-			<xs:element name="dimensions" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="dimensions" type="NonnegativeInteger" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Number of dimensions must equal the tensor rank</xs:documentation>
 				</xs:annotation>
@@ -914,13 +914,13 @@ can be used to set up special tensors with properties not otherwise available</x
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="templateTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="rank" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="templateTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>tensor variable has a nonzero entry wherever the template tensor does also. If templateTensorIdx missing: Completely dense tensor.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="varReferenceTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="varReferenceTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core variables instead of creation of new ones. 
 Note: only where template tensor indicates a nonzero.
@@ -932,33 +932,33 @@ If missing, all variables indicated  by the use of the template tensor are creat
 				<xs:documentation>same type for every newly created variable; default is 'C'; variables inherited from the core keep the type and bounds declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant tensor; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains tensorVar - lbTensor; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant tensor; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubTensor - tensorVar; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created variable; default is 0; variables inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDescriptors" type="NonnegativeInteger" default="0"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="TensorVarOrConDescriptor" mixed="true">
 		<xs:attribute name="name" use="required">
@@ -980,46 +980,46 @@ If missing, all variables indicated  by the use of the template tensor are creat
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TensorObj">
 		<xs:sequence>
-			<xs:element name="dimensions" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="dimensions" type="NonnegativeInteger" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Number of dimensions must equal the tensor rank</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="templateTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="rank" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="templateTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>tensor objective has a nonzero entry wherever the template tensor does also. If templateTensorIdx missing: Completely dense tensor.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="objReferenceTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="objReferenceTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
 Note: only where template tensor indicates a nonzero.
 If missing, all objectives indicated  by the use of the template tensor are created fresh. </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="orderConeIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses only core objectives, orderConeIdx can be omitted and defaults to the corresponding orthant cone</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="constantTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="constantTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>added to objective;        zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created objective; default is 0; objectives inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="TensorConstraints">
 		<xs:sequence>
@@ -1029,11 +1029,11 @@ If missing, all objectives indicated  by the use of the template tensor are crea
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TensorCon">
 		<xs:sequence>
-			<xs:element name="dimensions" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="dimensions" type="NonnegativeInteger" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Number of dimensions must equal the tensor rank</xs:documentation>
 				</xs:annotation>
@@ -1046,46 +1046,46 @@ can be used, e.g., to set up Toeplitz matrices</xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="templateTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="rank" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="templateTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>tensor constraint has a nonzero entry wherever the template tensor does also. If templateTensorIdx missing: Completely dense tensor.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="conReferenceTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="conReferenceTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
 Note: only where template tensor indicates a nonzero.
 If missing, all constraints indicated  by the use of the template tensor are created fresh.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant tensor; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains tensor expr - lbTensor; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubTensorIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubTensorIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant tensor; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubConeIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubTensor - tensor expr; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created constraint; default is 0; constraints inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDescriptors" type="NonnegativeInteger" default="0"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="TensorExpressions">
 		<xs:sequence>
@@ -1095,7 +1095,7 @@ If missing, all constraints indicated  by the use of the template tensor are cre
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TensorExpression">
 		<xs:annotation>
@@ -1104,7 +1104,7 @@ If missing, all constraints indicated  by the use of the template tensor are cre
 		<xs:sequence>
 			<xs:element ref="OSnLTNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>refers to existing tensor objective (if negative) or tensor constraint (if nonnegative)</xs:documentation>
 			</xs:annotation>
@@ -1135,7 +1135,7 @@ convexity row to the solver, which might speed up the execution time.
 -->
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSOS" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSOS" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOS">
 		<xs:annotation>
@@ -1152,12 +1152,12 @@ If type = 2 adjacent variables are by default consecutive entries in the variabl
 In an SOS2, adjacency usually means that nonzero variables must be consecutive within the set. They are used to model piecewise linear functions of one variable, and what is adjacent should be reasonably clear. In an SOS3 the adjacent points are the vertices of a triangle (a two-dimensional simplex), and one cannot infer the adjacency from the order of the variables in the SOS. One also cannot infer  the size of the triangulation. That's why one needs to specify adjacency lists here. Since it is possible to omit such lists for SOS2 (and certainly for SOS1), it makes sense to allow for 0 adjacencySets. (And each triangle forms its own set, hence the plural.)-->
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="type" type="xs:positiveInteger" use="required">
+		<xs:attribute name="type" type="PositiveInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>"type = k" means at most k of the variables in this SOS can be nonzero, and the nonzeros must be "adjacent"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="convexityRowIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="convexityRowIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>if present must refer to a previously defined constraint of the form 
 x_i1 + x_i2 + ... = 1. </xs:documentation>
@@ -1175,7 +1175,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSets" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSets" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<!--Cones: draft -->
 	<xs:complexType name="Cones">
@@ -1188,7 +1188,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:annotation>
 			<xs:group ref="ConeGroup"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCones" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:group name="ConeGroup">
 		<xs:choice>
@@ -1232,8 +1232,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>
 	<xs:complexType name="NonnegativeCone">
@@ -1282,7 +1282,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="PolyhedralCone">
 		<xs:annotation>
@@ -1297,7 +1297,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
-				<xs:attribute name="referenceMatrixIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="referenceMatrixIdx" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="coneDirection" use="optional">
 					<xs:annotation>
 						<xs:documentation>"positive": Ax \ge 0; "negative": Ax \le 0; 
@@ -1328,7 +1328,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="mult" type="PositiveInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCone">
 		<xs:annotation>
@@ -1336,9 +1336,9 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="distortionMatrixIdx" type="NonnegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-				<xs:attribute name="axisDirection" type="xs:nonNegativeInteger" use="optional" default="0">
+				<xs:attribute name="axisDirection" type="NonnegativeInteger" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>This is an index of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
 					</xs:annotation>
@@ -1352,14 +1352,14 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="distortionMatrixIdx" type="NonnegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-				<xs:attribute name="firstAxisDirection" type="xs:nonNegativeInteger" use="optional" default="0">
+				<xs:attribute name="firstAxisDirection" type="NonnegativeInteger" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>Each is an index of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="secondAxisDirection" type="xs:nonNegativeInteger" use="optional" default="1"/>
+				<xs:attribute name="secondAxisDirection" type="NonnegativeInteger" use="optional" default="1"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1369,9 +1369,9 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="distortionMatrixIdx" type="NonnegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-				<xs:attribute name="axisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
+				<xs:attribute name="axisDirectionIndex" type="NonnegativeInteger" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>index is of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
 					</xs:annotation>
@@ -1392,14 +1392,14 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="distortionMatrixIdx" type="NonnegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-				<xs:attribute name="firstAxisDirection" type="xs:nonNegativeInteger" use="optional" default="0">
+				<xs:attribute name="firstAxisDirection" type="NonnegativeInteger" use="optional" default="0">
 					<xs:annotation>
 						<xs:documentation>Each is an index of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="secondAxisDirection" type="xs:nonNegativeInteger" use="optional" default="1"/>
+				<xs:attribute name="secondAxisDirection" type="NonnegativeInteger" use="optional" default="1"/>
 				<xs:attribute name="pNorm" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:double">
@@ -1544,7 +1544,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="referenceConeIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="referenceConeIdx" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1554,7 +1554,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="referenceConeIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="referenceConeIdx" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1564,7 +1564,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:sequence>
 					<xs:element name="descriptor" type="Descriptor" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
-				<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="numberOfDescriptors" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1590,7 +1590,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDataSources" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDataSources" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataSource">
 		<xs:annotation>
@@ -1612,7 +1612,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:documentation>if missing, use value of defaultRefreshPoint</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfDataPoints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDataPoints" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataPoint">
 		<xs:annotation>
@@ -1630,7 +1630,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfTargetComponents" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTargetComponents" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="RealTimeUpdateableProblemComponent">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1664,7 +1664,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfExternalFunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExternalFunctions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ExternalFunction">
 		<xs:annotation>
@@ -1676,7 +1676,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>if both uri and uriAlias missing, use defaultURI</xs:documentation>
 				</xs:annotation>
 				<xs:element name="uri" type="xs:anyURI" minOccurs="0"/>
-				<xs:element name="uriAlias" type="xs:nonNegativeInteger" minOccurs="0"/>
+				<xs:element name="uriAlias" type="NonnegativeInteger" minOccurs="0"/>
 			</xs:choice>
 			<xs:element name="input" type="SimulationInputOrOutput" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
@@ -1690,8 +1690,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="numberOfInputs" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfOutputs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfInputs" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOutputs" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="refreshPoint" type="RefreshPointEnum"/>
 	</xs:complexType>
 	<xs:complexType name="SimulationInputOrOutput">
@@ -1705,7 +1705,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SimulationElement">
 		<xs:annotation>
@@ -1793,17 +1793,17 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="realTimeDataSourceIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="dataPointIdx" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="targetComponentIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="realTimeDataSourceIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="dataPointIdx" type="NonnegativeInteger"/>
+		<xs:attribute name="targetComponentIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>must be present if attr="targetComponent"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentDisjunctiveTerm">
-		<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="disjunctiveTermIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="disjunctionIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="disjunctiveTermIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -1814,9 +1814,9 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentDisjunctiveElement">
-		<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="disjunctiveTermIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="disjunctionIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="disjunctiveTermIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="elementIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>identifies the element within the element array of the indicated disjunctive term.</xs:documentation>
 			</xs:annotation>
@@ -1835,7 +1835,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSubst" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationsUpdateableProblemComponent">
 		<xs:choice>
@@ -1885,7 +1885,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="AppendableProblemComponent">
-				<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="disjunctionIdx" type="NonnegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1913,24 +1913,24 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteVar">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteObjectives">
 		<xs:sequence>
 			<xs:element name="obj" type="ModificationDeleteObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteObj">
-		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="idx" type="NegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="colIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>If present, delete only the objective coefficient in this column</xs:documentation>
 			</xs:annotation>
@@ -1940,41 +1940,41 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element name="con" type="ModificationDeleteCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteCon">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteLinearConstraintCoefficients">
 		<xs:sequence>
 			<xs:element name="el" type="ModificationDeleteLinearConstraintEl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteLinearConstraintEl">
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteQuadraticCoefficients">
 		<xs:sequence>
 			<xs:element name="qTerm" type="ModificationDeleteQTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfQTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfQTerms" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteQTerm">
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>row index (constraint or objective)</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idxOne" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>column index</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idxTwo" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>column index</xs:documentation>
 			</xs:annotation>
@@ -1984,10 +1984,10 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element name="nl" type="ModificationDeleteNl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteNl">
-		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="idx" type="Integer" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixVariables">
 		<xs:sequence>
@@ -1997,43 +1997,43 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixVar">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixObjectives">
 		<xs:sequence>
 			<xs:element name="matrixObj" type="ModificationDeleteMatrixObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixObj">
-		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixConstraints">
 		<xs:sequence>
 			<xs:element name="matrixCon" type="ModificationDeleteMatrixCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixCon">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixExpressions">
 		<xs:sequence>
 			<xs:element name="expr" type="ModificationDeleteMatrixExpr" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixExpr">
-		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="idx" type="Integer" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexVariables">
 		<xs:sequence>
@@ -2043,43 +2043,43 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfComplexVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfComplexVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexVar">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexObjectives">
 		<xs:sequence>
 			<xs:element name="complexObj" type="ModificationDeleteComplexObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfComplexObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfComplexObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexObj">
-		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:int" default="-1"/>
+		<xs:attribute name="idx" type="NegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="Integer" default="-1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexConstraints">
 		<xs:sequence>
 			<xs:element name="complexCon" type="ModificationDeleteComplexCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfComplexCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfComplexCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexCon">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexExpressions">
 		<xs:sequence>
 			<xs:element name="expr" type="ModificationDeleteComplexExpr" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexExpr">
-		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="idx" type="Integer" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorVariables">
 		<xs:sequence>
@@ -2089,71 +2089,71 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorVar">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorObjectives">
 		<xs:sequence>
 			<xs:element name="tensorObj" type="ModificationDeleteTensorObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorObj">
-		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:int" default="-1"/>
+		<xs:attribute name="idx" type="NegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="Integer" default="-1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorConstraints">
 		<xs:sequence>
 			<xs:element name="tensorCon" type="ModificationDeleteTensorCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorCon">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorExpressions">
 		<xs:sequence>
 			<xs:element name="expr" type="ModificationDeleteTensorExpr" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorExpr">
-		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="idx" type="Integer" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteDisjunctions">
 		<xs:sequence>
 			<xs:element name="disjunction" type="ModificationDeleteDisjunction" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDisjunctions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteDisjunction">
-		<xs:attribute name="idx" type="xs:int" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="Integer" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteDisjunctiveTerms">
 		<xs:sequence>
 			<xs:element name="disjunctiveTerm" type="ModificationDeleteDisjunctiveTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfDisjunctiveTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="disjunctionIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDisjunctiveTerms" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteDisjunctiveTerm">
-		<xs:attribute name="idx" type="xs:int" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="Integer" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteRealTimeDataSource">
-		<xs:attribute name="realTimeDataSourceIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="dataPointIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="targetComponentIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="realTimeDataSourceIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="dataPointIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="targetComponentIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>if attribute is present, only replace the indicated target component. Otherwise delete all target components for the indicated data point.</xs:documentation>
 			</xs:annotation>
@@ -2163,7 +2163,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element name="dataSource" type="ModificationDeleteRealTimeDataSource" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfDataSources" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDataSources" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteStochasticTree">
 		<xs:annotation>
@@ -2186,12 +2186,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element name="con" type="ModificationDeleteSoftCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteSoftCon">
-		<xs:attribute name="idx" type="xs:int" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="idx" type="Integer" use="required"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteScenarios">
 		<xs:sequence>
@@ -2201,11 +2201,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfScen" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfScen" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteScenario">
-		<xs:attribute name="scenIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="scenIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="stageIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>first stage that is to be deleted - default value: start of the scenario</xs:documentation>
 			</xs:annotation>
@@ -2241,7 +2241,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfNodes" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNodes" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteNode">
 		<xs:attribute name="nodeId" type="xs:IDREF" use="required">
@@ -2258,16 +2258,16 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteParam">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>experiment</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="DeletableProblemComponent">
 		<xs:sequence>
@@ -2559,7 +2559,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSubtrees" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSubtrees" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalSubtree">
 		<xs:annotation>
@@ -2586,7 +2586,7 @@ of the subtree</xs:documentation>
 						<xs:documentation>must be present to identify location of the subtree root</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="numberOfLinkingStages" type="xs:nonNegativeInteger" default="1">
+				<xs:attribute name="numberOfLinkingStages" type="NonnegativeInteger" default="1">
 					<xs:annotation>
 						<xs:documentation>governs the length of the history that can influence the present node as well as the offsets for variable and constraint references</xs:documentation>
 					</xs:annotation>
@@ -2598,7 +2598,7 @@ of the subtree</xs:documentation>
 		<xs:sequence>
 			<xs:element name="obj" type="ModificationAddObjective" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObjectives" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddObjective">
 		<xs:annotation>
@@ -2614,22 +2614,22 @@ of the subtree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:negativeInteger" use="required">
+		<xs:attribute name="idx" type="NegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>must refer to a previously existing objective</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObjCoef" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddLinearConstraintCoefficients">
 		<xs:sequence>
 			<xs:element name="el" type="ModificationAddLinearConstraintCoefficientsEl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddLinearConstraintCoefficientsEl">
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:double" default="0.0"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddNonlinearExpressions">
@@ -2638,7 +2638,7 @@ of the subtree</xs:documentation>
 			<xs:element name="string" type="xs:string"/>
 			<xs:element name="nl" type="Nl"/>
 		</xs:choice>
-		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddMatrixExpressions">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -2646,7 +2646,7 @@ of the subtree</xs:documentation>
 			<xs:element name="string" type="xs:string"/>
 			<xs:element name="expr" type="MatrixExpression"/>
 		</xs:choice>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddComplexExpressions">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -2654,7 +2654,7 @@ of the subtree</xs:documentation>
 			<xs:element name="string" type="xs:string"/>
 			<xs:element name="expr" type="ComplexExpression"/>
 		</xs:choice>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddTensorExpressions">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -2662,7 +2662,7 @@ of the subtree</xs:documentation>
 			<xs:element name="string" type="xs:string"/>
 			<xs:element name="expr" type="TensorExpression"/>
 		</xs:choice>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddRealTimeData">
 		<xs:annotation>
@@ -2675,7 +2675,7 @@ of the subtree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDataSources" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDataSources" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddScenarios">
 		<xs:annotation>
@@ -2688,7 +2688,7 @@ of the subtree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfScenarios" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctiveSet">
 		<xs:annotation>
@@ -2704,8 +2704,8 @@ of the subtree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctiveTerms" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="numberOfDisjunctiveTerms" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="stage" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section</xs:documentation>
 			</xs:annotation>
@@ -2736,7 +2736,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDisjunctions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionUpdates">
 		<xs:sequence>
@@ -2746,7 +2746,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSubst" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionUpdateableProblemComponent">
 		<xs:choice>
@@ -2807,12 +2807,12 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="conditioningVariableIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="conditioningVariableIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>disjunction is enforced only if logical conditioning variable is TRUE</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="conditioningConstraintIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="conditioningConstraintIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>disjunction is enforced only if logical conditioning constraint is TRUE</xs:documentation>
 			</xs:annotation>
@@ -2830,7 +2830,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Distributions">
 		<xs:sequence>
@@ -2843,13 +2843,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDist" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDist" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentVariable">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -2866,7 +2866,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -2878,7 +2878,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="varIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="varIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>required if attr="coef"</xs:documentation>
 			</xs:annotation>
@@ -2888,7 +2888,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -2905,16 +2905,16 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentQuadraticCoefficient">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="rowIdx" type="xs:int" use="required"/>
-		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowIdx" type="Integer" use="required"/>
+		<xs:attribute name="idxOne" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="idxTwo" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentNlNode">
 		<xs:annotation>
@@ -2964,9 +2964,9 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="matrixIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="rowIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="realOrImaginary" default="real">
 			<xs:annotation>
 				<xs:documentation>to access either the real or the imaginary part of a complex number</xs:documentation>
@@ -2990,7 +2990,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="tensorIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="tensorIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="realOrImaginary" default="real">
 			<xs:annotation>
 				<xs:documentation>to access either the real or the imaginary part of a complex number</xs:documentation>
@@ -3007,7 +3007,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3024,7 +3024,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3039,7 +3039,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3056,7 +3056,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3075,7 +3075,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3091,7 +3091,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3110,7 +3110,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3127,7 +3127,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3142,7 +3142,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3159,7 +3159,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft - to replace one distribution in an implicit tree by another distribution with the same dimensions</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="rvIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rvIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3168,12 +3168,12 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="distributionIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="distributionIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>required if attr="distribution"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="transformationMatrixIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="transformationMatrixIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>required if attr="transformationMatrix"</xs:documentation>
 			</xs:annotation>
@@ -3183,7 +3183,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft - to replace the probability or one stochastic value in a scenario</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="scenarioIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3203,7 +3203,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="elementIdx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>must be present if attr="element"</xs:documentation>
 			</xs:annotation>
@@ -3213,7 +3213,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft - to replace the probability of a scenario</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="scenarioIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="probType">
 			<xs:annotation>
 				<xs:documentation>path probability or conditional probability - default is "path"</xs:documentation>
@@ -3230,8 +3230,8 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft - to parametrize one stochastic value in a scenario</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="scenarioIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="elementIdx" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentNodalTree">
 		<xs:attribute name="nodeId" type="xs:IDREF" use="required"/>
@@ -3245,7 +3245,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				<xs:documentation>if component is not "prob", this attribute is required to pinpoint where the value is to be stored (e.g., if component="var", attr could be "lb", "ub", etc.)</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger">
+		<xs:attribute name="idx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>if component is not "prob", this attribute is required to identify the array element (e.g., variable number) where the value is to be stored.</xs:documentation>
 			</xs:annotation>
@@ -3275,7 +3275,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				<xs:documentation>"var", "obj", etc.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>identifyies the array element (e.g., variable number) where the value is to be stored.</xs:documentation>
 			</xs:annotation>
@@ -3287,20 +3287,20 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentDistributionParameter">
-		<xs:attribute name="distribIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="distribIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="attr" type="xs:string" use="required">
 			<xs:annotation>
 				<xs:documentation>value must match one of the attribute names in the corresponding distribution, e.g., "mean".</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger">
+		<xs:attribute name="idx" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>used to identify an element within a one-dimensional array of parameters, e.g., mean of multivariateNormal.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentLinearOrQuadraticPenalty">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>index within the array of softConstraint objects</xs:documentation>
 			</xs:annotation>
@@ -3444,7 +3444,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:annotation>
 			<xs:element name="uri" type="RealTimeDataURI" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfURIAliases" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfURIAliases" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStages">
 		<xs:annotation>
@@ -3456,7 +3456,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:annotation>
 			<xs:element name="stage" type="TimeStageOrLevel" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfStages" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfStages" type="PositiveInteger" use="required"/>
 		<xs:attribute name="eventsFollowDecisions" type="xs:boolean" default="false">
 			<xs:annotation>
 				<xs:documentation>events and decisions, constraints, disjunctions, etc. can share a stage. By default events precede all decisions, etc. in a stage. This attribute can be used to reverse the order. </xs:documentation>
@@ -3547,7 +3547,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageConstraints">
 		<xs:annotation>
@@ -3560,7 +3560,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageDisjunctions">
 		<xs:annotation>
@@ -3573,7 +3573,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDisjunctions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageObjectives">
 		<xs:annotation>
@@ -3586,7 +3586,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageMatrixVariables">
 		<xs:annotation>
@@ -3599,7 +3599,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageMatrixConstraints">
 		<xs:annotation>
@@ -3612,7 +3612,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageMatrixObjectives">
 		<xs:annotation>
@@ -3625,7 +3625,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageComplexVariables">
 		<xs:annotation>
@@ -3638,7 +3638,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageComplexConstraints">
 		<xs:annotation>
@@ -3651,7 +3651,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageComplexObjectives">
 		<xs:annotation>
@@ -3664,7 +3664,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageTensorVariables">
 		<xs:annotation>
@@ -3677,7 +3677,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageTensorConstraints">
 		<xs:annotation>
@@ -3690,7 +3690,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageTensorObjectives">
 		<xs:annotation>
@@ -3703,7 +3703,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfTensorObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfTensorObj" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<!--StochasticInformation: proposal-->
 	<xs:complexType name="StochasticDistribution">
@@ -3727,7 +3727,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:annotation>
 			<xs:group ref="UpdateableProblemComponent"/>
 		</xs:choice>
-		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfStochEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<!-- A new way of looking at stochastics by building on existing constructs -->
 	<xs:complexType name="StochasticDataModifications">
@@ -3753,7 +3753,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfScenarios" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="mode" default="replace">
 			<xs:annotation>
 				<xs:documentation>scenario values can replace deterministic base values, or can be given as additive or multiplicative modifications </xs:documentation>
@@ -3785,7 +3785,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence>
 			<xs:element name="changesFromBase" type="ChangesInScenario" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="parentIdx" type="xs:int" use="required">
+		<xs:attribute name="parentIdx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>gives the index of the parent scenario. The root scenario has parentIdx = -1.</xs:documentation>
 			</xs:annotation>
@@ -3812,17 +3812,17 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseIdx" type="xs:int">
+		<xs:attribute name="baseIdx" type="Integer">
 			<xs:annotation>
 				<xs:documentation>gives the index of a scenario that contains the default data. The default value is parentIdx; use -1 to indicate the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="stage" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>gives the first stage in which this scenario has data that differ from its parent.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfChanges" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfChanges" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>changes are relative to parent or, if present, the base scenario</xs:documentation>
 			</xs:annotation>
@@ -3863,7 +3863,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 						<xs:documentation>This is the conditional probability of reaching this node given its parent node.</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="numberOfLinkingStages" type="xs:nonNegativeInteger" default="1">
+				<xs:attribute name="numberOfLinkingStages" type="NonnegativeInteger" default="1">
 					<xs:annotation>
 						<xs:documentation>governs the length of the history that can influence the present node as well as the offsets for variable and constraint references</xs:documentation>
 					</xs:annotation>
@@ -3980,14 +3980,14 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 		<xs:sequence>
 			<xs:element name="obj" type="NodalTreeObjective" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="numberOfObj" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeObjective">
 		<xs:sequence>
 			<xs:element name="coef" type="ObjCoef" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:negativeInteger" default="-1"/>
-		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NegativeInteger" default="-1"/>
+		<xs:attribute name="numberOfObjCoef" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeQuadraticCoefficients">
 		<xs:annotation>
@@ -3999,13 +3999,13 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:annotation>
 			<xs:element name="qTerm" type="NodalTreeQuadraticTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfQuadraticTerms" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeQuadraticTerm">
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the constraint or objective</xs:documentation>
 			</xs:annotation>
@@ -4015,12 +4015,12 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxLag" type="xs:nonNegativeInteger">
+		<xs:attribute name="idxLag" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxStage" type="xs:nonNegativeInteger">
+		<xs:attribute name="idxStage" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 			</xs:annotation>
@@ -4030,7 +4030,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idxOne" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the first variable</xs:documentation>
 			</xs:annotation>
@@ -4040,12 +4040,12 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxOneLag" type="xs:nonNegativeInteger">
+		<xs:attribute name="idxOneLag" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxOneStage" type="xs:nonNegativeInteger">
+		<xs:attribute name="idxOneStage" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 			</xs:annotation>
@@ -4055,7 +4055,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idxTwo" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the second variable</xs:documentation>
 			</xs:annotation>
@@ -4065,12 +4065,12 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxTwoLag" type="xs:nonNegativeInteger">
+		<xs:attribute name="idxTwoLag" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxTwoStage" type="xs:nonNegativeInteger">
+		<xs:attribute name="idxTwoStage" type="NonnegativeInteger">
 			<xs:annotation>
 				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 			</xs:annotation>
@@ -4091,7 +4091,7 @@ quadratic term</xs:documentation>
 		<xs:sequence>
 			<xs:element name="block" type="NodalTreeLinearConstraintCoefficientBlock" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="numberOfBlocks" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeLinearConstraintCoefficientBlock">
 		<xs:complexContent>
@@ -4101,12 +4101,12 @@ quadratic term</xs:documentation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="varRefLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="varRefLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="varRefStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="varRefStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -4121,12 +4121,12 @@ quadratic term</xs:documentation>
 						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="conRefLag" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="conRefLag" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="conRefStage" type="xs:nonNegativeInteger" use="optional">
+				<xs:attribute name="conRefStage" type="NonnegativeInteger" use="optional">
 					<xs:annotation>
 						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 					</xs:annotation>
@@ -4153,7 +4153,7 @@ quadratic term</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNonlinearExpressions" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeNl">
 		<xs:annotation>
@@ -4162,7 +4162,7 @@ quadratic term</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>index of constraint or objective row</xs:documentation>
 			</xs:annotation>
@@ -4172,12 +4172,12 @@ quadratic term</xs:documentation>
 				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
 			</xs:annotation>
@@ -4217,7 +4217,7 @@ convexity row to the solver, which might speed up the execution time.
 -->
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSOS" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSOS" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeSOS">
 		<xs:annotation>
@@ -4234,12 +4234,12 @@ If type = 2 adjacent variables are by default consecutive entries in the variabl
 In an SOS2, adjacency usually means that nonzero variables must be consecutive within the set. They are used to model piecewise linear functions of one variable, and what is adjacent should be reasonably clear. In an SOS3 the adjacent points are the vertices of a triangle (a two-dimensional simplex), and one cannot infer the adjacency from the order of the variables in the SOS. One also cannot infer  the size of the triangulation. That's why one needs to specify adjacency lists here. Since it is possible to omit such lists for SOS2 (and certainly for SOS1), it makes sense to allow for 0 adjacencySets. (And each triangle forms its own set, hence the plural.)-->
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="type" type="xs:positiveInteger" use="required">
+		<xs:attribute name="type" type="PositiveInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>"type = k" means at most k of the variables in this SOS can be nonzero, and the nonzeros must be "adjacent"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="convexityRowIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="convexityRowIdx" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>if present must refer to a previously defined constraint of the form 
 x_i1 + x_i2 + ... = 1. </xs:documentation>
@@ -4257,7 +4257,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSets" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSets" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeMatrixProgramming">
 		<xs:annotation>
@@ -4289,7 +4289,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeMatrixExpression">
 		<xs:annotation>
@@ -4298,7 +4298,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLMNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>refers to existing matrix objective (if negative) or matrix constraint (if nonnegative)</xs:documentation>
 			</xs:annotation>
@@ -4308,12 +4308,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Gives the lag of this matrix constraint or variable if  idxType="lag"; ignored otherwise</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Gives the stage number of this matrix constraint or variable if idxType="stage"; ignored otherwise</xs:documentation>
 			</xs:annotation>
@@ -4359,7 +4359,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeComplexExpression">
 		<xs:annotation>
@@ -4368,7 +4368,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLCNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>refers to existing complex objectives (if negative) or complex constraints (if nonnegative)</xs:documentation>
 			</xs:annotation>
@@ -4378,12 +4378,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Gives the lag of this complex constraint or variable if  idxType="lag"; ignored otherwise</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Gives the stage number of this complex constraint or variable if idxType="stage"; ignored otherwise</xs:documentation>
 			</xs:annotation>
@@ -4430,7 +4430,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExpr" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeTensorExpression">
 		<xs:annotation>
@@ -4439,7 +4439,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLCNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
+		<xs:attribute name="idx" type="Integer" use="required">
 			<xs:annotation>
 				<xs:documentation>refers to existing tensor objectives (if negative) or tensor constraints (if nonnegative)</xs:documentation>
 			</xs:annotation>
@@ -4449,12 +4449,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="idxLag" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Gives the lag of this tensor constraint or variable if  idxType="lag"; ignored otherwise</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="idxStage" type="NonnegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>Gives the stage number of this tensor constraint or variable if idxType="stage"; ignored otherwise</xs:documentation>
 			</xs:annotation>
@@ -4558,12 +4558,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element name="subst" type="NodalUpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSubst" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeUpdateableProblemComponentLinearConstraintCoefficient">
 		<xs:complexContent>
 			<xs:extension base="UpdateableProblemComponentLinearConstraintCoefficient">
-				<xs:attribute name="blockIdx" type="xs:nonNegativeInteger" default="0"/>
+				<xs:attribute name="blockIdx" type="NonnegativeInteger" default="0"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4571,11 +4571,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="UpdateableProblemComponentQuadraticCoefficient">
 				<xs:attribute name="rowIdxType" type="NodalTreeIndexType" default="local"/>
-				<xs:attribute name="rowIdxModifier" type="xs:nonNegativeInteger" default="0"/>
+				<xs:attribute name="rowIdxModifier" type="NonnegativeInteger" default="0"/>
 				<xs:attribute name="idxOneType" type="NodalTreeIndexType" default="local"/>
-				<xs:attribute name="idxOneModifier" type="xs:nonNegativeInteger" default="0"/>
+				<xs:attribute name="idxOneModifier" type="NonnegativeInteger" default="0"/>
 				<xs:attribute name="idxTwoType" type="NodalTreeIndexType" default="local"/>
-				<xs:attribute name="idxTwoModifier" type="xs:nonNegativeInteger" default="0"/>
+				<xs:attribute name="idxTwoModifier" type="NonnegativeInteger" default="0"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4685,7 +4685,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element name="block" type="ModificationDeleteLinearConstraintCoefficients" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfBlocks" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationAdditions">
 		<xs:sequence>
@@ -4797,19 +4797,19 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 		<xs:sequence>
 			<xs:element name="el" type="NodalTreeModificationAddLinearConstraintEl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationAddLinearConstraintEl">
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="blockIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="rowIdx" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="blockIdx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:double" default="0.0"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationAddLinearConstraintBlocks">
 		<xs:sequence>
 			<xs:element name="block" type="NodalTreeLinearConstraintCoefficientBlock" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfBlocks" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ImplicitTree">
 		<xs:sequence>
@@ -4825,7 +4825,7 @@ referenced by distributionIdx and is independent of all other rv's.</xs:document
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRV" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRV" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="ambiguityResolution">
 			<xs:annotation>
 				<xs:documentation>default is "max" for minimization problems, "min" for maximization problems</xs:documentation>
@@ -4855,17 +4855,17 @@ Each term refers to the value(s) of a previously defined random variable and app
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMA" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="numberOfMA" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>moving average terms</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfAR" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="numberOfAR" type="NonnegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>autoregressive terms</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the matrix defining the linear transformation.
 </xs:documentation>
@@ -4904,12 +4904,12 @@ Default: identity matrix.</xs:documentation>
 				</xs:element>
 			</xs:choice>
 		</xs:sequence>
-		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="stageIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>number of the stage in which the information is revealed</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="distributionIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="distributionIdx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>gives the index of the distribution in the "distributions" element</xs:documentation>
 			</xs:annotation>
@@ -4925,14 +4925,14 @@ Default: identity matrix.</xs:documentation>
 		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="AutoRegressiveTerm">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>gives the index (and hence locations and values) of a previously defined RV</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="MovingAveragesTerm">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>references the untransformed value of a previously defined RV</xs:documentation>
 			</xs:annotation>
@@ -4968,7 +4968,7 @@ Default: identity matrix.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional" default="-1">
+		<xs:attribute name="objectiveIdx" type="NegativeInteger" use="optional" default="-1">
 			<xs:annotation>
 				<xs:documentation>objective to which the term is to be added; default is -1</xs:documentation>
 			</xs:annotation>
@@ -4978,7 +4978,7 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>identifies the row to be penalized</xs:documentation>
 			</xs:annotation>
@@ -4990,7 +4990,7 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>identifies the row to be penalized</xs:documentation>
 			</xs:annotation>
@@ -5021,7 +5021,7 @@ Default: identity matrix.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>identifies the constraint to be penalized</xs:documentation>
 			</xs:annotation>
@@ -5047,7 +5047,7 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the constraint</xs:documentation>
 			</xs:annotation>
@@ -5089,7 +5089,7 @@ default is "scalar"</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="maxOrMin" default="max">
 			<xs:annotation>
 				<xs:documentation>maximize or minimize the probability of constraint satisfaction; default is "max"</xs:documentation>
@@ -5117,7 +5117,7 @@ default is "scalar"</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="constraintType">
 			<xs:annotation>
 				<xs:documentation>type of constraint; 
@@ -5137,7 +5137,7 @@ default is "scalar"</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>identifies the row to be penalized</xs:documentation>
 			</xs:annotation>
@@ -5156,7 +5156,7 @@ default is "scalar"</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="aggregatingFunction" use="optional" default="and">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -5184,7 +5184,7 @@ default is "scalar"</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>identifies the row to be penalized</xs:documentation>
 			</xs:annotation>
@@ -5212,7 +5212,7 @@ default is "scalar"</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSoftCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSoftCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MultilevelAndStochasticProgramming">
 		<xs:choice>

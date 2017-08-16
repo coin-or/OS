@@ -157,12 +157,12 @@
 					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="currentJobCount" type="xs:int" default="-1" minOccurs="0">
+			<xs:element name="currentJobCount" type="Integer" default="-1" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="totalJobsSoFar" type="xs:int" default="-1" minOccurs="0">
+			<xs:element name="totalJobsSoFar" type="Integer" default="-1" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
@@ -207,7 +207,7 @@
 		<xs:sequence>
 			<xs:element name="job" type="JobStatistics" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfJobs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfJobs" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="JobStatistics">
 		<xs:annotation>
@@ -265,7 +265,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfJobs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfJobs" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StandardOptimizationProcessInformation">
 		<xs:annotation>
@@ -289,7 +289,7 @@
 			<xs:element name="updatedConstraintValues" type="UpdatedConstraintValues" minOccurs="0"/>
 			<xs:element name="updatedDualValues" type="UpdatedDualValues" minOccurs="0"/>
 		</xs:all>
-		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="objectiveIdx" type="NegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="JobOptimization">
 		<xs:annotation>
@@ -316,7 +316,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="xs:string" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdatedVariableValues">
 		<xs:annotation>
@@ -325,7 +325,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="xs:double" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdatedVariableReducedCosts">
 		<xs:annotation>
@@ -334,7 +334,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="xs:double" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdatedConstraintValues">
 		<xs:annotation>
@@ -343,7 +343,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="con" type="xs:double" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdatedDualValues">
 		<xs:annotation>
@@ -352,6 +352,6 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="con" type="xs:double" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 </xs:schema>
