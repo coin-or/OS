@@ -203,35 +203,20 @@
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolutions" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfVariables" use="required">
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>Must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjectives" default="1">
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" default="1">
 			<xs:annotation>
 				<xs:documentation>Can be omitted if number of objectives in the original optimization instance is 1. Otherwise, must match number of objectives in the original optimization instance.</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfConstraints" use="required">
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>Must match number of constraints in the original optimization instance</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherResults">

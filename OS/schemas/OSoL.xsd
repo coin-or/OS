@@ -196,35 +196,20 @@
 			</xs:element>
 			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" use="optional">
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial values, etc.</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjectives" use="optional">
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial objective values and bounds</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfConstraints" use="optional">
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial dual values, etc.</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="VariableOption">

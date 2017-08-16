@@ -44,6 +44,45 @@
 			<xs:enumeration value="string"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="Integer">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:long">
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NonnegativeInteger">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:unsignedLong">
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PositiveInteger">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:unsignedLong">
+			<xs:minInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NonpositiveInteger">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:long">
+			<xs:maxInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NegativeInteger">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:long">
+			<xs:maxInclusive value="-1"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="PositiveDouble">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
@@ -54,7 +93,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="NonNegativeDouble">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:double">
 			<xs:minInclusive value="0.0"/>
@@ -62,7 +101,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="Probability">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:double">
 			<xs:minInclusive value="0.0"/>
@@ -71,7 +110,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="Correlation">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:double">
 			<xs:minInclusive value="-1.0"/>
@@ -80,7 +119,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="Percent">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:double">
 			<xs:minInclusive value="0.0"/>
@@ -88,6 +127,9 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="ComplexNumber">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="Re" type="xs:double" use="required"/>
 		<xs:attribute name="Im" type="xs:double" use="required"/>
 	</xs:complexType>
@@ -2524,7 +2566,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:element>
 	<xs:complexType name="CustomDistribution">
 		<xs:annotation>
-			<xs:documentation>since version 1.0</xs:documentation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="dimensions" type="NonNegativeIntVector" minOccurs="0">
@@ -2606,13 +2648,7 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="name" use="required">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:minLength value="1"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string"/>

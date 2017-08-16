@@ -3892,8 +3892,8 @@ Smallest representable positive number. </xs:documentation>
 				<xs:attribute name="valueType" type="RangedVariableOrConstraintValueType" use="optional" default="value">
 					<xs:annotation>
 						<xs:documentation>The value of the valueType attribute must be one of
-“value” (default), “status” (whether the variable is between the bounds, a boolean), “surplus”
-( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
+"value" (default), "status" (whether the variable is between the bounds, a boolean), "surplus"
+( (value − ub)+ ), or "shortage" ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
@@ -3921,7 +3921,7 @@ Returns the current value of the indicated objective</xs:documentation>
 				<xs:attribute name="valueType" type="ObjectiveReferenceValueType" use="optional" default="value">
 					<xs:annotation>
 						<xs:documentation>The value of the valueType attribute can be either of
-“value” (default), “constant” (the additive constant to the variable specified in the 'obj' section), “weight”
+"value" (default), "constant" (the additive constant to the variable specified in the 'obj' section), "weight"
 (the weight assigned to this objective).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
@@ -3969,8 +3969,8 @@ Returns the current value of the indicated objective</xs:documentation>
 				<xs:attribute name="valueType" type="RangedVariableOrConstraintValueType" use="optional" default="value">
 					<xs:annotation>
 						<xs:documentation>The value of the valueType attribute can be either of
-“value” (default), “status” (whether the constraint is satisfied, a boolean), “surplus”
-( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
+"value" (default), "status" (whether the constraint is satisfied, a boolean), "surplus"”
+( (value − ub)+ ), or "shortage" ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
