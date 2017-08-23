@@ -1694,6 +1694,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="numberOfOutputs" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="refreshPoint" type="RefreshPointEnum"/>
 	</xs:complexType>
+<!-- transferred to OSsL ... 
 	<xs:complexType name="SimulationInputOrOutput">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
@@ -1731,6 +1732,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+-->
 	<!--Modifications: draft -->
 	<xs:complexType name="InstanceModifications">
 		<xs:annotation>
