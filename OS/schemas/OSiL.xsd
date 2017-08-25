@@ -1673,28 +1673,19 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:choice>
 				<xs:annotation>
-					<xs:documentation>if both uri and uriAlias missing, use defaultURI</xs:documentation>
+					<xs:documentation>if both uri and uriAlias are missing, defaultURI must be present and will be used instead; the uri in the ossl child will be ignored in all cases.</xs:documentation>
 				</xs:annotation>
 				<xs:element name="uri" type="xs:anyURI" minOccurs="0"/>
 				<xs:element name="uriAlias" type="NonnegativeInteger" minOccurs="0"/>
 			</xs:choice>
-			<xs:element name="input" type="SimulationInputOrOutput" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>finalization</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="output" type="SimulationInputOrOutput" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>finalization</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="ossl" type="OSsL"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="numberOfInputs" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="numberOfOutputs" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="refreshPoint" type="RefreshPointEnum"/>
 	</xs:complexType>
-<!-- transferred to OSsL ... 
+	<!-- transferred to OSsL ... 
 	<xs:complexType name="SimulationInputOrOutput">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
