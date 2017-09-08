@@ -48,8 +48,7 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="xs:long">
-		</xs:restriction>
+		<xs:restriction base="xs:long"/>
 	</xs:simpleType>
 	<xs:simpleType name="NonnegativeInteger">
 		<xs:annotation>
@@ -2561,6 +2560,22 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
+		<xs:attribute name="type" default="density">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="density"/>
+					<xs:enumeration value="cumDist"/>
+					<xs:enumeration value="MGF"/>
+					<xs:enumeration value=""/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="name" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to an existing user-defined function</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<!--
 		<xs:sequence>
 			<xs:element name="dimensions" type="NonNegativeIntVector" minOccurs="0">
 				<xs:annotation>
@@ -2574,8 +2589,12 @@ according to WolframMathWorld</xs:documentation>
 					<xs:documentation>number must agree with numberOfParam</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="function" type="UserFunction_p" minOccurs="0"/>
 		</xs:sequence>
+-->
+		<!--
 		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
+-->
 	</xs:complexType>
 	<xs:element name="custom" type="CustomDistribution">
 		<xs:annotation>
