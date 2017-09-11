@@ -10,7 +10,6 @@
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- *
  */
 
 //kipp fix up the infinity issue
@@ -24,6 +23,21 @@
 
 #include <string>
 #include <limits>
+
+#ifdef OS_XML_INT64
+  #ifdef HAVE_CSTDINT
+        #include <cstdint> 
+  #else
+    #ifdef HAVE_CINTTYPES
+        #include <cinttypes>
+    #else
+      #ifdef HAVE_INTTYPES_H
+        #include <inttypes.h>
+      #endif
+    #endif
+  #endif
+#endif
+
 
 #define OS_PLUS                          1001
 #define OS_SUM                           1002
@@ -101,6 +115,27 @@
 #define OS_PI_VALUE 2*asin(1.0)
 
 #define OS_SCHEMA_VERSION "2.0"
+
+/* Since revision 5258 the OSxL schemas support long (64-bit) integers.
+ * However, at present the parsers and solver interfaces do not.
+ * For the time being we must configure without 64-bit integer support;
+ * this may be changed if solver interfaces move to 64-bit support.
+ */
+#ifdef OS_USE_XML_LONG_INTEGER
+  #error solver interfaces do not support 64-bit integers
+  typedef OS_XML_INT64  OsXmlInt;
+  typedef OS_XML_UINT64 OsXmlUInt;
+
+  #define OS_XML_INT_MAX_STR  "9223372036854775807"
+  #define OS_XML_UINT_MAX_STR "18446744073709551615"
+#else
+  typedef          int OsXmlInt;
+  typedef unsigned int OsXmlUInt;
+
+  #define OS_XML_INT_MAX_STR  "2147483647"
+  #define OS_XML_UINT_MAX_STR "4294967295"
+#endif
+
 
 /**
  * we use OS_NEAR_EQUAL in unitTest to see if we
@@ -330,15 +365,20 @@ inline bool verifyTimeCategory(std::string category)
 enum ENUM_LOCATIONTYPE
 {
     ENUM_LOCATIONTYPE_local = 1,
+    ENUM_LOCATIONTYPE_https,
     ENUM_LOCATIONTYPE_http,
-    ENUM_LOCATIONTYPE_ftp
+    ENUM_LOCATIONTYPE_ftp,
+    ENUM_LOCATIONTYPE_other
 };
 
 inline int returnLocationType(std::string type)
 {
     if (type == "local") return ENUM_LOCATIONTYPE_local;
+    if (type == "https") return ENUM_LOCATIONTYPE_https;
     if (type == "http" ) return ENUM_LOCATIONTYPE_http;
     if (type == "ftp"  ) return ENUM_LOCATIONTYPE_ftp;
+    if (type.length() < 6) return 0;
+    if (type.compare(0,6,"other:") == 0) return ENUM_LOCATIONTYPE_other;
     return 0;
 }//returnLocationType
 

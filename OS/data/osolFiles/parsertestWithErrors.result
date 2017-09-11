@@ -52,17 +52,17 @@ At line number 56: <jobID
 Repeated element: <jobID>
 At line number 68: <minDiskSpace
 only one minDiskSpace element allowed
-At line number 68:  -1 
+At line number 68:  2 
 setMinDiskSpace failed
 At line number 69: <minMemorySize
 only one minMemory element allowed
-At line number 69: -1.0
+At line number 69: 2.0
 setMinMemorySize failed
 At line number 70: <minCPUNumber
 only one minCPUNumber element allowed
 At line number 71: <minCPUSpeed
 only one minCPUSpeed element allowed
-At line number 71: -1.0
+At line number 71: 2.0
 setMinCPUSpeed failed
 At line number 72: <otherOptions
 Repeated element: <system> <otherOptions>
@@ -191,8 +191,6 @@ Repeated element: <job> <otherOptions>
 At line number 184: 
             <other
 more <other> elements than specified
-At line number 191: "
-variable index must be nonnegative
 At line number 196: 
 			</initialVariableValues>
             
@@ -203,27 +201,20 @@ too few initial values in <initialVariableValuesString> element
 At line number 206: </basic>
                 
 fewer data elements than specified
-At line number 209: </atLower>
-				
-set variables atLower failed
 At line number 214: >
 <var> element must have idx attribute
 At line number 218: 
 			</integerVariableBranchingWeights>
             
 fewer <var> elements than specified
-At line number 220: "
-variable index must be nonnegative
 At line number 225: 
 			</sosVariableBranchingWeights>
             
 fewer <sos> elements than specified
-At line number 226: "
-variable index must be nonnegative
-At line number 226: />
-set other variable option <var> element failed
 At line number 240: "
 objective index must be negative
+At line number 240: "
+objective index exceeds limit
 At line number 243: 
 			</initialObjectiveValues>
             
@@ -234,15 +225,9 @@ At line number 247: </initialObjectiveBounds>
 At line number 251: </basic>
 			
 fewer data elements than specified
-At line number 253: "
-number of <obj> cannot be negative
-At line number 258: "
-constraint index must be nonnegative
 At line number 261: </initialConstraintValues>
 			
 <initialConstraintValues>: fewer <con> elements than specified
-At line number 263: "
-constraint index must be nonnegative
 At line number 265: 
 			</initialDualValues>
             
@@ -252,6 +237,7 @@ At line number 269: </unknown>
 fewer data elements than specified
 At line number 273: <con
 more <con> elements than specified
+
 
 OSoL input is either invalid or not well-formed.
 

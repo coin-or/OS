@@ -296,7 +296,7 @@ public:
  *     LinearMatrixElements       (elements of the form a_0 + a_1*x_{i_1} + ... + a_k*x_{i_k}) 
  *     RealValuedExpressions      (an expression tree with a    real-valued root)
  *     ComplexValuedExpressions   (an expression tree with a complex-valued root)
- *     ObjReferenceMatrixElements (elements of the form o_i - return value of the i'th objective)
+ *     ObjReferenceMatrihttps://mail.google.com/mail/u/0/#label/Personal/HarveyStxElements (elements of the form o_i - return value of the i'th objective)
  *     ConReferenceMatrixElements (elements of the form c_i - return values associated with i'th constraint)
  *     StringValuedMatrixElements (elements can be general or symbolic strings)
  */

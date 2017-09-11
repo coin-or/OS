@@ -222,7 +222,8 @@ instanceLocationAttributes:
     | locationTypeAttribute
     {   
         if (verifyLocationType(parserData->typeAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "instance location type not recognized");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "instance location type not recognized");
         parserData->errorText = NULL;
     };
 
@@ -1876,7 +1877,7 @@ initVarValueAtt:
         if (osglData->idx < 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
                 "variable index must be nonnegative");
-        if (osoption->optimization->numberOfVariables >= 0)
+        if (osoption->optimization->numberOfVariablesIsSet)
         {
             if (osglData->idx >= osoption->optimization->numberOfVariables)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
@@ -1993,7 +1994,7 @@ initVarValueStringAtt:
     {
         if (osglData->idx< 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");
-        if (osoption->optimization->numberOfVariables >= 0)
+        if (osoption->optimization->numberOfVariablesIsSet)
         {
             if (osglData->idx >= osoption->optimization->numberOfVariables)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index exceeds upper limit");
@@ -2211,7 +2212,7 @@ branchingWeightAtt:
     {
         if (osglData->idx < 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");
-        if (osoption->optimization->numberOfVariables >= 0)
+        if (osoption->optimization->numberOfVariablesIsSet)
         {
             if (osglData->idx >= osoption->optimization->numberOfVariables)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index exceeds upper limit");
@@ -2481,7 +2482,7 @@ otherVarAtt:
     {
         if (osglData->idx < 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");
-        if (osoption->optimization->numberOfVariables >= 0)
+        if (osoption->optimization->numberOfVariablesIsSet)
         {
             if (osglData->idx >= osoption->optimization->numberOfVariables)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index exceeds upper limit");
@@ -2627,7 +2628,7 @@ initObjValueAtt:
     {
         if (osglData->idx >= 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index must be negative");
-        if (osoption->optimization->numberOfObjectives >= 0)
+        if (osoption->optimization->numberOfObjectivesIsSet)
         {
             if (osglData->idx < -osoption->optimization->numberOfObjectives)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index exceeds limit");
@@ -2743,7 +2744,7 @@ initObjBoundAtt:
     {
         if (osglData->idx >= 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index must be nonnegative");
-        if (osoption->optimization->numberOfObjectives >= 0)
+        if (osoption->optimization->numberOfObjectivesIsSet)
         {
             if (osglData->idx < -osoption->optimization->numberOfVariables)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index exceeds limit");
@@ -3009,7 +3010,7 @@ otherObjAtt:
     {
         if (osglData->idx >= 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index must be negative");
-        if (osoption->optimization->numberOfObjectives >= 0)
+        if (osoption->optimization->numberOfObjectivesIsSet)
         {
             if (osglData->idx < -osoption->optimization->numberOfObjectives)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index exceeds limit");
@@ -3159,7 +3160,7 @@ initConValueAtt:
     {
         if (osglData->idx < 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index must be nonnegative");
-        if (osoption->optimization->numberOfConstraints >= 0)
+        if (osoption->optimization->numberOfConstraintsIsSet)
         {
             if (osglData->idx >= osoption->optimization->numberOfConstraints)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index exceeds upper limit");
@@ -3281,7 +3282,7 @@ initDualValueAtt:
     {
         if (osglData->idx < 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index must be nonnegative");
-        if (osoption->optimization->numberOfConstraints >= 0)
+        if (osoption->optimization->numberOfConstraintsIsSet)
         {
             if (osglData->idx >= osoption->optimization->numberOfConstraints)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index exceeds upper limit");
@@ -3542,7 +3543,7 @@ otherConAtt:
         if (osglData->idx < 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
                 "constraint index must be nonnegative");
-        if (osoption->optimization->numberOfConstraints >= 0)
+        if (osoption->optimization->numberOfConstraintsIsSet)
         {
             if (osglData->idx >= osoption->optimization->numberOfConstraints)
                 parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
@@ -3570,7 +3571,7 @@ matrixProgramming: | matrixProgrammingStart matrixProgrammingAttributes matrixPr
         
 matrixProgrammingStart: MATRIXPROGRAMMINGSTART
 {
-//    osoption->optimization->matrixProgramming = new MatrixProgrammingOption();
+    osoption->optimization->matrixProgramming = new MatrixProgrammingOption();
 };
 
 
@@ -3591,9 +3592,9 @@ matrixProgrammingLaden:
 
 matrixVariables: | matrixVariablesStart matrixVariablesAttributes matrixVariablesContent
     {  
-        if (parserData->kounter < parserData->numberOfMatrixVar)  
-            parserData->parser_errors += addErrorMsg( NULL, parserObjects,
-                "actual number of matrixVar elements less than number attribute");   
+//        if (parserData->kounter < parserData->numberOfMatrixVar)  
+//            parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+//                "actual number of matrixVar elements less than number attribute");   
     };
 
 
@@ -3605,13 +3606,23 @@ matrixVariablesStart: MATRIXVARIABLESSTART
 matrixVariablesAttributes: | numberOfOtherMatrixVariableOptionsAttribute
 {    
     parserData->numberOfOtherMatrixVariableOptions = parserData->tempInt;
+    if (parserData->numberOfOtherMatrixVariableOptions < 0)
+        throw ErrorClass("numberOfOtherMatrixVariableOptions cannot be negative");
+    else
+    {
+        osglData->otherMatrixVarOptionOrResultArray
+            = new OtherMatrixVariableOptionOrResult*[parserData->numberOfOtherMatrixVariableOptions];
+        for (int i=0; i < parserData->numberOfOtherMatrixVariableOptions; i++)
+            osglData->otherMatrixVarOptionOrResultArray[i] = new OtherMatrixVariableOptionOrResult();
+    }
+    osglData->kounter = 0;
 };
     
 matrixVariablesContent: matrixVariablesEmpty | matrixVariablesLaden;
 
 matrixVariablesEmpty: ENDOFELEMENT;
 
-matrixVariablesLaden: GREATERTHAN initialMatrixVariableValues otherMatrixVariableOptionsArray  
+matrixVariablesLaden: GREATERTHAN initialMatrixVariableValues otherMatrixVariableOptions  
                       matrixVariablesEnd;
 
 matrixVariablesEnd: MATRIXVARIABLESEND;
@@ -3620,9 +3631,13 @@ matrixVariablesEnd: MATRIXVARIABLESEND;
 
 initialMatrixVariableValues: | initialMatrixVariableValuesStart initialMatrixVariableValuesAttributes
                                initialMatrixVariableValuesContent
-    {  
-        if (parserData->kounter < parserData->numberOfMatrixVar)  
-            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "actual number of matrixVar less than number attribute");   
+    {
+       if (osglData->matrixCounter < osglData->numberOfMatrixVar)  
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+                "actual number of matrixVar less than number attribute");
+        osoption->optimization->matrixProgramming->matrixVariables->initialMatrixVariableValues->matrixVar
+            = osglData->matrixWithMatrixVarIdx;
+        osglData->matrixWithMatrixVarIdx = NULL;
     };
 
 initialMatrixVariableValuesStart: INITIALMATRIXVARIABLEVALUESSTART
@@ -3633,12 +3648,12 @@ initialMatrixVariableValuesStart: INITIALMATRIXVARIABLEVALUESSTART
 
 initialMatrixVariableValuesAttributes: osglNumberOfMatrixVarATT
 {    
-    parserData->numberOfOtherMatrixVariableOptions = parserData->tempInt;
-    osoption->optimization->matrixProgramming->matrixVariables->initialMatrixVariableValues->matrixVar
-        = new OSMatrixWithMatrixVarIdx*[parserData->tempInt]; 
-    for (int k=0; k < parserData->tempInt; k++)
-        osoption->optimization->matrixProgramming->matrixVariables
-            ->initialMatrixVariableValues->matrixVar[k] = new OSMatrixWithMatrixVarIdx();
+    osglData->numberOfMatrixVar = parserData->tempInt;
+    osglData->matrixCounter = 0;
+std::cout << "initializing OSMatrixWithMatrixVarIdx array" << std::endl;
+    osglData->matrixWithMatrixVarIdx = new OSMatrixWithMatrixVarIdx*[osglData->numberOfMatrixVar];
+    for (int i=0; i < osglData->numberOfMatrixVar; i++)
+        osglData->matrixWithMatrixVarIdx[i] = NULL;
 };
 
 initialMatrixVariableValuesContent: initialMatrixVariableValuesEmpty | initialMatrixVariableValuesLaden;
@@ -3655,53 +3670,75 @@ initialMatrixVarArray: | initialMatrixVarArray initialMatrixVar;
 
 initialMatrixVar: osglMatrixWithMatrixVarIdx
 {
-    parserData->kounter += osglData->mult;
+//    parserData->kounter++;
+std::cout << "processed initialMatrixVar; osglData->matrixCounter now = " << osglData->matrixCounter << std::endl;
+//osglData->matrixWithMatrixVarIdx[osglData->matrixCounter-1]->printMatrix();
 };
 
+otherMatrixVariableOptions: otherMatrixVariableOptionsArray
+{
+        if (parserData->iOther > parserData->numberOfOtherMatrixVariableOptions)
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "More otherMatrixVariableOption elements than expected");
+        else
+        {
+            osoption->optimization->matrixProgramming->matrixVariables->numberOfOtherMatrixVariableOptions
+                = parserData->numberOfOtherMatrixVariableOptions;
+            osoption->optimization->matrixProgramming->matrixVariables->other
+                = osglData->otherMatrixVarOptionOrResultArray;
+        }
+};
 
 otherMatrixVariableOptionsArray: | otherMatrixVariableOptionsArray otherMatrixVariableOption
-{
-};
+    {
+        parserData->iOther++;
+    };
 
 otherMatrixVariableOption: 
     otherMatrixVariableOptionStart osglOtherMatrixVariableOptionOrResultAttributes emptyOtherMatrixVariableOptionEnd
     {
         if (osglData->numberOfMatrixVar > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <MatrixVar> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "expected at least one <MatrixVar> element");
             parserData->ignoreDataAfterErrors = true;        
         }
         if (osglData->numberOfEnumerations > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <enumeration> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "expected at least one <enumeration> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
   | otherMatrixVariableOptionStart osglOtherMatrixVariableOptionOrResultAttributes 
                     GREATERTHAN osglOtherMatrixVariableOptionOrResultBody otherMatrixVariableOptionEnd
     {
-/*
-        if (parserData->kounter < osglData->numberOfItems)
+        if (osglData->enumCounter < osglData->numberOfItems)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <item> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "fewer <item> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
-*/
     }
 ;
 
 otherMatrixVariableOptionStart: OTHERSTART
 {
-/*
-    if (parserData->iOther >= parserData->numberOfOtherVariableOptions)
+    if (parserData->iOther >= parserData->numberOfOtherMatrixVariableOptions)
+            std::cout << "more <otherMatrixVariableOptions> than specified: "
+                      << "encountered " << parserData->iOther << " out of " 
+                      << parserData->numberOfOtherMatrixVariableOptions << std::endl;
+
+
+    if (parserData->iOther >= parserData->numberOfOtherMatrixVariableOptions)
         if (!parserData->suppressFurtherErrorMessages)
         {
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
-                "more <otherVariableOptions> than specified");
+                "more <otherMatrixVariableOptions> than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
-*/
+
     osglData->namePresent = false;    
     osglData->descriptionPresent = false;    
     osglData->description = "";    
@@ -3720,7 +3757,8 @@ otherMatrixVariableOptionStart: OTHERSTART
     osglData->numberOfMatrixVarPresent = false;
     osglData->numberOfMatrixVar = 0;
     osglData->numberOfEnumerations = 0;
-    osglData->kounter = 0;
+    osglData->matrixCounter = 0;
+    osglData->enumCounter = 0;
 //    parserData->otherOptionType = ENUM_PROBLEM_COMPONENT_variables;
 };
 
@@ -4495,140 +4533,84 @@ varTypeAttContent: VARTYPEATT ATTRIBUTETEXT QUOTE
 
 
 
-/*************************************************************************************
- *  There are so many numberOf... attributes that they warrant their own section...  *
- *************************************************************************************/
-/*
-numberOfConAttribute: NUMBEROFCONATT quote INTEGER quote
-{
-    if (parserData->numberOfConAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfCon attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <con> cannot be negative");
-    parserData->numberOfConAttributePresent = true;        
-    parserData->numberOfCon = $3;
-};
-
-numberOfConstraintsAttribute: NUMBEROFCONSTRAINTSATT quote INTEGER quote 
-{
-    if (parserData->numberOfConstraintsPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfConstraints attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of constraints cannot be negative");
-    parserData->numberOfConstraintsPresent = true;        
-    parserData->tempInt = $3; 
-};
-
-numberOfElAttribute: NUMBEROFELATT quote INTEGER quote 
-{
-    if (osglData->osglNumberOfElPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfEl attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <el> cannot be negative");
-    osglData->osglNumberOfElPresent = true;
-    parserData->numberOf = $3; 
-}; 
-
-numberOfEnumerationsAttribute: NUMBEROFENUMERATIONSATT quote INTEGER quote 
-{
-    if (parserData->numberOfEnumerationsAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <enumeration> elements cannot be negative");
-    parserData->numberOfEnumerationsAttributePresent = true;        
-    parserData->numberOfEnumerations = $3; 
-}; 
-
-numberOfItemsAttribute: NUMBEROFITEMSATT quote INTEGER quote 
-{    
-   if (parserData->numberOfItemsPresent ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one numberOfItems attribute allowed");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of items cannot be negative");
-    parserData->numberOfItemsPresent = true;
-    parserData->numberOfItems = $3;
-};
-*/
+/**********************************************************************************
+ *  There are so many numberOf... attributes that they warrant their own section. *
+ *  (More are found in OSParseosgl.y.syntax.)                                     *
+ **********************************************************************************/
 numberOfJobIDsATT: NUMBEROFJOBIDSATT QUOTE INTEGER QUOTE
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Number of job IDs cannot be negative");
+        throw ErrorClass("Number of job IDs cannot be negative");
     else
         parserData->jobDependencies = new std::string[$3];
     parserData->numberOf = $3;
     parserData->kounter = 0;
 };
-/*
-numberOfObjAttribute: NUMBEROFOBJATT quote INTEGER quote
-{
-    if (parserData->numberOfObjAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfObj attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <obj> cannot be negative");
-    parserData->numberOfObjAttributePresent = true;        
-    parserData->numberOfObj = $3;
-}; 
-
-numberOfObjectivesAttribute: NUMBEROFOBJECTIVESATT quote INTEGER quote 
-{
-    if (parserData->numberOfObjectivesPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfObjectives attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of objectives cannot be negative");
-    parserData->numberOfObjectivesPresent = true;
-    parserData->tempInt = $3; 
-};
-*/
 
 numberOfOtherConstraintOptionsAttribute: NUMBEROFOTHERCONSTRAINTOPTIONSATT quote INTEGER quote 
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other constraint options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of other constraint options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherMatrixProgrammingOptionsAttribute: 
     NUMBEROFOTHERMATRIXPROGRAMMINGOPTIONSATT quote INTEGER quote 
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other matrixProgramming options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of other matrixProgramming options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherMatrixVariableOptionsAttribute: 
     NUMBEROFOTHERMATRIXVARIABLEOPTIONSATT quote INTEGER quote 
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other matrixVariable options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of other matrixVariable options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherMatrixObjectiveOptionsAttribute: 
     NUMBEROFOTHERMATRIXOBJECTIVEOPTIONSATT quote INTEGER quote 
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other matrixObjective options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of other matrixObjective options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherMatrixConstraintOptionsAttribute: 
     NUMBEROFOTHERMATRIXCONSTRAINTOPTIONSATT quote INTEGER quote 
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other matrixConstraint options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of other matrixConstraint options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherObjectiveOptionsAttribute: NUMBEROFOTHEROBJECTIVEOPTIONSATT quote INTEGER quote 
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other objective options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of other objective options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherOptionsAttribute: NUMBEROFOTHEROPTIONSATT quote INTEGER quote
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of other options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherVariableOptionsAttribute: NUMBEROFOTHERVARIABLEOPTIONSATT quote INTEGER quote 
 {    
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other variable options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of other variable cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfPathPairsAttribute: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Number of path pairs cannot be negative");
+        throw ErrorClass("Number of path pairs cannot be negative");
     else if ($3 > 0)
     {
         parserData->fromPaths = new std::string[$3];
@@ -4642,7 +4624,7 @@ numberOfPathPairsAttribute: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
 numberOfPathsAttribute: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Number of paths cannot be negative");
+        throw ErrorClass("Number of paths cannot be negative");
     else
         parserData->paths = new std::string[$3];
     parserData->numberOf = $3;
@@ -4652,7 +4634,7 @@ numberOfPathsAttribute: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 numberOfProcessesATT: NUMBEROFPROCESSESATT QUOTE INTEGER QUOTE
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Number of job IDs cannot be negative");
+        throw ErrorClass("numberOfProcesses cannot be negative");
     else
         parserData->processesToKill = new std::string[$3];
     parserData->numberOf = $3;
@@ -4662,39 +4644,16 @@ numberOfProcessesATT: NUMBEROFPROCESSESATT QUOTE INTEGER QUOTE
 
 numberOfSolverOptionsAttribute: NUMBEROFSOLVEROPTIONSATT quote INTEGER quote 
 {    
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of solver options cannot be negative");
+    if ($3 < 0)
+        throw ErrorClass("number of solver options cannot be negative");
     parserData->numberOfSolverOptions = $3;
 };
-/*
-numberOfVarAttribute: NUMBEROFVARATT quote INTEGER quote 
-{
-    if (parserData->numberOfVarAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfVar attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <var> cannot be negative");
-    parserData->numberOfVarAttributePresent = true;        
-    parserData->numberOfVar = $3; 
-}; 
-
-numberOfVariablesAttribute: NUMBEROFVARIABLESATT quote INTEGER quote 
-{    if (parserData->numberOfVariablesPresent)
-
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfVariables attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of variables cannot be negative");
-    parserData->numberOfVariablesPresent = true;    
-    parserData->tempInt = $3; 
-};
-*/
-//numberOfVarIdxAttribute: NUMBEROFVARIDXATT quote INTEGER quote 
-//{
-//    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <varIdx> cannot be negative");
-//    parserData->numberOfVarIdx = $3; 
-//}; 
 
 
 /**
- *  <enumeration> lists occur three times in the OSoL schema:
+ *  <enumeration> lists occur several times in the OSoL schema:
  *  for variables, objectives and constraints. 
- *  The code below can be used for all three situations.
+ *  The code below can be used for all these situations.
  */
 otherEnumerationList: otherEnumeration | otherEnumerationList otherEnumeration;
 
@@ -4722,7 +4681,8 @@ otherEnumerationStart: ENUMERATIONSTART
     if (parserData->kounter >= osglData->numberOfEnumerations)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <enumeration> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "more <enumeration> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -4737,9 +4697,11 @@ otherEnumerationStart: ENUMERATIONSTART
 otherEnumerationAttributes: otherEnumerationAttList 
     {
         if(!osglData->numberOfElPresent) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element enumeration requires numberOfEl attribute"); 
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "<other> element enumeration requires numberOfEl attribute"); 
         if(!osglData->valuePresent) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element enumeration requires value attribute"); 
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "<other> element enumeration requires value attribute"); 
     };
       
 otherEnumerationAttList: | otherEnumerationAttList otherEnumerationATT;

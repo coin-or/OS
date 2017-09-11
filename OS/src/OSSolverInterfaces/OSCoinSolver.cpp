@@ -328,7 +328,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         }
 
         // the clpSolver supports quadratic objectives if present in the input    
-        int nq = osinstance->getNumberOfQuadraticTerms();
+        unsigned int nq = osinstance->getNumberOfQuadraticTerms();
         if (nq > 0)
         {
             if ( (sSolverName.find("clp") != std::string::npos) )
@@ -547,7 +547,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
         // Process any options found
         if(osoption != NULL)
         {
-            int i;
+//            int i;
 
 #ifndef NDEBUG
             outStr.str("");
@@ -562,7 +562,9 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
 
                 //get the osi options, which apply to all solvers
                 optionsVector = osoption->getSolverOptions( "osi",true);
-                int num_osi_options = optionsVector.size();
+                std::vector<SolverOptionOrResult*>::size_type it, num_osi_options;
+                num_osi_options = optionsVector.size();
+//                int num_osi_options = optionsVector.size();
                 char *pEnd;
                 bool yesNo;
 
@@ -570,21 +572,21 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
  *  In this first pass through the options just see if the hintStrength was set
  *
  */
-                for(i = 0; i < num_osi_options; i++)
+                for(it = 0; it < num_osi_options; it++)
                 {
 #ifndef NDEBUG
                     outStr.str("");
                     outStr.clear();
-                    outStr << "osi solver option  "  << optionsVector[ i]->name  << std::endl;
-                    outStr << "osi solver value   "  << optionsVector[ i]->value << std::endl;
+                    outStr << "osi solver option  "  << optionsVector[ it]->name  << std::endl;
+                    outStr << "osi solver value   "  << optionsVector[ it]->value << std::endl;
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
                         ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-                    if (optionsVector[ i]->type == "OsiHintStrength" )
+                    if (optionsVector[ it]->type == "OsiHintStrength" )
                     {
-                        if( hintStrengthMap.find( optionsVector[ i]->name ) != hintStrengthMap.end() )
+                        if( hintStrengthMap.find( optionsVector[ it]->name ) != hintStrengthMap.end() )
                         {
-                            hintStrength = hintStrengthMap[ optionsVector[ i]->name] ;
+                            hintStrength = hintStrengthMap[ optionsVector[ it]->name] ;
                         }
                     }
                 }
@@ -592,19 +594,19 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
 /**
  *  If the hintStrength was set, use it when processing the other options
  */
-                for(i = 0; i < num_osi_options; i++)
+                for(it = 0; it < num_osi_options; it++)
                 {
 #ifndef NDEBUG
                     outStr.str("");
                     outStr.clear();
-                    outStr << "osi solver option  "  << optionsVector[ i]->name  << std::endl;
-                    outStr << "osi solver value   "  << optionsVector[ i]->value << std::endl;
+                    outStr << "osi solver option  "  << optionsVector[ it]->name  << std::endl;
+                    outStr << "osi solver value   "  << optionsVector[ it]->value << std::endl;
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
                         ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-                    if (optionsVector[ i]->type == "OsiHintParam" )
+                    if (optionsVector[ it]->type == "OsiHintParam" )
                     {
-                        if( optionsVector[ i]->value == "true" )
+                        if( optionsVector[ it]->value == "true" )
                         {
                             yesNo = true;
                         }
@@ -612,39 +614,41 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                         {
                             yesNo = false;
                         }
-                        if( hintParamMap.find( optionsVector[ i]->name ) != hintParamMap.end() )
+                        if( hintParamMap.find( optionsVector[ it]->name ) != hintParamMap.end() )
                         {
-                            osiSolver->setHintParam( hintParamMap[ optionsVector[ i]->name] , yesNo, hintStrength);
+                            osiSolver->setHintParam( hintParamMap[ optionsVector[ it]->name] , yesNo, hintStrength);
                         }
                     }
-                    else if(optionsVector[ i]->type == "OsiStrParam" )
+                    else if(optionsVector[ it]->type == "OsiStrParam" )
                     {
-                        if( strParamMap.find( optionsVector[ i]->name ) != strParamMap.end() )
+                        if( strParamMap.find( optionsVector[ it]->name ) != strParamMap.end() )
                         {
-                            osiSolver->setStrParam( strParamMap[ optionsVector[ i]->name] , optionsVector[ i]->value);
+                            osiSolver->setStrParam( strParamMap[ optionsVector[ it]->name] , optionsVector[ it]->value);
                         }
                     }
-                    else if(optionsVector[ i]->type == "OsiDblParam" )
+                    else if(optionsVector[ it]->type == "OsiDblParam" )
                     {
-                        if( dblParamMap.find( optionsVector[ i]->name ) != dblParamMap.end() )
+                        if( dblParamMap.find( optionsVector[ it]->name ) != dblParamMap.end() )
                         {
-                            osiSolver->setDblParam( dblParamMap[ optionsVector[ i]->name] , os_strtod( optionsVector[ i]->value.c_str(), &pEnd ));
+                            osiSolver->setDblParam( dblParamMap[ optionsVector[ it]->name],
+                                                      os_strtod( optionsVector[ it]->value.c_str(), &pEnd ));
                         }
     
                     }
-                    else if(optionsVector[ i]->type == "OsiIntParam" )
+                    else if(optionsVector[ it]->type == "OsiIntParam" )
                     {
-                        if( intParamMap.find( optionsVector[ i]->name ) != intParamMap.end() )
+                        if( intParamMap.find( optionsVector[ it]->name ) != intParamMap.end() )
                         {
-                            osiSolver->setIntParam( intParamMap[ optionsVector[ i]->name] , atoi( optionsVector[ i]->value.c_str() ) );
+                            osiSolver->setIntParam( intParamMap[ optionsVector[ it]->name],
+                                                           atoi( optionsVector[ it]->value.c_str() ) );
                         }
                     }
-                    else if (optionsVector[ i]->type == "bool" )
+                    else if (optionsVector[ it]->type == "bool" )
                     {
-                        if( optionsVector[ i]->name == "primalSimplex" )
+                        if( optionsVector[ it]->name == "primalSimplex" )
                         {
-                            if (optionsVector[ i]->value != "false")
-                            osiSolver->enableSimplexInterface((optionsVector[ i]->value != "false"));
+                            if (optionsVector[ it]->value != "false")
+                            osiSolver->enableSimplexInterface((optionsVector[ it]->value != "false"));
                         }
                     }
                 }
@@ -657,7 +661,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     if(optionsVector.size() > 0) optionsVector.clear();
                     optionsVector = osoption->getSolverOptions( "cbc",true);
 
-                    int num_cbc_options = optionsVector.size();
+                    std::vector<SolverOptionOrResult*>::size_type num_cbc_options = optionsVector.size();
                     char *cstr;
                     std::string cbc_option;
                     num_cbc_argv = optionsVector.size() + 3;
@@ -669,28 +673,28 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     strcpy (cstr, cbc_option.c_str());
                     cbc_argv[ 0] = cstr;
     
-                    for(i = 0; i < num_cbc_options; i++)
+                    for(it = 0; it < num_cbc_options; it++)
                     {
 #ifndef NDEBUG
                         outStr.str("");
                         outStr.clear();
-                        outStr << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
-                        outStr << "cbc solver value   "  << optionsVector[ i]->name << std::endl;
+                        outStr << "cbc solver option  "  << optionsVector[ it]->name << std::endl;
+                        outStr << "cbc solver value   "  << optionsVector[ it]->name << std::endl;
                         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
                             ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
-                        if(optionsVector[ i]->value.length() > 0 )
+                        if(optionsVector[ it]->value.length() > 0 )
                         {
-                            cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+                            cbc_option = "-" + optionsVector[ it]->name +"="+optionsVector[ it]->value;
                         }
                         else
                         {
-                            cbc_option = "-" + optionsVector[ i]->name ;
+                            cbc_option = "-" + optionsVector[ it]->name ;
                         }
                         cstr = new char [cbc_option.size() + 1];
                         strcpy (cstr, cbc_option.c_str());
-                        cbc_argv[i +  1] = cstr;
+                        cbc_argv[it +  1] = cstr;
                     }
 
                     // the solve option
@@ -715,7 +719,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     if(optionsVector.size() > 0) optionsVector.clear();
                     optionsVector = osoption->getSolverOptions( "clp",true);
 
-                    int num_cbc_options = optionsVector.size();
+                    std::vector<SolverOptionOrResult*>::size_type num_cbc_options = optionsVector.size();
                     if (num_cbc_options > 0)
                     {
                         char *cstr;
@@ -729,28 +733,28 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                         strcpy (cstr, cbc_option.c_str());
                         cbc_argv[ 0] = cstr;
     
-                        for(i = 0; i < num_cbc_options; i++)
+                        for(it = 0; it < num_cbc_options; it++)
                         {
 #ifndef NDEBUG
                             outStr.str("");
                             outStr.clear();
-                            outStr << "clp solver option  "  << optionsVector[ i]->name << std::endl;
-                            outStr << "clp solver value   "  << optionsVector[ i]->name << std::endl;
+                            outStr << "clp solver option  "  << optionsVector[ it]->name << std::endl;
+                            outStr << "clp solver value   "  << optionsVector[ it]->name << std::endl;
                             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
                                 ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
-                            if(optionsVector[ i]->value.length() > 0 )
+                            if(optionsVector[ it]->value.length() > 0 )
                             {
-                                cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+                                cbc_option = "-" + optionsVector[ it]->name +"="+optionsVector[ it]->value;
                             }
                             else
                             {
-                                cbc_option = "-" + optionsVector[ i]->name ;
+                                cbc_option = "-" + optionsVector[ it]->name ;
                             }
                             cstr = new char [cbc_option.size() + 1];
                             strcpy (cstr, cbc_option.c_str());
-                            cbc_argv[i +  1] = cstr;
+                            cbc_argv[it +  1] = cstr;
                         }
 
                         // the solve option
@@ -778,30 +782,30 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                         dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
 
                     optionsVector = osoption->getSolverOptions( "symphony",true);
-                    int num_sym_options = optionsVector.size();
-                    for(i = 0; i < num_sym_options; i++)
+                    std::vector<SolverOptionOrResult*>::size_type num_sym_options = optionsVector.size();
+                    for(it = 0; it < num_sym_options; it++)
                     {
 #ifndef NDEBUG
                         outStr.str("");
                         outStr.clear();
-                        outStr << "symphony solver option  "  << optionsVector[ i]->name << std::endl;
-                        outStr << "symphony solver value   "  << optionsVector[ i]->name << std::endl;
+                        outStr << "symphony solver option  "  << optionsVector[ it]->name << std::endl;
+                        outStr << "symphony solver value   "  << optionsVector[ it]->name << std::endl;
                         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-                        if (optionsVector[ i]->type == "OsiStrParam" || optionsVector[ i]->type == "string")
+                        if (optionsVector[ it]->type == "OsiStrParam" || optionsVector[ it]->type == "string")
                         {
-                            if (!si->setSymParam(optionsVector[ i]->name, optionsVector[ i]->value))
-                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ i]->name);
+                            if (!si->setSymParam(optionsVector[ it]->name, optionsVector[ it]->value))
+                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ it]->name);
                         }
-                        else if (optionsVector[ i]->type == "OsiDblParam" || optionsVector[ i]->type == "double")
+                        else if (optionsVector[ it]->type == "OsiDblParam" || optionsVector[ it]->type == "double")
                         {
-                            if (!si->setSymParam(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd )))
-                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ i]->name);
+                            if (!si->setSymParam(optionsVector[ it]->name, os_strtod( optionsVector[ it]->value.c_str(), &pEnd )))
+                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ it]->name);
                         }
-                        else if (optionsVector[ i]->type == "OsiIntParam" || optionsVector[ i]->type == "integer")
+                        else if (optionsVector[ it]->type == "OsiIntParam" || optionsVector[ it]->type == "integer")
                         {
-                            if (!si->setSymParam(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) ))
-                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ i]->name);
+                            if (!si->setSymParam(optionsVector[ it]->name, atoi( optionsVector[ it]->value.c_str() ) ))
+                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ it]->name);
                         }
                     }
 #endif      //symphony end            
@@ -809,7 +813,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
             }
 
             //now set initial values
-            int n,m,k;
+            unsigned int n,m,k;
             if (osoption != NULL)
                 m = osoption->getNumberOfInitVarValues();
             else
@@ -843,7 +847,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                 double initval;
                 for(k = 0; k < m; k++)
                 {
-                    i = initVarVector[k]->idx;
+                    int i = initVarVector[k]->idx;
                     if (initVarVector[k]->idx >= n)
                         throw ErrorClass ("Illegal index value in variable initialization");
 
@@ -938,7 +942,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                  * Any others, or any missing statuses, are set to isFree; let Clp deal with it.
                  */
                 {
-                    int nsBas,naBas,nsUpp,naUpp,nsLow,naLow,nvar,ncon;
+                    unsigned int nsBas,naBas,nsUpp,naUpp,nsLow,naLow,nvar,ncon;
                     int* tmpBas = NULL;
                     CoinWarmStartBasis* warmstart = new CoinWarmStartBasis();
                     nvar = osinstance->getVariableNumber();
@@ -978,7 +982,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     {
                         tmpBas = new int[nsBas];
                         osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic,tmpBas);
-                        for (int i=0; i<nsBas; i++)
+                        for (unsigned int i=0; i<nsBas; i++)
                             warmstart->setStructStatus(tmpBas[i], (CoinWarmStartBasis::Status)0x01); 
                         delete [] tmpBas;
                     }
@@ -986,7 +990,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     {
                         tmpBas = new int[naBas];
                         osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_basic,tmpBas);           
-                        for (int i=0; i<naBas; i++)                        
+                        for (unsigned int i=0; i<naBas; i++)                        
                             warmstart->setArtifStatus(tmpBas[i], (CoinWarmStartBasis::Status)0x01); 
                         delete [] tmpBas;
                     }
@@ -995,7 +999,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     {
                         tmpBas = new int[nsUpp];
                         osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atUpper,tmpBas);           
-                        for (int i=0; i<nsUpp; i++)
+                        for (unsigned int i=0; i<nsUpp; i++)
                             warmstart->setStructStatus(tmpBas[i], (CoinWarmStartBasis::Status)0x02); 
                         delete [] tmpBas;
                     }
@@ -1003,7 +1007,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     {
                         tmpBas = new int[naUpp];
                         osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atUpper,tmpBas);           
-                        for (int i=0; i<naUpp; i++)                        
+                        for (unsigned int i=0; i<naUpp; i++)                        
                             warmstart->setArtifStatus(tmpBas[i], (CoinWarmStartBasis::Status)0x02); 
                         delete [] tmpBas;
                     }
@@ -1012,7 +1016,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     {
                         tmpBas = new int[nsLow];
                         osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atLower,tmpBas);           
-                        for (int i=0; i<nsLow; i++)
+                        for (unsigned int i=0; i<nsLow; i++)
                             warmstart->setStructStatus(tmpBas[i], (CoinWarmStartBasis::Status)0x03); 
                         delete [] tmpBas;
                     }
@@ -1020,7 +1024,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     {
                         tmpBas = new int[naLow];
                         osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atLower,tmpBas);           
-                        for (int i=0; i<naLow; i++)                        
+                        for (unsigned int i=0; i<naLow; i++)                        
                             warmstart->setArtifStatus(tmpBas[i], (CoinWarmStartBasis::Status)0x03); 
                         delete [] tmpBas;
                     }

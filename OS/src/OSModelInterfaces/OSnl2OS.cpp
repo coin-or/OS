@@ -148,7 +148,7 @@ bool OSnl2OS::readNl(std::string stub)
 #endif
         if(N_OPS > 0)
         {
-            for(int i = 0; i < N_OPS; i++)
+            for(unsigned int i = 0; i < N_OPS; i++)
             {
                 r_ops_int[i] = (efunc*)(unsigned long)i;
             }
@@ -171,7 +171,7 @@ bool OSnl2OS::readNl(std::string stub)
     }
     catch(const ErrorClass& eclass)
     {
-        return false;
+        throw ErrorClass(eclass.errormsg);
     }
 }
 
@@ -441,7 +441,7 @@ ExprNode* OSnl2OS::walkTree (expr *e)
     }//end try
     catch(const ErrorClass& eclass)
     {
-        throw;
+        throw ErrorClass(eclass.errormsg);
     }
 }//walkTree
 
@@ -497,6 +497,10 @@ void OSnl2OS::setIBVar(OSInstance *osinstance, int lower, int upper)
 
 bool OSnl2OS::createOSObjects()
 {
+/** Create both an osinstance and an osoption object from the .nl file.
+ *  The .nl file may or may not contain options, but an osoption object
+ *  will be created. (It may be emtpy if neither .nl nor .osol file found.)
+ */
     int *A_rowstarts = NULL;
     int *A_colptr = NULL;
     double *A_nzelem = NULL;
@@ -664,7 +668,7 @@ bool OSnl2OS::createOSObjects()
         if (nlExprs.size())
         {
             Nl** ppsNl = new Nl*[ nlExprs.size() ];
-            for (unsigned int i = 0; i < nlExprs.size(); i++)
+            for (std::vector<Nl>::size_type i = 0; i < nlExprs.size(); i++)
             {
                 ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
                 ppsNl[i]->m_bDeleteExpressionTree = true;
@@ -742,7 +746,7 @@ bool OSnl2OS::createOSObjects()
         int row_len;
         A_rowstarts = new int[n_con+1];
         A_rowstarts[0] = 0;
-        for (int i=0; i < n_con; i++)
+        for (i=0; i < n_con; i++)
         {
             row_len = 0;
             for(cg = Cgrad[i]; cg; cg = cg->next)
@@ -753,7 +757,7 @@ bool OSnl2OS::createOSObjects()
         }
         A_colptr = new    int[A_rowstarts[n_con]];
         A_nzelem = new double[A_rowstarts[n_con]];
-        for (int i=0; i < n_con; i++)
+        for (i=0; i < n_con; i++)
         {
             row_len = 0;
             for(cg = Cgrad[i]; cg; cg = cg->next)
@@ -775,9 +779,9 @@ bool OSnl2OS::createOSObjects()
                 A_rowstarts,  0,  n_con);
 // setLinearConstraintCoefficients does a soft copy, and unlike the column-wise representation, 
 // this row-wise representation is not taken care of by the ASL_free method in the destructor
-            osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = true;
+            osinstance->instanceData->linearConstraintCoefficients->start ->bDeleteArrays = true;
             osinstance->instanceData->linearConstraintCoefficients->colIdx->bDeleteArrays = true;
-            osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = true;
+            osinstance->instanceData->linearConstraintCoefficients->value ->bDeleteArrays = true;
         }
 
 
@@ -785,15 +789,15 @@ bool OSnl2OS::createOSObjects()
         outStr.str("");
         outStr.clear();
         outStr << "A-matrix elements: ";
-        for (int i = 0; i < A_rowstarts[ n_con]; i++)
+        for (i = 0; i < A_rowstarts[ n_con]; i++)
             outStr << A_nzelem[i] << " ";
         outStr << endl;
         outStr << "A-matrix col index: ";
-        for (int i = 0; i < A_rowstarts[ n_con]; i++)
+        for (i = 0; i < A_rowstarts[ n_con]; i++)
             outStr << A_colptr[i] << " ";
         outStr << endl;
         outStr << "A-matrix rowstart: ";
-        for (int i = 0; i <= n_con; i++)
+        for (i = 0; i <= n_con; i++)
             outStr << A_rowstarts[i] << " ";
         outStr << endl;
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
@@ -810,15 +814,15 @@ bool OSnl2OS::createOSObjects()
         outStr.str("");
         outStr.clear();
         outStr << "A-matrix elements: ";
-        for (int i = 0; i < A_colstarts[ n_var]; i++)
+        for (i = 0; i < A_colstarts[ n_var]; i++)
             outStr << A_vals[i] << " ";
         outStr << endl;
         outStr << "A-matrix rowinfo: ";
-        for (int i = 0; i < A_colstarts[ n_var]; i++)
+        for (i = 0; i < A_colstarts[ n_var]; i++)
             outStr << A_rownos[i] << " ";
         outStr << endl;
         outStr << "A-matrix colstart: ";
-        for (int i = 0; i <= n_var; i++)
+        for (i = 0; i <= n_var; i++)
             outStr << A_colstarts[i] << " ";
         outStr << endl;
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
@@ -881,9 +885,9 @@ bool OSnl2OS::createOSObjects()
                 A_vals,   0,  A_colstarts[n_var] - 1,
                 A_rownos, 0,  A_colstarts[n_var] - 1,
                 A_colstarts,  0,  n_var);
-            osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
+            osinstance->instanceData->linearConstraintCoefficients->start ->bDeleteArrays = false;
             osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
-            osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
+            osinstance->instanceData->linearConstraintCoefficients->value ->bDeleteArrays = false;
 // We are doing a shallow copy, so we must decouple the A matrix from the AMPL data structure
             A_vals = NULL;
             A_rownos = NULL;
@@ -907,6 +911,22 @@ bool OSnl2OS::createOSObjects()
     try
     {
         osolreader = new OSoLReader();
+/**
+ *  osolreader maintains a private pointer to tmpoption, which will cause the OSOption object
+ *  to be destroyed when osolreader is deleted. The solution is to do a deep copy of tmpoption. 
+ *  This is not as bad as it looks because the information read from the OSoL file 
+ *  is likely to be much smaller than the array-valued information in the .nl file,
+ *  which triggered the merge of the .nl options with the .osol options in the first place.
+ *                                  (HIG - 28/Jan/2013)
+ */
+        OSOption* tmpoption = new OSOption(); 
+        tmpoption = osolreader->readOSoL(osol);
+
+        osoption = new OSOption();
+        osoption->deepCopyFrom(tmpoption);
+
+        //make sure to copy the jobID if it was set (from the command line)
+        if (jobID != "") osoption->setJobID(jobID);
 
         // check if there are any suffixes to deal with and read options if necessary
         bool have_primal = false;
@@ -937,22 +957,6 @@ bool OSnl2OS::createOSObjects()
             (asl->i.suffixes[ASL_Sufkind_prob] != NULL) ||
             ( have_primal ) || ( have_dual ) )               
         {   
-            OSOption* tmpoption = new OSOption(); 
-            tmpoption = osolreader->readOSoL(osol);
-/**
- *  osolreader maintains a private pointer to tmpoption, which will cause the OSOption object
- *  to be destroyed when osolreader is deleted. The solution is to do a deep copy of tmpoption. 
- *  This is not as bad as it looks because the information read from the OSoL file 
- *  is likely to be much smaller than the array-valued information in the .nl file,
- *  which triggered the merge of the .nl options with the .osol options in the first place.
- *                                  (HIG - 28/Jan/2013)
- */
-            osoption = new OSOption(); 
-            osoption->deepCopyFrom(tmpoption);
-
-            //make sure to copy the jobID if it was set (from the command line)
-            if (jobID != "") osoption->setJobID(jobID);
-        }
 
         bool found;
         int  nOther;
@@ -971,7 +975,7 @@ bool OSnl2OS::createOSObjects()
                 osoption->optimization->variables->numberOfOtherVariableOptions > 0)
             {
                 otherOptionNames = new std::string[osoption->optimization->variables->numberOfOtherVariableOptions];
-                for (int i=0; i < osoption->optimization->variables->numberOfOtherVariableOptions; i++)
+                for (i=0; i < osoption->optimization->variables->numberOfOtherVariableOptions; i++)
                     if (osoption->optimization->variables->other[i]->numberOfVar > 0)
                         otherOptionNames[nOther++] = osoption->optimization->variables->other[i]->name;
             }
@@ -1026,7 +1030,7 @@ bool OSnl2OS::createOSObjects()
                         osoption->optimization->variables->initialBasisStatus != NULL)
                     {
                         // retrieve basis and store into ASL data structure
-                        for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                        for (i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         {
                             nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, basCode[i]);
                             if (nIndexes > 0)
@@ -1074,7 +1078,7 @@ bool OSnl2OS::createOSObjects()
                     // allocate space
                     int **IBS2;
                     IBS2 = new int*[ENUM_BASIS_STATUS_NUMBER_OF_STATES];
-                    for (int i=0; i<ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    for (i=0; i<ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                     {
                         IBS2[i] = new int[nidx[i]];
                     }
@@ -1086,12 +1090,12 @@ bool OSnl2OS::createOSObjects()
                     }
 
                     // store into <initialBasisStatus> element
-                    for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    for (i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         if (nidx[i] > 0)
                             osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, basCode[i], IBS2[i], nidx[i]);
 
                     // garbage collection
-                    for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    for (i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         delete [] IBS2[i];
                     delete [] IBS2;
                 }
@@ -1122,7 +1126,7 @@ bool OSnl2OS::createOSObjects()
                     {
                         OtherVariableOptionOrResult* otherOption;
                         otherOption = osoption->getOtherVariableOption(iopt);
-                        for (int i=0; i < otherOption->numberOfVar; i++)
+                        for (i=0; i < otherOption->numberOfVar; i++)
                         {
                             if (d->kind & 4) // bit-wise mask to distinguish real from integer
                             {
@@ -1210,7 +1214,7 @@ bool OSnl2OS::createOSObjects()
                 osoption->optimization->constraints->numberOfOtherConstraintOptions > 0)
             {
                 otherOptionNames = new std::string[osoption->optimization->constraints->numberOfOtherConstraintOptions];
-                for (int i=0; i < osoption->optimization->constraints->numberOfOtherConstraintOptions; i++)
+                for (i=0; i < osoption->optimization->constraints->numberOfOtherConstraintOptions; i++)
                     if (osoption->optimization->constraints->other[i]->numberOfCon > 0)
                         otherOptionNames[nOther++] = osoption->optimization->constraints->other[i]->name;
             }
@@ -1265,7 +1269,7 @@ bool OSnl2OS::createOSObjects()
                     {
 
                         // retrieve basis and store into ASL data structure
-                        for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                        for (i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         {
                             nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, basCode[i]);
                             if (nIndexes > 0)
@@ -1313,7 +1317,7 @@ bool OSnl2OS::createOSObjects()
                     // allocate space
                     int **IBS2;
                     IBS2 = new int*[ENUM_BASIS_STATUS_NUMBER_OF_STATES];
-                    for (int i=0; i<ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    for (i=0; i<ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                     {
                         IBS2[i] = new int[nidx[i]];
                     }
@@ -1325,12 +1329,12 @@ bool OSnl2OS::createOSObjects()
                     }
 
                     // store into <initialBasisStatus> element
-                    for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    for (i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         if (nidx[i] > 0)
                             osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, basCode[i], IBS2[i], nidx[i]);
 
                     // garbage collection
-                    for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    for (i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         delete [] IBS2[i];
                     delete [] IBS2;
                 }
@@ -1361,7 +1365,7 @@ bool OSnl2OS::createOSObjects()
                     {
                         OtherConstraintOptionOrResult* otherOption;
                         otherOption = osoption->getOtherConstraintOption(iopt);
-                        for (int i=0; i < otherOption->numberOfCon; i++)
+                        for (i=0; i < otherOption->numberOfCon; i++)
                         {
                             if (d->kind & 4) // bit-wise mask to distinguish real from integer
                             {
@@ -1449,7 +1453,7 @@ bool OSnl2OS::createOSObjects()
                 osoption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
             {
                 otherOptionNames = new std::string[osoption->optimization->objectives->numberOfOtherObjectiveOptions];
-                for (int i=0; i < osoption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
+                for (i=0; i < osoption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
                     if (osoption->optimization->objectives->other[i]->numberOfObj > 0)
                         otherOptionNames[nOther++] = osoption->optimization->objectives->other[i]->name;
             }
@@ -1490,7 +1494,7 @@ bool OSnl2OS::createOSObjects()
 #ifndef NDEBUG
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, "Merge data\n");
 #endif
-                    for (int i=0; i < otherOption->numberOfObj; i++)
+                    for (i=0; i < otherOption->numberOfObj; i++)
                     {
                         if (d->kind & 4) // bit-wise mask to distinguish real from integer
                         {
@@ -1607,13 +1611,13 @@ bool OSnl2OS::createOSObjects()
             osoption->optimization->variables->initialVariableValues->numberOfVar > 0)
         {
             int n_prev = osoption->optimization->variables->initialVariableValues->numberOfVar;
-            for (int i=0; i < n_prev; i++)
+            for (i=0; i < n_prev; i++)
                 havex0[osoption->optimization->variables->initialVariableValues->var[i]->idx] = 0;
         }
 
         // count the number of values (including those in the OSoL file)
         int n_x0 = 0;
-        for (int i=0; i < n_var; i++)
+        for (i=0; i < n_var; i++)
             if (havex0[i] != 0) n_x0++;
 
         if (n_x0 > 0)
@@ -1623,7 +1627,7 @@ bool OSnl2OS::createOSObjects()
     
             // pull info out of ASL data structure
             n_x0 = 0;
-            for (int i=0; i < n_var; i++)
+            for (i=0; i < n_var; i++)
             {
                 if (havex0[i] != 0) 
                 {
@@ -1638,7 +1642,7 @@ bool OSnl2OS::createOSObjects()
             if (!osoption->setInitVarValuesSparse(n_x0, x_init, ENUM_COMBINE_ARRAYS_merge)) 
                 throw ErrorClass( "OSnl2OS: Error merging initial primal variable values" );
 
-            for (int i=0; i < n_x0; i++)
+            for (i=0; i < n_x0; i++)
                 delete x_init[i];
 //                x_init[i] = NULL;
             delete  [] x_init;
@@ -1655,13 +1659,13 @@ bool OSnl2OS::createOSObjects()
             osoption->optimization->constraints->initialDualValues->numberOfCon > 0)
         {
             int n_prev = osoption->optimization->constraints->initialDualValues->numberOfCon;
-            for (int i=0; i < n_prev; i++)
+            for (i=0; i < n_prev; i++)
                 havepi0[osoption->optimization->constraints->initialDualValues->con[i]->idx] = 0;
         }
 
         // count the number of values (including those in the OSoL file)
         int n_pi0 = 0;
-        for (int i=0; i < n_con; i++)
+        for (i=0; i < n_con; i++)
             if (havepi0[i] != 0) n_pi0++;
 
         if (n_pi0 > 0)
@@ -1671,7 +1675,7 @@ bool OSnl2OS::createOSObjects()
     
             // pull info out of ASL data structure
             n_pi0 = 0;
-            for (int i=0; i < n_con; i++)
+            for (i=0; i < n_con; i++)
             {
                 if (havepi0[i] != 0) 
                 {
@@ -1687,7 +1691,7 @@ bool OSnl2OS::createOSObjects()
             if (!osoption->setInitDualVarValuesSparse(n_pi0, pi_init, ENUM_COMBINE_ARRAYS_merge)) 
                 throw ErrorClass( "OSnl2OS: Error merging initial dual variable values" );
 
-            for (int i=0; i < n_pi0; i++)
+            for (i=0; i < n_pi0; i++)
                 delete pi_init[i];
 //                pi_init[i] = NULL;
             delete  [] pi_init;
@@ -1697,25 +1701,12 @@ bool OSnl2OS::createOSObjects()
     //still to do
     //special ordered sets, branching weights, branching group weights
     //initial objective values: .val
+        }// end if (.nl. has option info)
+
 
 #ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "At end of OSnl2OS\n");
-        OSiLWriter* osilwriter = new OSiLWriter(); 
-        std::string tmposil = osilwriter->writeOSiL(osinstance);
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, tmposil);
-
-        delete osilwriter;
-        osilwriter = NULL;
-
-#endif
-    }// end try
-
-    catch(const ErrorClass& eclass)
-    {
-        // garbage collection etc.
-    }
-
-#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace,
+            "At end of OSnl2OS\n");
     OSiLWriter *osilwriter = new OSiLWriter();
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "WRITE THE INSTANCE\n");
     osilwriter->m_bWhiteSpace = true;
@@ -1734,6 +1725,13 @@ bool OSnl2OS::createOSObjects()
 #endif
    
     return true;
+    }// end try
+
+    catch(const ErrorClass& eclass)
+    {
+        // garbage collection etc.
+        throw ErrorClass(eclass.errormsg);
+    }
 }
 
 

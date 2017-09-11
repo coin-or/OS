@@ -192,8 +192,8 @@ public:
     double ubDualValue;
     int  numberOfOtherMatrixProgrammingOptions;
     int  numberOfOtherMatrixVariableOptions;
-    int numberOfEnumerations;
-    int otherOptionType;
+    int  numberOfEnumerations;
+    int  otherOptionType;
 
     /** attributes of <other> options */
     bool otherOptionNumberPresent;

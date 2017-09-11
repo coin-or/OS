@@ -144,43 +144,27 @@ bool MatrixNode::IsEqual(MatrixNode *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MatrixNode");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->inumberOfChildren  != that->inumberOfChildren)  return false;
-            if (this->declaredMatrixType != that->declaredMatrixType) return false;
-            if (this->inferredMatrixType != that->inferredMatrixType) return false;
-            if (this->nType              != that->nType)              return false;
+        if (this->inumberOfChildren  != that->inumberOfChildren)  return false;
+        if (this->declaredMatrixType != that->declaredMatrixType) return false;
+        if (this->inferredMatrixType != that->inferredMatrixType) return false;
+        if (this->nType              != that->nType)              return false;
 
-            for (unsigned int i=0; i < inumberOfChildren; i++)
-                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
-                    return false;
-
-            return true;
-        }
+        for (unsigned int i=0; i < inumberOfChildren; i++)
+            if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                return false;
     }
+
+    return true;
 }// end of MatrixNode::IsEqual()
 // end of methods for MatrixNode
 
@@ -2254,7 +2238,7 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
 
                 tmpBlocks->blockNumber   = ((MatrixBlocks*)m_mChildren[0])->inumberOfChildren;
                 tmpBlocks->blocks        = new GeneralSparseMatrix*[tmpBlocks->blockNumber]; //leaks memory
-                tmpBlocks->blockRows     = new int[tmpBlocks->blockNumber]; //apparently clean!
+                tmpBlocks->blockRows     = new int[tmpBlocks->blockNumber]; //leaks memory
                 tmpBlocks->blockColumns  = new int[tmpBlocks->blockNumber]; //leaks memory
                 tmpBlockIdx              = new int[tmpBlocks->blockNumber];
 
@@ -2689,43 +2673,39 @@ bool MatrixElements::IsEqual(MatrixElements *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor      ) return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor != that->rowMajor) return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start))
                 return false;
 
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
+        }
+        else
             if (!this->index->IsEqual(that->index))
                 return false;
-
-            return true;
-        }
     }
+
+    return true;
 }// end of MatrixElements::IsEqual()
 // end of methods for MatrixElements
 
@@ -3545,38 +3525,22 @@ bool OSMatrix::IsEqual(OSMatrix *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSMatrix");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->idx  != this->idx)  return false; 
-            if (this->name != this->name) return false; 
-            if (!this->MatrixNode::IsEqual(that)) return false;
-
-            return true;
-        }
+        if ( this->idx  != that->idx        ) return false; 
+        if ( this->name != that->name       ) return false; 
+        if (!this->MatrixNode::IsEqual(that)) return false;
     }
+
+    return true;
 }// end of OSMatrix::IsEqual()
 // end of methods for OSMatrix
 
@@ -3664,38 +3628,22 @@ bool OSMatrixWithMatrixVarIdx::IsEqual(OSMatrixWithMatrixVarIdx *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug,
         "Start comparing in OSMatrixWithMatrixVarIdx");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->idx  != this->idx)  return false; 
-            if (this->name != this->name) return false; 
-            if (!this->OSMatrix::IsEqual(that)) return false;
-
-            return true;
-        }
+        if (this->idx  != that->idx)  return false; 
+        if (this->name != that->name) return false; 
+        if (!this->OSMatrix::IsEqual(that)) return false;
     }
+
+    return true;
 }// end of OSMatrixWithMatrixVarIdx::IsEqual()
 
 /** ---------- Methods for class OSMatrixWithMatrixObjIdx ---------- */
@@ -3780,38 +3728,22 @@ bool OSMatrixWithMatrixObjIdx::IsEqual(OSMatrixWithMatrixObjIdx *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug,
         "Start comparing in OSMatrixWithMatrixObjIdx");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->idx  != this->idx)  return false; 
-            if (this->name != this->name) return false; 
-            if (!this->OSMatrix::IsEqual(that)) return false;
-
-            return true;
-        }
+        if (this->idx  != that->idx)  return false; 
+        if (this->name != that->name) return false; 
+        if (!this->OSMatrix::IsEqual(that)) return false;
     }
+
+    return true;
 }// end of OSMatrixWithMatrixObjIdx::IsEqual()
 
 
@@ -3897,38 +3829,22 @@ bool OSMatrixWithMatrixConIdx::IsEqual(OSMatrixWithMatrixConIdx *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug,
         "Start comparing in OSMatrixWithMatrixConIdx");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->idx  != this->idx)  return false; 
-            if (this->name != this->name) return false; 
-            if (!this->OSMatrix::IsEqual(that)) return false;
-
-            return true;
-        }
+        if (this->idx  != that->idx)  return false; 
+        if (this->name != that->name) return false; 
+        if (!this->OSMatrix::IsEqual(that)) return false;
     }
+
+    return true;
 }// end of OSMatrixWithMatrixConIdx::IsEqual()
 
 /** ---------- Methods for class BaseMatrix ---------- */
@@ -4040,44 +3956,28 @@ bool BaseMatrix::IsEqual(BaseMatrix *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in BaseMatrix");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->baseMatrixIdx        != that->baseMatrixIdx)        return false;
-            if (this->targetMatrixFirstRow != that->targetMatrixFirstRow) return false;
-            if (this->targetMatrixFirstCol != that->targetMatrixFirstCol) return false;
-            if (this->baseMatrixStartRow   != that->baseMatrixStartRow)   return false;
-            if (this->baseMatrixStartCol   != that->baseMatrixStartCol)   return false;
-            if (this->baseMatrixEndRow     != that->baseMatrixEndRow)     return false;
-            if (this->baseMatrixEndCol     != that->baseMatrixEndCol)     return false;
-            if (this->baseTranspose        != that->baseTranspose)        return false;
-            if (this->scalarMultiplier     != that->scalarMultiplier)     return false;
-
-            return true;
-        }
+        if (this->baseMatrixIdx        != that->baseMatrixIdx)        return false;
+        if (this->targetMatrixFirstRow != that->targetMatrixFirstRow) return false;
+        if (this->targetMatrixFirstCol != that->targetMatrixFirstCol) return false;
+        if (this->baseMatrixStartRow   != that->baseMatrixStartRow)   return false;
+        if (this->baseMatrixStartCol   != that->baseMatrixStartCol)   return false;
+        if (this->baseMatrixEndRow     != that->baseMatrixEndRow)     return false;
+        if (this->baseMatrixEndCol     != that->baseMatrixEndCol)     return false;
+        if (this->baseTranspose        != that->baseTranspose)        return false;
+        if (this->scalarMultiplier     != that->scalarMultiplier)     return false;
     }
+
+    return true;
 }// end of BaseMatrix::IsEqual()
 // end of methods for BaseMatrix
 
@@ -4161,37 +4061,27 @@ bool MatrixTransformation::IsEqual(MatrixTransformation *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MatrixTransformation");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->transformation == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->transformation != NULL)
+                return false;
         }
         else
-        {
             if (!this->transformation->IsEqual(that->transformation))
                 return false;
-
-            return true;
-        }
     }
+
+    return true;
 }// end of MatrixTransformation::IsEqual()
 //end of methods for MatrixTransformation
 
@@ -4308,41 +4198,45 @@ bool ConstantMatrixElements::IsEqual(ConstantMatrixElements *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace,
         "Start comparing in ConstantMatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of ConstantMatrixElements::IsEqual()
 
 bool ConstantMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -4393,38 +4287,24 @@ bool ConstantMatrixValues::IsEqual(ConstantMatrixValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ConstantMatrixValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
-            for (int i=0; i < numberOfEl; i++)
-                if (this->el[i] != that->el[i]) return false;
+        if (this->numberOfEl != that->numberOfEl) return false;
 
-            return true;
-        }
+        for (unsigned int i = 0; i < this->numberOfEl; i++)
+            if (this->el[i] != that->el[i])
+                return false;
     }
+
+    return true;
 }// end of ConstantMatrixValues::IsEqual()
 
 bool ConstantMatrixValues::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -4555,41 +4435,47 @@ bool ComplexMatrixElements::IsEqual(ComplexMatrixElements *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ComplexMatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
+
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
+        }
+        else
             if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
             if (!this->value->IsEqual(that->value)) return false;
 
             return true;
-        }
     }
+
+        return true;
 }// end of ComplexMatrixElements::IsEqual()
 
 bool ComplexMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -4641,38 +4527,41 @@ bool ComplexMatrixValues::IsEqual(ComplexMatrixValues *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace,
         "Start comparing in ComplexMatrixValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
-            for (int i=0; i < numberOfEl; i++)
-                if (this->el[i] != that->el[i]) return false;
+        if (this->numberOfEl != that->numberOfEl) return false;
 
-            return true;
+        for (unsigned int i = 0; i < this->numberOfEl; i++)
+        {
+/*
+            if (this->el[i] == NULL)
+            {
+                if (that->el[i] != NULL)
+                    return false;
+            }
+            else
+                if (!this->el[i]->IsEqual(that->el[i]))
+                    return false;
+*/
+/*
+            if ((this->el[i]).real != (that->el[i]).real ||
+                (this->el[i]).imag != (that->el[i]).imag  )
+                    return false;
+*/
+            if (this->el[i] != that->el[i])
+                return false;
         }
     }
+
+    return true;
 }// end of ComplexMatrixValues::IsEqual()
 
 bool ComplexMatrixValues::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -4807,41 +4696,45 @@ bool VarReferenceMatrixElements::IsEqual(VarReferenceMatrixElements *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VarReferenceMatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of VarReferenceMatrixElements::IsEqual()
 
 bool VarReferenceMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -4886,38 +4779,24 @@ bool VarReferenceMatrixValues::IsEqual(VarReferenceMatrixValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VarReferenceMatrixValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
-            for (int i=0; i < numberOfEl; i++)
-                if (this->el[i] != that->el[i]) return false;
+        if (this->numberOfEl != that->numberOfEl) return false;
 
-            return true;
-        }
+        for (unsigned int i = 0; i < this->numberOfEl; i++)
+            if (this->el[i] != that->el[i])
+                return false;
     }
+
+    return true;
 }// end of VarReferenceMatrixValues::IsEqual()
 
 bool VarReferenceMatrixValues::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -5058,41 +4937,45 @@ bool LinearMatrixElements::IsEqual(LinearMatrixElements *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of LinearMatrixElements::IsEqual()
 
 bool LinearMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -5218,39 +5101,32 @@ bool LinearMatrixValues::IsEqual(LinearMatrixValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL || that->numberOfEl == 0)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL || that->numberOfEl == 0)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
+        if (this->numberOfEl != that->numberOfEl) return false;
 
-            for (int i=0; i < numberOfEl; i++)
-                if (!this->el[i]->IsEqual(that->el[i])) return false;
-
-            return true;
+        for (unsigned int i = 0; i < this->numberOfEl; i++)
+        {
+            if (this->el[i] == NULL)
+            {
+                if (that->el[i] != NULL)
+                    return false;
+            }
+            else
+                if (!this->el[i]->IsEqual(that->el[i]))
+                    return false;
         }
     }
+
+    return true;
 }// end of LinearMatrixValues::IsEqual()
 
 bool LinearMatrixValues::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -5321,40 +5197,33 @@ bool LinearMatrixElement::IsEqual(LinearMatrixElement *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixElement");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL || that->numberOfVarIdx == 0)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL || that->numberOfVarIdx == 0)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfVarIdx != that->numberOfVarIdx) return false;
-            if (this->constant       != that->constant)       return false;
+        if (this->numberOfVarIdx != that->numberOfVarIdx) return false;
+        if (this->constant       != that->constant)       return false;
 
-            for (int i=0; i < numberOfVarIdx; i++)
-                if (!this->varIdx[i]->IsEqual(that->varIdx[i])) return false;
-
-            return true;
+        for (unsigned int i = 0; i < this->numberOfVarIdx; i++)
+        {
+            if (this->varIdx[i] == NULL)
+            {
+                if (that->varIdx[i] != NULL)
+                    return false;
+            }
+            else
+                if (!this->varIdx[i]->IsEqual(that->varIdx[i]))
+                    return false;
         }
     }
+
+    return true;
 }// end of LinearMatrixElement::IsEqual()
 
 bool LinearMatrixElement::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -5408,37 +5277,21 @@ bool LinearMatrixElementTerm::IsEqual(LinearMatrixElementTerm *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace,
         "Start comparing in LinearMatrixElementTerm");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->idx  != that->idx)  return false;
-            if (this->coef != that->coef) return false;
-
-            return true;
-        }
+        if (this->idx  != that->idx)  return false;
+        if (this->coef != that->coef) return false;
     }
+
+    return true;
 }// end of LinearMatrixElementTerm::IsEqual()
 
 bool LinearMatrixElementTerm::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -5553,41 +5406,45 @@ bool RealValuedExpressions::IsEqual(RealValuedExpressions *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in RealValuedExpressions");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of RealValuedExpressions::IsEqual()
 
 bool RealValuedExpressions::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -5651,39 +5508,32 @@ bool RealValuedExpressionArray::IsEqual(RealValuedExpressionArray *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
         ENUM_OUTPUT_LEVEL_trace, "Start comparing in RealValuedExpressionArray");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL || that->numberOfEl == 0)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL || that->numberOfEl == 0)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
+        if (this->numberOfEl != that->numberOfEl) return false;
 
-            for (int i=0; i < numberOfEl; i++)
-                if (!this->el[i]->IsEqual(that->el[i])) return false;
-
-            return true;
+        for (unsigned int i = 0; i < this->numberOfEl; i++)
+        {
+            if (this->el[i] == NULL)
+            {
+                if (that->el[i] != NULL)
+                    return false;
+            }
+            else
+                if (!this->el[i]->IsEqual(that->el[i]))
+                    return false;
         }
     }
+
+    return true;
 }// end of RealValuedExpressionArray::IsEqual()
 
 bool RealValuedExpressionArray::deepCopyFrom(RealValuedExpressionArray *that)
@@ -5806,41 +5656,45 @@ bool ComplexValuedExpressions::IsEqual(ComplexValuedExpressions *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ComplexValuedExpressions");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of ComplexValuedExpressions::IsEqual()
 
 bool ComplexValuedExpressions::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -5904,39 +5758,32 @@ bool ComplexValuedExpressionArray::IsEqual(ComplexValuedExpressionArray *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
         ENUM_OUTPUT_LEVEL_trace, "Start comparing in ComplexValuedExpressionArray");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL || that->numberOfEl == 0)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL || that->numberOfEl == 0)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
+        if (this->numberOfEl != that->numberOfEl) return false;
 
-            for (int i=0; i < numberOfEl; i++)
-                if (!this->el[i]->IsEqual(that->el[i])) return false;
-
-            return true;
+        for (unsigned int i = 0; i < this->numberOfEl; i++)
+        {
+            if (this->el[i] == NULL)
+            {
+                if (that->el[i] != NULL)
+                    return false;
+            }
+            else
+                if (!this->el[i]->IsEqual(that->el[i]))
+                    return false;
         }
     }
+
+    return true;
 }// end of ComplexValuedExpressionArray::IsEqual()
 
 bool ComplexValuedExpressionArray::deepCopyFrom(ComplexValuedExpressionArray *that)
@@ -6136,41 +5983,45 @@ bool ObjReferenceMatrixElements::IsEqual(ObjReferenceMatrixElements *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace,
         "Start comparing in ObjReferenceMatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of ObjReferenceMatrixElements::IsEqual()
 
 bool ObjReferenceMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -6217,38 +6068,23 @@ bool ObjReferenceMatrixValues::IsEqual(ObjReferenceMatrixValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ObjReferenceMatrixValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
-            for (int i=0; i < numberOfEl; i++)
-                if (this->el[i] != that->el[i]) return false;
+        if (this->numberOfEl != that->numberOfEl) return false;
 
-            return true;
-        }
+        for (unsigned int i=0; i < numberOfEl; i++)
+            if (this->el[i] != that->el[i]) return false;
     }
+
+    return true;
 }// end of ObjReferenceMatrixValues::IsEqual()
 
 bool ObjReferenceMatrixValues::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -6380,41 +6216,45 @@ bool ConReferenceMatrixElements::IsEqual(ConReferenceMatrixElements *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace,
         "Start comparing in ConReferenceMatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of ConReferenceMatrixElements::IsEqual()
 
 
@@ -6501,38 +6341,31 @@ bool ConReferenceMatrixValues::IsEqual(ConReferenceMatrixValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ConReferenceMatrixValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfEl != that->numberOfEl) return false;
+        for (unsigned int i=0; i < numberOfEl; i++)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
-            for (int i=0; i < numberOfEl; i++)
-                if (!this->el[i]->IsEqual(that->el[i])) return false;
-
-            return true;
+            if (this->el[i] == NULL)
+            {
+                if (that->el[i] != NULL)
+                    return false;
+            }
+            else
+                if (!this->el[i]->IsEqual(that->el[i]))
+                    return false;
         }
     }
+
+    return true;
 }// end of ConReferenceMatrixValues::IsEqual()
 
 bool ConReferenceMatrixValues::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -6575,37 +6408,21 @@ bool ConReferenceMatrixElement::IsEqual(ConReferenceMatrixElement *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ConReferenceMatrixElement");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->conReference != that->conReference) return false;
-            if (this->valueType    != that->valueType   ) return false;
-
-            return true;
-        }
+        if (this->conReference != that->conReference) return false;
+        if (this->valueType    != that->valueType   ) return false;
     }
+
+    return true;
 }// end of ConReferenceMatrixElement::IsEqual()
 
 bool ConReferenceMatrixElement::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -6861,41 +6678,45 @@ bool MixedRowReferenceMatrixElements::IsEqual(MixedRowReferenceMatrixElements *t
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace,
         "Start comparing in MixedRowReferenceMatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of MixedRowReferenceMatrixElements::IsEqual()
 
 bool MixedRowReferenceMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -7017,41 +6838,45 @@ bool StringValuedMatrixElements::IsEqual(StringValuedMatrixElements *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in StringValuedMatrixElements");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->rowMajor       != that->rowMajor)       return false;
+        if (this->numberOfValues != that->numberOfValues) return false;
+
+        if (this->start == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->start != NULL)
+                return false;
         }
         else
-        {
-            if (this->rowMajor       != that->rowMajor)       return false;
-            if (this->numberOfValues != that->numberOfValues) return false;
-
             if (!this->start->IsEqual(that->start)) return false;
-            if (!this->index->IsEqual(that->index)) return false;
-            if (!this->value->IsEqual(that->value)) return false;
 
-            return true;
+        if (this->index == NULL)
+        {
+            if (that->index != NULL)
+                return false;
         }
+        else
+            if (!this->index->IsEqual(that->index)) return false;
+
+        if (this->value == NULL)
+        {
+            if (that->value != NULL)
+                return false;
+        }
+        else
+            if (!this->value->IsEqual(that->value)) return false;
     }
+
+    return true;
 }// end of StringValuedMatrixElements::IsEqual()
 
 bool StringValuedMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -7289,38 +7114,22 @@ bool StringValuedMatrixValues::IsEqual(StringValuedMatrixValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in StringValuedMatrixValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->numberOfEl != that->numberOfEl) return false;
-            for (int i=0; i < numberOfEl; i++)
-                if (this->el[i] != that->el[i]) return false;
-
-            return true;
-        }
+        if (this->numberOfEl != that->numberOfEl) return false;
+        for (unsigned int i=0; i < numberOfEl; i++)
+            if (this->el[i] != that->el[i]) return false;
     }
+
+    return true;
 }// end of StringValuedMatrixValues::IsEqual()
 
 bool StringValuedMatrixValues::setRandom(double density, bool conformant, int iMin, int iMax)
@@ -7491,38 +7300,36 @@ bool MatrixBlocks::IsEqual(MatrixBlocks *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MatrixBlocks");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->colOffset == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
-                "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->colOffset != NULL)
+                return false;
         }
         else
-        {
             if (!this->colOffset->IsEqual(that->colOffset))
                 return false;
+
+        if (this->rowOffset == NULL)
+        {
+            if (that->rowOffset != NULL)
+                return false;
+        }
+        else
             if (!this->rowOffset->IsEqual(that->rowOffset))
                 return false;
-            return true;
-        }
     }
+
+    return true;
 }// end of MatrixBlocks::IsEqual()
 // end of methods for MatrixBlocks
 
@@ -7621,7 +7428,19 @@ MatrixBlock* MatrixBlock::cloneMatrixNode()
 
 bool MatrixBlock::IsEqual(MatrixBlock *that)
 {
-    return true;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MatrixBlock");
+#endif
+    if (that == NULL)
+    {
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
+#endif
+        return false;
+    }
+    else
+        return true;
 }// end of MatrixBlock::IsEqual()
 
 bool MatrixBlock::setRandom(double density, bool conformant, int iMin, int iMax)

@@ -540,7 +540,6 @@ InitBasStatus::~InitBasStatus()
 #endif
 }//end InitBasStatus destructor
 
-
 InitialBasisStatus::InitialBasisStatus():
     numberOfVar (0)
 {
@@ -1314,9 +1313,12 @@ SolverOptions::~SolverOptions()
 
 
 OptimizationOption::OptimizationOption():
-    numberOfVariables (-1),
-    numberOfObjectives (-1),
-    numberOfConstraints (-1)
+    numberOfVariables (0),
+    numberOfObjectives (0),
+    numberOfConstraints (0),
+    numberOfVariablesIsSet (false),
+    numberOfObjectivesIsSet (false),
+    numberOfConstraintsIsSet (false)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Inside OptimizationOption Constructor");
@@ -2103,8 +2105,19 @@ int  OSOption::getNumberOfVariables()
     if (this->optimization != NULL)
         return this->optimization->numberOfVariables;
 
-    return -1;
+    return 0;
 }//getNumberOfVariables
+
+/**
+ * get whether the number of variables has been set (in <optimization> element)
+ */
+bool OSOption::getIsSetNumberOfVariables()
+{
+    if (this->optimization != NULL)
+        return this->optimization->numberOfVariablesIsSet;
+
+    return false;
+}//getIsSetNumberOfVariables
 
 /**
  * get the number of objectives (in <optimization> element)
@@ -2114,8 +2127,19 @@ int  OSOption::getNumberOfObjectives()
     if (this->optimization != NULL)
         return this->optimization->numberOfObjectives;
 
-    return -1;
+    return 0;
 }//getNumberOfObjectives
+
+/**
+ * get whether the number of objectives has been set (in <optimization> element)
+ */
+bool OSOption::getIsSetNumberOfObjectives()
+{
+    if (this->optimization != NULL)
+        return this->optimization->numberOfObjectivesIsSet;
+
+    return false;
+}//getIsSetNumberOfObjectives
 
 /**
  * get the number of constraints (in <optimization> element)
@@ -2125,8 +2149,19 @@ int  OSOption::getNumberOfConstraints()
     if (this->optimization != NULL)
         return this->optimization->numberOfConstraints;
 
-    return -1;
+    return 0;
 }//getNumberOfConstraints
+
+/**
+ * get whether the number of constraints has been set (in <optimization> element)
+ */
+bool OSOption::getIsSetNumberOfConstraints()
+{
+    if (this->optimization != NULL)
+        return this->optimization->numberOfConstraintsIsSet;
+
+    return false;
+}//getIsSetNumberOfConstraints
 
 
 /**
@@ -2144,7 +2179,7 @@ int OSOption::getNumberOfInitVarValues()
             }
         }
     }
-    return -1;
+    return 0;
 }//getNumberOfInitVarValues
 
 /**
@@ -2156,7 +2191,7 @@ int OSOption::getNumberOfInitVarValuesString()
         if (this->optimization->variables != NULL)
             if (this->optimization->variables->initialVariableValuesString != NULL)
                 return this->optimization->variables->initialVariableValuesString->numberOfVar;
-    return -1;
+    return 0;
 }//getNumberOfInitVarValuesString
 
 
@@ -2169,7 +2204,7 @@ int OSOption::getNumberOfIntegerVariableBranchingWeights()
         if (this->optimization->variables != NULL)
             if (this->optimization->variables->integerVariableBranchingWeights != NULL)
                 return this->optimization->variables->integerVariableBranchingWeights->numberOfVar;
-    return -1;
+    return 0;
 }//getNumberOfIntegerBranchingWeights
 
 /**
@@ -2181,7 +2216,7 @@ int OSOption::getNumberOfSOS()
         if (this->optimization->variables != NULL)
             if (this->optimization->variables->sosVariableBranchingWeights != NULL)
                 return this->optimization->variables->sosVariableBranchingWeights->numberOfSOS;
-    return -1;
+    return 0;
 }//getNumberOfSOS
 
 /**
@@ -2197,7 +2232,7 @@ int OSOption::getNumberOfSOSVarBranchingWeights(int iSOS)
                     if (this->optimization->variables->sosVariableBranchingWeights->sos[iSOS] != NULL)
                         return this->optimization->variables->sosVariableBranchingWeights->sos[iSOS]->numberOfVar;
             }
-    return -1;
+    return 0;
 }//getNumberOfSOSVarBranchingWeights
 
 /**
@@ -2222,7 +2257,7 @@ int OSOption::getNumberOfInitObjValues()
             if (this->optimization->objectives->initialObjectiveValues != NULL)
                 return this->optimization->objectives->initialObjectiveValues->numberOfObj;
 
-    return -1;
+    return 0;
 }//getNumberOfInitObjValues
 
 /**
@@ -2234,7 +2269,7 @@ int OSOption::getNumberOfInitObjBounds()
         if (this->optimization->objectives != NULL)
             if (this->optimization->objectives->initialObjectiveBounds != NULL)
                 return this->optimization->objectives->initialObjectiveBounds->numberOfObj;
-    return -1;
+    return 0;
 }//getNumberOfInitObjBounds
 
 /**
@@ -2257,7 +2292,7 @@ int OSOption::getNumberOfInitConValues()
         if (this->optimization->constraints != NULL)
             if (this->optimization->constraints->initialConstraintValues != NULL)
                 return this->optimization->constraints->initialConstraintValues->numberOfCon;
-    return -1;
+    return 0;
 }//getNumberOfInitConValues
 
 /**
@@ -2270,7 +2305,7 @@ int OSOption::getNumberOfInitDualVarValues()
             if (this->optimization->constraints->initialDualValues != NULL)
                 return this->optimization->constraints->initialDualValues->numberOfCon;
 
-    return -1;
+    return 0;
 }//getNumberOfInitDualVarValues
 
 /**
@@ -2282,7 +2317,7 @@ int OSOption::getNumberOfOtherConstraintOptions()
         if (this->optimization->constraints != NULL)
             return this->optimization->constraints->numberOfOtherConstraintOptions;
 
-    return -1;
+    return 0;
 }//getNumberOfOtherConstraintOptions
 
 /**
@@ -2294,14 +2329,14 @@ int OSOption::getNumberOfSolverOptions()
         if (this->optimization->solverOptions != NULL)
             return this->optimization->solverOptions->numberOfSolverOptions;
 
-    return -1;
+    return 0;
 }//getNumberOfSolverOptions
 
 /**
  * get the value of an integer-valued option
  * @param optionName The name of the option
  * @return the value of the option optionName
- * @note This function returns -1 if optionName is not found
+ * @note This function throws an error if optionName is not found
  */
 int  OSOption::getOptionInt(std::string optionName)
 {
@@ -2401,7 +2436,7 @@ int  OSOption::getOptionInt(std::string optionName)
     if (optionName == "numberOfSolverOptions")
         return this->getNumberOfSolverOptions();
 
-    return -1;
+    throw ErrorClass("optionName not recognized");
 }//getOptionInt
 
 
@@ -2890,13 +2925,6 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
                 if (this->optimization->variables->initialVariableValues != NULL)
                 {
                     int i,j,k;
-
-
-
-
-
-
-
                     int num_var;
                     num_var = this->getNumberOfInitVarValues();
 
@@ -8457,6 +8485,7 @@ bool OSOption::setNumberOfVariables(int numberOfVariables)
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
     this->optimization->numberOfVariables = numberOfVariables;
+    this->optimization->numberOfVariablesIsSet = true;
     return true;
 }//setNumberOfVariables
 
@@ -8465,6 +8494,7 @@ bool OSOption::setNumberOfObjectives(int numberOfObjectives)
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
     this->optimization->numberOfObjectives = numberOfObjectives;
+    this->optimization->numberOfObjectivesIsSet = true;
     return true;
 }//setNumberOfObjectives
 
@@ -8473,6 +8503,7 @@ bool OSOption::setNumberOfConstraints(int numberOfConstraints)
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
     this->optimization->numberOfConstraints = numberOfConstraints;
+    this->optimization->numberOfConstraintsIsSet = true;
     return true;
 }//setNumberOfConstraints
 
@@ -9714,45 +9745,73 @@ bool OSOption::IsEqual(OSOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->optionHeader == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->optionHeader != NULL)
+                return false;
         }
         else
-        {
             if (!this->optionHeader->IsEqual(that->optionHeader))
                 return false;
+
+        if (this->general == NULL)
+        {
+            if (that->general != NULL)
+                return false;
+        }
+        else
             if (!this->general->IsEqual(that->general))
                 return false;
+
+        if (this->system == NULL)
+        {
+            if (that->system != NULL)
+                return false;
+        }
+        else
             if (!this->system->IsEqual(that->system))
 
                 return false;
+
+        if (this->service == NULL)
+        {
+            if (that->service != NULL)
+                return false;
+        }
+        else
             if (!this->service->IsEqual(that->service))
                 return false;
+
+        if (this->job == NULL)
+        {
+            if (that->job != NULL)
+                return false;
+        }
+        else
             if (!this->job->IsEqual(that->job))
                 return false;
+
+        if (this->optimization == NULL)
+        {
+            if (that->optimization != NULL)
+                return false;
+        }
+        else
             if (!this->optimization->IsEqual(that->optimization))
                 return false;
-            return true;
-        }
     }
+
+    return true;
 }//OSOption::IsEqual
 
 
@@ -9763,64 +9822,72 @@ bool GeneralOption::IsEqual(GeneralOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in GeneralOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        bool same;
+        same =  (this->serviceURI     == that->serviceURI);
+        same = ((this->serviceName    == that->serviceName )   && same);
+        same = ((this->instanceName   == that->instanceName )  && same);
+        same = ((this->jobID          == that->jobID )         && same);
+        same = ((this->solverToInvoke == that->solverToInvoke) && same);
+        same = ((this->license        == that->license )       && same);
+        same = ((this->userName       == that->userName )      && same);
+        same = ((this->password       == that->password )      && same);
+        if (!same)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "serviceURI:    " << this->serviceURI     << " vs. " << that->serviceURI     << endl;
+            outStr << "serviceName:   " << this->serviceName    << " vs. " << that->serviceName    << endl;
+            outStr << "instanceName:  " << this->instanceName   << " vs. " << that->instanceName   << endl;
+            outStr << "jobID:         " << this->jobID          << " vs. " << that->jobID          << endl;
+            outStr << "solverToInvoke:" << this->solverToInvoke << " vs. " << that->solverToInvoke << endl;
+            outStr << "license:       " << this->license        << " vs. " << that->license        << endl;
+            outStr << "userName:      " << this->userName       << " vs. " << that->userName       << endl;
+            outStr << "password:      " << this->password       << " vs. " << that->password       << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        if (this->instanceLocation == NULL)
         {
-            bool same;
-            same =  (this->serviceURI     == that->serviceURI);
-            same = ((this->serviceName    == that->serviceName )   && same);
-            same = ((this->instanceName   == that->instanceName )  && same);
-            same = ((this->jobID          == that->jobID )         && same);
-            same = ((this->solverToInvoke == that->solverToInvoke) && same);
-            same = ((this->license        == that->license )       && same);
-            same = ((this->userName       == that->userName )      && same);
-            same = ((this->password       == that->password )      && same);
-            if (!same)
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "serviceURI:    " << this->serviceURI     << " vs. " << that->serviceURI     << endl;
-                outStr << "serviceName:   " << this->serviceName    << " vs. " << that->serviceName    << endl;
-                outStr << "instanceName:  " << this->instanceName   << " vs. " << that->instanceName   << endl;
-                outStr << "jobID:         " << this->jobID          << " vs. " << that->jobID          << endl;
-                outStr << "solverToInvoke:" << this->solverToInvoke << " vs. " << that->solverToInvoke << endl;
-                outStr << "license:       " << this->license        << " vs. " << that->license        << endl;
-                outStr << "userName:      " << this->userName       << " vs. " << that->userName       << endl;
-                outStr << "password:      " << this->password       << " vs. " << that->password       << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
+            if (that->instanceLocation != NULL)
                 return false;
-            }
+        }
+        else
             if (!this->instanceLocation->IsEqual(that->instanceLocation))
                 return false;
+
+        if (this->contact == NULL)
+        {
+            if (that->contact != NULL)
+                return false;
+        }
+        else
             if (!this->contact->IsEqual(that->contact))
                 return false;
+
+        if (this->otherOptions == NULL)
+        {
+            if (that->otherOptions != NULL)
+                return false;
+        }
+        else
             if (!this->otherOptions->IsEqual(that->otherOptions))
                 return false;
-            return true;
-        }
     }
+
+    return true;
 }//GeneralOption::IsEqual
 
 
@@ -9829,42 +9896,63 @@ bool SystemOption::IsEqual(SystemOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SystemOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->minDiskSpace == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->minDiskSpace != NULL)
+                return false;
         }
         else
-        {
-            if (!this->minDiskSpace->IsEqual(that->minDiskSpace))
+           if (!this->minDiskSpace->IsEqual(that->minDiskSpace))
                 return false;
+
+        if (this->minMemorySize == NULL)
+        {
+            if (that->minMemorySize != NULL)
+                return false;
+        }
+        else
             if (!this->minMemorySize->IsEqual(that->minMemorySize))
                 return false;
+
+        if (this->minCPUSpeed == NULL)
+        {
+            if (that->minCPUSpeed != NULL)
+                return false;
+        }
+        else
             if (!this->minCPUSpeed->IsEqual(that->minCPUSpeed))
                 return false;
+
+        if (this->minCPUNumber == NULL)
+        {
+            if (that->minCPUNumber != NULL)
+                return false;
+        }
+        else
             if (!this->minCPUNumber->IsEqual(that->minCPUNumber))
                 return false;
+
+        if (this->otherOptions == NULL)
+        {
+            if (that->otherOptions != NULL)
+                return false;
+        }
+        else
             if (!this->otherOptions->IsEqual(that->otherOptions))
                 return false;
-            return true;
-        }
     }
+
+    return true;
 }//SystemOption::IsEqual
 
 
@@ -9875,45 +9963,38 @@ bool ServiceOption::IsEqual(ServiceOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ServiceOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->type != that->type)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "service type: " << this->type << " vs. " << that->type << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if (this->type != that->type)
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "service type: " << this->type << " vs. " << that->type << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
 
+        if (this->otherOptions == NULL)
+        {
+            if (that->otherOptions != NULL)
+                return false;
+        }
+        else
             if (!this->otherOptions->IsEqual(that->otherOptions))
                 return false;
-            return true;
-        }
     }
+
+    return true;
 }//ServiceOption::IsEqual
 
 
@@ -9924,73 +10005,155 @@ bool JobOption::IsEqual(JobOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in JobOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->requestedStartTime != that->requestedStartTime)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "requestedStartTime: " << this->requestedStartTime << " vs. " << that->requestedStartTime << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-
             return false;
         }
-        else
+
+        if (this->maxTime == NULL)
         {
-            if (this->requestedStartTime != that->requestedStartTime)
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "requestedStartTime: " << this->requestedStartTime << " vs. " << that->requestedStartTime << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
+            if (that->maxTime != NULL)
                 return false;
-            }
-
-
+        }
+        else
             if (!this->maxTime->IsEqual(that->maxTime))
                 return false;
+
+        if (this->dependencies == NULL)
+        {
+            if (that->dependencies != NULL)
+                return false;
+        }
+        else
             if (!this->dependencies->IsEqual(that->dependencies))
                 return false;
+
+        if (this->requiredDirectories == NULL)
+        {
+            if (that->requiredDirectories != NULL)
+                return false;
+        }
+        else
             if (!this->requiredDirectories->IsEqual(that->requiredDirectories))
                 return false;
+
+        if (this->requiredFiles == NULL)
+        {
+            if (that->requiredFiles != NULL)
+                return false;
+        }
+        else
             if (!this->requiredFiles->IsEqual(that->requiredFiles))
                 return false;
+
+        if (this->directoriesToMake == NULL)
+        {
+            if (that->directoriesToMake != NULL)
+                return false;
+        }
+        else
             if (!this->directoriesToMake->IsEqual(that->directoriesToMake))
                 return false;
+
+        if (this->filesToMake == NULL)
+        {
+            if (that->filesToMake != NULL)
+                return false;
+        }
+        else
             if (!this->filesToMake->IsEqual(that->filesToMake))
                 return false;
+
+        if (this->inputDirectoriesToMove == NULL)
+        {
+            if (that->inputDirectoriesToMove != NULL)
+                return false;
+        }
+        else
             if (!this->inputDirectoriesToMove->IsEqual(that->inputDirectoriesToMove))
                 return false;
+
+        if (this->inputFilesToMove == NULL)
+        {
+            if (that->inputFilesToMove != NULL)
+                return false;
+        }
+        else
             if (!this->inputFilesToMove->IsEqual(that->inputFilesToMove))
                 return false;
+
+        if (this->outputFilesToMove == NULL)
+        {
+            if (that->outputFilesToMove != NULL)
+                return false;
+        }
+        else
             if (!this->outputFilesToMove->IsEqual(that->outputFilesToMove))
                 return false;
+
+        if (this->outputDirectoriesToMove == NULL)
+        {
+            if (that->outputDirectoriesToMove != NULL)
+                return false;
+        }
+        else
             if (!this->outputDirectoriesToMove->IsEqual(that->outputDirectoriesToMove))
                 return false;
+
+        if (this->filesToDelete == NULL)
+        {
+            if (that->filesToDelete != NULL)
+                return false;
+        }
+        else
             if (!this->filesToDelete->IsEqual(that->filesToDelete))
                 return false;
+
+        if (this->directoriesToDelete == NULL)
+        {
+            if (that->directoriesToDelete != NULL)
+                return false;
+        }
+        else
             if (!this->directoriesToDelete->IsEqual(that->directoriesToDelete))
                 return false;
+
+        if (this->processesToKill == NULL)
+        {
+            if (that->processesToKill != NULL)
+                return false;
+        }
+        else
             if (!this->processesToKill->IsEqual(that->processesToKill))
                 return false;
+
+        if (this->otherOptions == NULL)
+        {
+            if (that->otherOptions != NULL)
+                return false;
+        }
+        else
             if (!this->otherOptions->IsEqual(that->otherOptions))
                 return false;
-            return true;
-        }
     }
+
+    return true;
 }//JobOption::IsEqual
 
 bool OptimizationOption::IsEqual(OptimizationOption *that)
@@ -10000,77 +10163,92 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OptimizationOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->numberOfVariables != that->numberOfVariables) &&
+            (this->numberOfVariables *  that->numberOfVariables) != 0)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfVariables: "
+                   << this->numberOfVariables << " vs. " << that->numberOfVariables << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+        if ((this->numberOfObjectives != that->numberOfObjectives) &&
+            (this->numberOfObjectives *  that->numberOfObjectives) != 0)
         {
-            if ((this->numberOfVariables != that->numberOfVariables) &&
-                    (this->numberOfVariables *  that->numberOfVariables) != 0)
-            {
 #ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfVariables: "
-                     << this->numberOfVariables << " vs. " << that->numberOfVariables << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfObjectives: "
+                   << this->numberOfObjectives << " vs. " << that->numberOfObjectives << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-                return false;
-            }
-            if ((this->numberOfObjectives != that->numberOfObjectives) &&
-                    (this->numberOfObjectives *  that->numberOfObjectives) != 0)
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfObjectives: "
-                     << this->numberOfObjectives << " vs. " << that->numberOfObjectives << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            if ((this->numberOfConstraints != that->numberOfConstraints) &&
-                    (this->numberOfConstraints *  that->numberOfConstraints) != 0)
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfConstraints: "
-                     << this->numberOfConstraints << " vs. " << that->numberOfConstraints << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
+            return false;
+        }
 
+        if ((this->numberOfConstraints != that->numberOfConstraints) &&
+            (this->numberOfConstraints *  that->numberOfConstraints) != 0)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfConstraints: "
+                   << this->numberOfConstraints << " vs. " << that->numberOfConstraints << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+            return false;
+        }
+
+        if (this->variables == NULL)
+        {
+            if (that->variables != NULL)
+                return false;
+        }
+        else
             if (!this->variables->IsEqual(that->variables))
                 return false;
+
+        if (this->objectives == NULL)
+        {
+            if (that->objectives != NULL)
+                return false;
+        }
+        else
             if (!this->objectives->IsEqual(that->objectives))
                 return false;
+
+        if (this->constraints == NULL)
+        {
+            if (that->constraints != NULL)
+                return false;
+        }
+        else
             if (!this->constraints->IsEqual(that->constraints))
                 return false;
+
+        if (this->solverOptions == NULL)
+        {
+            if (that->solverOptions != NULL)
+                return false;
+        }
+        else
             if (!this->solverOptions->IsEqual(that->solverOptions))
                 return false;
-            return true;
-        }
     }
+
+    return true;
 }//OptimizationOption::IsEqual
 
 bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
@@ -10080,43 +10258,30 @@ bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InstanceLocation");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->locationType != that->locationType) || (this->value != that->value))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "location type: " << this->locationType << " vs. " << that->locationType << endl;
+            outStr << "value: "         << this->value        << " vs. " << that->value        << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->locationType != that->locationType) || (this->value != that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "location type: " << this->locationType << " vs. " << that->locationType << endl;
-                outStr << "value: "         << this->value        << " vs. " << that->value        << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//InstanceLocationOption::IsEqual
 
 bool ContactOption::IsEqual(ContactOption *that)
@@ -10126,43 +10291,30 @@ bool ContactOption::IsEqual(ContactOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ContactOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->transportType != that->transportType) || (this->value != that->value))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "transport type: " << this->transportType << " vs. " << that->transportType << endl;
+            outStr << "value: "          << this->value         << " vs. " << that->value         << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->transportType != that->transportType) || (this->value != that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "transport type: " << this->transportType << " vs. " << that->transportType << endl;
-                outStr << "value: "          << this->value         << " vs. " << that->value         << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//ContactOption::IsEqual
 
 bool OtherOptions::IsEqual(OtherOptions *that)
@@ -10172,46 +10324,41 @@ bool OtherOptions::IsEqual(OtherOptions *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOptions");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfOtherOptions  != that->numberOfOtherOptions)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfOtherOptions: " << this->numberOfOtherOptions << " vs. " << that->numberOfOtherOptions << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfOtherOptions; i++)
         {
-            if (this->numberOfOtherOptions  != that->numberOfOtherOptions)
+            if (this->other[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfOtherOptions: " << this->numberOfOtherOptions << " vs. " << that->numberOfOtherOptions << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->other[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < this->numberOfOtherOptions; i++)
+            else
                 if (!this->other[i]->IsEqual(that->other[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//OtherOptions::IsEqual
 
 
@@ -10222,46 +10369,33 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MinDiskSpace");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->unit        != that->unit)    ||
+            !OSIsEqual(this->value, that->value) ||
+            (this->description != that->description) )
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
+            outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
+            outStr << "description: " << this->description << " vs. " << that->description << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->unit        != that->unit)  ||
-                    !OSIsEqual(this->value, that->value) ||
-                    (this->description != that->description) )
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
-                outStr << "description: " << this->description << " vs. " << that->description << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+   return true;
 }//MinDiskSpace::IsEqual
 
 bool MinMemorySize::IsEqual(MinMemorySize *that)
@@ -10271,45 +10405,32 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MinMemorySize");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->unit        != that->unit)  ||
+             !OSIsEqual(this->value, that->value) ||
+             (this->description != that->description) )
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+            outStr << "value: " << this->value << " vs. " << that->value << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->unit        != that->unit)  ||
-                    !OSIsEqual(this->value, that->value) ||
-                    (this->description != that->description) )
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
-                outStr << "value: " << this->value << " vs. " << that->value << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//MinMemorySize::IsEqual
 
 bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
@@ -10319,45 +10440,32 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MinCPUSpeed");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->unit        != that->unit)  ||
+             !OSIsEqual(this->value, that->value) ||
+             (this->description != that->description) )
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+            outStr << "value: " << this->value << " vs. " << that->value << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->unit        != that->unit)  ||
-                    !OSIsEqual(this->value, that->value) ||
-                    (this->description != that->description) )
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
-                outStr << "value: " << this->value << " vs. " << that->value << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//MinCPUSpeed::IsEqual
 
 bool MinCPUNumber::IsEqual(MinCPUNumber *that)
@@ -10367,44 +10475,31 @@ bool MinCPUNumber::IsEqual(MinCPUNumber *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MinCPUNumber");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->description != that->description)  ||
+            (this->value != that->value) )
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "description: " << this->description  << " vs. " << that->description  << endl;
+            outStr << "value:       " << this->value << " vs. " << that->value << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->description != that->description)  ||
-                    (this->value != that->value) )
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "description: " << this->description  << " vs. " << that->description  << endl;
-                outStr << "value:       " << this->value << " vs. " << that->value << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//MinCPUNumber::IsEqual
 
 bool JobDependencies::IsEqual(JobDependencies *that)
@@ -10414,54 +10509,43 @@ bool JobDependencies::IsEqual(JobDependencies *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in JobDependencies");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfJobIDs != that->numberOfJobIDs)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfJobIDs: " << this->numberOfJobIDs << " vs. " << that->numberOfJobIDs << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfJobIDs; i++)
         {
-            if (this->numberOfJobIDs != that->numberOfJobIDs)
+            if (this->jobID[i] != that->jobID[i])
             {
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
-                outStr << "numberOfJobIDs: " << this->numberOfJobIDs << " vs. " << that->numberOfJobIDs << endl;
+                outStr << "jobID[" << i << "]: " << this->jobID[i] << " vs. " << that->jobID[i] << endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
-            int i;
-            for (i = 0; i < numberOfJobIDs; i++)
-                if (this->jobID[i] != that->jobID[i])
-                {
-#ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "jobID[" << i << "]: " << this->jobID[i] << " vs. " << that->jobID[i] << endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                    return false;
-                }
-            return true;
         }
     }
+
+    return true;
 }//JobDependencies::IsEqual
 
 bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
@@ -10471,54 +10555,41 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in DirectoriesAndFiles");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfPaths != that->numberOfPaths)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfPaths: " << this->numberOfPaths << " vs. " << that->numberOfPaths << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if (this->numberOfPaths != that->numberOfPaths)
+
+        for (unsigned int i = 0; i < numberOfPaths; i++)
+            if (this->path[i] != that->path[i])
             {
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
-                outStr << "numberOfPaths: " << this->numberOfPaths << " vs. " << that->numberOfPaths << endl;
+                outStr << "path[" << i << "]: \'" << this->path[i] << "\' vs. \'" << that->path[i] << "\'" << endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
-            int i;
-            for (i = 0; i < numberOfPaths; i++)
-                if (this->path[i] != that->path[i])
-                {
-#ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "path[" << i << "]: \'" << this->path[i] << "\' vs. \'" << that->path[i] << "\'" << endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                    return false;
-                }
-            return true;
-        }
     }
+
+    return true;
 }//DirectoriesAndFiles::IsEqual
 
 bool PathPairs::IsEqual(PathPairs *that)
@@ -10528,46 +10599,41 @@ bool PathPairs::IsEqual(PathPairs *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in PathPairs");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfPathPairs != that->numberOfPathPairs)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfPathPairs: " << this->numberOfPathPairs << " vs. " << that->numberOfPathPairs << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfPathPairs; i++)
         {
-            if (this->numberOfPathPairs != that->numberOfPathPairs)
+            if (this->pathPair[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfPathPairs: " << this->numberOfPathPairs << " vs. " << that->numberOfPathPairs << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->pathPair[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfPathPairs; i++)
+            else
                 if (!this->pathPair[i]->IsEqual(that->pathPair[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//PathPairs::IsEqual
 
 
@@ -10578,46 +10644,31 @@ bool PathPair::IsEqual(PathPair *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in PathPair");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->from != that->from) || (this->to != that->to) || (this->makeCopy != that->makeCopy))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "from: "     << this->from     << " vs. " << that->from     << endl;
+            outStr << "to: "       << this->to       << " vs. " << that->to       << endl;
+            outStr << "makeCopy: " << this->makeCopy << " vs. " << that->makeCopy << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->from != that->from) || (this->to != that->to) ||
-                    (this->makeCopy != that->makeCopy))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "from: "     << this->from     << " vs. " << that->from     << endl;
-                outStr << "to: "       << this->to       << " vs. " << that->to       << endl;
-                outStr << "makeCopy: " << this->makeCopy << " vs. " << that->makeCopy << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//PathPair::IsEqual
 
 bool Processes::IsEqual(Processes *that)
@@ -10627,54 +10678,43 @@ bool Processes::IsEqual(Processes *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Processes");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfProcesses != that->numberOfProcesses)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfProcesses: " << this->numberOfProcesses << " vs. " << that->numberOfProcesses << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfProcesses; i++)
         {
-            if (this->numberOfProcesses != that->numberOfProcesses)
+            if (this->process[i] != that->process[i])
             {
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
-                outStr << "numberOfProcesses: " << this->numberOfProcesses << " vs. " << that->numberOfProcesses << endl;
+                outStr << "process[" << i << "]: " << this->process[i] << " vs. " << that->process[i] << endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
-            int i;
-            for (i = 0; i < numberOfProcesses; i++)
-                if (this->process[i] != that->process[i])
-                {
-#ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "process[" << i << "]: " << this->process[i] << " vs. " << that->process[i] << endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                    return false;
-                }
-            return true;
         }
     }
+
+    return true;
 }//Processes::IsEqual
 
 
@@ -10685,53 +10725,83 @@ bool VariableOption::IsEqual(VariableOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in VariableOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+
+        if (this->initialVariableValues == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->initialVariableValues != NULL)
+                return false;
         }
         else
-        {
             if (!this->initialVariableValues->IsEqual(that->initialVariableValues))
                 return false;
+
+        if (this->initialVariableValuesString == NULL)
+        {
+            if (that->initialVariableValuesString != NULL)
+                return false;
+        }
+        else
             if (!this->initialVariableValuesString->IsEqual(that->initialVariableValuesString))
                 return false;
+
+        if (this->initialBasisStatus == NULL)
+        {
+            if (that->initialBasisStatus != NULL)
+                return false;
+        }
+        else
             if (!this->initialBasisStatus->IsEqual(that->initialBasisStatus))
                 return false;
+
+        if (this->integerVariableBranchingWeights == NULL)
+        {
+            if (that->integerVariableBranchingWeights != NULL)
+                return false;
+        }
+        else
             if (!this->integerVariableBranchingWeights->IsEqual(that->integerVariableBranchingWeights))
                 return false;
+
+        if (this->sosVariableBranchingWeights == NULL)
+        {
+            if (that->sosVariableBranchingWeights != NULL)
+                return false;
+        }
+        else
             if (!this->sosVariableBranchingWeights->IsEqual(that->sosVariableBranchingWeights))
                 return false;
 
-            if (this->numberOfOtherVariableOptions != that->numberOfOtherVariableOptions)
-            {
+        if (this->numberOfOtherVariableOptions != that->numberOfOtherVariableOptions)
+        {
 #ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfOtherVariableOptions: " << this->numberOfOtherVariableOptions << " vs. " << that->numberOfOtherVariableOptions << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfOtherVariableOptions: " << this->numberOfOtherVariableOptions 
+                   << " vs. " << that->numberOfOtherVariableOptions << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-                return false;
-            }
+            return false;
+        }
 
-            int i;
-            for (i = 0; i < numberOfOtherVariableOptions; i++)
+
+        for (unsigned int i = 0; i < this->numberOfOtherVariableOptions; i++)
+        {
+            if (this->other[i] == NULL)
+            {
+                if (that->other[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->other[i]->IsEqual(that->other[i]))
                 {
 #ifndef NDEBUG
@@ -10742,10 +10812,10 @@ bool VariableOption::IsEqual(VariableOption *that)
 #endif
                     return false;
                 }
-
-            return true;
         }
     }
+
+    return true;
 }//VariableOption::IsEqual
 
 bool InitVariableValues::IsEqual(InitVariableValues *that)
@@ -10755,46 +10825,41 @@ bool InitVariableValues::IsEqual(InitVariableValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitVariableValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfVar != that->numberOfVar)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfVar; i++)
         {
-            if (this->numberOfVar != that->numberOfVar)
+            if (this->var[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->var[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfVar; i++)
+            else
                 if (!this->var[i]->IsEqual(that->var[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//InitVariableValues::IsEqual
 
 bool InitVarValue::IsEqual(InitVarValue *that)
@@ -10804,44 +10869,31 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitVarValue");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->idx != that->idx) || this->name != that->name 
+                                     || !OSIsEqual(this->value, that->value))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+            outStr << "value: " << this->value << " vs. " << that->value << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->idx != that->idx) || this->name != that->name 
-                                         || !OSIsEqual(this->value, that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
-                outStr << "value: " << this->value << " vs. " << that->value << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//InitVarValue::IsEqual
 
 
@@ -10852,46 +10904,41 @@ bool InitVariableValuesString::IsEqual(InitVariableValuesString *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitVariableValuesString");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfVar != that->numberOfVar)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfVar; i++)
         {
-            if (this->numberOfVar != that->numberOfVar)
+            if (this->var[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->var[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfVar; i++)
+            else
                 if (!this->var[i]->IsEqual(that->var[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//InitVariableValuesString::IsEqual
 
 bool InitVarValueString::IsEqual(InitVarValueString *that)
@@ -10901,43 +10948,30 @@ bool InitVarValueString::IsEqual(InitVarValueString *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitVarValueString");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->idx != that->idx) || this->name != that->name || (this->value != that->value))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+            outStr << "value: " << this->value << " vs. " << that->value << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->idx != that->idx) || this->name != that->name || (this->value != that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
-                outStr << "value: " << this->value << " vs. " << that->value << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//InitVarValueString::IsEqual
 
 bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
@@ -10947,46 +10981,41 @@ bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitialBasisStatus");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfVar != that->numberOfVar)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfVar; i++)
         {
-            if (this->numberOfVar != that->numberOfVar)
+            if (this->var[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->var[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfVar; i++)
+            else
                 if (!this->var[i]->IsEqual(that->var[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//InitialBasisStatus::IsEqual
 
 bool InitBasStatus::IsEqual(InitBasStatus *that)
@@ -10996,45 +11025,32 @@ bool InitBasStatus::IsEqual(InitBasStatus *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitBasStatus");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->idx != that->idx) || (this->value != that->value) ||
+            (this->value != "unknown" && that->value != "") ||
+            (that->value != "unknown" && this->value != "") )
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+            outStr << "value: " << this->value << " vs. " << that->value << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->idx != that->idx) || (this->value != that->value))
-                if ((this->value != "unknown" && that->value != "") ||
-                        (that->value != "unknown" && this->value != "") )
-                {
-#ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
-                    outStr << "value: " << this->value << " vs. " << that->value << endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                    return false;
-                }
-            return true;
-        }
     }
+
+    return true;
 }//InitBasStatus::IsEqual
 
 
@@ -11045,46 +11061,41 @@ bool IntegerVariableBranchingWeights::IsEqual(IntegerVariableBranchingWeights *t
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in IntegerVariableBranchingWeights");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfVar != that->numberOfVar)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfVar; i++)
         {
-            if (this->numberOfVar != that->numberOfVar)
+            if (this->var[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->var[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfVar; i++)
+            else
                 if (!this->var[i]->IsEqual(that->var[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//IntegerVariableBranchingWeights::IsEqual
 
 bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
@@ -11094,48 +11105,41 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SOSVariableBranchingWeights");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfSOS != that->numberOfSOS)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfSOS: " << this->numberOfSOS << " vs. " << that->numberOfSOS << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfSOS; i++)
         {
-            if (this->numberOfSOS != that->numberOfSOS)
+            if (this->sos[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfSOS: " << this->numberOfSOS << " vs. " << that->numberOfSOS << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            int i;
-            for (i = 0; i < numberOfSOS; i++)
-            {
-                if (!this->sos[i]->IsEqual(that->sos[i]))
+                if (that->sos[i] != NULL)
                     return false;
             }
-            return true;
+            else
+                if (!this->sos[i]->IsEqual(that->sos[i]))
+                    return false;
         }
     }
+
+    return true;
 }//SOSVariableBranchingWeights::IsEqual
 
 
@@ -11146,62 +11150,54 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SOSWeights");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->sosIdx != that->sosIdx) ||
+            !OSIsEqual(this->groupWeight, that->groupWeight))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "sosIdx: "      << this->sosIdx      << " vs. " << that->sosIdx      << endl;
+            outStr << "groupWeight: " << this->groupWeight << " vs. " << that->groupWeight << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->sosIdx != that->sosIdx) ||
-                    !OSIsEqual(this->groupWeight, that->groupWeight))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "sosIdx: "      << this->sosIdx      << " vs. " << that->sosIdx      << endl;
-                outStr << "groupWeight: " << this->groupWeight << " vs. " << that->groupWeight << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
 
-            if (this->numberOfVar != that->numberOfVar)
-            {
+        if (this->numberOfVar != that->numberOfVar)
+        {
 #ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-                return false;
-            }
-            int i;
-            for (i = 0; i < numberOfVar; i++)
+            return false;
+        }
+
+        for (unsigned int i = 0; i < this->numberOfVar; i++)
+        {
+            if (this->var[i] == NULL)
             {
-                //outStr << "var[" << i << "] of " << numberOfVar << endl;
-                if (!this->var[i]->IsEqual(that->var[i]))
+                if (that->var[i] != NULL)
                     return false;
             }
-            return true;
+            else
+                if (!this->var[i]->IsEqual(that->var[i]))
+                    return false;
         }
     }
+
+    return true;
 }//SOSWeights::IsEqual
 
 
@@ -11212,44 +11208,31 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in BranchingWeight");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "idx: "   << this->idx   <<  " vs. "  << that->idx   << endl;
+            outStr << "value: " << this->value <<  " vs. "  << that->value << endl;
+            outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "idx: "   << this->idx   <<  " vs. "  << that->idx   << endl;
-                outStr << "value: " << this->value <<  " vs. "  << that->value << endl;
-                outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//BranchingWeight::IsEqual
 
 #if 0
@@ -11394,54 +11377,68 @@ bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ObjectiveOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->initialObjectiveValues == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->initialObjectiveValues != NULL)
+                return false;
         }
         else
-        {
             if (!this->initialObjectiveValues->IsEqual(that->initialObjectiveValues))
                 return false;
+
+        if (this->initialObjectiveBounds == NULL)
+        {
+            if (that->initialObjectiveBounds != NULL)
+                return false;
+        }
+        else
             if (!this->initialObjectiveBounds->IsEqual(that->initialObjectiveBounds))
                 return false;
+
+        if (this->initialBasisStatus == NULL)
+        {
+            if (that->initialBasisStatus != NULL)
+                return false;
+        }
+        else
             if (!this->initialBasisStatus->IsEqual(that->initialBasisStatus))
                 return false;
 
-            if (this->numberOfOtherObjectiveOptions != that->numberOfOtherObjectiveOptions)
-            {
+        if (this->numberOfOtherObjectiveOptions != that->numberOfOtherObjectiveOptions)
+        {
 #ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfOtherObjectiveOptions: " << this->numberOfOtherObjectiveOptions << " vs. " << that->numberOfOtherObjectiveOptions << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfOtherObjectiveOptions: " << this->numberOfOtherObjectiveOptions << " vs. " << that->numberOfOtherObjectiveOptions << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-                return false;
+            return false;
+        }
+
+        for (unsigned int i = 0; i < this->numberOfOtherObjectiveOptions; i++)
+        {
+            if (this->other[i] == NULL)
+            {
+                if (that->other[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfOtherObjectiveOptions; i++)
+            else
                 if (!this->other[i]->IsEqual(that->other[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//ObjectiveOption::IsEqual
 
 bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
@@ -11451,46 +11448,41 @@ bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitObjectiveValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfObj != that->numberOfObj)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+       for (unsigned int i = 0; i < this->numberOfObj; i++)
         {
-            if (this->numberOfObj != that->numberOfObj)
+            if (this->obj[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->obj[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfObj; i++)
+            else
                 if (!this->obj[i]->IsEqual(that->obj[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//InitObjectiveValues::IsEqual
 
 bool InitObjValue::IsEqual(InitObjValue *that)
@@ -11500,43 +11492,30 @@ bool InitObjValue::IsEqual(InitObjValue *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitObjValue");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+            outStr << "value: " << this->value << " vs. " << that->value << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
-                outStr << "value: " << this->value << " vs. " << that->value << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//InitObjValue::IsEqual
 
 bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
@@ -11546,46 +11525,41 @@ bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitObjectiveBounds");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfObj != that->numberOfObj)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfObj; i++)
         {
-            if (this->numberOfObj != that->numberOfObj)
+            if (this->obj[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->obj[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfObj; i++)
+            else
                 if (!this->obj[i]->IsEqual(that->obj[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//InitObjectiveBounds::IsEqual
 
 bool InitObjBound::IsEqual(InitObjBound *that)
@@ -11595,47 +11569,34 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitObjBound");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->idx  != that->idx) ||
+             this->name != that->name ||
+             !OSIsEqual(this->lbValue, that->lbValue) ||
+             !OSIsEqual(this->ubValue, that->ubValue) )
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
+            outStr << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
+            outStr << "ubValue: " << this->ubValue << " vs. " << that->ubValue << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->idx  != that->idx) ||
-                    this->name != that->name ||
-                    !OSIsEqual(this->lbValue, that->lbValue) ||
-                    !OSIsEqual(this->ubValue, that->ubValue) )
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
-                outStr << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
-                outStr << "ubValue: " << this->ubValue << " vs. " << that->ubValue << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//InitObjBound::IsEqual
 
 #if 0
@@ -11766,54 +11727,69 @@ bool ConstraintOption::IsEqual(ConstraintOption *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ConstraintOption");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+
+        if (this->initialConstraintValues == NULL)
         {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
+            if (that->initialConstraintValues != NULL)
+                return false;
         }
         else
-        {
             if (!this->initialConstraintValues->IsEqual(that->initialConstraintValues))
                 return false;
+
+        if (this->initialDualValues == NULL)
+        {
+            if (that->initialDualValues != NULL)
+                return false;
+        }
+        else
             if (!this->initialDualValues->IsEqual(that->initialDualValues))
                 return false;
+
+        if (this->initialBasisStatus == NULL)
+        {
+            if (that->initialBasisStatus != NULL)
+                return false;
+        }
+        else
             if (!this->initialBasisStatus->IsEqual(that->initialBasisStatus))
                 return false;
 
-            if (this->numberOfOtherConstraintOptions != that->numberOfOtherConstraintOptions)
-            {
+        if (this->numberOfOtherConstraintOptions != that->numberOfOtherConstraintOptions)
+        {
 #ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfOtherConstraintOptions: " << this->numberOfOtherConstraintOptions << " vs. " << that->numberOfOtherConstraintOptions << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfOtherConstraintOptions: " << this->numberOfOtherConstraintOptions << " vs. " << that->numberOfOtherConstraintOptions << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-                return false;
+            return false;
+        }
+
+        for (unsigned int i = 0; i < this->numberOfOtherConstraintOptions; i++)
+        {
+            if (this->other[i] == NULL)
+            {
+                if (that->other[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfOtherConstraintOptions; i++)
+            else
                 if (!this->other[i]->IsEqual(that->other[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//ConstraintOption::IsEqual
 
 bool InitConstraintValues::IsEqual(InitConstraintValues *that)
@@ -11823,46 +11799,41 @@ bool InitConstraintValues::IsEqual(InitConstraintValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitConstraintValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfCon != that->numberOfCon)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfCon; i++)
         {
-            if (this->numberOfCon != that->numberOfCon)
+            if (this->con[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->con[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfCon; i++)
+            else
                 if (!this->con[i]->IsEqual(that->con[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//InitConstraintValues::IsEqual
 
 bool InitConValue::IsEqual(InitConValue *that)
@@ -11872,43 +11843,30 @@ bool InitConValue::IsEqual(InitConValue *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitConValue");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+            outStr << "value: " << this->value << " vs. " << that->value << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
-                outStr << "value: " << this->value << " vs. " << that->value << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//InitConValue::IsEqual
 
 bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
@@ -11918,46 +11876,41 @@ bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitDualVariableValues");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfCon != that->numberOfCon)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
+
+        for (unsigned int i = 0; i < this->numberOfCon; i++)
         {
-            if (this->numberOfCon != that->numberOfCon)
+            if (this->con[i] == NULL)
             {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
+                if (that->con[i] != NULL)
+                    return false;
             }
-            int i;
-            for (i = 0; i < numberOfCon; i++)
+            else
                 if (!this->con[i]->IsEqual(that->con[i]))
                     return false;
-            return true;
         }
     }
+
+    return true;
 }//InitDualVariableValues::IsEqual
 
 bool InitDualVarValue::IsEqual(InitDualVarValue *that)
@@ -11967,46 +11920,33 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitDualVarValue");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if ((this->idx != that->idx) || this->name != that->name ||
+                !OSIsEqual(this->lbDualValue, that->lbDualValue) ||
+                !OSIsEqual(this->ubDualValue, that->ubDualValue))
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "idx: "         << this->idx         << " vs. " << that->idx         << endl;
+            outStr << "lbDualValue: " << this->lbDualValue << " vs. " << that->lbDualValue << endl;
+            outStr << "ubDualValue: " << this->ubDualValue << " vs. " << that->ubDualValue << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if ((this->idx != that->idx) || this->name != that->name ||
-                    !OSIsEqual(this->lbDualValue, that->lbDualValue) ||
-                    !OSIsEqual(this->ubDualValue, that->ubDualValue))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "idx: "         << this->idx         << " vs. " << that->idx         << endl;
-                outStr << "lbDualValue: " << this->lbDualValue << " vs. " << that->lbDualValue << endl;
-                outStr << "ubDualValue: " << this->ubDualValue << " vs. " << that->ubDualValue << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
     }
+
+    return true;
 }//InitDualVarValue::IsEqual
 
 #if 0
@@ -12139,48 +12079,41 @@ bool SolverOptions::IsEqual(SolverOptions *that)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
         "Start comparing in SolverOptions");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
+        if (this->numberOfSolverOptions != that->numberOfSolverOptions)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+            outStr.str("");
+            outStr.clear();
+            outStr << "numberOfSolverOptions: " << this->numberOfSolverOptions << " vs. " << that->numberOfSolverOptions << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             return false;
         }
-        else
-        {
-            if (this->numberOfSolverOptions != that->numberOfSolverOptions)
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "numberOfSolverOptions: " << this->numberOfSolverOptions << " vs. " << that->numberOfSolverOptions << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
 
-            int i;
-            for (i = 0; i < numberOfSolverOptions; i++)
+        for (unsigned int i = 0; i < this->numberOfSolverOptions; i++)
+        {
+            if (this->solverOption[i] == NULL)
+            {
+                if (that->solverOption[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->solverOption[i]->IsEqual(that->solverOption[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//SolverOptions::IsEqual
 
 

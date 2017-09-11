@@ -203,18 +203,18 @@ public:
      *
      * @return a map of the variables in the current expression tree.
      */
-    virtual std::map<int, int> *getVariableIndicesMap();
+//    virtual std::map<int, int> *getVariableIndicesMap();
 
     /**
      * m_bIndexMapGenerated is set to true if getVariableIndicesMap() has been called
      */
-    bool m_bIndexMapGenerated;
+//    bool m_bIndexMapGenerated;
 
     /**
      * is true if an AD Expression Tree has an expression that can change depending on
      * the value of the input, e.g. an if statement -- false by default
      */
-    bool bADMustReTape;
+//    bool bADMustReTape;
 
     /**
      * Calculate the expression tree function value given the current variable

@@ -505,11 +505,11 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
     if (m_OSOption->optimization != NULL)
     {
         osolStr << "<optimization";
-        if (m_OSOption->optimization->numberOfVariables >= 0)
+        if (m_OSOption->optimization->numberOfVariablesIsSet)
             osolStr << " numberOfVariables=\"" << m_OSOption->optimization->numberOfVariables << "\" ";
-        if (m_OSOption->optimization->numberOfObjectives >= 0)
+        if (m_OSOption->optimization->numberOfObjectivesIsSet)
             osolStr << " numberOfObjectives=\"" << m_OSOption->optimization->numberOfObjectives << "\" ";
-        if (m_OSOption->optimization->numberOfConstraints >= 0)
+        if (m_OSOption->optimization->numberOfConstraintsIsSet)
             osolStr << " numberOfConstraints=\"" << m_OSOption->optimization->numberOfConstraints << "\" ";
         osolStr << ">" << endl;
         if (m_OSOption->optimization->variables != NULL)

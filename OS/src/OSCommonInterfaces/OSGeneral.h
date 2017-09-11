@@ -54,7 +54,7 @@
 #include <vector>
 
 /**
- *  Some forward declarations in order to work around circular referecnes
+ *  Some forward declarations in order to work around circular references
  */
 class OSMatrix;
 class OSMatrixWithMatrixVarIdx;
@@ -1176,13 +1176,13 @@ public:
     std::string category;
 
     /** number of <enumeration> child elements */
-    int numberOfEnumerations;
+    unsigned int numberOfEnumerations;
 
     /** type of the values in the enumeration array */
     std::string enumType;
 
     /** number of <var> child elements */
-    int numberOfVar;
+    unsigned int numberOfVar;
 
     /** 
      *  type of values in the elements "value", "lbValue" and/or "ubValue"

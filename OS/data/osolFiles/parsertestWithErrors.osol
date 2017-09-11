@@ -65,10 +65,10 @@
             <other name="test" value="5" description="some description"></other>
             <other name="another"></other>
         </otherOptions>
-        <minDiskSpace unit="overbyte" description="diskless machine"> -1 </minDiskSpace>
-        <minMemorySize unit="gigabite">-1.0</minMemorySize>
-        <minCPUNumber>-1</minCPUNumber>
-        <minCPUSpeed unit="bellyflops">-1.0</minCPUSpeed>
+        <minDiskSpace unit="overbyte" description="diskless machine"> 2 </minDiskSpace>
+        <minMemorySize unit="gigabite">2.0</minMemorySize>
+        <minCPUNumber>2</minCPUNumber>
+        <minCPUSpeed unit="bellyflops">2.0</minCPUSpeed>
         <otherOptions numberOfOtherOptions="1">
             <other name="test" value="5" description="some description"></other>
             <other name="another"></other>
@@ -188,7 +188,7 @@
 		<variables numberOfOtherVariableOptions="4">
 			<initialVariableValues numberOfVar="6">
 				<var idx="0" value="1" name="x0"/>
-				<var name="x1" value="4.742999643577776e-2" idx="-1"></var>
+				<var name="x1" value="4.742999643577776e-2" idx="0"></var>
 				<var idx="3" name="" value="zero"/>
 				<var idx="2"/>
 				<var value="NaN" idx="5" name=" "/>
@@ -204,7 +204,7 @@
 					<el>6</el>
 				</basic>
                 <atLower numberOfEl="1">
-					<el>-1</el>
+					<el>2</el>
 				</atLower>
 				<unknown numberOfEl="1">
 					<el incr="7">3</el>
@@ -217,13 +217,13 @@
 			</integerVariableBranchingWeights>
             <sosVariableBranchingWeights numberOfSOS="3">
 				<sos sosIdx="0" numberOfVar="3">
-					<var idx="-1" name="x0"/>
+					<var idx="1" name="x0"/>
 					<var idx="1" value="2"></var>
 				</sos>
 				<sos sosIdx="1" numberOfVar="1" groupWeight="0.3"/>
 			</sosVariableBranchingWeights>
             <other name="priority" numberOfVar="3" solver="Ipopt">
-				<var idx="-1" value="1"/>
+				<var idx="1" value="1"/>
 				<var value="2" idx="1"/>
 				<var idx="2" ></var>
 			</other>
@@ -246,21 +246,21 @@
 			</initialObjectiveBounds>
             <initialBasisStatus>
 				<basic numberOfEl="2">
-					<el>-1</el>
+					<el>1</el>
 				</basic>
 			</initialBasisStatus>
             <other name="otherObjOption" type="numeric" solver="generic" category="global" 
-             numberOfObj="-1" numberOfEnumerations="1" value="none" description="just testing all possibilities" >
+             numberOfObj="0" numberOfEnumerations="1" value="none" description="just testing all possibilities" >
 			</other>
 		</objectives>
 		<constraints numberOfOtherConstraintOptions="3">
 			<initialConstraintValues numberOfCon="3">
-				<con idx="-1" name="c0" value="5.0"></con>
+				<con idx="1" name="c0" value="5.0"></con>
 				<con idx="1"></con>
 			</initialConstraintValues>
 			<initialDualValues numberOfCon="3">
 				<con idx="1" lbDualValue="10.0" ubDualValue="-100." name="c1"></con>
-				<con idx="-1"/>
+				<con idx="1"/>
 			</initialDualValues>
             <initialBasisStatus>
 				<unknown numberOfEl="2">

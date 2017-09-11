@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.2"
+#define YYBISON_VERSION "3.0.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -1128,7 +1128,7 @@ extern int osildebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE YYSTYPE;
+
 union YYSTYPE
 {
 
@@ -1140,6 +1140,8 @@ union YYSTYPE
 
 
 };
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -1558,73 +1560,73 @@ static const yytype_uint16 yyrline[] =
     2653,  2655,  2657,  2666,  2668,  2668,  2670,  2670,  2672,  2681,
     2684,  2684,  2686,  2686,  2689,  2720,  2728,  2730,  2730,  2732,
     2734,  2742,  2742,  2744,  2753,  2755,  2755,  2757,  2757,  2759,
-    2790,  2800,  2800,  2802,  2804,  2812,  2812,  2814,  3261,  3313,
-    3336,  3360,  3360,  3363,  3364,  3365,  3366,  3367,  3564,  3564,
-    3566,  3568,  3608,  3610,  3610,  3615,  3633,  3662,  3662,  3665,
-    3666,  3667,  3668,  3669,  3670,  3671,  3672,  3673,  3676,  3676,
-    3678,  3678,  3683,  3683,  3683,  3684,  3684,  3684,  3685,  3685,
-    3685,  3686,  3686,  3688,  3690,  3699,  3705,  3705,  3708,  3712,
-    3718,  3720,  3720,  3726,  3736,  3746,  3746,  3748,  3750,  3766,
-    3769,  3769,  3783,  3791,  3791,  3793,  3795,  3797,  3803,  3813,
-    3821,  3821,  3823,  3825,  3827,  3830,  3832,  3841,  3847,  3847,
-    3850,  3854,  3860,  3862,  3864,  3864,  3874,  3882,  3882,  3884,
-    3886,  3888,  3891,  3893,  3902,  3908,  3908,  3911,  3915,  3921,
-    3923,  3926,  3931,  3942,  3958,  3958,  3960,  3962,  3964,  3966,
-    3966,  3968,  3975,  3982,  4001,  4001,  4004,  4005,  4007,  4007,
-    4009,  4011,  4013,  4013,  4016,  4018,  4026,  4026,  4031,  4038,
-    4040,  4049,  4055,  4055,  4058,  4062,  4069,  4071,  4074,  4078,
-    4089,  4105,  4105,  4107,  4109,  4111,  4111,  4113,  4115,  4130,
-    4130,  4132,  4134,  4143,  4145,  4154,  4160,  4160,  4163,  4167,
-    4174,  4176,  4179,  4183,  4194,  4211,  4211,  4213,  4215,  4217,
-    4217,  4219,  4221,  4236,  4236,  4238,  4240,  4250,  4252,  4261,
-    4267,  4267,  4270,  4274,  4280,  4282,  4284,  4284,  4294,  4302,
-    4302,  4304,  4306,  4308,  4311,  4313,  4322,  4328,  4328,  4331,
-    4335,  4341,  4343,  4346,  4350,  4361,  4377,  4377,  4379,  4381,
-    4383,  4383,  4385,  4388,  4400,  4400,  4403,  4404,  4405,  4407,
-    4440,  4442,  4452,  4458,  4458,  4461,  4465,  4471,  4473,  4476,
-    4480,  4491,  4504,  4504,  4506,  4508,  4510,  4510,  4512,  4539,
-    4550,  4550,  4553,  4554,  4555,  4557,  4557,  4560,  4562,  4571,
-    4577,  4577,  4580,  4584,  4590,  4592,  4594,  4594,  4604,  4612,
-    4612,  4614,  4616,  4618,  4621,  4624,  4642,  4642,  4653,  4660,
-    4670,  4678,  4684,  4686,  4700,  4712,  4718,  4724,  4724,  4726,
-    4728,  4730,  4732,  4742,  4748,  4754,  4754,  4756,  4758,  4760,
-    4762,  4762,  4767,  4772,  4784,  4786,  4786,  4789,  4790,  4791,
-    4801,  4808,  4808,  4810,  4812,  4830,  4841,  4885,  5008,  5020,
-    5042,  5067,  5078,  5092,  5107,  5122,  5134,  5146,  5166,  5186,
-    5196,  5236,  5247,  5259,  5273,  5286,  5299,  5309,  5319,  5332,
-    5332,  5334,  5344,  5508,  5508,  5510,  5517,  5544,  5544,  5546,
-    5555,  5571,  5571,  5573,  5580,  5607,  5607,  5609,  5616,  5625,
-    5625,  5627,  5634,  5661,  5661,  5665,  5673,  5682,  5682,  5684,
-    5691,  5700,  5700,  5702,  5709,  5749,  5750,  5764,  5770,  5795,
-    5796,  5798,  5809,  5828,  5836,  5836,  5839,  5848,  5861,  5862,
-    5863,  5864,  5865,  5866,  5867,  5868,  5869,  5870,  5871,  5872,
-    5873,  5874,  5875,  5876,  5877,  5878,  5879,  5880,  5881,  5882,
-    5883,  5884,  5886,  5887,  5888,  5892,  5892,  5895,  5896,  5898,
-    5898,  5901,  5902,  5906,  5906,  5911,  5911,  5916,  5916,  5921,
-    5921,  5926,  5926,  5931,  5931,  5936,  5936,  5941,  5941,  5946,
-    5946,  5951,  5951,  5956,  5956,  5961,  5961,  5966,  5968,  5974,
-    5981,  5981,  5987,  5987,  5999,  5999,  6004,  6004,  6009,  6009,
-    6019,  6026,  6032,  6033,  6035,  6036,  6039,  6043,  6047,  6051,
-    6050,  6071,  6070,  6077,  6078,  6080,  6079,  6086,  6087,  6090,
-    6096,  6104,  6111,  6133,  6133,  6144,  6144,  6147,  6147,  6161,
-    6162,  6165,  6165,  6178,  6179,  6182,  6182,  6195,  6196,  6199,
-    6199,  6209,  6210,  6216,  6217,  6218,  6219,  6220,  6221,  6222,
-    6223,  6224,  6225,  6226,  6227,  6228,  6229,  6230,  6231,  6232,
-    6233,  6234,  6237,  6248,  6256,  6256,  6259,  6260,  6263,  6264,
-    6266,  6278,  6292,  6297,  6304,  6305,  6307,  6314,  6319,  6326,
-    6327,  6329,  6336,  6341,  6348,  6349,  6351,  6358,  6360,  6366,
-    6368,  6370,  6376,  6378,  6380,  6386,  6388,  6390,  6396,  6398,
-    6400,  6406,  6406,  6411,  6413,  6415,  6421,  6421,  6426,  6428,
-    6439,  6441,  6446,  6446,  6448,  6450,  6456,  6459,  6461,  6467,
-    6470,  6472,  6478,  6481,  6483,  6489,  6493,  6492,  6504,  6504,
-    6511,  6513,  6519,  6521,  6523,  6529,  6532,  6534,  6540,  6550,
-    6550,  6556,  6564,  6566,  6586,  6586,  6588,  6590,  6592,  6592,
-    6594,  6606,  6624,  6630,  6630,  6633,  6641,  6657,  6657,  6661,
-    6662,  6663,  6664,  6665,  6666,  6667,  6668,  6669,  6673,  6677,
-    6686,  6687,  6689,  6696,  6696,  6699,  6700,  6704,  6706,  6712,
-    6715,  6717,  6723,  6726,  6726,  6736,  6737,  6743,  6745,  6751,
-    6754,  6756,  6762,  6765,  6767,  6773,  6776,  6778,  6784,  6787,
-    6789,  6795
+    2790,  2800,  2800,  2802,  2804,  2812,  2812,  2814,  3297,  3349,
+    3372,  3396,  3396,  3399,  3400,  3401,  3402,  3403,  3603,  3603,
+    3605,  3607,  3648,  3650,  3650,  3655,  3673,  3702,  3702,  3705,
+    3706,  3707,  3708,  3709,  3710,  3711,  3712,  3713,  3716,  3716,
+    3718,  3718,  3723,  3723,  3723,  3724,  3724,  3724,  3725,  3725,
+    3725,  3726,  3726,  3728,  3730,  3739,  3745,  3745,  3748,  3752,
+    3758,  3760,  3760,  3766,  3776,  3786,  3786,  3788,  3790,  3806,
+    3809,  3809,  3823,  3831,  3831,  3833,  3835,  3837,  3843,  3853,
+    3861,  3861,  3863,  3865,  3867,  3870,  3872,  3881,  3887,  3887,
+    3890,  3894,  3900,  3902,  3904,  3904,  3914,  3922,  3922,  3924,
+    3926,  3928,  3931,  3933,  3942,  3948,  3948,  3951,  3955,  3961,
+    3963,  3966,  3971,  3982,  3998,  3998,  4000,  4002,  4004,  4006,
+    4006,  4008,  4015,  4022,  4041,  4041,  4044,  4045,  4047,  4047,
+    4049,  4051,  4053,  4053,  4056,  4058,  4066,  4066,  4071,  4078,
+    4080,  4089,  4095,  4095,  4098,  4102,  4109,  4111,  4114,  4118,
+    4129,  4145,  4145,  4147,  4149,  4151,  4151,  4153,  4155,  4170,
+    4170,  4172,  4174,  4183,  4185,  4194,  4200,  4200,  4203,  4207,
+    4214,  4216,  4219,  4223,  4234,  4251,  4251,  4253,  4255,  4257,
+    4257,  4259,  4261,  4276,  4276,  4278,  4280,  4290,  4292,  4301,
+    4307,  4307,  4310,  4314,  4320,  4322,  4324,  4324,  4334,  4342,
+    4342,  4344,  4346,  4348,  4351,  4353,  4362,  4368,  4368,  4371,
+    4375,  4381,  4383,  4386,  4390,  4401,  4417,  4417,  4419,  4421,
+    4423,  4423,  4425,  4428,  4440,  4440,  4443,  4444,  4445,  4447,
+    4480,  4482,  4492,  4498,  4498,  4501,  4505,  4511,  4513,  4516,
+    4520,  4531,  4544,  4544,  4546,  4548,  4550,  4550,  4552,  4579,
+    4590,  4590,  4593,  4594,  4595,  4597,  4597,  4600,  4602,  4611,
+    4617,  4617,  4620,  4624,  4630,  4632,  4634,  4634,  4644,  4652,
+    4652,  4654,  4656,  4658,  4661,  4664,  4682,  4682,  4693,  4700,
+    4710,  4718,  4724,  4726,  4740,  4752,  4758,  4764,  4764,  4766,
+    4768,  4770,  4772,  4782,  4788,  4794,  4794,  4796,  4798,  4800,
+    4802,  4802,  4807,  4812,  4824,  4826,  4826,  4829,  4830,  4831,
+    4841,  4848,  4848,  4850,  4852,  4870,  4881,  4925,  5035,  5047,
+    5069,  5094,  5105,  5118,  5132,  5146,  5158,  5170,  5190,  5210,
+    5220,  5260,  5271,  5283,  5297,  5310,  5323,  5333,  5343,  5356,
+    5356,  5358,  5368,  5532,  5532,  5534,  5541,  5568,  5568,  5570,
+    5579,  5595,  5595,  5597,  5604,  5631,  5631,  5633,  5640,  5649,
+    5649,  5651,  5658,  5685,  5685,  5689,  5697,  5706,  5706,  5708,
+    5715,  5724,  5724,  5726,  5733,  5773,  5774,  5788,  5794,  5819,
+    5820,  5822,  5833,  5852,  5860,  5860,  5863,  5872,  5885,  5886,
+    5887,  5888,  5889,  5890,  5891,  5892,  5893,  5894,  5895,  5896,
+    5897,  5898,  5899,  5900,  5901,  5902,  5903,  5904,  5905,  5906,
+    5907,  5908,  5910,  5911,  5912,  5916,  5916,  5919,  5920,  5922,
+    5922,  5925,  5926,  5930,  5930,  5935,  5935,  5940,  5940,  5945,
+    5945,  5950,  5950,  5955,  5955,  5960,  5960,  5965,  5965,  5970,
+    5970,  5975,  5975,  5980,  5980,  5985,  5985,  5990,  5992,  5998,
+    6005,  6005,  6011,  6011,  6023,  6023,  6028,  6028,  6033,  6033,
+    6043,  6050,  6056,  6057,  6059,  6060,  6063,  6067,  6071,  6075,
+    6074,  6095,  6094,  6101,  6102,  6104,  6103,  6110,  6111,  6114,
+    6120,  6128,  6135,  6157,  6157,  6168,  6168,  6171,  6171,  6185,
+    6186,  6189,  6189,  6202,  6203,  6206,  6206,  6219,  6220,  6223,
+    6223,  6233,  6234,  6240,  6241,  6242,  6243,  6244,  6245,  6246,
+    6247,  6248,  6249,  6250,  6251,  6252,  6253,  6254,  6255,  6256,
+    6257,  6258,  6261,  6272,  6280,  6280,  6283,  6284,  6287,  6288,
+    6290,  6302,  6316,  6321,  6328,  6329,  6331,  6338,  6343,  6350,
+    6351,  6353,  6360,  6365,  6372,  6373,  6375,  6382,  6384,  6390,
+    6392,  6394,  6400,  6402,  6404,  6410,  6412,  6414,  6420,  6422,
+    6424,  6430,  6430,  6435,  6437,  6439,  6445,  6445,  6450,  6452,
+    6463,  6465,  6470,  6470,  6472,  6474,  6480,  6483,  6485,  6491,
+    6494,  6496,  6502,  6505,  6507,  6513,  6517,  6516,  6528,  6528,
+    6535,  6537,  6543,  6545,  6547,  6553,  6556,  6558,  6564,  6574,
+    6574,  6580,  6588,  6590,  6610,  6610,  6612,  6614,  6616,  6616,
+    6618,  6630,  6648,  6654,  6654,  6657,  6665,  6681,  6681,  6685,
+    6686,  6687,  6688,  6689,  6690,  6691,  6692,  6693,  6697,  6701,
+    6710,  6711,  6713,  6720,  6720,  6723,  6724,  6728,  6730,  6736,
+    6739,  6741,  6747,  6750,  6750,  6760,  6761,  6767,  6769,  6775,
+    6778,  6780,  6786,  6789,  6791,  6797,  6800,  6802,  6808,  6811,
+    6813,  6819
 };
 #endif
 
@@ -1969,18 +1971,18 @@ static const char *const yytname[] =
   "varTypeAttEmpty", "varTypeAttContent", "nonlinearExpressions",
   "nonlinearExpressionsStart", "nlnumberatt", "nlnodes",
   "realValuedExpressionTree", "nlstart", "nlAttributes", "nlAttributeList",
-  "nlAttribute", "nlnode", "E", "$@6", "eend", "PI", "$@7", "piend",
-  "times", "$@8", "plus", "$@9", "minus", "$@10", "negate", "$@11",
-  "divide", "$@12", "power", "$@13", "ln", "$@14", "sqrt", "$@15",
-  "square", "$@16", "cos", "$@17", "sin", "$@18", "exp", "$@19", "abs",
-  "absStart", "absEnd", "erf", "$@20", "if", "$@21", "matrixDeterminant",
-  "$@22", "matrixTrace", "$@23", "matrixToScalar", "$@24", "number",
+  "nlAttribute", "nlnode", "E", "$@7", "eend", "PI", "$@8", "piend",
+  "times", "$@9", "plus", "$@10", "minus", "$@11", "negate", "$@12",
+  "divide", "$@13", "power", "$@14", "ln", "$@15", "sqrt", "$@16",
+  "square", "$@17", "cos", "$@18", "sin", "$@19", "exp", "$@20", "abs",
+  "absStart", "absEnd", "erf", "$@21", "if", "$@22", "matrixDeterminant",
+  "$@23", "matrixTrace", "$@24", "matrixToScalar", "$@25", "number",
   "numberStart", "numberEnd", "numberAttributeList", "numberAttribute",
-  "numberidATT", "$@25", "variable", "$@26", "variableend", "$@27",
+  "numberidATT", "$@26", "variable", "$@27", "variableend", "$@28",
   "anotherVariableATT", "variableATT", "variablecoefATT", "variableidxATT",
-  "sum", "$@28", "anothersumnlnode", "allDiff", "$@29",
-  "anotherallDiffnlnode", "max", "$@30", "anothermaxnlnode", "min", "$@31",
-  "anotherminnlnode", "product", "$@32", "anotherproductnlnode",
+  "sum", "$@29", "anothersumnlnode", "allDiff", "$@30",
+  "anotherallDiffnlnode", "max", "$@31", "anothermaxnlnode", "min", "$@32",
+  "anotherminnlnode", "product", "$@33", "anotherproductnlnode",
   "OSnLMNode", "matrixReference", "matrixReferenceStart",
   "matrixRefAttributeList", "matrixRefAttribute", "matrixReferenceEnd",
   "matrixTransposeATT", "matrixVarReference", "matrixVarReferenceStart",
@@ -2000,7 +2002,7 @@ static const char *const yytname[] =
   "matrixMinusContent", "matrixNegate", "matrixNegateStart",
   "matrixNegateContent", "matrixPlus", "matrixPlusStart",
   "matrixPlusContent", "matrixTimes", "matrixTimesStart",
-  "matrixTimesContent", "matrixProduct", "$@33",
+  "matrixTimesContent", "matrixProduct", "$@34",
   "anothermatrixproductnode", "matrixScalarTimes",
   "matrixScalarTimesStart", "matrixScalarTimesContent",
   "matrixSubMatrixAt", "matrixSubMatrixAtStart",
@@ -2014,7 +2016,7 @@ static const char *const yytname[] =
   "complexNumberAttributes", "complexNumberAttList", "complexNumberAtt",
   "createComplex", "createComplexStart", "createComplexContent",
   "complexPlus", "complexPlusStart", "complexPlusContent", "complexSum",
-  "$@34", "anothercsumnode", "complexMinus", "complexMinusStart",
+  "$@35", "anothercsumnode", "complexMinus", "complexMinusStart",
   "complexMinusContent", "complexNegate", "complexNegateStart",
   "complexNegateContent", "complexConjugate", "complexConjugateStart",
   "complexConjugateContent", "complexTimes", "complexTimesStart",
@@ -7693,7 +7695,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfBlocksPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfBlocks attribute previously set");
-    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) throw ErrorClass("number of <blocks> cannot be negative");
     osglData->numberOfBlocksPresent = true;        
     osglData->numberOfBlocks = (yyvsp[-1].ival);
 }
@@ -7707,7 +7709,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfColumnsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfColumns attribute previously set");
-    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) throw ErrorClass("number of <blocks> cannot be negative");
     osglData->numberOfColumnsPresent = true;        
     osglData->numberOfColumns = (yyvsp[-1].ival);
 }
@@ -7721,7 +7723,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfElPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfEl attribute previously set");
-    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) throw ErrorClass("number of <el> cannot be negative");
     osglData->numberOfElPresent = true;        
     osglData->numberOfEl = (yyvsp[-1].ival);
 }
@@ -7735,7 +7737,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfRowsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfRows attribute previously set");
-    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <rows> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) throw ErrorClass("number of <rows> cannot be negative");
 std::cout << "Number of rows present" << std::endl;
     osglData->numberOfRowsPresent = true;        
     osglData->numberOfRows = (yyvsp[-1].ival);
@@ -7750,7 +7752,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfValuesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfValues attribute previously set");
-    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <values> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) throw ErrorClass("number of <values> cannot be negative");
     osglData->numberOfValuesPresent = true;        
     osglData->numberOfValues = (yyvsp[-1].ival);
 }
@@ -7764,7 +7766,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfVarIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfVarIdx attribute previously set");
-    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <varIdx> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) throw ErrorClass("number of <varIdx> cannot be negative");
     osglData->numberOfVarIdxPresent = true;        
     osglData->numberOfVarIdx = (yyvsp[-1].ival);
 }
@@ -7778,7 +7780,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->base64SizePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "base64Size attribute previously set");
-    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "base64Size cannot be negative");
+    if ((yyvsp[-1].ival) < 0) throw ErrorClass("base64Size cannot be negative");
     osglData->base64SizePresent = true;        
     osglData->base64Size = (yyvsp[-1].ival);
 }
@@ -7792,8 +7794,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->baseMatrixIdxPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
-    if ((yyvsp[-1].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
+    if ((yyvsp[-1].ival) < 0) throw ErrorClass("baseMatrix idx cannot be negative");
     if ((yyvsp[-1].ival) > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
     osglData->baseMatrixIdxPresent = true;   
@@ -7812,8 +7813,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
             "more than one baseMatrixStartRow attribute in <baseMatrix> element");
     if ((yyvsp[-1].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
-                                         "baseMatrix first row cannot be negative");
+        throw ErrorClass("baseMatrix first row cannot be negative");
     osglData->baseMatrixStartRowPresent = true;   
     osglData->baseMatrixStartRow = (yyvsp[-1].ival); 
 }
@@ -7830,8 +7830,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
             "more than one baseMatrixStartCol attribute in <baseMatrix> element");
     if ((yyvsp[-1].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
-                                         "baseMatrix first column cannot be negative");
+        throw ErrorClass("baseMatrix first column cannot be negative");
     osglData->baseMatrixStartColPresent = true;   
     osglData->baseMatrixStartCol = (yyvsp[-1].ival); 
 }
@@ -7846,7 +7845,7 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->baseMatrixEndRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ((yyvsp[-1].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix end row cannot be negative");
+        throw ErrorClass("baseMatrix end row cannot be negative");
     osglData->baseMatrixEndRowPresent = true;   
     osglData->baseMatrixEndRow = (yyvsp[-1].ival); 
 }
@@ -7861,7 +7860,7 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->baseMatrixEndColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ((yyvsp[-1].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix end col cannot be negative");
+        throw ErrorClass("baseMatrix end col cannot be negative");
     osglData->baseMatrixEndColPresent = true;   
     osglData->baseMatrixEndCol = (yyvsp[-1].ival); 
 }
@@ -7877,7 +7876,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockRowIdx attribute previously set");
     else
     {
-        if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockRowIdx cannot be negative");
+        if ((yyvsp[-1].ival) < 0) throw ErrorClass("blockRowIdx cannot be negative");
         osglData->blockRowIdxPresent = true;        
         osglData->blockRowIdx = (yyvsp[-1].ival);
         ((MatrixBlock*)osglData->tempC)->blockRowIdx = (yyvsp[-1].ival);
@@ -7900,7 +7899,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockColIdx attribute previously set");
     else
     {
-        if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockColIdx cannot be negative");
+        if ((yyvsp[-1].ival) < 0) throw ErrorClass("blockColIdx cannot be negative");
         osglData->blockColIdxPresent = true;
         osglData->blockColIdx = (yyvsp[-1].ival);       
         ((MatrixBlock*)osglData->tempC)->blockColIdx = (yyvsp[-1].ival);

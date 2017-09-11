@@ -49,6 +49,9 @@ OSgLParserData::OSgLParserData() :
     parser_errors(""),
     ignoreDataAfterErrors(false),
     suppressFurtherErrorMessages(false),
+    otherMatrixVarOptionOrResultArray(NULL),
+    otherMatrixObjOptionOrResultArray(NULL),
+    otherMatrixConOptionOrResultArray(NULL),
     matrix(NULL),
     matrixWithMatrixVarIdx(NULL),
     matrixWithMatrixObjIdx(NULL),
@@ -57,7 +60,7 @@ OSgLParserData::OSgLParserData() :
     matrixObjIndexes(NULL),
     matrixConIndexes(NULL),
     matrixCounter(0),
-    nonzeroCounter(0),
+    enumCounter(0),
     tempC(NULL),
 
     numberOfBlocksPresent(false),

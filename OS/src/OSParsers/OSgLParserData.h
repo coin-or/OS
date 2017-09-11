@@ -80,6 +80,11 @@ public:
     bool ignoreDataAfterErrors;
     bool suppressFurtherErrorMessages;
 
+    /** some matrixProgramming options need to be held in temporary arrays */
+    OtherMatrixVariableOptionOrResult**   otherMatrixVarOptionOrResultArray;
+    OtherMatrixObjectiveOptionOrResult**  otherMatrixObjOptionOrResultArray;
+    OtherMatrixConstraintOptionOrResult** otherMatrixConOptionOrResultArray;
+
     /** We need to hold an array of <matrix> elements temporarily */
     OSMatrix** matrix;
 
@@ -93,8 +98,9 @@ public:
     int* matrixObjIndexes;
     int* matrixConIndexes;
 
-    /** We also need to keep track locally of the number of matrices */
+    /** We also need to keep track locally of the number of matrices and enumerations */
     int  matrixCounter;
+    int    enumCounter;
 
     /** Linear matrices need a counter to count the number of terms within each element */
     int nonzeroCounter;

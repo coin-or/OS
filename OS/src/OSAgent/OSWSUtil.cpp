@@ -88,8 +88,15 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned short 
         /* Construct the server address structure */
         memset(&httpServAddr, 0, sizeof(httpServAddr));       /* Zero out structure      */
         httpServAddr.sin_family      = AF_INET;               /* Internet address family */
-        httpServAddr.sin_addr.s_addr = ResolveName( servIP);  /* Server IP address       */
+        httpServAddr.sin_addr.s_addr = ResolveName( servIP);  /* Server IP address +++   */
         httpServAddr.sin_port        = htons(httpServPort);   /* Server port             */
+
+/* added 20-July-2017, HIG
+ * The line above marked +++ creates a warning about type conversion from unsigned long int
+ * (the return code from ResolveName()) to unsigned int, which in this implementation seems to be
+ * the type associated with ....s_sddr. It does not appear that we can do anything about this...
+ */ 
+
         /* Establish the connection to the http server */
         if (connect(sock, (struct sockaddr *) &httpServAddr, sizeof(httpServAddr)) < 0)
         {

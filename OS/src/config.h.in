@@ -201,6 +201,9 @@
 /* SVN revision number of project */
 #undef OS_SVN_REV
 
+/* use 64 bit integers */
+#undef OS_USE_XML_LONG_INTEGER
+
 /* Version number of project */
 #undef OS_VERSION
 
@@ -212,6 +215,12 @@
 
 /* Release Version number of project */
 #undef OS_VERSION_RELEASE
+
+/* Define to 64-bit integer type */
+#undef OS_XML_INT64
+
+/* Define to 64-bit unsigned integer type */
+#undef OS_XML_UINT64
 
 /* Name of package */
 #undef PACKAGE
@@ -239,6 +248,9 @@
 
 /* The size of a `long', as computed by sizeof. */
 #undef SIZEOF_LONG
+
+/* The size of a `long long', as computed by sizeof. */
+#undef SIZEOF_LONG_LONG
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

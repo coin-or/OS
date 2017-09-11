@@ -641,9 +641,9 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
             std::vector<SolverOptionOrResult*> optionsVector;
             optionsVector = osoption->getSolverOptions( "csdp",true);
             char *pEnd;
-            int i;
-            int num_ipopt_options = optionsVector.size();
-            for(i = 0; i < num_ipopt_options; i++)
+            std::vector<SolverOptionOrResult*>::size_type i, num_csdp_options;
+            num_csdp_options = optionsVector.size();
+            for(i = 0; i < num_csdp_options; i++)
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -736,7 +736,7 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
     try
     {
         if(osinstance->getObjectiveNumber() <= 0) 
-            throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION\n(For pure feasibility problems, use zero function.)");
+            throw ErrorClass("CSDP NEEDS AN OBJECTIVE FUNCTION\n(For pure feasibility problems, use zero function.)");
         this->bSetSolverOptions = true;
         /* set the default options */
         //app->Options()->SetNumericValue("tol", 1e-9);
@@ -744,7 +744,7 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
         app->Options()->SetIntegerValue("max_iter", 20000);
         app->Options()->SetNumericValue("bound_relax_factor", 0, true, true);
         app->Options()->SetStringValue("mu_strategy", "adaptive", true, true);
-        //app->Options()->SetStringValue("output_file", "ipopt.out");
+        //app->Options()->SetStringValue("output_file", "csdp.out");
         app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
         // hessian constant for an LP
         if( (osinstance->getNumberOfNonlinearExpressions() <= 0) && 
@@ -779,16 +779,16 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             std::vector<SolverOptionOrResult*> optionsVector;
-            optionsVector = osoption->getSolverOptions( "ipopt",true);
+            optionsVector = osoption->getSolverOptions( "csdp",true);
             char *pEnd;
             int i;
-            int num_ipopt_options = optionsVector.size();
-            for(i = 0; i < num_ipopt_options; i++)
+            int num_csdp_options = optionsVector.size();
+            for(i = 0; i < num_csdp_options; i++)
             {
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
-                outStr << "ipopt solver option  ";
+                outStr << "num_csdp_options solver option  ";
                 outStr << optionsVector[ i]->name;
                 outStr << std::endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
@@ -835,7 +835,7 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "Error while setting options in IpoptSolver\n");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "Error while setting options in CSDPSolver\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -852,8 +852,8 @@ void  CsdpSolver::solve() throw (ErrorClass)
     double* mdObjValues = NULL;
     int* colOffset = NULL;
     int* colOffsetD = NULL;
-//    int* rowOffset = NULL;
-//    int* rowOffsetD = NULL;
+    int* rowOffset = NULL;
+    int* rowOffsetD = NULL;
 
     if( this->bCallbuildSolverInstance == false) buildSolverInstance();
     if( this->bSetSolverOptions == false) setSolverOptions();
@@ -880,10 +880,10 @@ void  CsdpSolver::solve() throw (ErrorClass)
         //call solver
         int returnCode = easy_sdp(nC_rows,ncon,C_matrix,rhsValues,mconstraints,0.0,&X,&y,&Z,&pobj,&dobj);
 
-        int solIdx = 0;
-        int numberOfOtherVariableResults;
-        int otherIdx;
-        int numCon = osinstance->getConstraintNumber();
+        unsigned int solIdx = 0;
+        unsigned int numberOfOtherVariableResults;
+        unsigned int otherIdx;
+        unsigned int numCon = osinstance->getConstraintNumber();
 
         if(osinstance->getObjectiveNumber() > 0)   
         {

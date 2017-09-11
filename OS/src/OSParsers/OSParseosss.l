@@ -297,7 +297,10 @@ browserState (on|off)
         ch+=11;
         for(; isspace(*ch); ch++);
         std::string str(  ch);
-        yyextra->osilOutputFile = str;  
+        if (str[0] == '\"')
+            yyextra->osilOutputFile = str.substr(1,str.length()-2);
+        else
+            yyextra->osilOutputFile = str;
 }
 
  (osilOutput{xmlwhitespace}+{optionValue}) {
@@ -308,7 +311,10 @@ browserState (on|off)
          ch+=10;
          for(; isspace(*ch); ch++);
          std::string str(  ch);
-         yyextra->osilOutputFile = str;  
+        if (str[0] == '\"')
+            yyextra->osilOutputFile = str.substr(1,str.length()-2);
+        else
+            yyextra->osilOutputFile = str;
 }
              
  (osilOutput{xmlwhitespace}+) {

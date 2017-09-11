@@ -660,8 +660,8 @@ bool LindoSolver::optimize()
             }
             // now put the reduced costs into the osrl
             {
-                int numberOfOtherVariableResult = 1;
-                int otherIdx = 0;
+                unsigned int numberOfOtherVariableResult = 1;
+                unsigned int otherIdx = 0;
                 // first set the number of Other Variable Results
                 osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResult);
                 for(int i = 0; i <  osinstance->getVariableNumber() + m_iNumberNewSlacks; i++)
@@ -716,7 +716,7 @@ bool LindoSolver::optimize()
 
 bool LindoSolver::processQuadraticTerms()
 {
-    int nQCnnz = osinstance->getNumberOfQuadraticTerms();
+    unsigned int nQCnnz = osinstance->getNumberOfQuadraticTerms();
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, 
         "WE ARE PROCESSING QUADRATIC TERMS\n");
     try
@@ -725,17 +725,17 @@ bool LindoSolver::processQuadraticTerms()
         std::map<std::string, double> mapQuadraticAdjustMap;
         std::map<std::string, double>::iterator mapPointer;
 
-        int i;
-        int iVarOneIndex, iVarTwoIndex;
+        unsigned int i;
+        unsigned int iVarOneIndex, iVarTwoIndex;
         int iRowIndex;
         std::string sKey;
         double dValue;
 
-        int iStringPostionOne, iStringPostionTwo;
+        unsigned int iStringPostionOne, iStringPostionTwo;
 
         int* paiQCrows = osinstance->getQuadraticTerms()->rowIndexes;
-        int* paiQCcols1 = osinstance->getQuadraticTerms()->varOneIndexes;
-        int* paiQCcols2 = osinstance->getQuadraticTerms()->varTwoIndexes;
+        unsigned int* paiQCcols1 = osinstance->getQuadraticTerms()->varOneIndexes;
+        unsigned int* paiQCcols2 = osinstance->getQuadraticTerms()->varTwoIndexes;
         double* padQCcoef = osinstance->getQuadraticTerms()->coefficients;
         std::ostringstream ostrRow, ostr1, ostr2;
         std::string sIndexRow, sIndex1, sIndex2;
@@ -792,7 +792,7 @@ bool LindoSolver::processQuadraticTerms()
                 dValue *= 2;
             }
 
-            paiQCrows[iNumberOfQuadraticTerms] = iRowIndex;
+            paiQCrows[ iNumberOfQuadraticTerms] = iRowIndex;
             paiQCcols1[iNumberOfQuadraticTerms] = iVarOneIndex;
             paiQCcols2[iNumberOfQuadraticTerms] = iVarTwoIndex;
 
@@ -909,7 +909,7 @@ bool LindoSolver::processNonlinearExpressions()
     double *padNonlinearNonz = NULL;
 
     /** The number of constraints with nonlinear terms is given by iNumberOfNonlinearConstraints*/
-    int iNumberOfNonlinearConstraints = osinstance->getNumberOfNonlinearConstraints();
+    unsigned int iNumberOfNonlinearConstraints = osinstance->getNumberOfNonlinearConstraints();
 
     /** A pointer to the start of each nonlinear constraint in the instructions list paiOp_Codes
      *  is given by paiConsBegin
@@ -924,7 +924,7 @@ bool LindoSolver::processNonlinearExpressions()
     if(iNumberOfNonlinearConstraints > 0) paiConsLength = new int[ iNumberOfNonlinearConstraints];
 
     /** The number of objectives with nonlinear terms is given by iNumberOfNonlinearObjectives */
-    int iNumberOfNonlinearObjectives = osinstance->getNumberOfNonlinearObjectives();
+    unsigned int iNumberOfNonlinearObjectives = osinstance->getNumberOfNonlinearObjectives();
 
     /** A pointer to the start of each objective function in the instructions list paiOp_Codes
      *  is given by paiObjsBegin
@@ -944,7 +944,7 @@ bool LindoSolver::processNonlinearExpressions()
      *  In our implementation we assume all the variables are added prior to adding the nonlinear
      *  terms so this should always be zero
      */
-    int iNumberOfNewVariables = 0;
+    unsigned int iNumberOfNewVariables = 0;
 
     /** The nonlinear terms are held in postfix format via op codes in the pointer array paiInsList */
     int *paiInsList;

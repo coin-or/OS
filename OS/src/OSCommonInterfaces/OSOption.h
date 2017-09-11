@@ -715,7 +715,7 @@ class JobDependencies
 
 public:
     /** the number of entries in the list of job dependencies */
-    int numberOfJobIDs;
+    unsigned int numberOfJobIDs;
 
     /** the list of job IDs */
     std::string *jobID;
@@ -787,7 +787,7 @@ class DirectoriesAndFiles
 
 public:
     /** the number of <path> children */
-    int numberOfPaths;
+    unsigned int numberOfPaths;
 
     /** the list of directory and file paths */
     std::string *path;
@@ -919,7 +919,7 @@ class PathPairs
 
 public:
     /** the number of <path> children */
-    int numberOfPathPairs;
+    unsigned int numberOfPathPairs;
 
     /** the list of directory and file paths */
     PathPair **pathPair;
@@ -1003,7 +1003,7 @@ class Processes
 
 public:
     /** the number of <process> children */
-    int numberOfProcesses;
+    unsigned int numberOfProcesses;
 
     /** the list of processes */
     std::string *process;
@@ -1533,7 +1533,6 @@ public:
      */
     bool deepCopyFrom(InitBasStatus *that);
 }; //InitBasStatus
-
 
 /*! \class InitialBasisStatus
  *  \brief the InitialBasisStatus class.
@@ -4599,13 +4598,22 @@ class OptimizationOption
 
 public:
     /** the number of variables */
-    int numberOfVariables;
+    unsigned int numberOfVariables;
+
+    /** track whether numberOfVariables has been set */
+    bool numberOfVariablesIsSet;
 
     /** the number of objectives */
-    int numberOfObjectives;
+    unsigned int numberOfObjectives;
+
+    /** track whether numberOfObjectives has been set */
+    bool numberOfObjectivesIsSet;
 
     /** the number of constraints */
-    int numberOfConstraints;
+    unsigned int numberOfConstraints;
+
+    /** track whether numberOfConstraints has been set */
+    bool numberOfConstraintsIsSet;
 
     /** the options for the variables */
     VariableOption *variables;
@@ -5061,14 +5069,29 @@ public:
     int  getNumberOfVariables();
 
     /**
+     * Get whether the number of variables has been set
+     */
+    bool getIsSetNumberOfVariables();
+
+    /**
      * Get the number of objectives in the instance
      */
     int  getNumberOfObjectives();
 
     /**
+     * Get whether the number of objectives has been set
+     */
+    bool getIsSetNumberOfObjectives();
+
+    /**
      * Get the number of constraints in the instance
      */
     int  getNumberOfConstraints();
+
+    /**
+     * Get whether the number of constraints has been set
+     */
+    bool getIsSetNumberOfConstraints();
 
     /**
      * Get the number of initial variable values.
@@ -5986,10 +6009,13 @@ public:
 
 
     bool setNumberOfVariables(int numberOfVariables);
+    bool setNumberOfVariablesStatus(bool status);
 
     bool setNumberOfObjectives(int numberOfObjectives);
+    bool setNumberOfObjectivesStatus(bool status);
 
     bool setNumberOfConstraints(int numberOfConstraints);
+    bool setNumberOfConstraintsStatus(bool status);
 
     bool setInitVarValues(int numberOfVar, int* idx, double* value, std::string* name);
     bool setInitVarValuesSparse(int numberOfVar, InitVarValue** var);
@@ -6004,8 +6030,8 @@ public:
     bool setAnotherInitVarValueString(int idx, std::string value);
 
     bool setInitBasisStatus(int object, int status, int *i, int ni);
-    bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var);
-    bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var, ENUM_COMBINE_ARRAYS disp);
+//    bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var);
+//    bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var, ENUM_COMBINE_ARRAYS disp);
     bool setInitBasisStatusDense(int numberOfVar, std::string *var);
 
     /**

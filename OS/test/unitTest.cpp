@@ -9687,6 +9687,10 @@ if (OTHER_TESTS)
         delete fileUtil;
         fileUtil = NULL;
 
+#ifndef NDEBUG
+std::cout << std::endl << std::endl << nl2osil->osol << std::endl << std::endl;
+#endif
+
         std::cout << std::endl << "Create OS objects" << std::endl << std::endl;
 
         nl2osil->createOSObjects();

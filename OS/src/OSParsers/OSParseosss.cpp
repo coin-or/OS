@@ -8,8 +8,8 @@
 
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
-#define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_MINOR_VERSION 6
+#define YY_FLEX_SUBMINOR_VERSION 0
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -179,6 +179,11 @@ typedef void* yyscan_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
@@ -197,6 +202,13 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
                     if ( yytext[yyl] == '\n' )\
                         --yylineno;\
             }while(0)
+    #define YY_LINENO_REWIND_TO(dst) \
+            do {\
+                const char *p;\
+                for ( p = yy_cp-1; p >= (dst); --p)\
+                    if ( *p == '\n' )\
+                        --yylineno;\
+            }while(0)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -213,11 +225,6 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 	while ( 0 )
 
 #define unput(c) yyunput( c, yyg->yytext_ptr , yyscanner )
-
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
 
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
@@ -315,7 +322,7 @@ static void osss_init_buffer (YY_BUFFER_STATE b,FILE *file ,yyscan_t yyscanner )
 
 YY_BUFFER_STATE osss_scan_buffer (char *base,yy_size_t size ,yyscan_t yyscanner );
 YY_BUFFER_STATE osss_scan_string (yyconst char *yy_str ,yyscan_t yyscanner );
-YY_BUFFER_STATE osss_scan_bytes (yyconst char *bytes,int len ,yyscan_t yyscanner );
+YY_BUFFER_STATE osss_scan_bytes (yyconst char *bytes,yy_size_t len ,yyscan_t yyscanner );
 
 void *osssalloc (yy_size_t ,yyscan_t yyscanner );
 void *osssrealloc (void *,yy_size_t ,yyscan_t yyscanner );
@@ -347,7 +354,7 @@ void osssfree (void * ,yyscan_t yyscanner );
 
 /* Begin user sect3 */
 
-#define ossswrap(n) 1
+#define ossswrap(yyscanner) (/*CONSTCOND*/1)
 #define YY_SKIP_YYWRAP
 
 typedef unsigned char YY_CHAR;
@@ -359,6 +366,9 @@ typedef int yy_state_type;
 static yy_state_type yy_get_previous_state (yyscan_t yyscanner );
 static yy_state_type yy_try_NUL_trans (yy_state_type current_state  ,yyscan_t yyscanner);
 static int yy_get_next_buffer (yyscan_t yyscanner );
+#if defined(__GNUC__) && __GNUC__ >= 3
+__attribute__((__noreturn__))
+#endif
 static void yy_fatal_error (yyconst char msg[] ,yyscan_t yyscanner );
 
 /* Done after the current pattern has been matched and before the
@@ -446,7 +456,7 @@ static yyconst flex_int16_t yy_accept[568] =
         0,    0,    0,    0,    0,    0,    0
     } ;
 
-static yyconst flex_int32_t yy_ec[256] =
+static yyconst YY_CHAR yy_ec[256] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
@@ -478,7 +488,7 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[41] =
+static yyconst YY_CHAR yy_meta[41] =
     {   0,
         1,    2,    3,    2,    2,    2,    2,    2,    2,    2,
         2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
@@ -486,7 +496,7 @@ static yyconst flex_int32_t yy_meta[41] =
         2,    2,    2,    2,    2,    2,    2,    2,    2,    2
     } ;
 
-static yyconst flex_int16_t yy_base[648] =
+static yyconst flex_uint16_t yy_base[648] =
     {   0,
         0,    0,  964,  965,   39,   41,   39,  965,  929,  931,
       944,  920,  934,  937,  927,  925,  924,  922,  925,  917,
@@ -636,7 +646,7 @@ static yyconst flex_int16_t yy_def[648] =
       567,  567,  567,  567,  567,  567,  567
     } ;
 
-static yyconst flex_int16_t yy_nxt[1006] =
+static yyconst flex_uint16_t yy_nxt[1006] =
     {   0,
         4,    5,    6,    4,    4,    7,    8,    4,    4,    4,
         4,    4,    4,    4,    4,    4,    4,    9,   10,   11,
@@ -983,7 +993,7 @@ void setyyextra( OSCommandLine* oscommandline, void* scanner);
  */
 
 
-#line 987 "../../../../OS/src/OSParsers/OSParseosss.cpp"
+#line 997 "../../../../OS/src/OSParsers/OSParseosss.cpp"
 
 #define INITIAL 0
 
@@ -1013,7 +1023,7 @@ struct yyguts_t
     YY_BUFFER_STATE * yy_buffer_stack; /**< Stack as an array. */
     char yy_hold_char;
     int yy_n_chars;
-    int yyleng_r;
+    yy_size_t yyleng_r;
     char *yy_c_buf_p;
     int yy_init;
     int yy_start;
@@ -1054,19 +1064,23 @@ void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
 
 FILE *osssget_in (yyscan_t yyscanner );
 
-void osssset_in  (FILE * in_str ,yyscan_t yyscanner );
+void osssset_in  (FILE * _in_str ,yyscan_t yyscanner );
 
 FILE *osssget_out (yyscan_t yyscanner );
 
-void osssset_out  (FILE * out_str ,yyscan_t yyscanner );
+void osssset_out  (FILE * _out_str ,yyscan_t yyscanner );
 
-int osssget_leng (yyscan_t yyscanner );
+yy_size_t osssget_leng (yyscan_t yyscanner );
 
 char *osssget_text (yyscan_t yyscanner );
 
 int osssget_lineno (yyscan_t yyscanner );
 
-void osssset_lineno (int line_number ,yyscan_t yyscanner );
+void osssset_lineno (int _line_number ,yyscan_t yyscanner );
+
+int osssget_column  (yyscan_t yyscanner );
+
+void osssset_column (int _column_no ,yyscan_t yyscanner );
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -1078,6 +1092,10 @@ extern "C" int ossswrap (yyscan_t yyscanner );
 #else
 extern int ossswrap (yyscan_t yyscanner );
 #endif
+#endif
+
+#ifndef YY_NO_UNPUT
+    
 #endif
 
 #ifndef yytext_ptr
@@ -1192,7 +1210,7 @@ extern int ossslex (yyscan_t yyscanner);
 
 /* Code executed at the end of each rule. */
 #ifndef YY_BREAK
-#define YY_BREAK break;
+#define YY_BREAK /*LINTED*/break;
 #endif
 
 #define YY_RULE_SETUP \
@@ -1202,15 +1220,10 @@ extern int ossslex (yyscan_t yyscanner);
  */
 YY_DECL
 {
-	register yy_state_type yy_current_state;
-	register char *yy_cp, *yy_bp;
-	register int yy_act;
+	yy_state_type yy_current_state;
+	char *yy_cp, *yy_bp;
+	int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-
-#line 116 "../../../../OS/src/OSParsers/OSParseosss.l"
-
-
-#line 1214 "../../../../OS/src/OSParsers/OSParseosss.cpp"
 
 	if ( !yyg->yy_init )
 		{
@@ -1238,7 +1251,13 @@ YY_DECL
 		osss_load_buffer_state(yyscanner );
 		}
 
-	while ( 1 )		/* loops until end-of-file is reached */
+	{
+#line 116 "../../../../OS/src/OSParsers/OSParseosss.l"
+
+
+#line 1259 "../../../../OS/src/OSParsers/OSParseosss.cpp"
+
+	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
 		yy_cp = yyg->yy_c_buf_p;
 
@@ -1254,7 +1273,7 @@ YY_DECL
 yy_match:
 		do
 			{
-			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
+			YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)] ;
 			if ( yy_accept[yy_current_state] )
 				{
 				yyg->yy_last_accepting_state = yy_current_state;
@@ -1284,7 +1303,7 @@ yy_find_action:
 
 		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
 			{
-			int yyl;
+			yy_size_t yyl;
 			for ( yyl = 0; yyl < yyleng; ++yyl )
 				if ( yytext[yyl] == '\n' )
 					   
@@ -1552,13 +1571,16 @@ YY_RULE_SETUP
         ch+=11;
         for(; isspace(*ch); ch++);
         std::string str(  ch);
-        yyextra->osilOutputFile = str;  
+        if (str[0] == '\"')
+            yyextra->osilOutputFile = str.substr(1,str.length()-2);
+        else
+            yyextra->osilOutputFile = str;
 }
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 303 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 306 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
          YY_PRINT 
          //char *ch = strdup(yytext);
@@ -1567,13 +1589,16 @@ YY_RULE_SETUP
          ch+=10;
          for(; isspace(*ch); ch++);
          std::string str(  ch);
-         yyextra->osilOutputFile = str;  
+        if (str[0] == '\"')
+            yyextra->osilOutputFile = str.substr(1,str.length()-2);
+        else
+            yyextra->osilOutputFile = str;
 }
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 314 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 320 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
          YY_PRINT 
          //char *ch = strdup(yytext);
@@ -1588,7 +1613,7 @@ YY_RULE_SETUP
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 325 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 331 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
     //if(yyextra->osolFile == ""){
         YY_PRINT 
@@ -1608,7 +1633,7 @@ YY_RULE_SETUP
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 341 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 347 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
     //if(yyextra->osolFile == ""){
         YY_PRINT 
@@ -1628,7 +1653,7 @@ YY_RULE_SETUP
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 357 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 363 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -1646,7 +1671,7 @@ YY_RULE_SETUP
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 371 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 377 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -1664,7 +1689,7 @@ YY_RULE_SETUP
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 385 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 391 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
          YY_PRINT 
          //char *ch = strdup(yytext);
@@ -1679,7 +1704,7 @@ YY_RULE_SETUP
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 396 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 402 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
     //if(yyextra->osplInputFile == ""){
         YY_PRINT 
@@ -1699,7 +1724,7 @@ YY_RULE_SETUP
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 412 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 418 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -1717,7 +1742,7 @@ YY_RULE_SETUP
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 426 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 432 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -1735,7 +1760,7 @@ YY_RULE_SETUP
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 440 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 446 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -1753,7 +1778,7 @@ YY_RULE_SETUP
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 454 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 460 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
     //if(yyextra->osrlFile == ""){
         YY_PRINT 
@@ -1773,7 +1798,7 @@ YY_RULE_SETUP
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 470 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 476 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
      //if(yyextra->osrlFile == ""){
         YY_PRINT 
@@ -1793,7 +1818,7 @@ YY_RULE_SETUP
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 486 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 492 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT
         //char *ch = strdup(yytext);
@@ -1811,7 +1836,7 @@ YY_RULE_SETUP
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 500 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 506 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT
         //char *ch = strdup(yytext);
@@ -1830,7 +1855,7 @@ YY_RULE_SETUP
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 515 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 521 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -1848,7 +1873,7 @@ YY_RULE_SETUP
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 529 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 535 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -1866,7 +1891,7 @@ YY_RULE_SETUP
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 543 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 549 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT
         //char *ch = strdup(yytext);
@@ -1884,7 +1909,7 @@ YY_RULE_SETUP
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 557 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 563 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT
         //char *ch = strdup(yytext);
@@ -1902,7 +1927,7 @@ YY_RULE_SETUP
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 571 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 577 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT
         //char *ch = strdup(yytext);
@@ -1920,7 +1945,7 @@ YY_RULE_SETUP
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 585 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 591 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT
         //char *ch = strdup(yytext);
@@ -1938,7 +1963,7 @@ YY_RULE_SETUP
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 599 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 605 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT
         //char *ch = strdup(yytext);
@@ -1956,7 +1981,7 @@ YY_RULE_SETUP
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 613 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 619 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT
         //char *ch = strdup(yytext);
@@ -1975,7 +2000,7 @@ YY_RULE_SETUP
 case 45:
 /* rule 45 can match eol */
 YY_RULE_SETUP
-#line 628 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 634 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //yyextra->serviceLocation = strdup(yytext);
@@ -1995,7 +2020,7 @@ YY_RULE_SETUP
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 644 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 650 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //yyextra->serviceLocation = strdup(yytext);
@@ -2015,7 +2040,7 @@ YY_RULE_SETUP
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 660 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 666 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -2033,7 +2058,7 @@ YY_RULE_SETUP
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 674 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 680 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT 
         //char *ch = strdup(yytext);
@@ -2051,7 +2076,7 @@ YY_RULE_SETUP
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 688 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 694 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2069,7 +2094,7 @@ YY_RULE_SETUP
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 702 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 708 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2087,7 +2112,7 @@ YY_RULE_SETUP
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 716 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 722 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2107,7 +2132,7 @@ YY_RULE_SETUP
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 732 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 738 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2127,7 +2152,7 @@ YY_RULE_SETUP
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 748 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 754 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2145,7 +2170,7 @@ YY_RULE_SETUP
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 762 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 768 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2163,7 +2188,7 @@ YY_RULE_SETUP
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 776 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 782 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2183,7 +2208,7 @@ YY_RULE_SETUP
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 792 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 798 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2203,7 +2228,7 @@ YY_RULE_SETUP
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 808 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 814 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2218,7 +2243,7 @@ YY_RULE_SETUP
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 819 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 825 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -2232,7 +2257,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 830 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 836 "../../../../OS/src/OSParsers/OSParseosss.l"
 {
     std::string error;
     std::ostringstream outStr;
@@ -2249,10 +2274,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 843 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 849 "../../../../OS/src/OSParsers/OSParseosss.l"
 ECHO;
 	YY_BREAK
-#line 2256 "../../../../OS/src/OSParsers/OSParseosss.cpp"
+#line 2281 "../../../../OS/src/OSParsers/OSParseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2383,6 +2408,7 @@ case YY_STATE_EOF(INITIAL):
 			"fatal flex scanner internal error--no action found" );
 	} /* end of action switch */
 		} /* end of scanning one token */
+	} /* end of user's declarations */
 } /* end of ossslex */
 
 /* yy_get_next_buffer - try to read in a new buffer
@@ -2395,9 +2421,9 @@ case YY_STATE_EOF(INITIAL):
 static int yy_get_next_buffer (yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-	register char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
-	register char *source = yyg->yytext_ptr;
-	register int number_to_move, i;
+	char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
+	char *source = yyg->yytext_ptr;
+	yy_size_t number_to_move, i;
 	int ret_val;
 
 	if ( yyg->yy_c_buf_p > &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars + 1] )
@@ -2426,7 +2452,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	/* Try to read more data. */
 
 	/* First move last chars to start of buffer. */
-	number_to_move = (int) (yyg->yy_c_buf_p - yyg->yytext_ptr) - 1;
+	number_to_move = (yy_size_t) (yyg->yy_c_buf_p - yyg->yytext_ptr) - 1;
 
 	for ( i = 0; i < number_to_move; ++i )
 		*(dest++) = *(source++);
@@ -2439,21 +2465,21 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 	else
 		{
-			int num_to_read =
+			yy_size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
 			{ /* Not enough room in the buffer - grow it. */
 
 			/* just a shorter name for the current buffer */
-			YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
 
 			int yy_c_buf_p_offset =
 				(int) (yyg->yy_c_buf_p - b->yy_ch_buf);
 
 			if ( b->yy_is_our_buffer )
 				{
-				int new_size = b->yy_buf_size * 2;
+				yy_size_t new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -2484,7 +2510,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			yyg->yy_n_chars, (size_t) num_to_read );
+			yyg->yy_n_chars, num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = yyg->yy_n_chars;
 		}
@@ -2508,9 +2534,9 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
 
-	if ((yy_size_t) (yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+	if ((int) (yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
-		yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
+		int new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) osssrealloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,new_size ,yyscanner );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
 			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
@@ -2529,15 +2555,15 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
     static yy_state_type yy_get_previous_state (yyscan_t yyscanner)
 {
-	register yy_state_type yy_current_state;
-	register char *yy_cp;
+	yy_state_type yy_current_state;
+	char *yy_cp;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
 	yy_current_state = yyg->yy_start;
 
 	for ( yy_cp = yyg->yytext_ptr + YY_MORE_ADJ; yy_cp < yyg->yy_c_buf_p; ++yy_cp )
 		{
-		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
+		YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
 		if ( yy_accept[yy_current_state] )
 			{
 			yyg->yy_last_accepting_state = yy_current_state;
@@ -2562,11 +2588,11 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
  */
     static yy_state_type yy_try_NUL_trans  (yy_state_type yy_current_state , yyscan_t yyscanner)
 {
-	register int yy_is_jam;
+	int yy_is_jam;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner; /* This var may be unused depending upon options. */
-	register char *yy_cp = yyg->yy_c_buf_p;
+	char *yy_cp = yyg->yy_c_buf_p;
 
-	register YY_CHAR yy_c = 1;
+	YY_CHAR yy_c = 1;
 	if ( yy_accept[yy_current_state] )
 		{
 		yyg->yy_last_accepting_state = yy_current_state;
@@ -2581,8 +2607,13 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 	yy_is_jam = (yy_current_state == 567);
 
+	(void)yyg;
 	return yy_is_jam ? 0 : yy_current_state;
 }
+
+#ifndef YY_NO_UNPUT
+
+#endif
 
 #ifndef YY_NO_INPUT
 #ifdef __cplusplus
@@ -2609,7 +2640,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 		else
 			{ /* need more input */
-			int offset = yyg->yy_c_buf_p - yyg->yytext_ptr;
+			yy_size_t offset = yyg->yy_c_buf_p - yyg->yytext_ptr;
 			++yyg->yy_c_buf_p;
 
 			switch ( yy_get_next_buffer( yyscanner ) )
@@ -2744,7 +2775,7 @@ static void osss_load_buffer_state  (yyscan_t yyscanner)
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in osss_create_buffer()" );
 
-	b->yy_buf_size = size;
+	b->yy_buf_size = (yy_size_t)size;
 
 	/* yy_ch_buf has to be 2 characters longer than the size given because
 	 * we need to put in 2 end-of-buffer characters.
@@ -2780,10 +2811,6 @@ static void osss_load_buffer_state  (yyscan_t yyscanner)
 	osssfree((void *) b ,yyscanner );
 }
 
-#ifndef __cplusplus
-extern int isatty (int );
-#endif /* __cplusplus */
-    
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a osssrestart() or at EOF.
@@ -2900,7 +2927,7 @@ void ossspop_buffer_state (yyscan_t yyscanner)
  */
 static void osssensure_buffer_stack (yyscan_t yyscanner)
 {
-	int num_to_alloc;
+	yy_size_t num_to_alloc;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
 	if (!yyg->yy_buffer_stack) {
@@ -2909,7 +2936,7 @@ static void osssensure_buffer_stack (yyscan_t yyscanner)
 		 * scanner will even need a stack. We use 2 instead of 1 to avoid an
 		 * immediate realloc on the next call.
          */
-		num_to_alloc = 1;
+		num_to_alloc = 1; /* After all that talk, this was set to 1 anyways... */
 		yyg->yy_buffer_stack = (struct yy_buffer_state**)osssalloc
 								(num_to_alloc * sizeof(struct yy_buffer_state*)
 								, yyscanner);
@@ -2926,7 +2953,7 @@ static void osssensure_buffer_stack (yyscan_t yyscanner)
 	if (yyg->yy_buffer_stack_top >= (yyg->yy_buffer_stack_max) - 1){
 
 		/* Increase the buffer to prepare for a possible push. */
-		int grow_size = 8 /* arbitrary grow size */;
+		yy_size_t grow_size = 8 /* arbitrary grow size */;
 
 		num_to_alloc = yyg->yy_buffer_stack_max + grow_size;
 		yyg->yy_buffer_stack = (struct yy_buffer_state**)osssrealloc
@@ -2998,12 +3025,12 @@ YY_BUFFER_STATE osss_scan_string (yyconst char * yystr , yyscan_t yyscanner)
  * @param yyscanner The scanner object.
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE osss_scan_bytes  (yyconst char * yybytes, int  _yybytes_len , yyscan_t yyscanner)
+YY_BUFFER_STATE osss_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len , yyscan_t yyscanner)
 {
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	int i;
+	yy_size_t i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
@@ -3034,7 +3061,9 @@ YY_BUFFER_STATE osss_scan_bytes  (yyconst char * yybytes, int  _yybytes_len , yy
 
 static void yy_fatal_error (yyconst char* msg , yyscan_t yyscanner)
 {
-    	(void) fprintf( stderr, "%s\n", msg );
+	struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+	(void)yyg;
+	(void) fprintf( stderr, "%s\n", msg );
 	exit( YY_EXIT_FAILURE );
 }
 
@@ -3113,7 +3142,7 @@ FILE *osssget_out  (yyscan_t yyscanner)
 /** Get the length of the current token.
  * @param yyscanner The scanner object.
  */
-int osssget_leng  (yyscan_t yyscanner)
+yy_size_t osssget_leng  (yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
     return yyleng;
@@ -3140,51 +3169,51 @@ void osssset_extra (YY_EXTRA_TYPE  user_defined , yyscan_t yyscanner)
 }
 
 /** Set the current line number.
- * @param line_number
+ * @param _line_number line number
  * @param yyscanner The scanner object.
  */
-void osssset_lineno (int  line_number , yyscan_t yyscanner)
+void osssset_lineno (int  _line_number , yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
         /* lineno is only valid if an input buffer exists. */
         if (! YY_CURRENT_BUFFER )
-           yy_fatal_error( "osssset_lineno called with no buffer" , yyscanner); 
+           YY_FATAL_ERROR( "osssset_lineno called with no buffer" );
     
-    yylineno = line_number;
+    yylineno = _line_number;
 }
 
 /** Set the current column.
- * @param line_number
+ * @param _column_no column number
  * @param yyscanner The scanner object.
  */
-void osssset_column (int  column_no , yyscan_t yyscanner)
+void osssset_column (int  _column_no , yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
         /* column is only valid if an input buffer exists. */
         if (! YY_CURRENT_BUFFER )
-           yy_fatal_error( "osssset_column called with no buffer" , yyscanner); 
+           YY_FATAL_ERROR( "osssset_column called with no buffer" );
     
-    yycolumn = column_no;
+    yycolumn = _column_no;
 }
 
 /** Set the input stream. This does not discard the current
  * input buffer.
- * @param in_str A readable stream.
+ * @param _in_str A readable stream.
  * @param yyscanner The scanner object.
  * @see osss_switch_to_buffer
  */
-void osssset_in (FILE *  in_str , yyscan_t yyscanner)
+void osssset_in (FILE *  _in_str , yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-    yyin = in_str ;
+    yyin = _in_str ;
 }
 
-void osssset_out (FILE *  out_str , yyscan_t yyscanner)
+void osssset_out (FILE *  _out_str , yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-    yyout = out_str ;
+    yyout = _out_str ;
 }
 
 int osssget_debug  (yyscan_t yyscanner)
@@ -3193,10 +3222,10 @@ int osssget_debug  (yyscan_t yyscanner)
     return yy_flex_debug;
 }
 
-void osssset_debug (int  bdebug , yyscan_t yyscanner)
+void osssset_debug (int  _bdebug , yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-    yy_flex_debug = bdebug ;
+    yy_flex_debug = _bdebug ;
 }
 
 /* Accessor methods for yylval and yylloc */
@@ -3335,7 +3364,10 @@ int ossslex_destroy  (yyscan_t yyscanner)
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n , yyscan_t yyscanner)
 {
-	register int i;
+	struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+	(void)yyg;
+
+	int i;
 	for ( i = 0; i < n; ++i )
 		s1[i] = s2[i];
 }
@@ -3344,7 +3376,7 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n , yyscan_t yysca
 #ifdef YY_NEED_STRLEN
 static int yy_flex_strlen (yyconst char * s , yyscan_t yyscanner)
 {
-	register int n;
+	int n;
 	for ( n = 0; s[n]; ++n )
 		;
 
@@ -3354,11 +3386,16 @@ static int yy_flex_strlen (yyconst char * s , yyscan_t yyscanner)
 
 void *osssalloc (yy_size_t  size , yyscan_t yyscanner)
 {
+	struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+	(void)yyg;
 	return (void *) malloc( size );
 }
 
 void *osssrealloc  (void * ptr, yy_size_t  size , yyscan_t yyscanner)
 {
+	struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+	(void)yyg;
+
 	/* The cast to (char *) in the following accommodates both
 	 * implementations that use char* generic pointers, and those
 	 * that use void* generic pointers.  It works with the latter
@@ -3371,12 +3408,14 @@ void *osssrealloc  (void * ptr, yy_size_t  size , yyscan_t yyscanner)
 
 void osssfree (void * ptr , yyscan_t yyscanner)
 {
+	struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+	(void)yyg;
 	free( (char *) ptr );	/* see osssrealloc() for (char *) cast */
 }
 
 #define YYTABLES_NAME "yytables"
 
-#line 843 "../../../../OS/src/OSParsers/OSParseosss.l"
+#line 849 "../../../../OS/src/OSParsers/OSParseosss.l"
 
 
 

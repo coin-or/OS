@@ -42,3 +42,13 @@
 
 /* Define to 1 if OS uses ASL */
 #define OS_HAS_ASL
+
+/* use 64 bit integers */
+#undef OS_USE_XML_LONG_INTEGER
+
+/* Define to 64-bit integer type */
+#undef OS_XML_INT64
+
+/* Define to 64-bit unsigned integer type */
+#undef OS_XML_UINT64
+

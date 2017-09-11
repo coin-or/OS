@@ -227,7 +227,7 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
     assert(init_x == true);
     assert(init_z == false);
     assert(init_lambda == false);
-    int i, m1, n1;
+    unsigned int i, m1, n1;
 
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!!\n");
@@ -942,8 +942,8 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             std::vector<SolverOptionOrResult*> optionsVector;
             optionsVector = osoption->getSolverOptions( "ipopt",true);
             char *pEnd;
-            int i;
-            int num_ipopt_options = optionsVector.size();
+            std::vector<SolverOptionOrResult*>::size_type i, num_ipopt_options;
+            num_ipopt_options = optionsVector.size();
             for(i = 0; i < num_ipopt_options; i++)
             {
 #ifndef NDEBUG

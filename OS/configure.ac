@@ -77,6 +77,7 @@ AC_CHECK_SIZEOF( long)
 
 AC_LANG_POP(C)
 
+
 #############################################################################
 #                           COIN-OR components                              #
 #############################################################################
@@ -335,6 +336,79 @@ AC_MSG_RESULT([$os_flex_bison])
 
 AM_CONDITIONAL(HAVE_LEXYACC, test -n "`$LEX --version`" && test -n "$YACC" && 
 			     test $os_flex_bison = yes)
+
+
+AC_MSG_CHECKING([whether to use 64-bit integers in XML parser])
+AC_ARG_ENABLE([xml-long-integer],
+[AC_HELP_STRING([--enable-xml-long-integer],
+                [use 64 bit integers])],
+		[os_xml_long_integer=$withval],[os_xml_long_integer=no])
+AC_MSG_RESULT([$os_xml_long_integer])
+
+#make sure that OS and compilers support 64-bit integers
+if test x$os_xml_long_integer = xyes ; then
+
+# Check for 64-bit integer support again; CoinInt64 is not available,
+# but the code can be reused and modified
+  OsXmlInt64=
+  OsXmlUInt64=
+
+# try int64_t
+  AC_CHECK_TYPE([int64_t],[OsXmlInt64=int64_t ; OsXmlUInt64=uint64_t],[],[])
+
+# try int_least64_t
+  if test x"$OsXmlInt64" = x; then
+    AC_CHECK_TYPE([int_least64_t],[OsXmlInt64=int_least64_t ; OsXmlUInt64=uint_least64_t],
+      [],[])
+  fi
+
+# We need to use the C compiler in the AC_CHECK_SIZEOF since otherwise the
+# MSCV compiler complains about redefinition of "exit". ac_cv_sizeof_<type>
+# sometimes adds `^M' to the number, hence the check for `8?'.
+  AC_LANG_PUSH(C)
+# try long long
+  if test x"$OsXmlInt64" = x; then
+    AC_CHECK_SIZEOF([long long])
+    case $ac_cv_sizeof_long_long in
+      8 | 8?) OsXmlInt64="long long"
+    	    OsXmlUInt64="unsigned long long"
+	    ;;
+    esac
+  fi
+
+#try long
+  if test x"$OsXmlInt64" = x; then
+    AC_CHECK_SIZEOF([long])
+    case $ac_cv_sizeof_long in
+      8 | 8?) OsXmlInt64="long"
+    	    OsXmlUInt64="unsigned long"
+	    ;;
+    esac
+  fi
+
+#try int
+  if test x"$OsXmlInt64" = x; then
+    AC_CHECK_SIZEOF([int])
+    case $ac_cv_sizeof_int in
+      8 | 8?) OsXmlInt64="int"
+    	    OsXmlUInt64="unsigned int"
+	    ;;
+    esac
+  fi
+  AC_LANG_POP(C)
+
+  if test x"$OsXmlInt64" = x; then
+    AC_MSG_ERROR([Can't use 64-bit integers without architecture support!])
+  else
+#    AC_MSG_NOTICE([OsXmlInt64 has value:])
+#    AC_MSG_RESULT([$OsXmlInt64])
+    AC_DEFINE(OS_USE_XML_LONG_INTEGER, [1], [use 64 bit integers])
+    AC_DEFINE_UNQUOTED([OS_XML_INT64],[$OsXmlInt64],[Define to 64-bit integer type])
+    AC_DEFINE_UNQUOTED([OS_XML_UINT64],[$OsXmlUInt64],
+  		   [Define to 64-bit unsigned integer type])
+  fi
+fi
+
 
 #############################################################################
 # Define the root of the OS project                                         #

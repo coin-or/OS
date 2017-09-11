@@ -2341,9 +2341,14 @@ private:
     bool m_bProcessVariables;
 
     /**
-     * m_iVariableNumber holds the variable number.
+     * m_iVariableNumber holds the number of variables
      */
     int m_iVariableNumber;
+
+    /**
+     * m_bIsSetVariableNumber tracks whether the number of variables has been set
+     */
+    bool m_bIsSetVariableNumber;
 
     /**
      * m_iNumberOfIntegerVariables holds the number of integer variables.

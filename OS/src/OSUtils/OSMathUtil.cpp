@@ -181,7 +181,7 @@ std::string os_dtoa_format(double  x)
     int decimalPointPos;
     int sign;
     //int strLength = 0;
-    int k = 0;
+    unsigned int k = 0;
     charResult = os_dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
     // get the length
     // get the sign, 1 for negative

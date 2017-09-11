@@ -173,6 +173,8 @@ void doPrintModel( OSCommandLine *oscommandline);
 void doPrintModel( OSInstance *osinstance);
 void doPrintRow(OSCommandLine *oscommandline);
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
+void doWriteOSiLFile(OSCommandLine *oscommandline);
+void doWriteOSoLFile(OSCommandLine *oscommandline);
 
 extern const OSSmartPtr<OSOutput> osoutput;
 
@@ -212,7 +214,7 @@ int main(int argC, const char* argV[])
     // initialize the command line structure 
 
     OSCommandLine *oscommandline = new OSCommandLine();
-    bool scannerActive = false;
+    bool scannerActive;
         
     try
     {
@@ -339,6 +341,9 @@ int main(int argC, const char* argV[])
             scannerActive = false;           
         }
     }
+
+//  catch: error parsing command line
+//  =================================
     catch (const ErrorClass& eclass)
     {
 #ifndef NDEBUG
@@ -468,6 +473,9 @@ int main(int argC, const char* argV[])
             return 0;
         }
     }
+
+//  catch: error while processing command line action items
+//  =======================================================
     catch (const ErrorClass& eclass)
     {
 #ifndef NDEBUG
@@ -640,10 +648,16 @@ int main(int argC, const char* argV[])
     if (oscommandline->serviceMethod == "") oscommandline->serviceMethod = "solve";
     if (oscommandline->serviceMethod[0] == 's')
     {
+        // Deal with some command line action items first
         if (oscommandline->printModel == true)
             doPrintModel(oscommandline);
         else if (oscommandline->printRowNumberAsString != "")
             doPrintRow(oscommandline);
+        if (oscommandline->osilOutputFile != "")
+            doWriteOSiLFile(oscommandline);
+        if (oscommandline->osolOutputFile != "")
+            doWriteOSoLFile(oscommandline);
+
         if (oscommandline->serviceMethod[1] == 'e')
             send(oscommandline);
         else
@@ -848,6 +862,9 @@ void solve(OSCommandLine *oscommandline)
 
         }//end of local solve
 
+//      at this point we have solved the problem successfully 
+//      and can output an OSiL or OSoL file if desired
+	
 
         //garbage collection
         if (osilreader != NULL)
@@ -856,7 +873,7 @@ void solve(OSCommandLine *oscommandline)
         if (mps2osil != NULL)
             delete mps2osil;
         mps2osil = NULL;
-#ifdef COIN_HAS_ASL
+#ifdef COIN_HAS_ASLprint
         if(nl2os != NULL) delete nl2os;
         nl2os = NULL;
 #endif
@@ -866,8 +883,8 @@ void solve(OSCommandLine *oscommandline)
 #endif
         delete fileUtil;
         fileUtil = NULL;
-
     }//end try
+
     catch (const ErrorClass& eclass)
     {
         std::string osrl = "";
@@ -1548,7 +1565,7 @@ void interactiveShell()
     std::string logfilename;
 
     OSCommandLine *oscommandline = new OSCommandLine();
-    bool scannerActive = false;
+    bool scannerActive;
 
     //this is the interactive shell
     scannerActive = true;
@@ -1986,8 +2003,8 @@ void interactiveShell()
                                     case 7: //solver
 
                                         //make solver name lower case 
-                                        for (int k = 0; k
-                                                < oscommandline->solverName.length(); k++)
+                                        for (string::size_type k = 0;
+                                                k < oscommandline->solverName.length(); k++)
                                         {
                                             oscommandline->solverName[k] = 
                                                 (char)tolower(oscommandline->solverName[k]);
@@ -2578,7 +2595,7 @@ void list_options(OSCommandLine *oscommandline)
 
 void doPrintModel(OSCommandLine *oscommandline)
 {
-    if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
+    if (oscommandline->osil == "" && oscommandline->mpsFile == "" &&  oscommandline->nlFile == "")
     {
         std::cout
             << "no instance defined; print command ignored" << std::endl;
@@ -2593,7 +2610,7 @@ void doPrintModel(OSCommandLine *oscommandline)
             delete osilreader;
             osilreader = NULL;
         }
-        else if (oscommandline->nl != "")
+        else if (oscommandline->nlFile != "")
         {
 #ifdef COIN_HAS_ASL
             OSnl2OS *nl2os;    
@@ -2609,7 +2626,7 @@ void doPrintModel(OSCommandLine *oscommandline)
             std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
         }
-        else if (oscommandline->mps != "")
+        else if (oscommandline->mpsFile != "")
         {
             OSmps2OS *mps2osil;
             mps2osil = new OSmps2OS(oscommandline->mpsFile);
@@ -2650,7 +2667,7 @@ void doPrintRow(OSCommandLine *oscommandline)
                     std::cout << "invalid row number; print command ignored" << std::endl;
         }
 
-        if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
+        if (oscommandline->osil == "" && oscommandline->mpsFile == "" &&  oscommandline->nlFile == "")
                 {
                         std::cout
                             << "no instance defined; print command ignored" << std::endl;
@@ -2666,7 +2683,7 @@ void doPrintRow(OSCommandLine *oscommandline)
                 delete osilreader;
                 osilreader = NULL;
             }
-            else if (oscommandline->nl != "")
+            else if (oscommandline->nlFile != "")
             {
 #ifdef COIN_HAS_ASL
                 OSnl2OS *nl2os;    
@@ -2682,7 +2699,7 @@ void doPrintRow(OSCommandLine *oscommandline)
                 std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
             }
-            else if (oscommandline->mps != "")
+            else if (oscommandline->mpsFile != "")
             {
                 OSmps2OS *mps2osil;
                 mps2osil = new OSmps2OS(oscommandline->mpsFile);
@@ -2723,4 +2740,127 @@ void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
         }
     }
 }// doPrintRow(OSInstance *osinstance, std::string rownumberstring)
+
+void doWriteOSiLFile(OSCommandLine *oscommandline)
+{
+    FileUtil *fileUtil = NULL;
+
+    if (oscommandline->osil == "" && oscommandline->mpsFile == "" &&  oscommandline->nlFile == "")
+    {
+        if (oscommandline->osilFile == "")
+            std::cout
+                << "no instance defined; output command ignored" << std::endl;
+        else
+            std::cout
+                << "OSiL file already exists; output command ignored" << std::endl;
+    }
+    else
+    {
+        if (oscommandline->osil != "")
+        {
+            fileUtil = new FileUtil();
+            fileUtil->writeFileFromString(oscommandline->osilOutputFile, oscommandline->osil);
+            delete fileUtil;
+            fileUtil = NULL;
+        }
+        else if (oscommandline->nlFile != "")
+        {
+#ifdef COIN_HAS_ASL
+            OSnl2OS *nl2os;
+            OSiLWriter *osilwriter = new OSiLWriter();
+//            nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
+            nl2os = new OSnl2OS();
+            nl2os->readNl(oscommandline->nlFile);
+            nl2os->setOsol(oscommandline->osol);
+            nl2os->createOSObjects();
+
+            fileUtil = new FileUtil();
+            fileUtil->writeFileFromString(oscommandline->osilOutputFile, 
+                                          osilwriter->writeOSiL(nl2os->osinstance));
+
+            if (oscommandline->osolOutputFile != "")
+            {
+                OSoLWriter *osolwriter = new OSoLWriter();
+                fileUtil->writeFileFromString(oscommandline->osolOutputFile, 
+                                              osolwriter->writeOSoL(nl2os->osoption));
+                delete osolwriter;
+                osolwriter = NULL;
+                oscommandline->osolOutputFile = "";
+            }
+
+            delete nl2os;
+            nl2os = NULL;
+            delete fileUtil;
+            fileUtil = NULL;
+            delete osilwriter;
+            osilwriter = NULL;
+#else
+            std::cout << "no ASL present to read nl file; output command ignored" << std::endl; 
+#endif
+        }
+        else if (oscommandline->mpsFile != "")
+        {
+            OSmps2OS *mps2osil;
+            OSiLWriter *osilwriter = new OSiLWriter();
+            mps2osil = new OSmps2OS(oscommandline->mpsFile);
+            mps2osil->createOSObjects();
+
+            fileUtil = new FileUtil();
+            fileUtil->writeFileFromString(oscommandline->osilOutputFile, 
+                                          osilwriter->writeOSiL(mps2osil->osinstance));
+            delete mps2osil;
+            mps2osil = NULL;
+            delete fileUtil;
+            fileUtil = NULL;
+            delete osilwriter;
+            osilwriter = NULL;
+        }
+    }
+
+}// doWriteOSiLFile(OSCommandLine *oscommandline)
+
+void doWriteOSoLFile(OSCommandLine *oscommandline)
+{
+    FileUtil *fileUtil = NULL;
+
+    {
+        if (oscommandline->osol != "")
+        {
+            fileUtil->writeFileFromString(oscommandline->osolOutputFile, oscommandline->osol);
+            delete fileUtil;
+            fileUtil = NULL;
+        }
+        else if (oscommandline->nlFile != "")
+        {
+#ifdef COIN_HAS_ASL
+            OSnl2OS *nl2os;
+//            nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
+            nl2os = new OSnl2OS();
+            nl2os->readNl(oscommandline->nlFile);
+            nl2os->setOsol(oscommandline->osol);
+            nl2os->createOSObjects();
+                OSoLWriter *osolwriter = new OSoLWriter();
+                fileUtil->writeFileFromString(oscommandline->osolOutputFile, 
+                                              osolwriter->writeOSoL(nl2os->osoption));
+
+            delete osolwriter;
+            osolwriter = NULL;
+            oscommandline->osolOutputFile = "";
+
+            delete nl2os;
+            nl2os = NULL;
+            delete fileUtil;
+            fileUtil = NULL;
+#else
+            std::cout << "no ASL present to read nl file; output command ignored" << std::endl; 
+#endif
+        }
+        else if (oscommandline->osolFile != "")
+            std::cout
+                << "OSoL file already exists; output command ignored" << std::endl;
+        else
+            std::cout
+                << "no OSOption defined; output command ignored" << std::endl;
+    }
+}// doWriteOSoLFile(OSCommandLine *oscommandline)
 

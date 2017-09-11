@@ -156,7 +156,7 @@ bool BonminProblem::get_constraints_linearity(Index m, Ipopt::TNLP::LinearityTyp
         const_types[ i] = Ipopt::TNLP::LINEAR;
     }
 
-    int mm = osinstance->getNumberOfNonlinearExpressionTreeModIndexes();
+    unsigned int mm = osinstance->getNumberOfNonlinearExpressionTreeModIndexes();
 
     outStr.str("");
     outStr.clear();
@@ -303,7 +303,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
     assert(init_x == true);
     assert(init_z == false);
     assert(init_lambda == false);
-    int i, m1, n1;
+    unsigned int i, k, m1, n1;
 
 
 #ifndef NDEBUG
@@ -316,7 +316,6 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, 
             "get number of initial values !!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 #endif
-    int k;
     if (osoption != NULL)
         m1 = osoption->getNumberOfInitVarValues();
     else
@@ -718,10 +717,10 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
         if(osoption != NULL && osoption->getNumberOfSolverOptions() > 0 )
         {
             char *pEnd;
-            int i;
             std::vector<SolverOptionOrResult*> optionsVector;
             optionsVector = osoption->getSolverOptions( "bonmin",true);
-            int num_bonmin_options = optionsVector.size();
+            std::vector<SolverOptionOrResult*>::size_type i, num_bonmin_options;
+            num_bonmin_options = optionsVector.size();
 
             std::string optionName;
 

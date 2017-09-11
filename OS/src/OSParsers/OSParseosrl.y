@@ -4765,7 +4765,9 @@ osglOtherMatrixVariableOptionOrResultATT:
   | osglEnumTypeATT
   | osglNumberOfMatrixVarATT
     {
-        osglData->matrixVarList = new OSMatrixWithMatrixVarIdx*[osglData->numberOfMatrixVar];
+        osglData->matrixWithMatrixVarIdx = new OSMatrixWithMatrixVarIdx*[osglData->numberOfMatrixVar];
+        for (int i=0; i < osglData->numberOfMatrixVar; i++)
+            osglData->matrixWithMatrixVarIdx[i] = NULL;
     }
 ;
 
@@ -4773,19 +4775,51 @@ osglOtherMatrixVariableOptionOrResultATT:
 osglOtherMatrixVariableOptionOrResultBody: 
     osglOtherMatrixVariableOptionOrResultMatrixVarArray
     {
-        if (osglData->kounter < osglData->numberOfMatrixVar)
+
+        if (osglData->matrixCounter < osglData->numberOfMatrixVar)
+            std::cout << "actual number of matrixVar less than number attribute: "
+                      << "encountered " << osglData->kounter << " out of " 
+                      << osglData->numberOfMatrixVar << std::endl;
+
+        if (osglData->matrixCounter < osglData->numberOfMatrixVar)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <matrixVar> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "fewer <matrixVar> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->name
+            = osglData->name;
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->description
+            = osglData->description;
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->value
+            = osglData->value;
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->type
+            = osglData->type;
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->solver
+            = osglData->solver;
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->category
+            = osglData->category;
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->enumType
+            = osglData->enumType;
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->numberOfEnumerations
+            = osglData->numberOfEnumerations;
+        osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->numberOfMatrixVar
+            = osglData->numberOfMatrixVar;
+        if (osglData->numberOfEnumerations > 0)
+            osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->enumeration
+                = osglData->enumList;
+        if (osglData->numberOfMatrixVar > 0)
+            osglData->otherMatrixVarOptionOrResultArray[parserData->iOther]->matrixVar
+                = osglData->matrixWithMatrixVarIdx;
     }
   | osglOtherMatrixVariableOptionOrResultEnumerationArray
     {
 std::cout << "number of items specified: " << osglData-> numberOfEnumerations << std::endl;
 std::cout << " number of items seen: " << osglData->kounter << std::endl; 
-        if (osglData->kounter < osglData-> numberOfEnumerations)
+        if (osglData->enumCounter < osglData-> numberOfEnumerations)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <enumeration> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "fewer <enumeration> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -4850,7 +4884,8 @@ osglSolverOptionOrResultBody:
     {
         if (osglData->kounter < osglData->numberOfMatrices)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <matrix> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "fewer <matrix> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -4860,7 +4895,8 @@ std::cout << "number of items specified: " << osglData->numberOfItems << std::en
 std::cout << " number of items seen: " << osglData->kounter << std::endl; 
         if (osglData->kounter < osglData->numberOfItems)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <item> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "fewer <item> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -5095,11 +5131,14 @@ matrixWithMatrixVarIdxATTList: | matrixWithMatrixVarIdxATTList matrixWithMatrixV
 
 matrixWithMatrixVarIdxATT:
       osglSymmetryATT
-    | osglNumberOfRowsATT
-    | osglNumberOfColumnsATT
+    | osglNumberOfRowsATT 
+{std::cout << "processed osglNumberOfRowsATT attribute: " << osglData->numberOfRows << std::endl;};
+    | osglNumberOfColumnsATT 
+{std::cout << "processed osglNumberOfColumnsATT attribute: " << osglData->numberOfColumns  << std::endl;};
     | osglNameATT
     | osglTypeATT
     | osglMatrixVarIdxATT
+{std::cout << "processed osglMatrixVarIdxATT attribute: " << osglData->matrixVarIdx  << std::endl;};
 ;
 
 matrixObjStart: MATRIXOBJSTART 
@@ -5246,8 +5285,9 @@ matrixVarContent: matrixVarEmpty | matrixVarLaden;
 
 matrixVarEmpty: ENDOFELEMENT;
 
-matrixVarLaden: GREATERTHAN matrixOrBlockBody MATRIXVAREND
+matrixVarLaden: GREATERTHAN {std::cout << " start matrixVar" << std::endl;} matrixOrBlockBody MATRIXVAREND
 {
+std::cout << "matrixVar is finished" << std::endl;
     osglData->mtxBlkVec.back()->m_mChildren = 
         new MatrixNode*[osglData->mtxBlkVec.back()->inumberOfChildren];
     osglData->mtxBlkVec.pop_back();
@@ -6503,7 +6543,7 @@ osglNumberOfBlocksATT: NUMBEROFBLOCKSATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfBlocksPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfBlocks attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <blocks> cannot be negative");
     osglData->numberOfBlocksPresent = true;        
     osglData->numberOfBlocks = $3;
 };
@@ -6514,7 +6554,7 @@ osglNumberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfColumnsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfColumns attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <blocks> cannot be negative");
     osglData->numberOfColumnsPresent = true;        
     osglData->numberOfColumns = $3;
 };
@@ -6525,7 +6565,7 @@ osglNumberOfConATT: NUMBEROFCONATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfConPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfCon attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <con> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <con> cannot be negative");
     osglData->numberOfConPresent = true;        
     osglData->numberOfCon = $3;
 };
@@ -6536,7 +6576,7 @@ osglNumberOfConIdxATT: NUMBEROFCONIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfConIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfConIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <conIdx> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <conIdx> cannot be negative");
     osglData->numberOfConIdxPresent = true;        
     osglData->numberOfConIdx = $3;
 };
@@ -6547,7 +6587,7 @@ osglNumberOfConstraintsATT: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfConstraintsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfConstraints attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of constraints cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of constraints cannot be negative");
     osglData->numberOfConstraintsPresent = true;        
     osglData->numberOfConstraints = $3;
 };
@@ -6558,7 +6598,7 @@ osglNumberOfElATT: NUMBEROFELATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfElPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfEl attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <el> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <el> cannot be negative");
     osglData->numberOfElPresent = true;        
     osglData->numberOfEl = $3;
 };
@@ -6569,7 +6609,7 @@ osglNumberOfEnumerationsATT: NUMBEROFENUMERATIONSATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfEnumerationsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <enumerations> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <enumerations> cannot be negative");
     osglData->numberOfEnumerationsPresent = true;        
     osglData->numberOfEnumerations = $3;
 };
@@ -6580,7 +6620,7 @@ osglNumberOfItemsATT: NUMBEROFITEMSATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfItemsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfItems attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <items> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <items> cannot be negative");
     osglData->numberOfItemsPresent = true;        
     osglData->numberOfItems = $3;
 };
@@ -6591,7 +6631,7 @@ osglNumberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfMatricesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfMatrices attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <matrices> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <matrices> cannot be negative");
     osglData->numberOfMatricesPresent = true;        
     osglData->numberOfMatrices = $3;
 };
@@ -6602,7 +6642,7 @@ osglNumberOfMatrixConATT: NUMBEROFMATRIXCONATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfMatrixConPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfMatrixCon attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <matrixCon> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <matrixCon> cannot be negative");
     osglData->numberOfMatrixConPresent = true;        
     osglData->numberOfMatrixCon = $3;
 };
@@ -6613,7 +6653,7 @@ osglNumberOfMatrixObjATT: NUMBEROFMATRIXOBJATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfMatrixObjPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfMatrixObj attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <matrixObj> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <matrixObj> cannot be negative");
     osglData->numberOfMatrixObjPresent = true;        
     osglData->numberOfMatrixObj = $3;
 };
@@ -6624,23 +6664,10 @@ osglNumberOfMatrixVarATT: NUMBEROFMATRIXVARATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfMatrixVarPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfMatrixVar attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <matrixVar> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <matrixVar> cannot be negative");
     osglData->numberOfMatrixVarPresent = true;        
     osglData->numberOfMatrixVar = $3;
 };
-
-/*
-osglNumberOfNonzerosATT: NUMBEROFNONZEROSATT QUOTE INTEGER QUOTE
-{
-    if ( *$2 != *$4 ) 
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    if (osglData->numberOfNonzerosPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfNonzeros attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of nonzeros cannot be negative");
-    osglData->numberOfNonzerosPresent = true;        
-    osglData->numberOfNonzeros = $3;
-};
-*/
 
 osglNumberOfObjATT: NUMBEROFOBJATT QUOTE INTEGER QUOTE
 {
@@ -6648,7 +6675,7 @@ osglNumberOfObjATT: NUMBEROFOBJATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfObjPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfObj attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <obj> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <obj> cannot be negative");
     osglData->numberOfObjPresent = true;        
     osglData->numberOfObj = $3;
 };
@@ -6659,7 +6686,7 @@ osglNumberOfObjIdxATT: NUMBEROFOBJIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfObjIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfObjIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <objIdx> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <objIdx> cannot be negative");
     osglData->numberOfObjIdxPresent = true;        
     osglData->numberOfObjIdx = $3;
 };
@@ -6670,7 +6697,7 @@ osglNumberOfObjectivesATT: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfObjectivesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfObjectives attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of objectives cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of objectives cannot be negative");
     osglData->numberOfObjectivesPresent = true;        
     osglData->numberOfObjectives = $3;
 };
@@ -6681,7 +6708,7 @@ osglNumberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfRowsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfRows attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <rows> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <rows> cannot be negative");
 std::cout << "Number of rows present" << std::endl;
     osglData->numberOfRowsPresent = true;        
     osglData->numberOfRows = $3;
@@ -6693,7 +6720,7 @@ osglNumberOfValuesATT: NUMBEROFVALUESATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfValuesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfValues attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <values> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <values> cannot be negative");
     osglData->numberOfValuesPresent = true;        
     osglData->numberOfValues = $3;
 };
@@ -6704,7 +6731,7 @@ osglNumberOfVarATT: NUMBEROFVARATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfVarPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfVar attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <var> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <var> cannot be negative");
     osglData->numberOfVarPresent = true;        
     osglData->numberOfVar = $3;
 };
@@ -6715,7 +6742,7 @@ osglNumberOfVarIdxATT: NUMBEROFVARIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfVarIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfVarIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <varIdx> cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of <varIdx> cannot be negative");
     osglData->numberOfVarIdxPresent = true;        
     osglData->numberOfVarIdx = $3;
 };
@@ -6726,7 +6753,7 @@ osglNumberOfVariablesATT: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfVariablesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfVariables attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of variables cannot be negative");
+    if ($3 < 0) throw ErrorClass("number of variables cannot be negative");
     osglData->numberOfVariablesPresent = true;        
     osglData->numberOfVariables = $3;
 };
@@ -6740,7 +6767,7 @@ osglBase64SizeATT: SIZEOFATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->base64SizePresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "base64Size attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "base64Size cannot be negative");
+    if ($3 < 0) throw ErrorClass("base64Size cannot be negative");
     osglData->base64SizePresent = true;        
     osglData->base64Size = $3;
 };
@@ -6751,8 +6778,7 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->baseMatrixIdxPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
-    if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
+    if ($3 < 0) throw ErrorClass("baseMatrix idx cannot be negative");
     if ($3 > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
     osglData->baseMatrixIdxPresent = true;   
@@ -6768,8 +6794,7 @@ osglBaseMatrixStartRowATT: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, 
             "more than one baseMatrixStartRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, 
-                                         "baseMatrix first row cannot be negative");
+        throw ErrorClass("baseMatrix first row cannot be negative");
     osglData->baseMatrixStartRowPresent = true;   
     osglData->baseMatrixStartRow = $3; 
 };
@@ -6783,8 +6808,7 @@ osglBaseMatrixStartColATT: BASEMATRIXSTARTCOLATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, 
             "more than one baseMatrixStartCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, 
-                                         "baseMatrix first column cannot be negative");
+        throw ErrorClass("baseMatrix first column cannot be negative");
     osglData->baseMatrixStartColPresent = true;   
     osglData->baseMatrixStartCol = $3; 
 };
@@ -6796,7 +6820,7 @@ osglBaseMatrixEndRowATT: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
     if (osglData->baseMatrixEndRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix end row cannot be negative");
+        throw ErrorClass("baseMatrix end row cannot be negative");
     osglData->baseMatrixEndRowPresent = true;   
     osglData->baseMatrixEndRow = $3; 
 };
@@ -6808,7 +6832,7 @@ osglBaseMatrixEndColATT: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
     if (osglData->baseMatrixEndColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix end col cannot be negative");
+        throw ErrorClass("baseMatrix end col cannot be negative");
     osglData->baseMatrixEndColPresent = true;   
     osglData->baseMatrixEndCol = $3; 
 };
@@ -6821,7 +6845,7 @@ osglBlockRowIdxATT: BLOCKROWIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "blockRowIdx attribute previously set");
     else
     {
-        if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "blockRowIdx cannot be negative");
+        if ($3 < 0) throw ErrorClass("blockRowIdx cannot be negative");
         osglData->blockRowIdxPresent = true;        
         osglData->blockRowIdx = $3;
         ((MatrixBlock*)osglData->tempC)->blockRowIdx = $3;
@@ -6841,7 +6865,7 @@ osglBlockColIdxATT: BLOCKCOLIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "blockColIdx attribute previously set");
     else
     {
-        if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "blockColIdx cannot be negative");
+        if ($3 < 0) throw ErrorClass("blockColIdx cannot be negative");
         osglData->blockColIdxPresent = true;
         osglData->blockColIdx = $3;       
         ((MatrixBlock*)osglData->tempC)->blockColIdx = $3;

@@ -279,45 +279,38 @@ bool ExprNode::IsEqual(ExprNode *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ExprNode");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
-        {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
 
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        {
+           if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
 
-            return true;
         }
     }
+
+    return true;
 }//ExprNode::IsEqual
 // End of ExprNode methods
 
@@ -358,45 +351,37 @@ bool ScalarNode::IsEqual(ScalarNode *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ScalarNode");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
-        {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
 
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        {
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//ScalarNode::IsEqual
 // End of ScalarNode methods
 
@@ -428,7 +413,7 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
     {
         for(i = 0; i < inumberOfChildren; i++)
         {
-            if (!m_mChildren[ i]->inodeKind == 1)
+            if (m_mChildren[ i]->inodeKind != 1)
                 throw ErrorClass("Can only evaluate real-valued nodes so far");
             ((OSnLNode*)m_mChildren[ i])->getVariableIndexMap( varIdx);
         }
@@ -527,45 +512,37 @@ bool OSnLNode::IsEqual(OSnLNode *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLNode");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inumberOfChildren != that->inumberOfChildren)
             return false;
-        }
-        else
-        {
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
+        if (this->inodeInt != that->inodeInt)
+            return false;
+        if (this->inodeKind != that->inodeKind)
+            return false;
 
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        {
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLNode::IsEqual
 
 
@@ -601,7 +578,7 @@ double OSnLNodePlus::calculateFunction(double *x)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, "in OSnLNodePlus::calculateFunction");
 #endif
-    if (!m_mChildren[0]->inodeKind == 1 || !m_mChildren[1]->inodeKind == 1)
+    if (m_mChildren[0]->inodeKind != 1 || m_mChildren[1]->inodeKind != 1)
         throw ErrorClass("Can only evaluate real-valued nodes so far");
     m_dFunctionValue = ((OSnLNode*)m_mChildren[0])->calculateFunction(x) + 
                        ((OSnLNode*)m_mChildren[1])->calculateFunction(x);
@@ -611,7 +588,7 @@ double OSnLNodePlus::calculateFunction(double *x)
 
 ADdouble OSnLNodePlus::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
 {
-    if (!m_mChildren[0]->inodeKind == 1 || !m_mChildren[1]->inodeKind == 1)
+    if (m_mChildren[0]->inodeKind != 1 || m_mChildren[1]->inodeKind != 1)
         throw ErrorClass("Can only evaluate real-valued nodes so far");
     m_ADTape = ((OSnLNode*)m_mChildren[0])->constructADTape( ADIdx,  XAD) + 
                ((OSnLNode*)m_mChildren[1])->constructADTape( ADIdx,  XAD);
@@ -2243,51 +2220,44 @@ bool OSnLNodeNumber::IsEqual(OSnLNodeNumber *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLNodeNumber");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
-        {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
 
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        {
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            if (this->value != that->value)
-                return false;
-            if (this->type != that->type)
-                return false;
-            if (this->id != that->id)
-                return false;
-            return true;
         }
+
+        if (this->value != that->value)
+            return false;
+        if (this->type != that->type)
+            return false;
+        if (this->id != that->id)
+            return false;
     }
+
+        return true;
 }//OSnLNodeNumber::IsEqual
 // end OSnLNodeNumber methods
 
@@ -2616,49 +2586,42 @@ bool OSnLNodeVariable::IsEqual(OSnLNodeVariable *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLNodeVariable");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
-        {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
 
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        {
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            if (this->coef != that->coef)
-                return false;
-            if (this->idx != that->idx)
-                return false;
-            return true;
         }
+
+        if (this->coef != that->coef)
+            return false;
+        if (this->idx != that->idx)
+            return false;
     }
+
+    return true;
 }//OSnLNodeVariable::IsEqual
 
 
@@ -3024,45 +2987,37 @@ bool OSnLMNode::IsEqual(OSnLMNode *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNode");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inumberOfChildren != that->inumberOfChildren)
             return false;
-        }
-        else
-        {
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
+        if (this->inodeInt != that->inodeInt)
+            return false;
+        if (this->inodeKind != that->inodeKind)
+            return false;
 
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        {
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLMNode::IsEqual
 
 
@@ -4025,48 +3980,40 @@ bool OSnLMNodeMatrixLowerTriangle::IsEqual(OSnLMNodeMatrixLowerTriangle *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixLowerTriangle");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
+
+        if (this->includeDiagonal != that->includeDiagonal)
+            return false;
+
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
         {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-
-            if (this->includeDiagonal != that->includeDiagonal)
-                return false;
-
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLMNodeMatrixLowerTriangle::IsEqual
 
 
@@ -4160,48 +4107,40 @@ bool OSnLMNodeMatrixUpperTriangle::IsEqual(OSnLMNodeMatrixUpperTriangle *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixUpperTriangle");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
+
+        if (this->includeDiagonal != that->includeDiagonal)
+            return false;
+
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
         {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-
-            if (this->includeDiagonal != that->includeDiagonal)
-                return false;
-
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLMNodeMatrixUpperTriangle::IsEqual
 
 
@@ -4531,48 +4470,40 @@ bool OSnLMNodeMatrixReference::IsEqual(OSnLMNodeMatrixReference *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixReference");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
+
+        if (this->idx != that->idx)
+            return false;
+
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
         {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-
-            if (this->idx != that->idx)
-                return false;
-
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLMNodeMatrixReference::IsEqual
 
 
@@ -4672,48 +4603,40 @@ bool OSnLMNodeMatrixVar::IsEqual(OSnLMNodeMatrixVar *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixVar");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
+
+        if (this->idx != that->idx)
+            return false;
+
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
         {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-
-            if (this->idx != that->idx)
-                return false;
-
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLMNodeMatrixVar::IsEqual
 
 
@@ -4811,48 +4734,40 @@ bool OSnLMNodeMatrixObj::IsEqual(OSnLMNodeMatrixObj *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixObj");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
+
+        if (this->idx != that->idx)
+            return false;
+
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
         {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-
-            if (this->idx != that->idx)
-                return false;
-
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLMNodeMatrixObj::IsEqual
 
 
@@ -4952,48 +4867,40 @@ bool OSnLMNodeMatrixCon::IsEqual(OSnLMNodeMatrixCon *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixCon");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inodeInt != that->inodeInt)
             return false;
-        }
-        else
+        if (this->inodeKind != that->inodeKind)
+            return false;
+        if (this->inumberOfChildren != that->inumberOfChildren)
+            return false;
+
+        if (this->idx != that->idx)
+            return false;
+
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
         {
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-
-            if (this->idx != that->idx)
-                return false;
-
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLMNodeMatrixCon::IsEqual
 
 
@@ -5110,45 +5017,37 @@ bool OSnLCNode::IsEqual(OSnLCNode *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLCNode");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
-                "Second object is NULL, first is not");
-#endif
+        if (this->inumberOfChildren != that->inumberOfChildren)
             return false;
-        }
-        else
-        {
-            if (this->inumberOfChildren != that->inumberOfChildren)
-                return false;
-            if (this->inodeInt != that->inodeInt)
-                return false;
-            if (this->inodeKind != that->inodeKind)
-                return false;
+        if (this->inodeInt != that->inodeInt)
+            return false;
+        if (this->inodeKind != that->inodeKind)
+            return false;
 
-            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+        {
+            if (this->m_mChildren[i] == NULL)
+            {
+                if (that->m_mChildren[i] != NULL)
+                    return false;
+            }
+            else
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
-
-            return true;
         }
     }
+
+    return true;
 }//OSnLCNode::IsEqual
 
 

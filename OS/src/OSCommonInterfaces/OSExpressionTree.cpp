@@ -76,32 +76,21 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSExpressionTree");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
-#endif
+        if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
             return false;
-        }
-        else
-        {
-            return true;
-        }
     }
+
+    return true;
 }//OSExpressionTree::IsEqual
 
 
@@ -187,35 +176,29 @@ bool RealValuedExpressionTree::IsEqual(RealValuedExpressionTree *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in RealValuedExpressionTree");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
-#endif
+        if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
             return false;
-        }
-        else
-        {
-            if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
-                return false;
 
-            return true; //this->OSExpressionTree::IsEqual(that);
-        }
+        if (this->m_bIndexMapGenerated != that->m_bIndexMapGenerated)
+            return false;
+        if (this->bADMustReTape != that->bADMustReTape)
+            return false;
+
+        if (this->mapVarIdx != that->mapVarIdx)
+            return false;
     }
+
+    return true;
 }//RealValuedExpressionTree::IsEqual
 
 
@@ -243,18 +226,18 @@ ComplexValuedExpressionTree::~ComplexValuedExpressionTree()
 }//end ~ComplexValuedExpressionTree
 
 
+#if 0
 std::map<int, int> *ComplexValuedExpressionTree::getVariableIndicesMap()
 {
-#if 0
     if( m_bIndexMapGenerated == true) return mapVarIdx;
     mapVarIdx = new std::map<int, int>();
     std::map<int, int>::iterator m_mPosVarIdx;
     ((OSnLCNode*)m_treeRoot)->getVariableIndexMap( mapVarIdx);
     m_bIndexMapGenerated = true;
     return mapVarIdx;
-#endif
     return NULL;
 }//getVariableIndicesMap
+#endif
 
 
 std::complex<double> ComplexValuedExpressionTree::calculateFunction( double *x, bool new_x)
@@ -294,37 +277,32 @@ ComplexValuedExpressionTree* ComplexValuedExpressionTree::cloneExpressionTree()
 bool ComplexValuedExpressionTree::IsEqual(ComplexValuedExpressionTree *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ComplexValuedExpressionTree");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+        "Start comparing in ComplexValuedExpressionTree");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
-#endif
+        if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
             return false;
-        }
-        else
-        {
-            if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
-                return false;
 
-            return this->OSExpressionTree::IsEqual(that);
-        }
+//        if (this->m_bIndexMapGenerated != that->m_bIndexMapGenerated)
+//            return false;
+//        if (this->bADMustReTape != that->bADMustReTape)
+//            return false;
+//
+//        if (this->mapVarIdx != that->mapVarIdx)
+//            return false;
     }
+
+    return false;
 }//ComplexValuedExpressionTree::IsEqual
 
 
@@ -377,35 +355,23 @@ bool MatrixExpressionTree::IsEqual(MatrixExpressionTree *that)
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MatrixExpressionTree");
 #endif
-    if (this == NULL)
+    if (that == NULL)
     {
-        if (that == NULL)
-            return true;
-        else
-        {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+            "Second object is NULL, first is not");
 #endif
-            return false;
-        }
+        return false;
     }
     else
     {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
+        if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
                 return false;
 
-            return this->OSExpressionTree::IsEqual(that);
-        }
+//            return this->OSExpressionTree::IsEqual(that);
     }
+
+    return true;
 }//MatrixExpressionTree::IsEqual
 
 
@@ -413,9 +379,9 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
 {
     std::string resultString;
     resultString = "";
-    unsigned int i;
-    unsigned int j;
-    unsigned int n;
+    std::vector<ExprNode*>::size_type i; /*unsigned int i;*/
+    std::vector<ExprNode*>::size_type j; /*unsigned int j;*/
+    std::vector<ExprNode*>::size_type n; /*unsigned int n;*/
     ostringstream outStr;
 //    std::vector<ExprNode*> postfixVec;
 

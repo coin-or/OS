@@ -8,7 +8,7 @@
 	<optimization numberOfVariables="2">
 		<variables numberOfOtherVariableOptions="0">
 			<initialVariableValues numberOfVar="2">
-					<var idx="0" value="5."/>
+					<var idx="0" value="2.5"/>
 					<var idx="1" value="5."/>
 			</initialVariableValues>
 		</variables>	

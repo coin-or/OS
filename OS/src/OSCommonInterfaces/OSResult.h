@@ -2475,22 +2475,22 @@ public:
     /** numberOfSolutions is the number of objective functions
      * reported.
      */
-    int numberOfSolutions;
+    unsigned int numberOfSolutions;
 
     /** numberOfVariables is the number of variables reported
      * in the solution.
      */
-    int numberOfVariables;
+    unsigned int numberOfVariables;
 
     /** numberOfObjectives is the number of objective functions
      * reported in the solution.
      */
-    int numberOfObjectives;
+    unsigned int numberOfObjectives;
 
     /** numberOfConstrants is the number of constraint functions
      * reported in the solution.
      */
-    int numberOfConstraints;
+    unsigned int numberOfConstraints;
 
     /** solution is an array of pointers to OptimizationSolution
      * objects
