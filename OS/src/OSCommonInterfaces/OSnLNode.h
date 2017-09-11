@@ -1816,7 +1816,7 @@ public:
      *  \return a pointer to a new OSnLNodeMatrixTrace of the proper type.
      */
     virtual ExprNode *cloneExprNode();
-};//end OSnLNodeMatrixToScalar
+};//end OSnLNodeMatrixTrace
 
 /*! \class OSnLNodeMatrixToScalar
  *  \brief The OSnLNodeMatrixTrace Class.
@@ -2244,6 +2244,45 @@ public:
      */
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixTimes
+
+
+/*! \class OSnLMNodeMatrixProduct
+ *  \brief The OSnLMNodeMatrixProduct Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <matrixProduct>
+ *
+ */
+class OSnLMNodeMatrixProduct : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixProduct();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixProduct();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn OSnLNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLNode *cloneExprNode();
+};//end OSnLMNodeMatrixProduct
+
 
 class OSnLMNodeMatrixInverse : public OSnLMNode
 {
