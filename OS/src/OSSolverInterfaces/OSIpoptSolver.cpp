@@ -853,7 +853,10 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 }
 
 
-void IpoptSolver::buildSolverInstance() throw (ErrorClass)
+void IpoptSolver::buildSolverInstance()
+#if __cplusplus < 201100  
+    throw(ErrorClass)
+#endif
 {
     std::ostringstream outStr;
     try
@@ -892,7 +895,10 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass)
 }//end buildSolverInstance()
 
 
-void IpoptSolver::setSolverOptions() throw (ErrorClass)
+void IpoptSolver::setSolverOptions()
+#if __cplusplus < 201100  
+    throw(ErrorClass)
+#endif
 {
     std::ostringstream outStr;
     try
@@ -1007,7 +1013,10 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
 
 
 
-void IpoptSolver::solve() throw (ErrorClass)
+void IpoptSolver::solve()
+#if __cplusplus < 201100  
+    throw(ErrorClass)
+#endif
 {
     std::ostringstream outStr;
 

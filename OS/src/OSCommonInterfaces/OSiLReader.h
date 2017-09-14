@@ -57,7 +57,12 @@ public:
      * @return the instance as an OSInstance object.
      * </p>
      */
-    OSInstance* readOSiL(const std::string& osil) throw(ErrorClass);
+    OSInstance* readOSiL(const std::string& osil)
+#if __cplusplus < 201100  
+    throw(ErrorClass)
+#endif
+    ;
+
 
 private:
     /** m_osinstance is the OSInstance object returned by
