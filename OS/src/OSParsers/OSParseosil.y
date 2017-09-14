@@ -8259,24 +8259,22 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
     for(i = 0; sizeOf[i]  == *ch; i++, ch++);
     if(i != 6) {  osilerror_wrapper( ch,osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return NULL;}    
     // ch should be pointing to the first character after sizeOf
-    BURNWHITESPACE( ch ); \
-    if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return NULL;}  \
     ch++; \
-    BURNWHITESPACE( ch ); \
+    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
     if(*ch == '\"'){ \
-        ch++; \
-        BURNWHITESPACE( ch ); \
-        *p = ch; \
-        for( ; *ch != '\"'; ch++); \
+       ch++; \
+       for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+       *p = ch; \
+       for( ; *ch != '\"'; ch++); \
     }\
     else{\
         if(*ch == '\'') { \
-            ch++; \
-            BURNWHITESPACE( ch ); \
-            *p = ch; \
-            for( ; *ch != '\''; ch++); \
-        } \
-        else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return NULL;} \
+           ch++; \
+           for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+           *p = ch; \
+           for( ; *ch != '\''; ch++); \
+       } \
+       else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return NULL;} \
     }\
     numChar = ch - *p; \
     attText = new char[numChar + 1]; \
