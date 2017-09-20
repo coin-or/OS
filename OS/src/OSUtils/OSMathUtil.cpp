@@ -282,3 +282,147 @@ double OSiRand(int iMin, int iMax)
 }
 
 
+/**
+ * OS_a_to_xml_int(std::string inStr)
+ *
+ * @return the integer represented by the string instr
+ * @notes  checks ranges and throws exception if ranges are violated
+ * @notes  the string is assumed to be matched by the parser to the pattern
+ *         anxmlint ([ \t\n\r]*-?[0-9]+[ \t\n\r]*)
+ */
+OsXmlInt OS_a_to_xml_int(std::string inStr)
+{
+    OsXmlInt res;
+
+//  First check sign
+    size_t M = inStr.find_first_of("-",0);
+
+//  Verify the string and remove whitespace
+    std::string tempStr = inStr;
+
+    if (M == std::string::npos)
+    {
+//      positive number    
+        size_t i0 = inStr.find_first_of("123456789",M+1);
+        if (i0 == std::string::npos)
+        {
+            size_t zero = inStr.find_first_of("0",M+1);
+            if (zero == std::string::npos)
+                throw ErrorClass("Improperly formed numeric string in OS_a_to_xml_int");
+            else
+                return 0;
+        }
+        else
+        {
+            size_t last = inStr.find_first_of(" \t\r\n",i0+1);
+            tempStr = inStr.substr(i0,last-i0);
+        }
+
+//      Check for overflow...
+        int len = tempStr.length();
+        if (len > OS_XML_INT_MAX_LEN)
+            throw ErrorClass("Integer overflow detected in OS_a_to_xml_int");
+        else if (len == OS_XML_INT_MAX_LEN)
+        {
+            if (strcmp(tempStr.c_str(), OS_XML_INT_MAX_STR) > 0)
+                throw ErrorClass("Integer overflow detected in OS_a_to_xml_int");
+        }
+
+//      ... then convert
+        res = atoi( (tempStr.substr(0,1)).c_str() );
+        for (int k=1; k<tempStr.length(); k++)
+            res = 10*res + atoi( (tempStr.substr(k,1)).c_str() );
+        return res;
+    }
+
+    else
+    //  negative number
+    {
+        size_t i0 = inStr.find_first_of("123456789",M+1);
+        if (i0 == std::string::npos)
+        {
+            size_t zero = inStr.find_first_of("0",M+1);
+            if (zero == std::string::npos)
+                throw ErrorClass("Improperly formed numeric string in OS_a_to_xml_int");
+            else
+                return 0;
+        }
+        else
+        {
+            size_t last = inStr.find_first_of(" \t\r\n",i0+1);
+            tempStr = inStr.substr(i0,last-i0);
+        }
+
+//      Check for overflow...
+        int len = tempStr.length();
+        if (len > OS_XML_INT_MAX_LEN)
+            throw ErrorClass("Integer overflow detected in OS_a_to_xml_int");
+        else if (len == OS_XML_INT_MAX_LEN)
+        {
+            if (strcmp(tempStr.c_str(), OS_XML_INT_MAX_STR) > 0)
+                throw ErrorClass("Integer overflow detected in OS_a_to_xml_int");
+        }
+
+//      ... then convert
+        res = -atoi( (tempStr.substr(0,1)).c_str() );
+        for (int k=1; k<tempStr.length(); k++)
+            res = 10*res - atoi( (tempStr.substr(k,1)).c_str() );
+        return res;
+    }
+}// end of OS_a_to_xml_int
+
+/**
+ * OS_a_to_xml_uint(std::string tempStr)
+ *
+ * @return the unsigned integer represented by the string instr
+ * @notes  checks ranges and throws exception if ranges are violated
+ * @notes  the string is assumed to be matched by the parser to the pattern
+ *         anxmluint ([ \t\n\r]*[0-9]+[ \t\n\r]*)
+ */
+OsXmlUInt OS_a_to_xml_uint(std::string inStr)
+{
+    OsXmlUInt res = 0;
+
+//  First check sign
+    size_t M = inStr.find_first_of("-",0);
+
+//  Verify the string and remove whitespace
+    std::string tempStr = inStr;
+
+    if (M == std::string::npos)
+    {
+        size_t i0 = inStr.find_first_of("123456789",0);
+        if (i0 == std::string::npos)
+        {
+            size_t zero = inStr.find_first_of("0",0);
+            if (zero == std::string::npos)
+                throw ErrorClass("Improperly formed numeric string in OS_a_to_xml_uint");
+            else
+                return 0;
+        }
+        else
+        {
+            size_t last = inStr.find_first_of(" \t\r\n",i0+1);
+            tempStr = inStr.substr(i0,last-i0);
+        }
+
+//      Check for overflow...
+        int len = tempStr.length();
+        if (len > OS_XML_UINT_MAX_LEN)
+            throw ErrorClass("Integer overflow detected in OS_a_to_xml_uint");
+        else if (len == OS_XML_INT_MAX_LEN)
+        {
+            if (strcmp(tempStr.c_str(), OS_XML_UINT_MAX_STR) > 0)
+                throw ErrorClass("Integer overflow detected in OS_a_to_xml_uint");
+        }
+
+//      then convert
+        res = atoi( (tempStr.substr(0,1)).c_str() );
+        for (int k=1; k<tempStr.length(); k++)
+            res = 10*res + atoi( (tempStr.substr(k,1)).c_str() );
+        return res;
+    }
+    else
+        throw ErrorClass("Negative mumber detected in OS_a_to_xml_uint");
+}// end of OS_a_to_xml_uint
+

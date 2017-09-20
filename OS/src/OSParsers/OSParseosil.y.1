@@ -210,10 +210,9 @@ this fails on in Mac OS X
 */
 
 %union {
-    double dval;
-    int ival;
-    char* sval;
-    
+    double   dval;
+    OsXmlInt ival;
+    char*    sval;
 }
 %{
 int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );

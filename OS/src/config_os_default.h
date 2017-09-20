@@ -46,6 +46,9 @@
 /* use 64 bit integers */
 #undef OS_USE_XML_LONG_INTEGER
 
+/* integer size */
+#define OS_INT_SIZE 4
+
 /* Define to 64-bit integer type */
 #undef OS_XML_INT64
 

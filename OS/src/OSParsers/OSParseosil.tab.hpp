@@ -914,10 +914,9 @@ union YYSTYPE
 {
 
 
-    double dval;
-    int ival;
-    char* sval;
-    
+    double   dval;
+    OsXmlInt ival;
+    char*    sval;
 
 
 };

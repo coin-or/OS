@@ -2208,7 +2208,7 @@ branchingWeightAttributes: branchingWeightAttList
 branchingWeightAttList: | branchingWeightAttList branchingWeightAtt;
 
 branchingWeightAtt: 
-    osglIdxATT 
+    osglIdxATT
     {
         if (osglData->idx < 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");

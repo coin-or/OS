@@ -118,7 +118,7 @@ nlAttributes: nlAttributeList
 nlAttributeList: | nlAttributeList nlAttribute;
 
 nlAttribute: 
-      osglIdxATT 
+      osglIdxATT
     {
 //        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
 //        {
@@ -845,7 +845,7 @@ matrixExpressionsStart: MATRIXEXPRESSIONSSTART
 
 matrixExpressionsAtt: numberOfExprATT;
 
-numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE 
+numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE
     {
     #ifdef OSINSTANCE_AVAILABLE
         if (*$2 != *$4) 
@@ -912,7 +912,7 @@ matrixExprAttributes: matrixExprAttributeList
 matrixExprAttributeList: | matrixExprAttributeList exprAttribute;
 
 exprAttribute: 
-      osglIdxATT 
+      osglIdxATT
     {
     #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->idx = osglData->idx;

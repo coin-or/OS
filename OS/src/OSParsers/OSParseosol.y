@@ -85,9 +85,9 @@ void osnl_empty_vectors( OSnLParserData* osnlData);
 
 
 %union {
-    double dval;
-    int ival;
-    char* sval;
+    double   dval;
+    OsXmlInt ival;
+    char*    sval;
 }
 
 /* %name-prefix="osol"
@@ -2531,7 +2531,7 @@ branchingWeightAttributes: branchingWeightAttList
 branchingWeightAttList: | branchingWeightAttList branchingWeightAtt;
 
 branchingWeightAtt: 
-    osglIdxATT 
+    osglIdxATT
     {
         if (osglData->idx < 0)
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");
@@ -8461,7 +8461,7 @@ nlAttributes: nlAttributeList
 nlAttributeList: | nlAttributeList nlAttribute;
 
 nlAttribute: 
-      osglIdxATT 
+      osglIdxATT
     {
 //        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
 //        {
@@ -9188,7 +9188,7 @@ matrixExpressionsStart: MATRIXEXPRESSIONSSTART
 
 matrixExpressionsAtt: numberOfExprATT;
 
-numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE 
+numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE
     {
     #ifdef OSINSTANCE_AVAILABLE
         if (*$2 != *$4) 
@@ -9255,7 +9255,7 @@ matrixExprAttributes: matrixExprAttributeList
 matrixExprAttributeList: | matrixExprAttributeList exprAttribute;
 
 exprAttribute: 
-      osglIdxATT 
+      osglIdxATT
     {
     #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->idx = osglData->idx;

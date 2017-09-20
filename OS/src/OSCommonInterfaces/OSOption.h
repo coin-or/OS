@@ -6093,8 +6093,10 @@ public:
      *	@param description: further information about the enumeration and its value
      *	@param idxArray: the array of indices for the objects sharing this enumeration
      */
-    bool setOtherOptionOrResultEnumeration(int object, int otherOptionNumber, int enumerationNumber,
-                                   int numberOfEl, std::string value, std::string description, int* idxArray);
+    bool setOtherOptionOrResultEnumeration(int object, int otherOptionNumber, 
+                                           int enumerationNumber,
+                                           int numberOfEl, std::string value, 
+                                           std::string description, int* idxArray);
 
     /**
      *  Set one <var> element associated with an <other> option in

@@ -125,6 +125,10 @@ quote [\"|\']
 twoquotes (\"\"|\'\')
 greater_than (>)
 aninteger ([ \t\n\r]*-?[0-9]+[ \t\n\r]*)
+ /* Distinguishing signed and unsigned integers requires careful ordering of patterns
+    anxmluint ([ \t\n\r]*[0-9]+[ \t\n\r]*)
+    anxmlint ([ \t\n\r]*-?[0-9]+[ \t\n\r]*)
+  */
 adouble ([ \t\n\r]*(-?(([0-9]+|[0-9]*\.[0-9]*)([eE][-+]?[0-9]+)?|INF)|NaN)[ \t\n\r]*)
 aboolean (true|false|1|0)
 %%
@@ -136,7 +140,8 @@ aboolean (true|false|1|0)
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 {twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
-{aninteger} {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
+{aninteger} {YY_PRINT; yylval->ival = OS_a_to_xml_int(yytext); return(INTEGER);}
+ /* {anxmlint} {YY_PRINT; yylval->ival = OS_a_to_xml_uint(yytext); return(UNSIGNEDINT);} */
 
 {adouble} {YY_PRINT; 
 char *yytextEnd;

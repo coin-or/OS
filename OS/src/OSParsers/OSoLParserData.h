@@ -260,6 +260,8 @@ public:
 
     bool* makeCopy;
     int*  idxArray;
+    int*  idxIntArray;    //should eventually be typed OsXmlInt*, but this is a "3.0 issue"
+    int*  idxUIntArray;   //should eventually be typed OsXmlUInt*
 
     double* valArray;
     double* lbValArray;

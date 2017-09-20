@@ -361,4 +361,20 @@ double OSRand();
  */
 double OSiRand(int iMin, int iMax);
 
+/**
+ * OS_a_to_xml_int(std::string inStr)
+ *
+ * @return the integer represented by the string instr
+ * @notes checks ranges and throws exception if ranges are violated
+ */
+OsXmlInt OS_a_to_xml_int(std::string inStr);
+
+/**
+ * OS_a_to_xml_uint(std::string inStr)
+ *
+ * @return the unsigned integer represented by the string instr
+ * @notes checks ranges and throws exception if ranges are violated
+ */
+OsXmlUInt OS_a_to_xml_uint(std::string inStr);
+
 #endif

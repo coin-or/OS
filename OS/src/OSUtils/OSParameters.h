@@ -126,14 +126,29 @@
   typedef OS_XML_INT64  OsXmlInt;
   typedef OS_XML_UINT64 OsXmlUInt;
 
-  #define OS_XML_INT_MAX_STR  "9223372036854775807"
-  #define OS_XML_UINT_MAX_STR "18446744073709551615"
-#else
+#  define OS_XML_INT_MAX_STR  "9223372036854775807"
+#  define OS_XML_INT_MAX_LEN  19
+#  define OS_XML_UINT_MAX_STR "18446744073709551615"
+#  define OS_XML_UINT_MAX_LEN 20
+# else
   typedef          int OsXmlInt;
   typedef unsigned int OsXmlUInt;
-
-  #define OS_XML_INT_MAX_STR  "2147483647"
-  #define OS_XML_UINT_MAX_STR "4294967295"
+# if   OS_INT_SIZE == 8
+#  define OS_XML_INT_MAX_STR  "9223372036854775807"
+#  define OS_XML_INT_MAX_LEN  19
+#  define OS_XML_UINT_MAX_STR "18446744073709551615"
+#  define OS_XML_UINT_MAX_LEN 20
+# elif OS_INT_SIZE == 4
+#  define OS_XML_INT_MAX_STR  "2147483647"
+#  define OS_XML_INT_MAX_LEN  10
+#  define OS_XML_UINT_MAX_STR "4294967295"
+#  define OS_XML_UINT_MAX_LEN 10
+# else
+#  define OS_XML_INT_MAX_STR  "32767"
+#  define OS_XML_INT_MAX_LEN  5
+#  define OS_XML_UINT_MAX_STR "65535"
+#  define OS_XML_UINT_MAX_LEN 5
+# endif
 #endif
 
 

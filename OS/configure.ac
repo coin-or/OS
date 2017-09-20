@@ -397,16 +397,27 @@ if test x$os_xml_long_integer = xyes ; then
   fi
   AC_LANG_POP(C)
 
-  if test x"$OsXmlInt64" = x; then
-    AC_MSG_ERROR([Can't use 64-bit integers without architecture support!])
-  else
-#    AC_MSG_NOTICE([OsXmlInt64 has value:])
-#    AC_MSG_RESULT([$OsXmlInt64])
+  if test x"$OsXmlInt64" != x; then
     AC_DEFINE(OS_USE_XML_LONG_INTEGER, [1], [use 64 bit integers])
     AC_DEFINE_UNQUOTED([OS_XML_INT64],[$OsXmlInt64],[Define to 64-bit integer type])
     AC_DEFINE_UNQUOTED([OS_XML_UINT64],[$OsXmlUInt64],
   		   [Define to 64-bit unsigned integer type])
+  else
+    AC_MSG_ERROR([Can't use 64-bit integers without architecture support!])
   fi
+#else
+#  AC_LANG_PUSH(C)
+#use default type int but make sure to select the right size
+#    AC_CHECK_SIZEOF([int])
+#    case $ac_cv_sizeof_long_long in
+#      8 | 8?) AC_DEFINE(OS_INT_SIZE, [8], [use 64 bit integers])
+#	    ;;
+#      4 | 4?) AC_DEFINE(OS_INT_SIZE, [4], [use 32 bit integers])
+#	    ;;
+#      2 | 2?) AC_DEFINE(OS_INT_SIZE, [2], [use 16 bit integers])
+#	    ;;
+#    esac
+#  AC_LANG_POP(C)
 fi
 
 

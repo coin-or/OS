@@ -2245,7 +2245,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixTimes
 
-
+#if 0
 /*! \class OSnLMNodeMatrixProduct
  *  \brief The OSnLMNodeMatrixProduct Class.
  *
@@ -2282,7 +2282,7 @@ public:
      */
     virtual OSnLNode *cloneExprNode();
 };//end OSnLMNodeMatrixProduct
-
+#endif
 
 class OSnLMNodeMatrixInverse : public OSnLMNode
 {
@@ -3120,7 +3120,6 @@ public:
  *  \brief The OSnLCNode Class for complex-valued expressions.
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
-
  * @version 1.0, 28/Sep/2015
  * @since   OS2.9
  */

@@ -39218,13 +39218,7 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-  if test x"$OsXmlInt64" = x; then
-    { { echo "$as_me:$LINENO: error: Can't use 64-bit integers without architecture support!" >&5
-echo "$as_me: error: Can't use 64-bit integers without architecture support!" >&2;}
-   { (exit 1); exit 1; }; }
-  else
-#    AC_MSG_NOTICE([OsXmlInt64 has value:])
-#    AC_MSG_RESULT([$OsXmlInt64])
+  if test x"$OsXmlInt64" != x; then
 
 cat >>confdefs.h <<\_ACEOF
 #define OS_USE_XML_LONG_INTEGER 1
@@ -39240,7 +39234,24 @@ cat >>confdefs.h <<_ACEOF
 #define OS_XML_UINT64 $OsXmlUInt64
 _ACEOF
 
+  else
+    { { echo "$as_me:$LINENO: error: Can't use 64-bit integers without architecture support!" >&5
+echo "$as_me: error: Can't use 64-bit integers without architecture support!" >&2;}
+   { (exit 1); exit 1; }; }
   fi
+#else
+#  AC_LANG_PUSH(C)
+#use default type int but make sure to select the right size
+#    AC_CHECK_SIZEOF([int])
+#    case $ac_cv_sizeof_long_long in
+#      8 | 8?) AC_DEFINE(OS_INT_SIZE, [8], [use 64 bit integers])
+#	    ;;
+#      4 | 4?) AC_DEFINE(OS_INT_SIZE, [4], [use 32 bit integers])
+#	    ;;
+#      2 | 2?) AC_DEFINE(OS_INT_SIZE, [2], [use 16 bit integers])
+#	    ;;
+#    esac
+#  AC_LANG_POP(C)
 fi
 
 

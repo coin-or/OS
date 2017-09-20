@@ -210,10 +210,9 @@ this fails on in Mac OS X
 */
 
 %union {
-    double dval;
-    int ival;
-    char* sval;
-    
+    double   dval;
+    OsXmlInt ival;
+    char*    sval;
 }
 %{
 int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
@@ -2137,7 +2136,7 @@ osilStageobjstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE
     if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->stageObjectivesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
-    if ($3 >= 0 && $3 <= -osinstance->instanceData->objectives->numberOfObjectives - 1)
+    if ($3 >= 0 || $3 <= -osinstance->instanceData->objectives->numberOfObjectives - 1)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");
     parserData->stageObjectivesOrdered = true;
     parserData->stageObjectiveStartIdx = $3;
@@ -5860,7 +5859,7 @@ nlAttributes: nlAttributeList
 nlAttributeList: | nlAttributeList nlAttribute;
 
 nlAttribute: 
-      osglIdxATT 
+      osglIdxATT
     {
 //        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
 //        {
@@ -6587,7 +6586,7 @@ matrixExpressionsStart: MATRIXEXPRESSIONSSTART
 
 matrixExpressionsAtt: numberOfExprATT;
 
-numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE 
+numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE
     {
     #ifdef OSINSTANCE_AVAILABLE
         if (*$2 != *$4) 
@@ -6654,7 +6653,7 @@ matrixExprAttributes: matrixExprAttributeList
 matrixExprAttributeList: | matrixExprAttributeList exprAttribute;
 
 exprAttribute: 
-      osglIdxATT 
+      osglIdxATT
     {
     #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->idx = osglData->idx;
