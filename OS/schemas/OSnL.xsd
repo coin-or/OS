@@ -6165,7 +6165,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="idx" type="NonnegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="NonpositiveInteger" use="required"/>
 				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>

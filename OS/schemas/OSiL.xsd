@@ -3706,7 +3706,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:choice>
 			<xs:group ref="DistributionGroup"/>
 			<xs:group ref="DistributionTransformationGroup"/>
-			<xs:element ref="custom"/>
+			<xs:element name="custom" type="CustomDistribution"/>
 		</xs:choice>
 		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>

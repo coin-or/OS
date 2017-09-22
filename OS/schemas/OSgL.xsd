@@ -580,7 +580,7 @@
 	</xs:complexType>
 	<xs:complexType name="BlockSizesEl">
 		<xs:simpleContent>
-			<xs:extension base="Integer">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="mult" type="PositiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="Integer" use="optional" default="0"/>
 			</xs:extension>
@@ -1094,7 +1094,7 @@ Each value must refer to an existing (core) objective index</xs:documentation>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="mult" type="Integer"/>
+				<xs:attribute name="mult" type="NonnegativeInteger"/>
 				<xs:attribute name="incr" type="Integer" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -2556,7 +2556,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experimental</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="CustomDistribution">
+	<xs:complexType name="UserDefinedDistribution">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -2564,9 +2564,9 @@ according to WolframMathWorld</xs:documentation>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="density"/>
-					<xs:enumeration value="cumDist"/>
-					<xs:enumeration value="MGF"/>
-					<xs:enumeration value=""/>
+					<xs:enumeration value="cumulativeDistribution"/>
+					<xs:enumeration value="momentGeneratingFunction"/>
+					<xs:enumeration value="randomNumberGenerator"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -2596,7 +2596,64 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
 -->
 	</xs:complexType>
-	<xs:element name="custom" type="CustomDistribution">
+	<xs:complexType name="CustomDistributionFunctionParam">
+		<xs:attribute name="name" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to an existing user-defined function</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CustomDistribution">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfParameters; the order and interpretation of the parameters must be agreed on between the user and the solver.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="name" type="xs:string" use="required"/>
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="integer"/>
+								<xs:enumeration value="real"/>
+								<xs:enumeration value="boolean"/>
+								<xs:enumeration value="string"/>
+								<xs:enumeration value="userFunctionName"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="value" type="xs:string" use="required"/>
+					<xs:attribute name="description" type="xs:string"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="numberOfParameters" type="NonnegativeInteger" default="0"/>
+		<!--
+		<xs:sequence>
+			<xs:element name="dimensions" type="NonNegativeIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of entries in vector of dimensions determines the "rank" of the random object: 
+1 for random vector, 
+2 for random matrix, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="param" type="DistributionParameter" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfParam</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="function" type="UserFunction_p" minOccurs="0"/>
+		</xs:sequence>
+-->
+		<!--
+		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
+-->
+	</xs:complexType>
+	<xs:element name="custom" type="UserDefinedDistribution">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -3773,7 +3830,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>finalize</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="Integer">
+			<xs:extension base="NonnegativeInteger">
 				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
