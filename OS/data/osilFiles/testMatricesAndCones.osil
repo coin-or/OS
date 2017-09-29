@@ -371,8 +371,9 @@
                         <el>0</el>
                     </index>
                     <value>
-                        <el numberOfVarIdx="1">
-                            <varIdx>1</varIdx>
+                        <el numberOfVarIdx="2" constant="1">
+                            <varIdx coef="2">0</varIdx>
+                            <varIdx coef="3">1</varIdx>
                         </el>
                     </value>
                 </linearElements>
