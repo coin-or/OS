@@ -1341,11 +1341,29 @@ equal tensor rank</xs:documentation>
 				<xs:element name="constantValue" type="xs:double"/>
 				<xs:element name="complexValue" type="ComplexNumber"/>
 				<xs:element name="varReference" type="NonnegativeInteger"/>
+				<xs:element name="objReference" type="NegativeInteger"/>
+				<xs:element name="conReference" type="ConReferenceTensorElement"/>
 				<xs:element name="realValuedExpression" type="RealValuedExpression"/>
 				<xs:element name="complexValuedExpression" type="ComplexValuedExpression"/>
 				<xs:element name="stringValue" type="xs:string"/>
 			</xs:choice>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConReferenceTensorElement">
+		<xs:simpleContent>
+			<xs:extension base="NonnegativeInteger">
+				<xs:attribute name="valueType" use="optional" default="value">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="value"/>
+							<xs:enumeration value="status"/>
+							<xs:enumeration value="surplus"/>
+							<xs:enumeration value="shortage"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="XMLData">
 		<xs:annotation>
@@ -2614,17 +2632,6 @@ according to WolframMathWorld</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:attribute name="name" type="xs:string" use="required"/>
-					<xs:attribute name="type" use="required">
-						<xs:simpleType>
-							<xs:restriction base="xs:string">
-								<xs:enumeration value="integer"/>
-								<xs:enumeration value="real"/>
-								<xs:enumeration value="boolean"/>
-								<xs:enumeration value="string"/>
-								<xs:enumeration value="userFunctionName"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:attribute>
 					<xs:attribute name="value" type="xs:string" use="required"/>
 					<xs:attribute name="description" type="xs:string"/>
 				</xs:complexType>
@@ -4154,6 +4161,8 @@ according to WolframMathWorld</xs:documentation>
 			<xs:enumeration value="skewLower"/>
 			<xs:enumeration value="HermitianUpper"/>
 			<xs:enumeration value="HermitianLower"/>
+			<xs:enumeration value="skewHermitianUpper"/>
+			<xs:enumeration value="skewHermitianLower"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="NodalTreeIndexType">
