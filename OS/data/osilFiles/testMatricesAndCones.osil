@@ -111,7 +111,7 @@
 
 <!-- The matrices section can be expanded as needed. The first 32 matrices mostly test the parser,
      although some are reused later for testing various expansion methods -->
-        <matrices numberOfMatrices= " 56 " >
+        <matrices numberOfMatrices= " 59 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -2392,11 +2392,11 @@
                 </complexElements>
                 <complexValuedExpressions numberOfValues="1">
                     <start>
-                        <el mult="2">0</el>
-                        <el mult="2">1</el>
+                        <el mult="3">0</el>
+                        <el mult="1">1</el>
                     </start>
                     <index>
-                        <el>0</el>
+                        <el>2</el>
                     </index>
                     <value>
                         <el>
@@ -2451,7 +2451,60 @@
                     </matrixTimes>
                 </transformation>
             </matrix>
+
+
+<!-- Expansion tests for matrix expressions involving sums, and other transformations -->
+            <matrix numberOfColumns="4" numberOfRows="3" name="56">
+                <constantElements numberOfValues="6">
+                    <start>
+                        <el>0</el>    <el>2</el>    <el>3</el>    <el>5</el>    <el>6</el>
+                    </start>
+                    <index>
+                        <el>0</el>    <el mult="2">1</el>    <el>0</el>    <el>2</el>    <el>1</el>
+                    </index>
+
+                    <value>
+                        <el>1.0</el>
+                        <el>2.0</el>
+                        <el>3.0</el>
+                        <el>4.0</el>
+                        <el>5.0</el>
+                        <el>6.0</el>
+                    </value>
+                </constantElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="3" name="57">
+                <constantElements numberOfValues="6">
+                    <start>
+                        <el mult="4" incr="2">0</el>    <el>6</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">1</el>
+                        <el mult="2" incr="1">0</el>
+                        <el mult="2" incr="1">0</el>
+                    </index>
+                    <value>
+                        <el>11.0</el>
+                        <el>12.0</el>
+                        <el>13.0</el>
+                        <el>14.0</el>
+                        <el>15.0</el>
+                        <el>16.0</el>
+                    </value>
+                </constantElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="3" name="58-M56-plus-M57">
+                <transformation>
+                    <matrixPlus>
+                        <matrixReference idx="56"></matrixReference>
+                        <matrixReference idx="57"></matrixReference>
+                    </matrixPlus>
+                </transformation>
+            </matrix>
+
+
         </matrices>
+
         <cones numberOfCones="11">
             <nonnegativeCone numberOfColumns="2" numberOfRows="2"></nonnegativeCone>
             <nonpositiveCone numberOfColumns="2" numberOfRows="2"/>

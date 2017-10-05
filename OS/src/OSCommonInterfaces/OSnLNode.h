@@ -1876,6 +1876,16 @@ public:
  */
 class OSnLMNode: public ExprNode
 {
+private:
+#if 0
+    /**
+     *  This parameter holds the types of elements found in this node
+     *
+     *  For types supported, see OSParameters.h
+     */
+    ENUM_MATRIX_TYPE valueType;
+#endif
+
 public:
 
     /**
@@ -1887,6 +1897,13 @@ public:
      * default destructor.
      */
     virtual ~OSnLMNode();
+
+#if 0
+    /**
+     *  a utility routine to determine the type of values held in this node
+     */
+    virtual ENUM_MATRIX_TYPE getValueType(OSMatrix** mtxLoc);
+#endif
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
@@ -1900,7 +1917,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default) = 0;
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown) = 0;
 
     /**
      * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
@@ -2040,7 +2057,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2089,7 +2106,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2138,7 +2155,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2187,7 +2204,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2208,6 +2225,13 @@ public:
      * default destructor.
      */
     virtual ~OSnLMNodeMatrixTimes();
+
+#if 0
+    /**
+     *  a utility routine to determine the type of values held in this node
+     */
+    virtual ENUM_MATRIX_TYPE getValueType(OSMatrix** mtxLoc);
+#endif
 
     /**
      * @return the value of operator name
@@ -2236,7 +2260,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2324,7 +2348,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2345,6 +2369,13 @@ public:
      * default destructor.
      */
     virtual ~OSnLMNodeMatrixTranspose();
+
+#if 0
+    /**
+     *  a utility routine to determine the type of values held in this node
+     */
+    virtual ENUM_MATRIX_TYPE getValueType(OSMatrix** mtxLoc);
+#endif
 
     /**
      * @return the value of operator name
@@ -2373,7 +2404,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2422,7 +2453,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2471,7 +2502,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2520,7 +2551,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2574,7 +2605,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2633,7 +2664,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2688,7 +2719,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2737,7 +2768,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2787,7 +2818,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2825,6 +2856,13 @@ public:
      */
     virtual std::string getTokenName();
 
+#if 0
+    /**
+     *  a utility routine to determine the type of values held in this node
+     */
+    virtual ENUM_MATRIX_TYPE getValueType(OSMatrix** mtxLoc);
+#endif
+
     /**
      * @return a string token that corresponds to the OSnLNode.
      */
@@ -2856,7 +2894,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2916,7 +2954,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2976,7 +3014,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -3037,7 +3075,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -3106,7 +3144,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.

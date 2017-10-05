@@ -131,6 +131,12 @@ public:
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
 
     /**
+     *  Set the inferred type of the matrix elements
+     *  @return whether the operation was successul
+     */
+    virtual void setInferredMatrixType(ENUM_MATRIX_TYPE valueType);
+
+    /**
      *  getMatrixType() amalgamates the declared and inferred types 
      *  @return the amalgamated type of the matrix elements:
      *          if mergeTypes(declared,inferred) = declared, return declared
@@ -2399,6 +2405,15 @@ public:
     GeneralSparseMatrix* convertSymmetry(ENUM_MATRIX_SYMMETRY symmetry_);
 
     /**
+     *  A method to change the type of symmetry used in storing a generalSparseMatrix 
+     *  The result is stored into another generalSparseMatrix with the same type of values
+     *  @param symmetry_ gives the type of symmetry to be used in the target matrix
+     *  @return the transformed matrix
+     */
+    GeneralSparseMatrix* expandSymmetry(ENUM_MATRIX_TYPE convertTo_, 
+                                        bool transpose_, bool rowMajor_);
+
+    /**
      *  a method to determine whether the matrix is diagonal
      *  @return whether the matrix is diagonal or not
      */
@@ -2620,7 +2635,7 @@ public:
      */
     int getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                           ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                          ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                          ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
 
     GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx,
@@ -2705,7 +2720,7 @@ public:
      virtual GeneralSparseMatrix* 
                     processBaseMatrix(OSMatrix** mtxIdx, bool rowMajor_, 
                                       ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                                      ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                                      ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A method to determine the block structure of a matrixType 
@@ -2740,7 +2755,7 @@ public:
      virtual GeneralSparseMatrix* 
                 expandBlocks( ExpandedMatrixBlocks* currentBlocks, OSMatrix** mtxIdx, bool rowMajor_,
                               ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                              ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                              ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A method to expand a blocks constructor into a single matrix of a particular form. 
@@ -2762,7 +2777,7 @@ public:
      virtual GeneralSparseMatrix* 
                     expandBlocks( int nConst, OSMatrix** mtxIdx, bool rowMajor_,
                                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A method to repackage an elements constructor into the form required in the referencing matrixType. 
@@ -2778,7 +2793,7 @@ public:
      */
     virtual GeneralSparseMatrix* 
         extractElements(int nConst, bool rowMajor,
-                        ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                        ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
     /**
      *  A method to expand a matrix transformation into the form required in the referencing matrixType. 
      *  Processing may require recursion, transposing the elements, and applying symmetry.
@@ -2796,7 +2811,7 @@ public:
     virtual GeneralSparseMatrix* 
         expandTransformation(int nConst, OSMatrix** mtxIdx, bool rowMajor,
                              ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                             ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                             ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A method to process a matrixType into a block structure defined by 
@@ -2817,7 +2832,7 @@ public:
      */
      virtual bool processBlocks(OSMatrix** mtxIdx, bool rowMajor_, 
                                 ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
-                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A method to process a matrixType into a specific block structure.
@@ -2841,7 +2856,7 @@ public:
      virtual bool processBlocks(OSMatrix** mtxIdx, int* rowOffset, int rowOffsetSize,
                                 int* colOffset, int colOffsetSize, bool rowMajor_,
                                 ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
-                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /** 
      *  A method to extract a block from a larger matrix
@@ -2863,7 +2878,7 @@ public:
      */
     GeneralSparseMatrix* extractBlock(int firstrow, int firstcol, int lastrow, int lastcol,
                                       bool rowMajor_, 
-                                      ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                                      ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /** 
      *  A method to retrieve the blocks from a particular collection.
@@ -2894,7 +2909,7 @@ public:
                                     int* colPartition, int colPartitionSize, 
                                     OSMatrix** mtxIdx, bool appendToBlockArray, bool rowMajor, 
                                     ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /** 
      *  A method to retrieve the blocks from a particular <blocks> constructor.
@@ -2919,7 +2934,7 @@ public:
      */
     //ExpandedMatrixBlocks* getBlocks(int i, bool appendToBlockArray, bool rowMajor, 
     //                                ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
-    //                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+    //                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /** 
      *  A method to disassemble a MatrixType into individual blocks of specific structure
@@ -2941,7 +2956,7 @@ public:
                                             int* colPartition, int colPartitionSize, 
                                             OSMatrix** mtxIdx, bool rowMajor_, 
                                             ENUM_MATRIX_TYPE valueType_    = ENUM_MATRIX_TYPE_unknown,
-                                            ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                                            ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A function to check for the equality of two objects

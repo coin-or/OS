@@ -3631,7 +3631,7 @@ public:
      */
     GeneralSparseMatrix* getExpandedMatrix(int n, bool rowMajor_ = false,
                                            ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                                           ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+                                           ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      * Get the (nonzero) elements of the matrix in row major form.

@@ -1030,7 +1030,6 @@ if (PARSER_TESTS)
                 {
                     cout << endl << "Test expansion of matrix " << i << " in " 
                          << (rowMajor?"row":"column") << " major form" << endl;
-
                     expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix,rowMajor);
                     if (expIdx >= 0)
                     {
@@ -1039,6 +1038,24 @@ if (PARSER_TESTS)
                     }
                     else
                         cout << endl << "Error during matrix expansion" << endl << endl;
+
+                    ENUM_MATRIX_SYMMETRY 
+                        tempSym = instance1->instanceData->matrices->matrix[i]->symmetry;
+                    if ((tempSym != ENUM_MATRIX_SYMMETRY_none) &&
+                        (tempSym != ENUM_MATRIX_SYMMETRY_unknown) )
+                    {
+                        cout << endl << "Matrix symmetry encountered: " << tempSym;
+                        cout << "; expand symmetry " << std::endl; 
+                        expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix, rowMajor,ENUM_MATRIX_TYPE_unknown,tempSym);
+                        if (expIdx >= 0)
+                        {
+                            cout << endl << "Matrix expanded successfully" << endl << endl;
+                            instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(expIdx);
+                        }
+                        else
+                            cout << endl << "Error during matrix expansion" << endl << endl;
+                    }
+
                 }
                 catch(const ErrorClass& eclass)
                 {

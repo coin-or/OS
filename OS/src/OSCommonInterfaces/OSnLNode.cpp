@@ -2896,6 +2896,12 @@ OSnLMNode::~OSnLMNode()
 #endif
 }//end ~OSnLNode
 
+#if 0
+ENUM_MATRIX_TYPE OSnLMNode::getValueType(OSMatrix** mtxLoc)
+{
+    return ENUM_MATRIX_TYPE_unknown;
+}//end of OSnLMNode::getValueType()
+#endif
 
 OSnLMNode* OSnLMNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
 {
@@ -3054,8 +3060,160 @@ GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool ro
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixPlus");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixPlus: expandNode method not yet implemented");
-    return NULL;
+
+    GeneralSparseMatrix* returnMtx = NULL;
+    GeneralSparseMatrix* summandA  = NULL;
+    GeneralSparseMatrix* summandB  = NULL;
+       int* loc = NULL;
+    double* val = NULL;
+
+    try
+    {
+        summandA = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, 
+                                                            convertTo_, symmetry_);
+        if (summandA == NULL)
+            throw ErrorClass("OSnLMNodeMatrixPlus::expandNode(): Error expanding summand A");
+
+        summandB = ((OSnLMNode*)m_mChildren[1])->expandNode(mtxLoc, rowMajor_,
+                                                            convertTo_, symmetry_);
+        if (summandB == NULL)
+            throw ErrorClass("OSnLMNodeMatrixPlus::expandNode(): Error expanding summand B");
+
+        if ( (summandA->numberOfRows    != summandB->numberOfRows) ||
+             (summandA->numberOfColumns != summandB->numberOfColumns) )
+            throw ErrorClass("Incompatible matrix dimensions in OSnLMNodeMatrixPlus::expandNode()");
+
+        returnMtx = new GeneralSparseMatrix();
+
+        returnMtx->numberOfRows    = summandA->numberOfRows;
+        returnMtx->numberOfColumns = summandB->numberOfColumns;
+        returnMtx->isRowMajor      = rowMajor_;
+        returnMtx->symmetry        = symmetry_;
+
+        ENUM_MATRIX_TYPE rType = mergeMatrixTypeSum(summandA->valueType, 
+                                                    summandB->valueType);
+
+        int  i, j, k, l;
+        int majorDim, minorDim;
+        int  nonz = 0;
+
+        if (rowMajor_)
+        {
+            majorDim = returnMtx->numberOfRows;
+            minorDim = returnMtx->numberOfColumns;
+        }
+        else
+        {
+            majorDim = returnMtx->numberOfColumns;
+            minorDim = returnMtx->numberOfRows;
+        }
+
+        if (rType == ENUM_MATRIX_TYPE_constant)
+        {
+            returnMtx->startSize = majorDim + 1;
+            returnMtx->start     = new int[returnMtx->startSize];
+            returnMtx->start[0] = 0;
+    
+            loc = new    int[minorDim];
+            val = new double[minorDim];
+
+            for (j=0; j < minorDim; ++j)
+                loc[j] = -1;
+
+            // in the first pass, count the nonzeroes 
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                    loc[summandA->index[j]] = 1;
+                nonz += (summandA->start[i+1] - summandA->start[i]);
+
+                for (j = summandB->start[i]; j < summandB->start[i+1]; ++j)
+                {
+                    if (loc[summandB->index[j]] == -1)
+                        ++nonz;
+                }
+                returnMtx->start[i+1] = nonz;
+
+                for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                    loc[summandA->index[j]] = -1;
+            }
+
+            returnMtx->index = new int[nonz];
+            returnMtx->value = new ConstantMatrixValues();
+            ((ConstantMatrixValues*)returnMtx->value)->el = new double[nonz];
+
+//            for (i=0; i<nonz; ++i)
+//                ((ConstantMatrixValues*)returnMtx->value)->el[i] = 0.0;
+
+            // second pass: load the values of matrix A into temporary arrays
+            nonz = 0;
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                {
+                    loc[summandA->index[j]] = summandA->index[j];
+                    val[summandA->index[j]]
+                        = ((ConstantMatrixValues*)summandA->value)->el[j];
+                }
+                
+                // add the values of Matrix B
+                for (j = summandB->start[i]; j < summandB->start[i+1]; ++j)
+                {
+                    if (loc[summandB->index[j]] < 0)
+                        loc[summandB->index[j]] = summandB->index[j];
+
+                    val[summandB->index[j]]
+                        += ((ConstantMatrixValues*)summandB->value)->el[j];
+                }
+
+                //transfer information to returnMtx
+                for (j = 0; j < minorDim; ++j)
+                {
+                    if (loc[j] >= 0)
+                    {
+                        returnMtx->index[nonz] = loc[j];
+                        ((ConstantMatrixValues*)returnMtx->value)->el[nonz] = val[j];
+                        ++nonz;
+                        loc[j] = -1;
+                        val[j] = 0.0;
+                    }
+                }
+            }
+
+            returnMtx->valueType = rType;
+            returnMtx->valueSize = nonz;
+        }
+
+        else
+            throw ErrorClass("Unsupported element type for OSnLMNodeMatrixPlus");
+
+#ifndef NDEBUG
+	if (nonz != returnMtx->valueSize)
+		throw ErrorClass("OSnLMNodeMatrixPlus::expandNode(): Number of nonzeroes is inconsistent");
+#endif
+
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (val != NULL)
+            delete [] val;
+        val = NULL;
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+std::cout << "OSnLMNodeMatrixPlus::expandNode(): error catch" << std::endl;
+        if (returnMtx != NULL)
+            delete returnMtx;
+        returnMtx = NULL;
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (val != NULL)
+            delete [] val;
+        val = NULL;
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end OSnLMNodeMatrixPlus::expandNode()
 
 
@@ -3375,6 +3533,14 @@ OSnLMNodeMatrixTimes::~OSnLMNodeMatrixTimes()
 #endif
 }//end ~OSnLMNodeMatrixTimes
 
+#if 0
+ENUM_MATRIX_TYPE OSnLMNodeMatrixTimes::getValueType(OSMatrix** mtxLoc)
+{
+    return mergeMatrixTypeProduct(m_mChildren[0]->getValueType(OSMatrix** mtxLoc),
+                                  m_mChildren[1]->getValueType(OSMatrix** mtxLoc));
+}//end of OSnLMNodeMatrixTimes::getValueType()
+#endif
+
 std::string OSnLMNodeMatrixTimes::getTokenName()
 {
     return "matrixTimes";
@@ -3390,16 +3556,23 @@ GeneralSparseMatrix* OSnLMNodeMatrixTimes::expandNode(OSMatrix** mtxLoc, bool ro
 #endif
 
     GeneralSparseMatrix* returnMtx = NULL;
+    GeneralSparseMatrix* factorA   = NULL;
+    GeneralSparseMatrix* factorB   = NULL;
+    int*    loc      = NULL;
+    double* denseCol = NULL;
 
     try
     {
-        if (rowMajor_)
-            throw ErrorClass("Row-wise multiplication not implemented yet in OSnLMNodeMatrixTimes");
+        factorA = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, true,
+                                                           convertTo_, symmetry_);
+        if (factorA == NULL)
+            throw ErrorClass("OSnLMNodeMatrixTimes::expandNode(): error expanding factor A");
 
-        GeneralSparseMatrix* factorA
-            = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, true,  convertTo_, symmetry_);
-        GeneralSparseMatrix* factorB
-            = ((OSnLMNode*)m_mChildren[1])->expandNode(mtxLoc, false, convertTo_, symmetry_);
+        factorB = ((OSnLMNode*)m_mChildren[1])->expandNode(mtxLoc, false,
+                                                           convertTo_, symmetry_);
+        if (factorB == NULL)
+            throw ErrorClass("OSnLMNodeMatrixTimes::expandNode(): error expanding factor B");
+
 
         if (factorA->numberOfColumns != factorB->numberOfRows)
             throw ErrorClass("Incompatible matrix dimensions in OSnLMNodeMatrixTimes::expandNode()");
@@ -3410,110 +3583,233 @@ GeneralSparseMatrix* OSnLMNodeMatrixTimes::expandNode(OSMatrix** mtxLoc, bool ro
         returnMtx->numberOfColumns = factorB->numberOfColumns;
         returnMtx->isRowMajor      = rowMajor_;
         returnMtx->symmetry        = symmetry_;
-        returnMtx->startSize       = returnMtx->numberOfColumns + 1;
-        returnMtx->start           = new int[returnMtx->startSize];
 
         ENUM_MATRIX_TYPE rType = mergeMatrixTypeProduct(factorA->valueType, factorB->valueType);
 
         int i, j, k, l;
-
-        int* loc = new int[factorB->numberOfRows];
-
         int nonz = 0;
-        returnMtx->start[0] = 0;
-        
-        for (j=0; j < factorB->numberOfRows; ++j)
-            loc[j] = 0;
 
-        // in the first pass, count the nonzeroes 
-        for (i=0; i < factorB->numberOfColumns; ++i)
+        if (rowMajor_)
         {
-            for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
-                loc[factorB->index[j]] = 1;
+//            throw ErrorClass("Row-wise multiplication not implemented yet in OSnLMNodeMatrixTimes");
+            returnMtx->startSize       = returnMtx->numberOfRows + 1;
+            returnMtx->start           = new int[returnMtx->startSize];
+            returnMtx->start[0] = 0;
+    
+            loc = new int[factorA->numberOfColumns];
 
-            for (k = 0; k < factorA->numberOfRows; ++k)
+
+            for (j=0; j < factorA->numberOfColumns; ++j)
+                loc[j] = 0;
+
+            // in the first pass, count the nonzeroes 
+            for (i=0; i < factorA->numberOfRows; ++i)
             {
-                for (l = factorA->start[k]; l < factorA->start[k+1]; ++l)
-                    if (loc[factorA->index[l]] == 1)
-                    {
-                        ++nonz;
-                        break;
-                    }
-            }
-            returnMtx->start[i+1] = nonz;
+                for (j = factorA->start[i]; j < factorA->start[i+1]; ++j)
+                    loc[factorA->index[j]] = 1;
 
-            for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
-                loc[factorB->index[j]] = 0;
-        }
-
-        returnMtx->valueType = rType;
-        returnMtx->valueSize = nonz;
-        returnMtx->index     = new int[nonz];
-
-        // in the second pass, store the nonzeroes. This must be done separately for each type 
-        nonz = 0;
-        switch (rType)
-        {
-            case ENUM_MATRIX_TYPE_constant:
-            {
-                double val;
-                bool   putVal;
-                double* denseCol     = new double[factorB->numberOfRows];
-                returnMtx->value     = new ConstantMatrixValues();
-                ((ConstantMatrixValues*)returnMtx->value)->el = new double[returnMtx->valueSize];
-
-                for (i=0; i < factorB->numberOfColumns; ++i)
+                for (k = 0; k < factorB->numberOfColumns; ++k)
                 {
-                    for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
-                    {
-                             loc[factorB->index[j]] = 1;
-                        denseCol[factorB->index[j]] = ((ConstantMatrixValues*)factorB->value)->el[j];
-                    }
-
-                    for (k = 0; k < factorA->numberOfRows; ++k)
-                    {
-                        val = 0.0;
-                        putVal = false;
-                        for (l = factorA->start[k]; l < factorA->start[k+1]; ++l)
-                            if (loc[factorA->index[l]] == 1)
-                            {
-                                putVal = true;
-                                val   += ((ConstantMatrixValues*)factorA->value)->el[l]
-                                            *denseCol[factorA->index[l]];
-                            }
-
-                        if (putVal)
+                    for (l = factorB->start[k]; l < factorB->start[k+1]; ++l)
+                        if (loc[factorB->index[l]] == 1)
                         {
-                            returnMtx->index[nonz] = k;
-                            ((ConstantMatrixValues*)returnMtx->value)->el[nonz] = val;
-                            nonz++;
+                            ++nonz;
+                            break;
+                        }
+                }
+                returnMtx->start[i+1] = nonz;
+
+                for (j = factorA->start[i]; j < factorA->start[i+1]; ++j)
+                    loc[factorA->index[j]] = 0;
+            }
+
+            returnMtx->valueType = rType;
+            returnMtx->valueSize = nonz;
+            returnMtx->index     = new int[nonz];
+
+            // in the second pass, store the nonzeroes. This must be done separately for each type 
+            nonz = 0;
+            switch (rType)
+            {
+                case ENUM_MATRIX_TYPE_constant:
+                {
+                    double val;
+                    bool   putVal;
+                    denseCol     = new double[factorA->numberOfColumns];
+	    			for (int i=0; i < factorA->numberOfColumns; ++i)
+	    				denseCol[i] = 0.0;
+
+                    returnMtx->value     = new ConstantMatrixValues();
+                    ((ConstantMatrixValues*)returnMtx->value)->el = new double[returnMtx->valueSize];
+
+                    for (i=0; i < factorA->numberOfRows; ++i)
+                    {
+                        for (j = factorA->start[i]; j < factorA->start[i+1]; ++j)
+                        {
+                                 loc[factorA->index[j]] = 1;
+                            denseCol[factorA->index[j]] = ((ConstantMatrixValues*)factorA->value)->el[j];
+                        }
+
+                        for (k = 0; k < factorB->numberOfColumns; ++k)
+                        {
+                            val = 0.0;
+                            putVal = false;
+                            for (l = factorB->start[k]; l < factorB->start[k+1]; ++l)
+                                if (loc[factorB->index[l]] == 1)
+                                {
+                                    putVal = true;
+                                    val   += ((ConstantMatrixValues*)factorB->value)->el[l]
+                                                *denseCol[factorB->index[l]];
+                                }
+
+                            if (putVal)
+                            {
+                                returnMtx->index[nonz] = k;
+                                ((ConstantMatrixValues*)returnMtx->value)->el[nonz] = val;
+                                nonz++;
+                            }
+                        }
+    
+                        for (j = factorA->start[i]; j < factorA->start[i+1]; ++j)
+                        {
+                                 loc[factorA->index[j]] = 0;
+                            denseCol[factorA->index[j]] = 0.0;
                         }
                     }
-    
-                    for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
-                    {
-                             loc[factorB->index[j]] = 0;
-                        denseCol[factorB->index[j]] = 0.0;
-                    }
+                    break;
                 }
-                break;
-            }
 
-            default:
-            {
-                throw ErrorClass("Attempting to compute matrix product with unimplemented types");
-                break;
+                default:
+                {
+                    throw ErrorClass("Attempting to compute matrix product with unimplemented types");
+                    break;
+                }
             }
         }
+        else
+        {
+            returnMtx->startSize       = returnMtx->numberOfColumns + 1;
+            returnMtx->start           = new int[returnMtx->startSize];
+    
+            loc = new int[factorB->numberOfRows];
+
+            returnMtx->start[0] = 0;
+
+            for (j=0; j < factorB->numberOfRows; ++j)
+                loc[j] = 0;
+
+            // in the first pass, count the nonzeroes 
+            for (i=0; i < factorB->numberOfColumns; ++i)
+            {
+                for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
+                    loc[factorB->index[j]] = 1;
+
+                for (k = 0; k < factorA->numberOfRows; ++k)
+                {
+                    for (l = factorA->start[k]; l < factorA->start[k+1]; ++l)
+                        if (loc[factorA->index[l]] == 1)
+                        {
+                            ++nonz;
+                            break;
+                        }
+                }
+                returnMtx->start[i+1] = nonz;
+
+                for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
+                    loc[factorB->index[j]] = 0;
+            }
+
+            returnMtx->valueType = rType;
+            returnMtx->valueSize = nonz;
+            returnMtx->index     = new int[nonz];
+
+            // in the second pass, store the nonzeroes. This must be done separately for each type 
+            nonz = 0;
+            switch (rType)
+            {
+                case ENUM_MATRIX_TYPE_constant:
+                {
+                    double val;
+                    bool   putVal;
+                    denseCol = new double[factorB->numberOfRows];
+	    			for (int i=0; i < factorB->numberOfRows; ++i)
+	    				denseCol[i] = 0.0;
+
+                    returnMtx->value     = new ConstantMatrixValues();
+                    ((ConstantMatrixValues*)returnMtx->value)->el = new double[returnMtx->valueSize];
+
+                    for (i=0; i < factorB->numberOfColumns; ++i)
+                    {
+                        for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
+                        {
+                                 loc[factorB->index[j]] = 1;
+                            denseCol[factorB->index[j]] = ((ConstantMatrixValues*)factorB->value)->el[j];
+                        }
+
+                        for (k = 0; k < factorA->numberOfRows; ++k)
+                        {
+                            val = 0.0;
+                            putVal = false;
+                            for (l = factorA->start[k]; l < factorA->start[k+1]; ++l)
+                                if (loc[factorA->index[l]] == 1)
+                                {
+                                    putVal = true;
+                                    val   += ((ConstantMatrixValues*)factorA->value)->el[l]
+                                                *denseCol[factorA->index[l]];
+                                }
+
+                            if (putVal)
+                            {
+                                returnMtx->index[nonz] = k;
+                                ((ConstantMatrixValues*)returnMtx->value)->el[nonz] = val;
+                                nonz++;
+                            }
+                        }
+    
+                        for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
+                        {
+                                 loc[factorB->index[j]] = 0;
+                            denseCol[factorB->index[j]] = 0.0;
+                        }
+                    }
+                    break;
+                }
+
+                default:
+                {
+                    throw ErrorClass("Attempting to compute matrix product with unimplemented types");
+                    break;
+                }
+            }
+        }
+
+#ifndef NDEBUG
+	if (nonz != returnMtx->valueSize)
+		throw ErrorClass("OSnLMNodeMatrixTimes::expandNode(): Number of nonzeroes is inconsistent");
+#endif
+
+        // cleanup
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (denseCol != NULL)
+            delete [] denseCol;
+        denseCol = NULL;
 
         return returnMtx;
     }
     catch(const ErrorClass& eclass)
     {
-std::cout << "error catch" << std::endl;
+std::cout << "OSnLMNodeMatrixTimes::expandNode(): error catch" << std::endl;
         if (returnMtx != NULL)
             delete returnMtx;
         returnMtx = NULL;
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (denseCol != NULL)
+            delete [] denseCol;
+        denseCol = NULL;
         throw ErrorClass( eclass.errormsg);
     }
 }//end OSnLMNodeMatrixTimes::expandNode()
@@ -3633,6 +3929,13 @@ OSnLMNodeMatrixTranspose::~OSnLMNodeMatrixTranspose()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixTranspose
+
+#if 0
+ENUM_MATRIX_TYPE OSnLMNodeMatrixTranspose::getValueType(OSMatrix** mtxLoc)
+{
+    return m_mChildren[0]->getValueType(OSMatrix** mtxLoc);
+}//end of OSnLMNodeMatrixTranspose::getValueType()
+#endif
 
 std::string OSnLMNodeMatrixTranspose::getTokenName()
 {
@@ -4401,6 +4704,17 @@ std::string OSnLMNodeMatrixReference::getNodeInfo(bool recurse, int indent)
     outStr << std::endl;
     return outStr.str();
 }//getNodeInfo
+
+#if 0
+ENUM_MATRIX_TYPE OSnLMNodeMatrixReference::getValueType(OSMatrix** mtxLoc)
+{
+    if (valueType == ENUM_MATRIX_TYPE_unknown)
+    {
+        valueType = mtxLoc[idx]->inferredMatrixType;
+    }
+    return valueType;
+}//OSnLMNodeMatrixReference::getValueType
+#endif
 
 std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
 {
