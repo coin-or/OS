@@ -1297,7 +1297,7 @@ Each nonzero is a complex-valued expression</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="Tensors">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -1317,18 +1317,109 @@ Each nonzero is a complex-valued expression</xs:documentation>
 					<xs:documentation>number of elements in dimensions vector must equal tensor rank. Dimensions may be omitted if rank=0.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="element" type="tensorElement" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="baseTensor" type="BaseTensor" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>must have the same dimensions as the current tensor</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="transformation" type="TensorTransformation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="elements" type="TensorElements" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="rank" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="contravalence" type="NonnegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>covalent dimensions are first, followed by contravalent dimensions (if any).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="BaseTensor" mixed="false">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="baseTensorIdx" type="NonnegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>Must refer to a previously defined tensor in the global "tensors" section within this schema</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<!--
+		<xs:attribute name="baseMatrixStartRow" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="baseMatrixStartCol" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="baseMatrixEndRow" type="NonnegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Defaults to last row in the baseMatrix</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="baseMatrixEndCol" type="NonnegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Defaults to last column in the baseMatrix</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation>Applied after cropping</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="scalarMultiplier" type="xs:double" use="optional" default="1.0">
+			<xs:annotation>
+				<xs:documentation>real-valued or real part only.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="scalarImaginaryPart" type="xs:double" default="0.0">
+			<xs:annotation>
+				<xs:documentation>scalar multiplier is
+      realPart + i*imagPart</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="targetMatrixFirstRow" type="NonnegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="targetMatrixFirstCol" type="NonnegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>Can be used to shift the position of the base matrix within the target (parent). Default is (0,0)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+-->
+	</xs:complexType>
+	<xs:complexType name="TensorTransformation">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLTNode"/>
+		</xs:sequence>
+		<!--		
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="constant"/>
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="concave"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+-->
+	</xs:complexType>
+	<xs:complexType name="TensorElements">
+		<xs:sequence>
+			<xs:element name="element" type="TensorElement" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number of elements must equal numberOfElements</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="rank" type="NonnegativeInteger" use="required"/>
-		<xs:attribute name="contravalence" type="NonnegativeInteger" default="0"/>
 		<xs:attribute name="numberOfElements" type="NonnegativeInteger" use="required"/>
-		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>
-	<xs:complexType name="tensorElement">
+	<xs:complexType name="TensorElement">
 		<xs:sequence>
 			<xs:element name="indexes" type="NonNegativeIntVector">
 				<xs:annotation>
@@ -2626,15 +2717,10 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="parameter" type="OtherOptionOrResult" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfParameters; the order and interpretation of the parameters must be agreed on between the user and the solver.</xs:documentation>
+					<xs:documentation>number must agree with numberOfParameters; the  interpretation of parameters and values must be agreed on between the user and the solver.</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:attribute name="name" type="xs:string" use="required"/>
-					<xs:attribute name="value" type="xs:string" use="required"/>
-					<xs:attribute name="description" type="xs:string"/>
-				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>

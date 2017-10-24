@@ -86,6 +86,21 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 	</xs:group>
 	<xs:group name="DefinitionData">
 		<xs:sequence>
+			<xs:element name="userFunctions" type="UserFunctions_p" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="externalFunctions" type="ExternalFunctions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="distributions" type="Distributions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="matrices" type="Matrices" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 2.0</xs:documentation>
@@ -101,21 +116,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="distributions" type="Distributions" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="userFunctions" type="UserFunctions_p" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>finalization</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="externalFunctions" type="ExternalFunctions" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="xmlData" type="XMLData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
@@ -125,6 +125,11 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 	</xs:group>
 	<xs:group name="ExtensionData">
 		<xs:sequence>
+			<xs:element name="disjunctiveProgramming" type="DisjunctiveInformation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
@@ -140,12 +145,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="disjunctiveProgramming" type="DisjunctiveInformation" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="realTimeDataProgramming" type="RealTimeData" minOccurs="0">
+			<xs:element name="realTimeDataProgramming" type="RealTimeDataProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -1572,7 +1572,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="RealTimeData">
+	<xs:complexType name="RealTimeDataProgramming">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -1588,7 +1588,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onOptimizationStart" minOccurs="0"/>
-			<xs:element name="realTimeDataSource" type="RealTimeDataSource" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with  numberOfDataSources</xs:documentation>
 				</xs:annotation>
@@ -1596,7 +1596,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfDataSources" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="RealTimeDataSource">
+	<xs:complexType name="RealTimeData">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
@@ -2666,7 +2666,7 @@ of the subtree</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="realTimeDataSource" type="RealTimeDataSource" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with  numberOfDataSources</xs:documentation>
 				</xs:annotation>
