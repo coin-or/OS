@@ -1024,13 +1024,20 @@ if (PARSER_TESTS)
             int expIdx;
             bool rowMajor = false;
 
-            for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
+            for (int i=32; i < instance1->instanceData->matrices->numberOfMatrices; i++)
             {
                 try
                 {
                     cout << endl << "Test expansion of matrix " << i << " in " 
                          << (rowMajor?"row":"column") << " major form" << endl;
-                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix,rowMajor);
+                    cout << "matrix statistics: " 
+                         << instance1->instanceData->matrices->matrix[i]->numberOfRows
+                         << " rows; " 
+                         << instance1->instanceData->matrices->matrix[i]->numberOfColumns
+                         << " columns; symmetry type: "
+                         << returnMatrixSymmetryString(instance1->instanceData->matrices->matrix[i]->symmetry) << endl;
+                    expIdx = instance1->instanceData->matrices->matrix[i] 
+                            ->getExpandedMatrix(instance1->instanceData->matrices->matrix, rowMajor);
                     if (expIdx >= 0)
                     {
                         cout << endl << "Matrix expanded successfully" << endl << endl;
@@ -1046,7 +1053,7 @@ if (PARSER_TESTS)
                     {
                         cout << endl << "Matrix symmetry encountered: " << tempSym;
                         cout << "; expand symmetry " << std::endl; 
-                        expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix, rowMajor,ENUM_MATRIX_TYPE_unknown,tempSym);
+                        expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix, rowMajor,ENUM_MATRIX_TYPE_unknown,ENUM_MATRIX_SYMMETRY_none);
                         if (expIdx >= 0)
                         {
                             cout << endl << "Matrix expanded successfully" << endl << endl;

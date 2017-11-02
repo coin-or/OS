@@ -3064,11 +3064,14 @@ GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool ro
     GeneralSparseMatrix* returnMtx = NULL;
     GeneralSparseMatrix* summandA  = NULL;
     GeneralSparseMatrix* summandB  = NULL;
-       int* loc = NULL;
+    int*    loc = NULL;
     double* val = NULL;
-
     try
     {
+        int  i, j, k, l;
+        int  majorDim, minorDim;
+        int  nonz = 0;
+
         summandA = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, 
                                                             convertTo_, symmetry_);
         if (summandA == NULL)
@@ -3092,11 +3095,12 @@ GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool ro
 
         ENUM_MATRIX_TYPE rType = mergeMatrixTypeSum(summandA->valueType, 
                                                     summandB->valueType);
-
-        int  i, j, k, l;
-        int majorDim, minorDim;
-        int  nonz = 0;
-
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = rType;
+        if (convertTo != mergeMatrixTypeSum(convertTo, rType))
+            throw ErrorClass("Requested improper conversion of element values");
+        
         if (rowMajor_)
         {
             majorDim = returnMtx->numberOfRows;
@@ -3108,19 +3112,22 @@ GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool ro
             minorDim = returnMtx->numberOfRows;
         }
 
+        loc = new int[minorDim];
+        for (j=0; j < minorDim; ++j)
+            loc[j] = -1;
+
         if (rType == ENUM_MATRIX_TYPE_constant)
         {
             returnMtx->startSize = majorDim + 1;
             returnMtx->start     = new int[returnMtx->startSize];
             returnMtx->start[0] = 0;
     
-            loc = new    int[minorDim];
             val = new double[minorDim];
 
             for (j=0; j < minorDim; ++j)
-                loc[j] = -1;
+                val[j] = 0.0;
 
-            // in the first pass, count the nonzeroes 
+            // phase 0: count the number of nonzeroes and allocate space
             for (i=0; i < majorDim; ++i)
             {
                 for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
@@ -3138,50 +3145,51 @@ GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool ro
                     loc[summandA->index[j]] = -1;
             }
 
+            returnMtx->valueType = rType;
+            returnMtx->valueSize = nonz;
             returnMtx->index = new int[nonz];
             returnMtx->value = new ConstantMatrixValues();
             ((ConstantMatrixValues*)returnMtx->value)->el = new double[nonz];
 
-//            for (i=0; i<nonz; ++i)
-//                ((ConstantMatrixValues*)returnMtx->value)->el[i] = 0.0;
-
-            // second pass: load the values of matrix A into temporary arrays
+            // phase 1: register the nonzeroes of summand A
             nonz = 0;
+
             for (i=0; i < majorDim; ++i)
             {
+                // in the first pass pull out the nonzero locations of summand A
                 for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
                 {
-                    loc[summandA->index[j]] = summandA->index[j];
-                    val[summandA->index[j]]
-                        = ((ConstantMatrixValues*)summandA->value)->el[j];
+                    loc[summandA->index[j]] = 1;
+                    val[summandA->index[j]] +=
+                        ((ConstantMatrixValues*)summandA->value)->el[j];
                 }
-                
-                // add the values of Matrix B
+
+                // second pass: identify matching locations and store the sum
                 for (j = summandB->start[i]; j < summandB->start[i+1]; ++j)
                 {
-                    if (loc[summandB->index[j]] < 0)
-                        loc[summandB->index[j]] = summandB->index[j];
-
-                    val[summandB->index[j]]
-                        += ((ConstantMatrixValues*)summandB->value)->el[j];
+                    returnMtx->index[nonz] = summandB->index[j];
+                    ((ConstantMatrixValues*)returnMtx->value)->el[nonz]
+                        = val[summandB->index[j]]
+                            + ((ConstantMatrixValues*)summandB->value)->el[j];
+                    loc[summandB->index[j]] = -1;
+                    val[summandB->index[j]] = 0.0;
+                    ++nonz;
                 }
 
-                //transfer information to returnMtx
-                for (j = 0; j < minorDim; ++j)
+                // third pass: store remaining unmatched values of summand A
+                for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
                 {
-                    if (loc[j] >= 0)
+                    if (loc[summandA->index[j]] != -1)
                     {
-                        returnMtx->index[nonz] = loc[j];
-                        ((ConstantMatrixValues*)returnMtx->value)->el[nonz] = val[j];
+                        returnMtx->index[nonz] = summandA->index[j];
+                        ((ConstantMatrixValues*)returnMtx->value)->el[nonz]
+                            = val[summandA->index[j]];
+                        loc[summandA->index[j]] = -1;
+                        val[summandA->index[j]] = 0.0;
                         ++nonz;
-                        loc[j] = -1;
-                        val[j] = 0.0;
                     }
                 }
             }
-
-            returnMtx->valueType = rType;
-            returnMtx->valueSize = nonz;
         }
 
         else
@@ -3202,7 +3210,6 @@ GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool ro
     }
     catch(const ErrorClass& eclass)
     {
-std::cout << "OSnLMNodeMatrixPlus::expandNode(): error catch" << std::endl;
         if (returnMtx != NULL)
             delete returnMtx;
         returnMtx = NULL;
@@ -3280,9 +3287,179 @@ GeneralSparseMatrix* OSnLMNodeMatrixSum::expandNode(OSMatrix** mtxLoc, bool rowM
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixSum");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixSum: expandNode method not yet implemented");
-    return NULL;
+
+    GeneralSparseMatrix* returnMtx = NULL;
+    GeneralSparseMatrix* summandA  = NULL;
+    GeneralSparseMatrix* summandB  = NULL;
+    int*    loc = NULL;
+    double* val = NULL;
+
+    try
+    {
+        if (inumberOfChildren == 0) return NULL;
+
+        int  i, j, k, l;
+        int  majorDim, minorDim;
+        int  nonz = 0;
+        ENUM_MATRIX_TYPE rType;
+        ENUM_MATRIX_TYPE convertTo;
+
+        returnMtx = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, 
+                                                             convertTo_, symmetry_);
+        if (returnMtx == NULL)
+            throw ErrorClass("OSnLMNodeMatrixSum::expandNode(): Error expanding matrix");
+
+        if (rowMajor_)
+        {
+            majorDim = returnMtx->numberOfRows;
+            minorDim = returnMtx->numberOfColumns;
+        }
+        else
+        {
+            majorDim = returnMtx->numberOfColumns;
+            minorDim = returnMtx->numberOfRows;
+        }
+
+        loc = new int[minorDim];
+        for (j=0; j < minorDim; ++j)
+            loc[j] = -1;
+
+
+        for (k=1; k<inumberOfChildren; ++k)
+        {
+            summandA = returnMtx;
+            summandB = ((OSnLMNode*)m_mChildren[1])->expandNode(mtxLoc, rowMajor_,
+                                                                convertTo_, symmetry_);
+            if (summandB == NULL) throw ErrorClass(
+                             "OSnLMNodeMatrixSum::expandNode(): Error expanding matrix");
+
+            if ( (summandA->numberOfRows    != summandB->numberOfRows) ||
+                 (summandA->numberOfColumns != summandB->numberOfColumns) )
+                throw ErrorClass("Incompatible matrix dimensions in OSnLMNodeMatrixSum::expandNode()");
+
+            returnMtx = new GeneralSparseMatrix();
+
+            returnMtx->numberOfRows    = summandA->numberOfRows;
+            returnMtx->numberOfColumns = summandB->numberOfColumns;
+            returnMtx->isRowMajor      = rowMajor_;
+            returnMtx->symmetry        = symmetry_;
+
+            rType = mergeMatrixTypeSum(summandA->valueType, summandB->valueType);
+
+            convertTo = convertTo_;
+            if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+                convertTo  = rType;
+            if (convertTo != mergeMatrixTypeSum(convertTo, rType))
+                throw ErrorClass("Requested improper conversion of element values");
+
+
+            if (rType == ENUM_MATRIX_TYPE_constant)
+            {
+                val = new double[minorDim];
+                for (i=0; i<minorDim; ++i)
+                    val[i] = 0.0;
+
+                returnMtx->startSize = majorDim + 1;
+                returnMtx->start     = new int[returnMtx->startSize];
+                returnMtx->start[0] = 0;
+    
+                // phase 0: count the number of nonzeroes and allocate space
+                for (i=0; i < majorDim; ++i)
+                {
+                    for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                        loc[summandA->index[j]] = 1;
+                    nonz += (summandA->start[i+1] - summandA->start[i]);
+
+                    for (j = summandB->start[i]; j < summandB->start[i+1]; ++j)
+                    {
+                        if (loc[summandB->index[j]] == -1)
+                            ++nonz;
+                    }
+                    returnMtx->start[i+1] = nonz;
+                    for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                        loc[summandA->index[j]] = -1;
+                }
+
+                returnMtx->valueType = rType;
+                returnMtx->valueSize = nonz;
+                returnMtx->index = new int[nonz];
+                returnMtx->value = new ConstantMatrixValues();
+                ((ConstantMatrixValues*)returnMtx->value)->el = new double[nonz];
+
+                // phase 1: register the nonzeroes of summand A
+                nonz = 0;
+
+                for (i=0; i < majorDim; ++i)
+                {
+                    // in the first pass pull out the nonzero locations of summand A
+                    for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                    {
+                        loc[summandA->index[j]] = 1;
+                        val[summandA->index[j]] +=
+                            ((ConstantMatrixValues*)summandA->value)->el[j];
+                    }
+
+                    // second pass: identify matching locations and store the sum
+                    for (j = summandB->start[i]; j < summandB->start[i+1]; ++j)
+                    {
+                        returnMtx->index[nonz] = summandB->index[j];
+                        ((ConstantMatrixValues*)returnMtx->value)->el[nonz]
+                            = val[summandB->index[j]]
+                                + ((ConstantMatrixValues*)summandB->value)->el[j];
+                        loc[summandB->index[j]] = -1;
+                        val[summandB->index[j]] = 0.0;
+                        ++nonz;
+                    }
+
+                    // third pass: store remaining unmatched values of summand A
+                    for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                    {
+                        if (loc[summandA->index[j]] != -1)
+                        {
+                            returnMtx->index[nonz] = summandA->index[j];
+                            ((ConstantMatrixValues*)returnMtx->value)->el[nonz]
+                                = val[summandA->index[j]];
+                            loc[summandA->index[j]] = -1;
+                            val[summandA->index[j]] = 0.0;
+                            ++nonz;
+                        }
+                    }
+                }
+            }
+
+            else
+                throw ErrorClass("Unsupported element type for OSnLMNodeMatrixSum");
+        }
+
+#ifndef NDEBUG
+	if (nonz != returnMtx->valueSize)
+		throw ErrorClass("OSnLMNodeMatrixSum::expandNode(): Number of nonzeroes is inconsistent");
+#endif
+
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (val != NULL)
+            delete [] val;
+        val = NULL;
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        if (returnMtx != NULL)
+            delete returnMtx;
+        returnMtx = NULL;
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (val != NULL)
+            delete [] val;
+        val = NULL;
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end OSnLMNodeMatrixSum::expandNode()
+
+
 
 ExprNode* OSnLMNodeMatrixSum::cloneExprNode()
 {
@@ -3413,8 +3590,167 @@ GeneralSparseMatrix* OSnLMNodeMatrixMinus::expandNode(OSMatrix** mtxLoc, bool ro
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixMinus");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixMinus: expandNode method not yet implemented");
-    return NULL;
+
+    GeneralSparseMatrix* returnMtx = NULL;
+    GeneralSparseMatrix* summandA  = NULL;
+    GeneralSparseMatrix* summandB  = NULL;
+    int*    loc = NULL;
+    double* val = NULL;
+    try
+    {
+        int  i, j, k, l;
+        int  majorDim, minorDim;
+        int  nonz = 0;
+
+        summandA = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, 
+                                                            convertTo_, symmetry_);
+        if (summandA == NULL)
+            throw ErrorClass("OSnLMNodeMatrixMinus::expandNode(): Error expanding summand A");
+
+        summandB = ((OSnLMNode*)m_mChildren[1])->expandNode(mtxLoc, rowMajor_,
+                                                            convertTo_, symmetry_);
+        if (summandB == NULL)
+            throw ErrorClass("OSnLMNodeMatrixMinus::expandNode(): Error expanding summand B");
+
+        if ( (summandA->numberOfRows    != summandB->numberOfRows) ||
+             (summandA->numberOfColumns != summandB->numberOfColumns) )
+            throw ErrorClass("Incompatible matrix dimensions in OSnLMNodeMatrixMinus::expandNode()");
+
+        returnMtx = new GeneralSparseMatrix();
+
+        returnMtx->numberOfRows    = summandA->numberOfRows;
+        returnMtx->numberOfColumns = summandB->numberOfColumns;
+        returnMtx->isRowMajor      = rowMajor_;
+        returnMtx->symmetry        = symmetry_;
+
+        ENUM_MATRIX_TYPE rType = mergeMatrixTypeSum(summandA->valueType, 
+                                                    summandB->valueType);
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = rType;
+        if (convertTo != mergeMatrixTypeSum(convertTo, rType))
+            throw ErrorClass("Requested improper conversion of element values");
+        
+        if (rowMajor_)
+        {
+            majorDim = returnMtx->numberOfRows;
+            minorDim = returnMtx->numberOfColumns;
+        }
+        else
+        {
+            majorDim = returnMtx->numberOfColumns;
+            minorDim = returnMtx->numberOfRows;
+        }
+
+        loc = new int[minorDim];
+        for (j=0; j < minorDim; ++j)
+            loc[j] = -1;
+
+        if (rType == ENUM_MATRIX_TYPE_constant)
+        {
+            returnMtx->startSize = majorDim + 1;
+            returnMtx->start     = new int[returnMtx->startSize];
+            returnMtx->start[0] = 0;
+    
+            val = new double[minorDim];
+
+            for (j=0; j < minorDim; ++j)
+                val[j] = 0.0;
+
+            // phase 0: count the number of nonzeroes and allocate space
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                    loc[summandA->index[j]] = 1;
+                nonz += (summandA->start[i+1] - summandA->start[i]);
+
+                for (j = summandB->start[i]; j < summandB->start[i+1]; ++j)
+                {
+                    if (loc[summandB->index[j]] == -1)
+                        ++nonz;
+                }
+                returnMtx->start[i+1] = nonz;
+
+                for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                    loc[summandA->index[j]] = -1;
+            }
+
+            returnMtx->valueType = rType;
+            returnMtx->valueSize = nonz;
+            returnMtx->index = new int[nonz];
+            returnMtx->value = new ConstantMatrixValues();
+            ((ConstantMatrixValues*)returnMtx->value)->el = new double[nonz];
+
+            // phase 1: register the nonzeroes of summand A
+            nonz = 0;
+
+            for (i=0; i < majorDim; ++i)
+            {
+                // in the first pass pull out the nonzero locations of summand A
+                for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                {
+                    loc[summandA->index[j]] = 1;
+                    val[summandA->index[j]] +=
+                        ((ConstantMatrixValues*)summandA->value)->el[j];
+                }
+
+                // second pass: identify matching locations and store the difference
+                for (j = summandB->start[i]; j < summandB->start[i+1]; ++j)
+                {
+                    returnMtx->index[nonz] = summandB->index[j];
+                    ((ConstantMatrixValues*)returnMtx->value)->el[nonz]
+                        = val[summandB->index[j]]
+                            - ((ConstantMatrixValues*)summandB->value)->el[j];
+                    loc[summandB->index[j]] = -1;
+                    val[summandB->index[j]] = 0.0;
+                    ++nonz;
+                }
+
+                // third pass: store remaining unmatched values of summand A
+                for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
+                {
+                    if (loc[summandA->index[j]] != -1)
+                    {
+                        returnMtx->index[nonz] = summandA->index[j];
+                        ((ConstantMatrixValues*)returnMtx->value)->el[nonz]
+                            = val[summandA->index[j]];
+                        loc[summandA->index[j]] = -1;
+                        val[summandA->index[j]] = 0.0;
+                        ++nonz;
+                    }
+                }
+            }
+        }
+
+        else
+            throw ErrorClass("Unsupported element type for OSnLMNodeMatrixMinus");
+
+#ifndef NDEBUG
+	if (nonz != returnMtx->valueSize)
+		throw ErrorClass("OSnLMNodeMatrixMinus::expandNode(): Number of nonzeroes is inconsistent");
+#endif
+
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (val != NULL)
+            delete [] val;
+        val = NULL;
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        if (returnMtx != NULL)
+            delete returnMtx;
+        returnMtx = NULL;
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (val != NULL)
+            delete [] val;
+        val = NULL;
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end OSnLMNodeMatrixMinus::expandNode()
 
 ExprNode* OSnLMNodeMatrixMinus::cloneExprNode()
@@ -3679,6 +4015,13 @@ GeneralSparseMatrix* OSnLMNodeMatrixTimes::expandNode(OSMatrix** mtxLoc, bool ro
                     break;
                 }
 
+//                case ENUM_MATRIX_TYPE_empty;
+//                case ENUM_MATRIX_TYPE_complexConstant;
+//                case ENUM_MATRIX_TYPE_linear;
+//                case ENUM_MATRIX_TYPE_quadratic;
+//                case ENUM_MATRIX_TYPE_realValuedExpressions;
+//                case ENUM_MATRIX_TYPE_complexValuedExpressions;
+
                 default:
                 {
                     throw ErrorClass("Attempting to compute matrix product with unimplemented types");
@@ -3798,9 +4141,9 @@ GeneralSparseMatrix* OSnLMNodeMatrixTimes::expandNode(OSMatrix** mtxLoc, bool ro
 
         return returnMtx;
     }
+
     catch(const ErrorClass& eclass)
     {
-std::cout << "OSnLMNodeMatrixTimes::expandNode(): error catch" << std::endl;
         if (returnMtx != NULL)
             delete returnMtx;
         returnMtx = NULL;
@@ -4228,8 +4571,167 @@ GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxLoc,
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixLowerTriangle");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixLowerTriangle: expandNode method not yet implemented");
-    return NULL;
+
+    GeneralSparseMatrix* returnMtx = NULL;
+    GeneralSparseMatrix* baseMtx   = NULL;
+
+    try
+    {
+        int  i, j, k, l;
+        int  majorDim, minorDim;
+        int  nonz = 0;
+        int  min;
+
+        baseMtx = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, 
+                                                           convertTo_, symmetry_);
+        if (baseMtx == NULL)
+            throw ErrorClass("OSnLMNodeMatrixLowerTriangle::expandNode(): Error expanding base matrix");
+        if (baseMtx->numberOfRows != baseMtx->numberOfColumns)
+            throw ErrorClass("OSnLMNodeMatrixLowerTriangle::expandNode(): base matrix is not square");
+
+        returnMtx = new GeneralSparseMatrix();
+
+        returnMtx->numberOfRows    = baseMtx->numberOfRows;
+        returnMtx->numberOfColumns = baseMtx->numberOfColumns;
+        returnMtx->isRowMajor      = rowMajor_;
+
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = baseMtx->valueType;
+
+        switch (baseMtx->symmetry)
+        {
+            // intentional fall-through
+            case ENUM_MATRIX_SYMMETRY_lower: 
+            case ENUM_MATRIX_SYMMETRY_skewLower:
+            case ENUM_MATRIX_SYMMETRY_HermitianLower:
+            case ENUM_MATRIX_SYMMETRY_skewHermitianLower:
+            {
+                returnMtx->symmetry = baseMtx->symmetry;
+                break;
+            }
+
+            //intentional fall-through
+            case ENUM_MATRIX_SYMMETRY_upper: 
+            case ENUM_MATRIX_SYMMETRY_skewUpper:
+            case ENUM_MATRIX_SYMMETRY_HermitianUpper:
+            case ENUM_MATRIX_SYMMETRY_skewHermitianUpper:
+            {
+                // matrix will be diagonal, but should the symmetry be upper or lower?
+                returnMtx->symmetry = baseMtx->symmetry;
+                break;
+            }
+
+            default:
+                returnMtx->symmetry = ENUM_MATRIX_SYMMETRY_none;
+        }//end switch
+
+        if (includeDiagonal)
+            min = 0;
+        else
+            min = 1;
+        
+        if (rowMajor_)
+        {
+            majorDim = returnMtx->numberOfRows;
+            minorDim = returnMtx->numberOfColumns;
+        }
+        else
+        {
+            majorDim = returnMtx->numberOfColumns;
+            minorDim = returnMtx->numberOfRows;
+        }
+
+        returnMtx->startSize = majorDim + 1;
+        returnMtx->start     = new int[returnMtx->startSize];
+
+        for ( i = 0; i < returnMtx->startSize; ++i)
+        {
+            returnMtx->start[ i ] = 0;
+        }
+
+        // phase 1: count the number of nonzeroes and allocate space
+        if (rowMajor_)
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] <= i - min)
+                        nonz ++;
+                }
+                returnMtx->start[i+1] = nonz;
+            }
+        }
+        else
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] >= i + min)
+                        nonz ++;
+                }
+                returnMtx->start[i+1] = nonz;
+            }
+        }
+
+        returnMtx->valueType = convertTo;
+        returnMtx->valueSize = nonz;
+        returnMtx->index = new int[nonz];
+        if (!returnMtx->allocateValueArray(nonz))
+            throw ErrorClass("OSnLMNodeMatrixLowerTriangle::expandNode(): Unable to allocate memory");
+
+        // phase 2: store the values, using returnMtx->start[i] as the insertion pointer
+        if (rowMajor_)
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] <= i - min)
+                    {
+                        returnMtx->index[returnMtx->start[i]] = baseMtx->index[j];
+                        if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
+                            throw ErrorClass("Error copying a value in OSnLMNodeMatrixLowerTriangle::expandNode()");
+                        returnMtx->start[i] ++;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] >= i + min)
+                    {
+                        returnMtx->index[returnMtx->start[i]] = baseMtx->index[j];
+                        if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
+                            throw ErrorClass("Error copying a value in OSnLMNodeMatrixLowerTriangle::expandNode()");
+                        returnMtx->start[i] ++;
+                    }
+                }
+            }
+        }
+
+        // phase 3: readjust the start array
+        for (i = returnMtx->startSize - 1; i >= 1; i--)
+        {
+            returnMtx->start[i] = returnMtx->start[i-1];
+        }
+        returnMtx->start[0] = 0;
+
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        if (returnMtx != NULL)
+            delete returnMtx;
+        returnMtx = NULL;
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end OSnLMNodeMatrixLowerTriangle::expandNode()
 
 ExprNode* OSnLMNodeMatrixLowerTriangle::cloneExprNode()
@@ -4369,8 +4871,167 @@ GeneralSparseMatrix* OSnLMNodeMatrixUpperTriangle::expandNode(OSMatrix** mtxLoc,
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixUpperTriangle");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixUpperTriangle: expandNode method not yet implemented");
-    return NULL;
+
+    GeneralSparseMatrix* returnMtx = NULL;
+    GeneralSparseMatrix* baseMtx   = NULL;
+
+    try
+    {
+        int  i, j, k, l;
+        int  majorDim, minorDim;
+        int  nonz = 0;
+        int  min;
+
+        baseMtx = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, 
+                                                           convertTo_, symmetry_);
+        if (baseMtx == NULL)
+            throw ErrorClass("OSnLMNodeMatrixUpperTriangle::expandNode(): Error expanding base matrix");
+        if (baseMtx->numberOfRows != baseMtx->numberOfColumns)
+            throw ErrorClass("OSnLMNodeMatrixUpperTriangle::expandNode(): base matrix is not square");
+
+        returnMtx = new GeneralSparseMatrix();
+
+        returnMtx->numberOfRows    = baseMtx->numberOfRows;
+        returnMtx->numberOfColumns = baseMtx->numberOfColumns;
+        returnMtx->isRowMajor      = rowMajor_;
+
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = baseMtx->valueType;
+
+        switch (baseMtx->symmetry)
+        {
+            // intentional fall-through
+            case ENUM_MATRIX_SYMMETRY_lower: 
+            case ENUM_MATRIX_SYMMETRY_skewLower:
+            case ENUM_MATRIX_SYMMETRY_HermitianLower:
+            case ENUM_MATRIX_SYMMETRY_skewHermitianLower:
+            {
+                returnMtx->symmetry = baseMtx->symmetry;
+                break;
+            }
+
+            //intentional fall-through
+            case ENUM_MATRIX_SYMMETRY_upper: 
+            case ENUM_MATRIX_SYMMETRY_skewUpper:
+            case ENUM_MATRIX_SYMMETRY_HermitianUpper:
+            case ENUM_MATRIX_SYMMETRY_skewHermitianUpper:
+            {
+                // matrix will be diagonal, but should the symmetry be upper or lower?
+                returnMtx->symmetry = baseMtx->symmetry;
+                break;
+            }
+
+            default:
+                returnMtx->symmetry = ENUM_MATRIX_SYMMETRY_none;
+        }//end switch
+
+        if (includeDiagonal)
+            min = 0;
+        else
+            min = 1;
+        
+        if (rowMajor_)
+        {
+            majorDim = returnMtx->numberOfRows;
+            minorDim = returnMtx->numberOfColumns;
+        }
+        else
+        {
+            majorDim = returnMtx->numberOfColumns;
+            minorDim = returnMtx->numberOfRows;
+        }
+
+        returnMtx->startSize = majorDim + 1;
+        returnMtx->start     = new int[returnMtx->startSize];
+
+        for ( i = 0; i < returnMtx->startSize; ++i)
+        {
+            returnMtx->start[ i ] = 0;
+        }
+
+        // phase 1: count the number of nonzeroes and allocate space
+        if (!rowMajor_)
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] <= i - min)
+                        nonz ++;
+                }
+                returnMtx->start[i+1] = nonz;
+            }
+        }
+        else
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] >= i + min)
+                        nonz ++;
+                }
+                returnMtx->start[i+1] = nonz;
+            }
+        }
+
+        returnMtx->valueType = convertTo;
+        returnMtx->valueSize = nonz;
+        returnMtx->index = new int[nonz];
+        if (!returnMtx->allocateValueArray(nonz))
+            throw ErrorClass("OSnLMNodeMatrixUpperTriangle::expandNode(): Unable to allocate memory");
+
+        // phase 2: store the values, using returnMtx->start[i] as the insertion pointer
+        if (!rowMajor_)
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] <= i - min)
+                    {
+                        returnMtx->index[returnMtx->start[i]] = baseMtx->index[j];
+                        if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
+                            throw ErrorClass("Error copying a value in OSnLMNodeMatrixUpperTriangle::expandNode()");
+                        returnMtx->start[i] ++;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] >= i + min)
+                    {
+                        returnMtx->index[returnMtx->start[i]] = baseMtx->index[j];
+                        if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
+                            throw ErrorClass("Error copying a value in OSnLMNodeMatrixUpperTriangle::expandNode()");
+                        returnMtx->start[i] ++;
+                    }
+                }
+            }
+        }
+
+        // phase 3: readjust the start array
+        for (i = returnMtx->startSize - 1; i >= 1; i--)
+        {
+            returnMtx->start[i] = returnMtx->start[i-1];
+        }
+        returnMtx->start[0] = 0;
+
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        if (returnMtx != NULL)
+            delete returnMtx;
+        returnMtx = NULL;
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end OSnLMNodeMatrixUpperTriangle::expandNode()
 
 ExprNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
@@ -4479,8 +5140,107 @@ GeneralSparseMatrix* OSnLMNodeMatrixDiagonal::expandNode(OSMatrix** mtxLoc, bool
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixDiagonal");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixDiagonal: expandNode method not yet implemented");
-    return NULL;
+
+    GeneralSparseMatrix* returnMtx = NULL;
+    GeneralSparseMatrix* baseMtx   = NULL;
+
+    try
+    {
+        int  i, j, k, l;
+        int  majorDim, minorDim;
+        int  nonz = 0;
+
+        baseMtx = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, 
+                                                           convertTo_, symmetry_);
+        if (baseMtx == NULL)
+            throw ErrorClass("OSnLMNodeMatrixDiagonal::expandNode(): Error expanding base matrix");
+        if (baseMtx->numberOfRows != baseMtx->numberOfColumns)
+            throw ErrorClass("OSnLMNodeMatrixDiagonal::expandNode(): base matrix is not square");
+
+        returnMtx = new GeneralSparseMatrix();
+
+        returnMtx->numberOfRows    = baseMtx->numberOfRows;
+        returnMtx->numberOfColumns = baseMtx->numberOfColumns;
+        returnMtx->isRowMajor      = rowMajor_;
+
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = baseMtx->valueType;
+
+        if ( (baseMtx->symmetry == ENUM_MATRIX_SYMMETRY_lower) || 
+             (baseMtx->symmetry == ENUM_MATRIX_SYMMETRY_upper) ||
+             (baseMtx->symmetry == ENUM_MATRIX_SYMMETRY_skewLower) ||
+             (baseMtx->symmetry == ENUM_MATRIX_SYMMETRY_skewUpper) ||
+             (baseMtx->symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower) ||
+             (baseMtx->symmetry == ENUM_MATRIX_SYMMETRY_HermitianUpper) ||
+             (baseMtx->symmetry == ENUM_MATRIX_SYMMETRY_skewHermitianLower) ||
+             (baseMtx->symmetry == ENUM_MATRIX_SYMMETRY_skewHermitianUpper) )
+            returnMtx->symmetry = baseMtx->symmetry;
+        else
+            returnMtx->symmetry = ENUM_MATRIX_SYMMETRY_none;
+
+        majorDim = returnMtx->numberOfRows;
+        minorDim = returnMtx->numberOfColumns;
+
+        returnMtx->startSize = majorDim + 1;
+        returnMtx->start     = new int[returnMtx->startSize];
+
+        for ( i = 0; i < returnMtx->startSize; ++i)
+        {
+            returnMtx->start[ i ] = 0;
+        }
+    
+        // phase 1: count the number of nonzeroes and allocate space
+        for (i=0; i < majorDim; ++i)
+        {
+            for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+            {
+                if (baseMtx->index[j] == i)
+                    nonz ++;
+            }
+            returnMtx->start[i+1] = nonz;
+        }
+
+        returnMtx->valueType = convertTo;
+        returnMtx->valueSize = nonz;
+        returnMtx->index = new int[nonz];
+        if (!returnMtx->allocateValueArray(nonz))
+            throw ErrorClass("OSnLMNodeMatrixDiagonal::expandNode(): Unable to allocate memory");
+
+        // phase 2: store the values, using returnMtx->start[i] as the insertion pointer
+        for (i=0; i < majorDim; ++i)
+        {
+            for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+            {
+                if (baseMtx->index[j] == i)
+                {
+                    returnMtx->index[returnMtx->start[i]] = baseMtx->index[j];
+                    if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
+                        throw ErrorClass("Error copying a value in OSnLMNodeMatrixDiagonal::expandNode()");
+                    returnMtx->start[i] ++;
+                }
+            }
+        }
+
+        // phase 3: readjust the start array
+        for (i = returnMtx->startSize - 1; i >= 1; i--)
+        {
+            returnMtx->start[i] = returnMtx->start[i-1];
+        }
+        returnMtx->start[0] = 0;
+
+#ifndef NDEBUG
+        returnMtx->printMatrix();
+#endif
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        if (returnMtx != NULL)
+            delete returnMtx;
+        returnMtx = NULL;
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end OSnLMNodeMatrixDiagonal::expandNode()
 
 ExprNode* OSnLMNodeMatrixDiagonal::cloneExprNode()
@@ -4617,7 +5377,260 @@ GeneralSparseMatrix* OSnLMNodeMatrixSubmatrixAt::expandNode(OSMatrix** mtxLoc, b
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixSubmatrixAt");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixSubmatrixAt: expandNode method not yet implemented");
+    GeneralSparseMatrix* returnMtx = NULL;
+    GeneralSparseMatrix* baseMtx   = NULL;
+#if 0
+    try
+    {
+        int  i, j, k, l;
+        int  majorDim, minorDim;
+        int  nonz = 0;
+        int  min;
+
+        baseMtx = ((OSnLMNode*)m_mChildren[4])->expandNode(mtxLoc, rowMajor_, 
+                                                           convertTo_, symmetry_);
+        if (baseMtx == NULL)
+            throw ErrorClass("OSnLMNodeMatrixSubmatrixAt::expandNode(): Error expanding base matrix");
+
+        ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
+
+        if (symmetry == ENUM_MATRIX_SYMMETRY_unknown)
+            symmetry  = this->symmetry;
+        if (symmetry != this->symmetry)
+        {
+            if (this->symmetry == ENUM_MATRIX_SYMMETRY_unknown)
+                this->symmetry  = symmetry;
+            else
+                throw ErrorClass("Symmetry changes not yet implemented in processBaseMatrix()");
+        }
+
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        ENUM_MATRIX_TYPE inferredType = m_mChildren[0]->getMatrixType();
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = inferredType;
+        if (convertTo != mergeMatrixType(convertTo, inferredType))
+            throw ErrorClass("Requested improper conversion of element values");
+
+        // record the cropping points depending on the orientation of the base matrix
+        int base_r0, base_c0, base_rN, base_cN;
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+process base matrix:
+
+        if (baseMtx->isRowMajor)
+        {
+            base_r0 = ((OSnLMNode*)m_mChildren[1])->calculateFunction(x); //first column
+            base_c0 = ((OSnLMNode*)m_mChildren[0])->calculateFunction(x); //first row
+            base_rN = ((OSnLMNode*)m_mChildren[3])->calculateFunction(x); //last column
+            base_cN = ((OSnLMNode*)m_mChildren[2])->calculateFunction(x); //last row
+            if (base_c0 < 0 || base_c0 >= baseMtx->numberOfRows)
+                throw ErrorClass("trying to extract submatrix beyond matrix boundaries");
+            if (base_cN < 0 || base_cN >= baseMtx->numberOfRows)
+                throw ErrorClass("trying to extract submatrix beyond matrix boundaries");
+            if (base_r0 < 0 || base_r0 >= baseMtx->numberOfColumns)
+                throw ErrorClass("trying to extract submatrix beyond matrix boundaries");
+            if (base_rN < 0 || base_rN >= baseMtx->numberOfColumns)
+                throw ErrorClass("trying to extract submatrix beyond matrix boundaries");
+            if (base_r0 > base_rN || base_c0 > base_cN)
+                throw ErrorClass("trying to extract submatrix of negative dimensions");
+            tempMtx->numberOfRows    = base_cN - base_c0 + 1;
+            tempMtx->numberOfColumns = base_rN - base_r0 + 1;
+        }
+        else
+        {
+((OSnLMNode*)m_mChildren[0])->
+            base_r0 = ((OSnLMNode*)m_mChildren[0])->calculateFunction(x); //first row
+            base_c0 = ((OSnLMNode*)m_mChildren[1])->calculateFunction(x); //first column
+            base_rN = ((OSnLMNode*)m_mChildren[2])->calculateFunction(x); //last row
+            base_cN = ((OSnLMNode*)m_mChildren[3])->calculateFunction(x); //last column
+            if (base_r0 < 0 || base_r0 >= baseMtx->numberOfRows)
+                throw ErrorClass("trying to extract submatrix beyond matrix boundaries");
+            if (base_rN < 0 || base_rN >= baseMtx->numberOfRows)
+                throw ErrorClass("trying to extract submatrix beyond matrix boundaries");
+            if (base_c0 < 0 || base_c0 >= baseMtx->numberOfColumns)
+                throw ErrorClass("trying to extract submatrix beyond matrix boundaries");
+            if (base_cN < 0 || base_cN >= baseMtx->numberOfColumns)
+                throw ErrorClass("trying to extract submatrix beyond matrix boundaries");
+            if (base_r0 > base_rN || base_c0 > base_cN)
+                throw ErrorClass("trying to extract submatrix of negative dimensions");
+            tempMtx->numberOfRows    = base_rN - base_r0 + 1;
+            tempMtx->numberOfColumns = base_cN - base_c0 + 1;
+        }
+
+        GeneralSparseMatrix* tempMtx = new GeneralSparseMatrix();
+        tempMtx->symmetry        = symmetry;
+        tempMtx->isRowMajor      = rowMajor_;
+        tempMtx->valueType       = convertTo;
+
+        int majorDim, minorDim;
+        if (rowMajor_)
+        {
+            majorDim             = numberOfRows;
+            minorDim             = numberOfColumns;
+            tempMtx->startSize   = numberOfRows + 1;
+        }
+        else
+        {
+            majorDim             = numberOfColumns;
+            minorDim             = numberOfRows;
+            tempMtx->startSize   = numberOfColumns + 1;
+        }
+
+        tempMtx->b_deleteStartArray = true;
+        tempMtx->b_deleteIndexArray = true;
+        tempMtx->b_deleteValueArray = true;
+        tempMtx->valueType  = baseMtx->valueType;
+
+        int  startSize = majorDim + 1; 
+        int* tmpStarts = new int[startSize];
+        for (int i=0; i < startSize; i++)
+            tmpStarts[i] = 0;
+
+        int adjc = icoff - base_c0;
+        int lastcol = icoff + base_cN - base_c0 + 1;
+        if (lastcol > majorDim)
+            lastcol = majorDim;
+
+        // count elements in each column and calculate starts
+        for (int i=icoff; i<lastcol; i++)
+            for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
+            {
+                if (baseMtx->index[j] >= base_r0 &&
+                        baseMtx->index[j] <= base_rN &&
+                        baseMtx->index[j] <  minorDim + base_r0 - iroff)
+                        tmpStarts[i+1]++; 
+                }
+            for (int i=icoff+1; i < startSize; i++) 
+                tmpStarts[i] += tmpStarts[i-1];
+
+            int valueSize      = tmpStarts[startSize-1];
+            tempMtx->valueSize = valueSize;
+            tempMtx->start     = tmpStarts;
+            tempMtx->index     = new int[valueSize];
+
+            // to get the values, go through the base matrix a second time
+            // allocate space and store value array
+            if (!tempMtx->allocateValueArray(valueSize))
+                throw ErrorClass("Error allocating value array of a GeneralSparseMatrix");
+
+            int ival = 0;
+            for (int i=icoff; i<lastcol; i++)
+                for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
+                {
+                    if (baseMtx->index[j] >= base_r0 &&
+                        baseMtx->index[j] <= base_rN &&
+                        baseMtx->index[j] <  minorDim + base_r0 - iroff)
+                    {
+                        tempMtx->index[ival] = baseMtx->index[j] - base_r0 + iroff; 
+                        if (!tempMtx->copyValue(baseMtx->value, baseMtx->valueType,
+                                                j, ival, scaleMult, scaleImag))
+                            throw ErrorClass("Base matrix expansion failed while copying element values");
+                        ival++;
+                    }    
+                }
+        }
+        tempMtx->printMatrix();
+        return tempMtx; 
++++++++++++++++++++++++++++++++++++++++++++++
+
+
+        returnMtx = new GeneralSparseMatrix();
+
+        returnMtx->numberOfRows    = baseMtx->numberOfRows;
+        returnMtx->numberOfColumns = baseMtx->numberOfColumns;
+        returnMtx->isRowMajor      = rowMajor_;
+
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = baseMtx->valueType;
+        
+        majorDim = returnMtx->numberOfRows;
+        minorDim = returnMtx->numberOfColumns;
+
+        returnMtx->startSize = majorDim + 1;
+        returnMtx->start     = new int[returnMtx->startSize];
+        returnMtx->start[0]  = 0;
+    
+        // phase 1: count the number of nonzeroes and allocate space
+        if (rowMajor_)
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] <= i - min)
+                        nonz ++;
+                }
+                returnMtx->start[i+1] = nonz;
+            }
+        }
+        else
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] >= i + min)
+                        nonz ++;
+                }
+                returnMtx->start[i+1] = nonz;
+            }
+        }
+
+        for (i=0; i < majorDim; ++i)
+            returnMtx->start[i+1] += returnMtx->start[i];
+
+        returnMtx->valueType = convertTo;
+        returnMtx->valueSize = nonz;
+        returnMtx->index = new int[nonz];
+        if (!returnMtx->allocateValueArray(nonz))
+            throw ErrorClass("OSnLMNodeMatrixLowerTriangle::expandNode(): Unable to allocate memory");
+
+        // phase 2: store the values, using returnMtx->start[i] as the insertion pointer
+        if (rowMajor_)
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] <= i - min)
+                    {
+                        if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
+                            throw ErrorClass("Error copying a value in OSnLMNodeMatrixLowerTriangle::expandNode()");
+                        returnMtx->start[i] ++;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (i=0; i < majorDim; ++i)
+            {
+                for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
+                {
+                    if (baseMtx->index[j] >= i + min)
+                    {
+                        if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
+                            throw ErrorClass("Error copying a value in OSnLMNodeMatrixLowerTriangle::expandNode()");
+                        returnMtx->start[i] ++;
+                    }
+                }
+            }
+        }
+
+        for (i=1; i < majorDim; ++i)
+            returnMtx->start[i-1] += returnMtx->start[i];
+
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        if (returnMtx != NULL)
+            delete returnMtx;
+        returnMtx = NULL;
+        throw ErrorClass( eclass.errormsg);
+    }
+==================================
+#endif
     return NULL;
 }//end OSnLMNodeMatrixSubmatrixAt::expandNode()
 

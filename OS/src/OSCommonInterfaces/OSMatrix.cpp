@@ -98,10 +98,13 @@ ENUM_MATRIX_TYPE MatrixNode::getInferredMatrixType()
 {
     if (inferredMatrixType == ENUM_MATRIX_TYPE_unknown)
     {
+        ENUM_MATRIX_TYPE temp;
         for (unsigned int i=0; i<inumberOfChildren; i++)
         {
-            inferredMatrixType = mergeMatrixType(inferredMatrixType,
-                                             m_mChildren[i]->getInferredMatrixType());
+            temp = m_mChildren[i]->getInferredMatrixType();
+            if (temp == ENUM_MATRIX_TYPE_unknown)
+                return temp;
+            inferredMatrixType = mergeMatrixType(inferredMatrixType, temp);
         }
     }
     return inferredMatrixType;
@@ -204,7 +207,7 @@ MatrixConstructor::~MatrixConstructor()
 // methods for MatrixType
 MatrixType::MatrixType():
     MatrixNode(),
-//    symmetry(ENUM_MATRIX_SYMMETRY_none),
+    symmetry(ENUM_MATRIX_SYMMETRY_unknown),
     numberOfRows(0),
     numberOfColumns(0),
     m_bHaveRowPartition(false),
@@ -351,7 +354,7 @@ int  MatrixType::getNumberOfBlocksConstructors()
 }// end of getNumberOfBlocksConstructors
 
 
-GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowMajor_,
                                                     ENUM_MATRIX_TYPE convertTo_, 
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -360,6 +363,11 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
 #endif
     try
     {
+        if (m_mChildren == NULL)
+            throw ErrorClass("processBaseMatrix(): constructor list is empty");
+        if (m_mChildren[0]->nType != ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+            throw ErrorClass("processBaseMatrix(): no base matrix defined");
+
         ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
 
         if (symmetry == ENUM_MATRIX_SYMMETRY_unknown)
@@ -376,20 +384,61 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
         OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
         m_mChildren[0]->inferredMatrixType = baseMtxPtr->getMatrixType();
 
-        int iroff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
-        int icoff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+        double scaleMult = ((BaseMatrix*)m_mChildren[0])->scalarMultiplier;
+        double scaleImag = ((BaseMatrix*)m_mChildren[0])->scalarImaginaryPart;
 
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        ENUM_MATRIX_TYPE inferredType = m_mChildren[0]->getMatrixType();
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = inferredType;
+        if (convertTo != mergeMatrixType(convertTo, inferredType))
+            throw ErrorClass("Requested improper conversion of element values");
+
+        if (scaleImag < 0 || scaleImag > 0)
+            convertTo = mergeMatrixType(convertTo, ENUM_MATRIX_TYPE_complexConstant);
+        else if (scaleMult < 1 || scaleMult > 1)
+            convertTo = mergeMatrixType(convertTo, ENUM_MATRIX_TYPE_constant);
+
+        // expand base matrix into row or column major format, depending on how it is used 
+        // if base matrix is transposed, expand in the _opposite_ order from target matrix,
+        // else expand in the same order so that indices of target and base run in parallel
+        GeneralSparseMatrix* baseMtx;
+        int i;
+
+        if (((BaseMatrix*)m_mChildren[0])->baseTranspose)
+            i = baseMtxPtr->getExpandedMatrix(mtxIdx, !rowMajor_, convertTo, symmetry);
+        else
+            i = baseMtxPtr->getExpandedMatrix(mtxIdx,  rowMajor_, convertTo, symmetry);
+        if (i < 0) 
+             throw ErrorClass("Base matrix could not be expanded");
+
+        baseMtx = baseMtxPtr->expandedMatrixByElements[i];
+
+        // record the insertion point of the base matrix (depends on the orientation of the target)
+        int iroff, icoff;
+
+        if (rowMajor_)
+        {
+            iroff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+            icoff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
+            if ((iroff < 0) || (iroff >= numberOfColumns) ||
+                (icoff < 0) || (icoff >= numberOfRows) )
+                throw ErrorClass("Attempt to position base matrix outside the target");
+        }
+        else
+        {
+            iroff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
+            icoff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+            if ((iroff < 0) || (iroff >= numberOfRows) ||
+                (icoff < 0) || (icoff >= numberOfColumns) )
+                throw ErrorClass("Attempt to position base matrix outside the target");
+        }
+
+        // record the cropping points depending on the orientation of the base matrix
         int base_r0, base_c0, base_rN, base_cN;
 
-        GeneralSparseMatrix* baseMtx;
-
-        // expand into row or column major format, depending on how the base matrix is used 
-        if (((BaseMatrix*)m_mChildren[0])->baseTranspose != rowMajor_)
+        if (baseMtx->isRowMajor)
         {
-            int i = baseMtxPtr->getExpandedMatrix(mtxIdx, true, convertTo_, symmetry);
-            if (i < 0) 
-                throw ErrorClass("Base matrix could not be expanded");
-            baseMtx = baseMtxPtr->expandedMatrixByElements[i];
             base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
             base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
             base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
@@ -401,10 +450,6 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
         }
         else
         {
-            int i = baseMtxPtr->getExpandedMatrix(mtxIdx, false, convertTo_, symmetry);
-            if (i < 0) 
-                throw ErrorClass("Base matrix could not be expanded");
-            baseMtx = baseMtxPtr->expandedMatrixByElements[i];
             base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
             base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
             base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
@@ -415,15 +460,26 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
                 base_cN = baseMtxPtr->numberOfColumns - 1;
         }
 
-        double scaleMult = ((BaseMatrix*)m_mChildren[0])->scalarMultiplier;
-        double scaleImag = ((BaseMatrix*)m_mChildren[0])->scalarImaginaryPart;
-
         GeneralSparseMatrix* tempMtx = new GeneralSparseMatrix();
         tempMtx->symmetry        = symmetry;
-        tempMtx->startSize       = numberOfColumns + 1;
         tempMtx->numberOfRows    = numberOfRows;
         tempMtx->numberOfColumns = numberOfColumns;
         tempMtx->isRowMajor      = rowMajor_;
+        tempMtx->valueType       = mergeMatrixType(convertTo, baseMtx->valueType);
+
+        int majorDim, minorDim;
+        if (rowMajor_)
+        {
+            majorDim             = numberOfRows;
+            minorDim             = numberOfColumns;
+            tempMtx->startSize   = numberOfRows + 1;
+        }
+        else
+        {
+            majorDim             = numberOfColumns;
+            minorDim             = numberOfRows;
+            tempMtx->startSize   = numberOfColumns + 1;
+        }
 
         // position and other options can affect how arrays need to be duplicated
         bool isShifted = (iroff > 0 || icoff > 0);
@@ -442,24 +498,8 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
             tempMtx->b_deleteStartArray = true;
             tempMtx->b_deleteIndexArray = true;
             tempMtx->b_deleteValueArray = true;
-//            tempMtx->isRowMajor = rowMajor_;
-            tempMtx->valueSize  = baseMtx->valueSize;
+            tempMtx->valueSize          = baseMtx->valueSize;
 
-            ENUM_MATRIX_TYPE convertTo = convertTo_;
-            ENUM_MATRIX_TYPE inferredType = m_mChildren[0]->getMatrixType();
-            if (convertTo == ENUM_MATRIX_TYPE_unknown) 
-                convertTo  = inferredType;
-            if (convertTo != mergeMatrixType(convertTo, inferredType))
-               throw ErrorClass("Requested improper conversion of element values");
-
-            tempMtx->valueType = convertTo;
-
-            if (scaleImag < 0 || scaleImag > 0)
-                tempMtx->valueType = mergeMatrixType(tempMtx->valueType, ENUM_MATRIX_TYPE_complexConstant);
-            else if (scaleMult < 1 || scaleMult > 1)
-                tempMtx->valueType = mergeMatrixType(tempMtx->valueType, ENUM_MATRIX_TYPE_constant);
-
-            tempMtx->startSize = numberOfColumns + 1;
             tempMtx->start =
                 new int[tempMtx->startSize];
             for (int i=0; i < baseMtx->startSize; i++)
@@ -485,7 +525,7 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
 
             for (int i = 0; i < baseMtx->valueSize; i++)
             {
-                if (!tempMtx->copyValue(baseMtx, i, i, scaleMult, scaleImag))
+                if (!tempMtx->copyValue(baseMtx->value, baseMtx->valueType, i, i, scaleMult, scaleImag))
                     throw ErrorClass("Matrix expansion failed while copying element values");
             }            
         }
@@ -494,19 +534,17 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
             tempMtx->b_deleteStartArray = true;
             tempMtx->b_deleteIndexArray = true;
             tempMtx->b_deleteValueArray = true;
-//            tempMtx->isRowMajor = false;
-            tempMtx->startSize  = numberOfColumns + 1;
             tempMtx->valueType  = baseMtx->valueType;
 
-            int  startSize = numberOfColumns + 1; 
+            int  startSize = majorDim + 1; 
             int* tmpStarts = new int[startSize];
             for (int i=0; i < startSize; i++)
                 tmpStarts[i] = 0;
 
             int adjc = icoff - base_c0;
             int lastcol = icoff + base_cN - base_c0 + 1;
-            if (lastcol > numberOfColumns)
-                lastcol = numberOfColumns;
+            if (lastcol > majorDim)
+                lastcol = majorDim;
 
             // count elements in each column and calculate starts
             for (int i=icoff; i<lastcol; i++)
@@ -514,7 +552,7 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
                 {
                     if (baseMtx->index[j] >= base_r0 &&
                         baseMtx->index[j] <= base_rN &&
-                        baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
+                        baseMtx->index[j] <  minorDim + base_r0 - iroff)
                         tmpStarts[i+1]++; 
                 }
             for (int i=icoff+1; i < startSize; i++) 
@@ -536,11 +574,12 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
                 {
                     if (baseMtx->index[j] >= base_r0 &&
                         baseMtx->index[j] <= base_rN &&
-                        baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
+                        baseMtx->index[j] <  minorDim + base_r0 - iroff)
                     {
                         tempMtx->index[ival] = baseMtx->index[j] - base_r0 + iroff; 
-                        if (!tempMtx->copyValue(baseMtx, j, ival, scaleMult, scaleImag))
-                            throw ErrorClass("Matrix expansion failed while copying element values");
+                        if (!tempMtx->copyValue(baseMtx->value, baseMtx->valueType,
+                                                j, ival, scaleMult, scaleImag))
+                            throw ErrorClass("Base matrix expansion failed while copying element values");
                         ival++;
                     }    
                 }
@@ -567,8 +606,6 @@ GeneralSparseMatrix* MatrixType::expandBlocks( ExpandedMatrixBlocks* currentBloc
 
     try
     {
-        tempMtx = new GeneralSparseMatrix();
-
         ENUM_MATRIX_TYPE convertTo = convertTo_;
         ENUM_MATRIX_TYPE inferredType = getMatrixType();
         if (convertTo == ENUM_MATRIX_TYPE_unknown) 
@@ -590,11 +627,14 @@ GeneralSparseMatrix* MatrixType::expandBlocks( ExpandedMatrixBlocks* currentBloc
         tempMtx->b_deleteStartArray  = true;
         tempMtx->b_deleteIndexArray  = true;
         tempMtx->b_deleteValueArray  = true;
-        tempMtx->isRowMajor          = rowMajor_;
         tempMtx->symmetry            = symmetry;
         tempMtx->numberOfRows        = numberOfRows;
         tempMtx->numberOfColumns     = numberOfColumns;
-        tempMtx->startSize           = numberOfColumns + 1;
+        tempMtx->isRowMajor          = rowMajor_;
+        if (rowMajor_)
+            tempMtx->startSize       = numberOfRows + 1;
+        else
+            tempMtx->startSize       = numberOfColumns + 1;
         tempMtx->start               = new int[numberOfColumns + 1];
         tempMtx->valueType           = convertTo;
         for (int i=0; i <= numberOfColumns; i++)
@@ -636,7 +676,8 @@ GeneralSparseMatrix* MatrixType::expandBlocks( ExpandedMatrixBlocks* currentBloc
                          k < currentBlocks->blocks[i]->start[j-c0+1]; k++)
                 {
                     tempMtx->index[loc] = currentBlocks->blocks[i]->index[k] + row_adj;
-                    if (!tempMtx->copyValue(currentBlocks->blocks[i], k, loc))
+                    if (!tempMtx->copyValue(currentBlocks->blocks[i]->value,
+                                            currentBlocks->blocks[i]->valueType, k, loc))
                         throw ErrorClass("Matrix expansion failed while copying element values");
                     loc++;
                 }
@@ -665,14 +706,22 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
                                                ENUM_MATRIX_TYPE convertTo_, 
                                                ENUM_MATRIX_SYMMETRY symmetry_)
 {
-    GeneralSparseMatrix* tempMtx = new GeneralSparseMatrix();
-    try
-    {
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Inside expandBlocks()");
 #endif
+
+    GeneralSparseMatrix* tempMtx = new GeneralSparseMatrix();
+
+    try
+    {
+        if (m_mChildren == NULL)
+            throw ErrorClass("expandBlocks(): no <blocks> constructor found");
+        if (nConst < 0 || nConst >= inumberOfChildren)
+            throw ErrorClass("expandBlocks(): trying to access nonexistent constructor");
         if (m_mChildren[nConst]->nType != ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
             throw ErrorClass("expandBlocks(): Constructor does not have <blocks> type");
+
+        tempMtx = new GeneralSparseMatrix();
 
         // Here we have matching block partitions
         ExpandedMatrixBlocks* tmpBlocks = new ExpandedMatrixBlocks();
@@ -699,13 +748,13 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
         tmpBlocks->bDeleteArrays = false;
         tmpBlocks->valueType     = convertTo;
         tmpBlocks->isRowMajor    = rowMajor_;
-        tmpBlocks->rowOffsetSize = sizeof(((MatrixBlocks*)m_mChildren[nConst])->rowOffset)/sizeof(int);
-        tmpBlocks->colOffsetSize = sizeof(((MatrixBlocks*)m_mChildren[nConst])->colOffset)/sizeof(int);
+        tmpBlocks->rowOffsetSize = ((MatrixBlocks*)m_mChildren[nConst])->rowOffset->numberOfEl;
+        tmpBlocks->colOffsetSize = ((MatrixBlocks*)m_mChildren[nConst])->colOffset->numberOfEl;
         tmpBlocks->rowOffset     = new int[tmpBlocks->rowOffsetSize];
         tmpBlocks->colOffset     = new int[tmpBlocks->colOffsetSize];
         for (int kr=0; kr < tmpBlocks->rowOffsetSize; kr++)
             tmpBlocks->rowOffset[kr] = ((MatrixBlocks*)m_mChildren[nConst])->rowOffset->el[kr];
-        for (int kc=0; kc < tmpBlocks->rowOffsetSize; kc++)
+        for (int kc=0; kc < tmpBlocks->colOffsetSize; kc++)
             tmpBlocks->colOffset[kc] = ((MatrixBlocks*)m_mChildren[nConst])->colOffset->el[kc];
 
         // Allocate memory
@@ -737,21 +786,38 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
         tempMtx->b_deleteStartArray  = true;
         tempMtx->b_deleteIndexArray  = true;
         tempMtx->b_deleteValueArray  = true;
-        tempMtx->isRowMajor          = rowMajor_;
+//        tempMtx->isRowMajor          = rowMajor_;
         tempMtx->symmetry            = symmetry;
         tempMtx->numberOfRows        = numberOfRows;
         tempMtx->numberOfColumns     = numberOfColumns;
-        tempMtx->startSize           = numberOfColumns + 1;
-        tempMtx->start               = new int[numberOfColumns + 1];
+//        tempMtx->startSize           = numberOfColumns + 1;
+        tempMtx->isRowMajor          = rowMajor_;
+
+        int *majorDimOffset, *minorDimOffset;
+        if (rowMajor_)
+        {
+            tempMtx->startSize       = numberOfRows + 1;
+            majorDimOffset           = tmpBlocks->rowOffset;
+            minorDimOffset           = tmpBlocks->colOffset;
+        }
+        else
+        {
+            tempMtx->startSize       = numberOfColumns + 1;
+            majorDimOffset           = tmpBlocks->colOffset;
+            minorDimOffset           = tmpBlocks->rowOffset;
+        }
+        tempMtx->start               = new int[tempMtx->startSize];
         tempMtx->valueType           = convertTo;
-        for (int i=0; i <= numberOfColumns; i++)
+        for (int i=0; i < tempMtx->startSize; i++)
             tempMtx->start[i] = 0;
 
         // augment column lengths block by block
         for (int i=0; i < tmpBlockNumber; i++)
         {
-            int c0 = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]];
-            int cN = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]+1];
+//            int c0 = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]];
+//            int cN = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]+1];
+            int c0 = majorDimOffset[tmpBlocks->blockColumns[i]];
+            int cN = majorDimOffset[tmpBlocks->blockColumns[i]+1];
             for (int j = c0; j < cN; j++)
             {
                 tempMtx->start[j+1] += ( tmpBlocks->blocks[i]->start[j+1-c0] 
@@ -759,7 +825,7 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
             }
         }
 
-        for (int i=1; i <= numberOfColumns; i++)
+        for (int i=1; i < tempMtx->startSize; i++)
             tempMtx->start[i] += tempMtx->start[i-1];
         tempMtx->valueSize = tempMtx->start[numberOfColumns];
         if (tempMtx->valueSize > 0)
@@ -772,25 +838,31 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
         // go through the blocks a second time to store values
         for (int i=0; i < tmpBlockNumber; i++)
         {
-            int c0      = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]];
-            int cN      = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]+1];
-            int row_adj = tmpBlocks->rowOffset[tmpBlocks->blockRows[i]];
+//            int c0 = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]];
+//            int cN = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]+1];
+            int c0      = majorDimOffset[tmpBlocks->blockColumns[i]];
+            int cN      = majorDimOffset[tmpBlocks->blockColumns[i]+1];
+            int row_adj = minorDimOffset[tmpBlocks->blockRows[i]];
     
             for (int j = c0; j < cN; j++)
             {
-                int loc = tempMtx->start[j];
+//                int loc = tempMtx->start[j];
                 for (int k = tmpBlocks->blocks[i]->start[j-c0];
                          k < tmpBlocks->blocks[i]->start[j-c0+1]; k++)
                 {
-                    tempMtx->index[loc] = tmpBlocks->blocks[i]->index[k] + row_adj;
-                    tempMtx->copyValue(tmpBlocks->blocks[i],tmpBlocks->blocks[i]->index[k],loc);
+                    tempMtx->index[tempMtx->start[j]] = tmpBlocks->blocks[i]->index[k] + row_adj;
+                    if (!tempMtx->copyValue(tmpBlocks->blocks[i]->value,
+                                       tmpBlocks->blocks[i]->valueType,
+                                       k, tempMtx->start[j]))
+//                                       tmpBlocks->blocks[i]->index[k],tempMtx->start[j]))
+                        throw ErrorClass("Error copying a value in MatrixType::expandBlocks()");
+                    tempMtx->start[j]++;
                 }
             }
         }
     
-        for (int i=numberOfColumns; i > 0; i--)
-            tempMtx->start[i] =
-                tempMtx->start[i-1];
+        for (int i=tempMtx->startSize; i > 0; i--)
+            tempMtx->start[i] = tempMtx->start[i-1];
         tempMtx->start[0] = 0;
 
         tempMtx->printMatrix();
@@ -808,88 +880,285 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
 }// end of expandBlocks
 
 
-GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_, 
+GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_,
+                                                 ENUM_MATRIX_TYPE convertTo_,
                                                  ENUM_MATRIX_SYMMETRY symmetry_)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Inside extractElements()");
 #endif
-
-    GeneralSparseMatrix* tempMtx = new GeneralSparseMatrix();
+    GeneralSparseMatrix* tempMtx  = new GeneralSparseMatrix();
+    GeneralSparseMatrix* tempMtx2 = NULL; // needed if changing type or orientation
+    GeneralSparseMatrix* tempMtx3 = NULL; // needed only if symmetry is expanded or imposed
 
     try
     {
-        if (((MatrixElements*)m_mChildren[nConst])->rowMajor == rowMajor_)
+        if (m_mChildren == NULL)
+            throw ErrorClass("extractElements(): constructor list is empty");
+        if (nConst < 0 || nConst >= inumberOfChildren)
+            throw ErrorClass("extractElements(): trying to access nonexistent constructor");
+
+        ENUM_MATRIX_TYPE convertTo = convertTo_;
+        ENUM_MATRIX_TYPE inferredType = getMatrixType();
+        if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+            convertTo  = inferredType;
+
+        ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
+
+        if (symmetry == ENUM_MATRIX_SYMMETRY_unknown)
+            symmetry  = this->symmetry;
+
+        // temporary check for symmetry --- remove once implemented
+        if ( (symmetry != ENUM_MATRIX_SYMMETRY_unknown) && 
+             (symmetry != ((MatrixElements*)m_mChildren[nConst])->symmetry) )
+            throw ErrorClass("Cannot handle symmetry and transposition in extractElements()");
+
+        if ( ((MatrixElements*)m_mChildren[nConst])->rowMajor )
+            tempMtx->startSize   = numberOfRows + 1;
+        else
+            tempMtx->startSize   = numberOfColumns + 1;
+
+        tempMtx->symmetry        = symmetry;
+        tempMtx->numberOfRows    = numberOfRows;
+        tempMtx->numberOfColumns = numberOfColumns;
+        tempMtx->isRowMajor      = ((MatrixElements*)m_mChildren[nConst])->rowMajor;
+        tempMtx->valueSize       = ((MatrixElements*)m_mChildren[nConst])->numberOfValues;
+        tempMtx->valueType       = ((MatrixElements*)m_mChildren[nConst])->getMatrixType();
+
+        // Determine if data arrays can be used again or need to be duplicated
+        if ( ( ((MatrixElements*)m_mChildren[nConst])->rowMajor       == rowMajor_) &&
+             ( ((MatrixElements*)m_mChildren[nConst])->symmetry       == symmetry ) &&
+                                (m_mChildren[nConst]->getMatrixType() != convertTo)    )
         {
-            ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
+            // here we have to copy the arrays and change the type of the value array
+            tempMtx->b_deleteStartArray = true;
+            tempMtx->b_deleteIndexArray = true;
+            tempMtx->b_deleteValueArray = true;
 
-            if (symmetry == ENUM_MATRIX_SYMMETRY_unknown)
-                symmetry  = this->symmetry;
-            else
+            tempMtx->start = new int[tempMtx->startSize];
+            for (int ii = 0;    ii < tempMtx->startSize; ++ii)
+                tempMtx->start[ii] = ((MatrixElements*)m_mChildren[nConst])->start->el[ii];
+
+            tempMtx->index = new int[tempMtx->valueSize];
+            for (int ii = 0;    ii < tempMtx->valueSize; ++ii)
+                tempMtx->index[ii] = ((MatrixElements*)m_mChildren[nConst])->index->el[ii];
+ 
+            if (!tempMtx->allocateValueArray(tempMtx->valueSize))
+                throw ErrorClass("Error allocating value array in MatrixType::extractElements()");
+
+            switch (m_mChildren[nConst]->getMatrixType())
             {
-                if (this->symmetry == ENUM_MATRIX_SYMMETRY_unknown)
-                    this->symmetry  = symmetry;
-                if (this->symmetry != symmetry)
-                    throw ErrorClass("Cannot handle symmetry properly in extractElements()");
-            }
+                case ENUM_MATRIX_TYPE_constant:
+                {
+                    for (int ii = 0; ii < tempMtx->valueSize; ++ii)
+                    {
+                        if (!tempMtx->copyValue(((ConstantMatrixElements*)
+                                m_mChildren[nConst])->value, ENUM_MATRIX_TYPE_constant, ii,ii)) 
+                            throw ErrorClass(
+                                "Error copying a value in MatrixType::extractElements()");
+                    }
+                    break;
+                }
 
-            tempMtx->symmetry = symmetry;
+                case ENUM_MATRIX_TYPE_varReference:
+                {
+                    for (int ii = 0; ii < tempMtx->valueSize; ++ii)
+                    {
+                        if (!tempMtx->copyValue(((VarReferenceMatrixElements*)
+                                                m_mChildren[nConst])->value, 
+                                                ENUM_MATRIX_TYPE_varReference, ii,ii)) 
+                            throw ErrorClass(
+                                "Error copying a value in MatrixType::extractElements()");
+                    }
+                    break;
+                }
+
+                case ENUM_MATRIX_TYPE_linear:
+                {
+                    for (int ii = 0; ii < tempMtx->valueSize; ++ii)
+                    {
+                        if (!tempMtx->copyValue(((LinearMatrixElements*)
+                                                m_mChildren[nConst])->value, 
+                                                ENUM_MATRIX_TYPE_linear, ii,ii)) 
+                            throw ErrorClass(
+                                "Error copying a value in MatrixType::extractElements()");
+                    }
+                    break;
+                }
+
+                case ENUM_MATRIX_TYPE_realValuedExpressions:
+                {
+                    for (int ii = 0; ii < tempMtx->valueSize; ++ii)
+                    {
+                        if (!tempMtx->copyValue(((RealValuedExpressions*)
+                                                m_mChildren[nConst])->value, 
+                                                ENUM_MATRIX_TYPE_realValuedExpressions, ii,ii)) 
+                            throw ErrorClass(
+                                "Error copying a value in MatrixType::extractElements()");
+                    }
+                    break;
+                }
+
+                case ENUM_MATRIX_TYPE_complexValuedExpressions:
+                {
+                    for (int ii = 0; ii < tempMtx->valueSize; ++ii)
+                    {
+                        if (!tempMtx->copyValue(((ComplexValuedExpressions*)
+                                                m_mChildren[nConst])->value, 
+                                                ENUM_MATRIX_TYPE_complexValuedExpressions,ii,ii)) 
+                            throw ErrorClass(
+                                "Error copying a value in MatrixType::extractElements()");
+                    }
+                    break;
+                }
+
+                case ENUM_MATRIX_TYPE_objReference:
+                {
+                    for (int ii = 0; ii < tempMtx->valueSize; ++ii)
+                    {
+                        if (!tempMtx->copyValue(((ObjReferenceMatrixElements*)
+                                                m_mChildren[nConst])->value, 
+                                                ENUM_MATRIX_TYPE_objReference, ii,ii)) 
+                            throw ErrorClass(
+                                "Error copying a value in MatrixType::extractElements()");
+                    }
+                    break;
+                }
+
+                case ENUM_MATRIX_TYPE_conReference:
+                {
+                    for (int ii = 0; ii < tempMtx->valueSize; ++ii)
+                    {
+                        if (!tempMtx->copyValue(((ConReferenceMatrixElements*)
+                                                m_mChildren[nConst])->value, 
+                                                ENUM_MATRIX_TYPE_conReference, ii,ii)) 
+                            throw ErrorClass(
+                                "Error copying a value in MatrixType::extractElements()");
+                    }
+                    break;
+                }
+
+                case ENUM_MATRIX_TYPE_string:
+                {
+                    for (int ii = 0; ii < tempMtx->valueSize; ++ii)
+                    {
+                        if (!tempMtx->copyValue(((StringValuedMatrixElements*)
+                                                m_mChildren[nConst])->value, 
+                                                ENUM_MATRIX_TYPE_string, ii,ii)) 
+                            throw ErrorClass(
+                                "Error copying a value in MatrixType::extractElements()");
+                    }
+                    break;
+                }
+
+                default:
+                {
+                    throw ErrorClass("Unknown element type in extractElements()");
+                    break;
+                }
+            }// end of switch statement
+            tempMtx->printMatrix();
+            return tempMtx;
+        }
+
+        else
+        {
+            // expansion can share the arrays with the matrix constructor --- at least temporarily
             tempMtx->b_deleteStartArray = false;
             tempMtx->b_deleteIndexArray = false;
             tempMtx->b_deleteValueArray = false;
-            tempMtx->isRowMajor = rowMajor_;
-            tempMtx->valueType  = m_mChildren[nConst]->getMatrixType();
-            tempMtx->numberOfRows    = numberOfRows;
-            tempMtx->numberOfColumns = numberOfColumns;
-//            tempMtx->startSize  = numberOfColumns + 1;
-            if (((MatrixElements*)m_mChildren[nConst])->rowMajor)
-                tempMtx->startSize  = numberOfRows + 1;
-            else
-                tempMtx->startSize  = numberOfColumns + 1;
-            tempMtx->valueSize  = ((MatrixElements*)m_mChildren[nConst])->numberOfValues;
+
             tempMtx->start      = ((MatrixElements*)m_mChildren[nConst])->start->el;
             tempMtx->index      = ((MatrixElements*)m_mChildren[nConst])->index->el;
 
             if (tempMtx->valueType == ENUM_MATRIX_TYPE_constant)
-                tempMtx->value  = ((ConstantMatrixElements*)m_mChildren[nConst])->value;
+                tempMtx->value = ((ConstantMatrixElements*)m_mChildren[nConst])->value;
+
+            else if (tempMtx->valueType == ENUM_MATRIX_TYPE_complexConstant)
+                tempMtx->value = ((ComplexMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_varReference)
-                tempMtx->value  = ((VarReferenceMatrixElements*)m_mChildren[nConst])->value;
+                tempMtx->value = ((VarReferenceMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_linear)
-                tempMtx->value  = ((LinearMatrixElements*)m_mChildren[nConst])->value;
+                tempMtx->value = ((LinearMatrixElements*)m_mChildren[nConst])->value;
 
-            else if (tempMtx->valueType 
-                    == ENUM_MATRIX_TYPE_realValuedExpressions)
-                tempMtx->value  = ((RealValuedExpressions*)m_mChildren[nConst])->value;
+            else if (tempMtx->valueType == ENUM_MATRIX_TYPE_realValuedExpressions)
+                tempMtx->value = ((RealValuedExpressions*)m_mChildren[nConst])->value;
 
-            else if (tempMtx->valueType 
-                    == ENUM_MATRIX_TYPE_complexValuedExpressions)
-                tempMtx->value  = ((ComplexValuedExpressions*)m_mChildren[nConst])->value;
+            else if (tempMtx->valueType == ENUM_MATRIX_TYPE_complexValuedExpressions)
+                tempMtx->value = ((ComplexValuedExpressions*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_objReference)
-                tempMtx->value  = ((ObjReferenceMatrixElements*)m_mChildren[nConst])->value;
+                tempMtx->value = ((ObjReferenceMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_conReference)
-                tempMtx->value  = ((ConReferenceMatrixElements*)m_mChildren[nConst])->value;
+                tempMtx->value = ((ConReferenceMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_string)
-                tempMtx->value  = ((StringValuedMatrixElements*)m_mChildren[nConst])->value;
+                tempMtx->value = ((StringValuedMatrixElements*)m_mChildren[nConst])->value;
 
             else
                 throw ErrorClass("Unknown element type in extractElements()");
+        }
 
+        if ( ( ((MatrixElements*)m_mChildren[nConst])->rowMajor == rowMajor_) &&
+             ( ((MatrixElements*)m_mChildren[nConst])->symmetry == symmetry ) &&
+             (   tempMtx->valueType                             == convertTo)    )
+        {
             tempMtx->printMatrix();
             return tempMtx;
         }
-        else // elements are given in the other major and must be "turned" 
+
+        else // change symmetry or major or type (or any combination of them)
         {
+            int changeMode = 1;
 
-            if (symmetry != ENUM_MATRIX_SYMMETRY_none  && 
-                symmetry != ENUM_MATRIX_SYMMETRY_unknown &&
-                symmetry != this->symmetry )
-                throw ErrorClass("Cannot handle symmetry and transposition in extractElements()");
+            if (tempMtx->valueType != convertTo)
+            {
+                // change the element type 
+                changeMode = 2;
+                tempMtx2 = tempMtx->convertType(convertTo);
+                tempMtx2->printMatrix();
+                delete tempMtx;
+                tempMtx = NULL;
+           }
 
+            else if ( ((MatrixElements*)m_mChildren[nConst])->rowMajor != rowMajor_ ) 
+            {
+                // elements are given in the other major and must be "turned"
+                changeMode = 2;
+                tempMtx2 = tempMtx->convertToOtherMajor(convertTo, false);
+                tempMtx2->printMatrix();
+                delete tempMtx;
+                tempMtx = NULL;
+            }
+
+            if ( (symmetry != ENUM_MATRIX_SYMMETRY_unknown) && 
+             (symmetry != ((MatrixElements*)m_mChildren[nConst])->symmetry) )
+            {
+                GeneralSparseMatrix* tt;
+                if (changeMode == 1)
+                    tt = tempMtx;
+                else
+                    tt = tempMtx2;
+
+                tempMtx3 = tt->convertSymmetry(symmetry);
+                delete tt;
+                tt = NULL;
+                tempMtx3->printMatrix();
+                return tempMtx3;
+            }
+            else
+            {
+                if (changeMode == 1)
+                    return tempMtx;
+                else
+                    return tempMtx2;
+            }
+        }
+
+/*
             MatrixElements* refMtx = (MatrixElements*)m_mChildren[nConst];
 
             int majorDim, minorDim;
@@ -1152,9 +1421,10 @@ GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_,
             }
 
             tempMtx->start[0] = 0;
+            tempMtx->printMatrix();
+            return tempMtx;
         }
-        tempMtx->printMatrix();
-        return tempMtx;
+*/
     }
     catch(const ErrorClass& eclass)
     {
@@ -1162,6 +1432,12 @@ GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_,
         if (tempMtx != NULL)
             delete tempMtx;
         tempMtx = NULL;
+        if (tempMtx2 != NULL)
+            delete tempMtx2;
+        tempMtx2 = NULL;
+        if (tempMtx3 != NULL)
+            delete tempMtx3;
+        tempMtx3 = NULL;
         throw ErrorClass( eclass.errormsg);
     }
 }// end of extractElements
@@ -1181,6 +1457,13 @@ GeneralSparseMatrix* MatrixType::expandTransformation(int nConst, OSMatrix** mtx
         outStr << "return matrix transformation in column major form" << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+
+    if (m_mChildren == NULL)
+        throw ErrorClass("expandTransformation(): constructor list is empty");
+    if (nConst < 0 || nConst >= inumberOfChildren)
+        throw ErrorClass("expandTransformation(): trying to access nonexistent constructor");
+    if (m_mChildren[nConst]->nType != ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+        throw ErrorClass("expandTransformation(): constructor has the wrong form");
 
     GeneralSparseMatrix* tempMtx = NULL;
 
@@ -1241,7 +1524,7 @@ GeneralSparseMatrix* MatrixType::expandTransformation(int nConst, OSMatrix** mtx
 }// end of expandTransformation
 
 
-int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_, 
+int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                                   ENUM_MATRIX_TYPE convertTo_,
                                   ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -1281,13 +1564,6 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
 
         if (symmetry == ENUM_MATRIX_SYMMETRY_unknown)
             symmetry  = this->symmetry;
-        if (symmetry != this->symmetry)
-        {
-            if (this->symmetry == ENUM_MATRIX_SYMMETRY_unknown)
-                this->symmetry  = symmetry;
-            else
-                throw ErrorClass("Cannot handle symmetry properly in getExpandedMatrix()");
-        }
 
         //Check if previous expansion available
         int bestMatch = 0;
@@ -1332,15 +1608,44 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
         {
             switch (bestMatch)
             {
-// cases 1-3 will rely on    GeneralSparseMatrix* convertSymmetry(ENUM_MATRIX_SYMMETRY symmetry_);
+// cases 1-3 will rely on    GeneralSparseMatrix* expandSymmetry(ENUM_MATRIX_TYPE convertTo_, bool transpose_, bool rowMajor_)
+
+#if 0
+        if (symmetry != this->symmetry)
+        {
+            if (this->symmetry == ENUM_MATRIX_SYMMETRY_unknown)
+                this->symmetry  = symmetry;
+            else
+            {
+                if (symmetry == none)
+                    expandSymmetry;
+                else if (isCompatible(symmetry))
+                {
+                    if ( (this->symmetry == ENUM_MATRIX_SYMMETRY_none) || 
+                         (this->symmetry == ENUM_MATRIX_SYMMETRY_unknown) )
+                        imposeSymmetry;
+                    else
+                }
+                else
+                    throw ErrorClass("Incompatible symmetry resolution requested");
+            }
+        }
+#endif
+
                 case 1: //Transpose, then apply symmetry --- Can this be done in one operation?
-                    throw ErrorClass("Requested conversion not yet implemented");
+//                    throw ErrorClass("Requested conversion not yet implemented");
+                    tempMtx = expandedMatrixByElements[bestMatch_index]
+                                        ->expandSymmetry(convertTo, true, rowMajor_);
                     break;
                 case 2: //Convert type and apply symmetry --- this should be doable in one operation
-                    throw ErrorClass("Requested conversion not yet implemented");
+//                    throw ErrorClass("Requested conversion not yet implemented");
+                    tempMtx = expandedMatrixByElements[bestMatch_index]
+                                        ->expandSymmetry(convertTo, false, rowMajor_);
                     break;
                 case 3: //Just apply symmetry --- this is a simple copy operation
-                    throw ErrorClass("Requested conversion not yet implemented");
+//                    throw ErrorClass("Requested conversion not yet implemented");
+                    tempMtx = expandedMatrixByElements[bestMatch_index]
+                                        ->expandSymmetry(convertTo, false, rowMajor_);
                     break;
                 case 4: //Transpose and convert
                 case 5: //Transpose only
@@ -1387,13 +1692,14 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
         {
             if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
             {
-                tempMtx = this->processBaseMatrix(mtxIdx, rowMajor_, ENUM_MATRIX_TYPE_unknown, symmetry);
-                tempMtx->valueType       = m_mChildren[0]->getMatrixType();
+                tempMtx = this->processBaseMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
+//                tempMtx->valueType       = m_mChildren[0]->getMatrixType();
                 this->inferredMatrixType = m_mChildren[0]->getMatrixType();
             }
 
             else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
             {
+/*
                 //make sure the blocks have been expanded, then retrieve them 
                 if (!processBlocks(mtxIdx, rowMajor_, tempMtx->valueType, symmetry))
                     throw ErrorClass("error processing blocks in getExpandedMatrix()");
@@ -1403,6 +1709,8 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                                 m_iColumnPartitionSize, mtxIdx, true, rowMajor_, convertTo, symmetry);
 
                 tempMtx = expandBlocks(currentBlocks, mtxIdx, rowMajor_, convertTo, symmetry);
+*/
+                tempMtx = expandBlocks(0, mtxIdx, rowMajor_, convertTo, symmetry);
             }
 
             else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
@@ -1411,21 +1719,35 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                 tempMtx = expandTransformation(0, mtxIdx, rowMajor_, convertTo, symmetry);
                 if ( convertTo_   == ENUM_MATRIX_TYPE_unknown && 
                      inferredType == ENUM_MATRIX_TYPE_unknown )
-                    inferredMatrixType = tempMtx->valueType;
+                    this->inferredMatrixType = tempMtx->valueType;
             }
             else // some kind of elements 
             {
-                tempMtx = this->extractElements(0,rowMajor_,symmetry);
-                this->inferredMatrixType = tempMtx->valueType;
+                tempMtx = this->extractElements(0, rowMajor_, convertTo, symmetry);
+                if (tempMtx->isRowMajor == rowMajor_)
+                {
+                    this->inferredMatrixType = tempMtx->valueType;
+                    expandedMatrixByElements.push_back(tempMtx);
+                    return expandedMatrixByElements.size() - 1;
+                }
+                else
+                {
+                    GeneralSparseMatrix* tempMtx2;
+                    tempMtx2 = tempMtx->convertToOtherMajor(convertTo,false);	
+                    this->inferredMatrixType = tempMtx2->valueType;
+                    expandedMatrixByElements.push_back(tempMtx2);
+                    return expandedMatrixByElements.size() - 1;
+                }
+//                    tempMtx = expandedMatrixByElements[bestMatch_index]
+//                                        ->expandSymmetry(convertTo, true, rowMajor_);
+//                    tempMtx = expandedMatrixByElements[bestMatch_index]
+//                                        ->convertToOtherMajor(convertTo,false);
+//                    tempMtx = expandedMatrixByElements[bestMatch_index]->convertType(convertTo);
 //                expandedMatrixInColumnMajorForm->printMatrix();
             }
         }
         else // two or more constructors --- worry about overwriting and number of elements
         {
-            // Here we have (base matrix plus) elements
-//            if (!matrixHasTransformations() && !matrixHasBlocks() )
-//            {
-//            expandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
             tempMtx->symmetry = symmetry;
             tempMtx->isRowMajor = rowMajor_;
             int majorDim, minorDim;
@@ -1469,27 +1791,34 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             {
                 if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
                 {
-                    tempExpansion[i] = expandTransformation(i, mtxIdx, rowMajor_, convertTo, symmetry);
+                    tempExpansion[i]
+                        = expandTransformation(i, mtxIdx, rowMajor_, convertTo, symmetry);
                     if ( convertTo_   == ENUM_MATRIX_TYPE_unknown && 
                          inferredType == ENUM_MATRIX_TYPE_unknown )
                         inferredMatrixType = tempExpansion[i]->valueType;
                 }
                 else if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
                 {
+/*
                     //make sure the blocks have been expanded, then retrieve them 
                     if (!processBlocks(mtxIdx, rowMajor_, tempMtx->valueType, symmetry))
                         throw ErrorClass("error processing blocks in getExpandedMatrix()");
 
                     ExpandedMatrixBlocks* currentBlocks
-                        = getBlocks(m_miRowPartition, m_iRowPartitionSize, m_miColumnPartition,
-                                    m_iColumnPartitionSize, mtxIdx, true, rowMajor_, convertTo, symmetry);
+                        = getBlocks(m_miRowPartition,    m_iRowPartitionSize,
+                                    m_miColumnPartition, m_iColumnPartitionSize,
+                                    mtxIdx, true, rowMajor_, convertTo, symmetry);
 
-                    tempExpansion[i] = expandBlocks(currentBlocks, mtxIdx, rowMajor_, convertTo, symmetry);
+                    tempExpansion[i]
+                        = expandBlocks(currentBlocks, mtxIdx, rowMajor_, convertTo, symmetry);
+*/
+                    tempExpansion[i]
+                        = expandBlocks(i, mtxIdx, rowMajor_, convertTo, symmetry);
                 }
                 else
                 {
-                    tempExpansion[i] = this->extractElements(i,rowMajor_, symmetry);
-                    tempExpansion[i]->valueType = m_mChildren[i]->getMatrixType();
+                    tempExpansion[i] = this->extractElements(i,rowMajor_, convertTo, symmetry);
+//                    tempExpansion[i]->valueType = m_mChildren[i]->getMatrixType();
                 }
 
 #ifndef NDEBUG
@@ -1500,12 +1829,30 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
 
             if (nv > numberOfRows*numberOfColumns) nv = numberOfRows*numberOfColumns;
 
+            for (unsigned int i=i0; i < inumberOfChildren; i++)
+            {
+                this->inferredMatrixType
+                    = mergeMatrixType(this->inferredMatrixType, tempExpansion[i]->valueType);
+            }
+
             if (convertTo == ENUM_MATRIX_TYPE_unknown) 
-                convertTo  = inferredType;
-            if (convertTo != mergeMatrixType(convertTo, inferredType))
+                convertTo  = this->inferredMatrixType;
+            if (convertTo != mergeMatrixType(convertTo, this->inferredMatrixType))
                throw ErrorClass("Requested improper conversion of element values");
             inferredType = convertTo;
-            tempMtx->valueType = inferredType;
+            tempMtx->valueType = convertTo;
+
+            // Make sure all expansions are in the same format
+
+            for (unsigned int i=i0; i < inumberOfChildren; i++)
+            {
+                if (tempMtx->valueType != tempExpansion[i]->valueType)
+                {
+                    GeneralSparseMatrix* tempMtx2 = tempExpansion[i];
+                    tempExpansion[i]   = tempMtx2->convertType(convertTo);
+                }
+            }
+
                 
             // allocate space for elements (nv is an overestimate --- don't worry about cancelations)
             // should use vectors eventually...
@@ -1579,7 +1926,8 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                         n =  ctorNbr[i];
                         tempMtx->index[nz] = tempExpansion[n]->index[l];
 
-                        if (!tempMtx->copyValue(tempExpansion[n], l, nz))
+                        if (!tempMtx->copyValue(tempExpansion[n]->value,
+                                                tempExpansion[n]->valueType,l, nz))
                             throw ErrorClass("Matrix expansion failed while copying element values");
 
                         nz++;
@@ -2054,10 +2402,6 @@ bool MatrixType::processBlockPartition()
         {
             if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
             {
-std::cout << "child node " << i << " has kind " << returnMatrixConstructorTypeString(m_mChildren[i]->nType);
-std::cout  << " - declared type " << returnMatrixTypeString(m_mChildren[i]->getDeclaredMatrixType());
-std::cout  << " - inferred type " << returnMatrixTypeString(m_mChildren[i]->getInferredMatrixType());
-std::cout  << std::endl << std::endl;
                 if (nPartitions == 0)
                 {
                     // first blocks constructor. Set up data structures
@@ -2203,9 +2547,10 @@ ExpandedMatrixBlocks* MatrixType::getBlocks(int* rowPartition, int rowPartitionS
     if (!appendToBlockArray)
         throw ErrorClass("getBlocks(): Cannot determine a suitable collection");
 
-    if (!processBlocks(mtxIdx, rowPartition, rowPartitionSize,
-                               colPartition, colPartitionSize, rowMajor, convertTo_, symmetry_) )
-       return NULL;
+//    if (!processBlocks(mtxIdx, rowPartition, rowPartitionSize,
+//                               colPartition, colPartitionSize, rowMajor, convertTo_, symmetry_) )
+//       return NULL;
+    throw ErrorClass("getBlocks(): Alternate block expansion not yet implemented");
     return expandedMatrixByBlocks.back();
 }// end of MatrixType::getBlocks
 
@@ -2254,7 +2599,8 @@ bool MatrixType::processBlocks(OSMatrix** mtxIdx, bool rowMajor_,
     int  rSize = getRowPartitionSize();
     int* cPartition = getColumnPartition(); 
     int* rPartition = getRowPartition(); 
-    return processBlocks(mtxIdx, rPartition, rSize, cPartition, cSize, rowMajor_, convertTo_, symmetry_);
+    return processBlocks(mtxIdx, rPartition, rSize, cPartition, cSize,
+                         rowMajor_, convertTo_, symmetry_);
 }// end of MatrixType::processBlocks
 
 
@@ -2297,6 +2643,7 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
                 throw ErrorClass("Symmetry changes not yet implemented in processBlocks()");
         }
 
+#if 0
         bool blockSym = (rowOffsetSize == colOffsetSize);
 
         int ioff = 0;
@@ -2313,75 +2660,75 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
             //symmetry != ENUM_MATRIX_SYMMETRY_unknown && 
             !blockSym)
             throw ErrorClass("Requested symmetry conversion not implemented yet");
+#endif
         
-        if (inumberOfChildren == 1)
+        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
         {
-            if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
-            {
-                if (((MatrixBlocks*)m_mChildren[0])->rowOffset->numberOfEl != rowOffsetSize ||
-                    ((MatrixBlocks*)m_mChildren[0])->colOffset->numberOfEl != colOffsetSize)
+            if (((MatrixBlocks*)m_mChildren[0])->rowOffset->numberOfEl != rowOffsetSize ||
+                ((MatrixBlocks*)m_mChildren[0])->colOffset->numberOfEl != colOffsetSize)
+                goto must_expand;
+
+            for (int j=0; j < rowOffsetSize; j++)
+                if (((MatrixBlocks*)m_mChildren[0])->rowOffset->el[j] != rowOffset[j])
                     goto must_expand;
 
-                for (int j=0; j < rowOffsetSize; j++)
-                    if (((MatrixBlocks*)m_mChildren[0])->rowOffset->el[j] != rowOffset[j])
-                        goto must_expand;
+            for (int j=0; j < colOffsetSize; j++)
+                if (((MatrixBlocks*)m_mChildren[0])->colOffset->el[j] != colOffset[j])
+                    goto must_expand;
 
-                for (int j=0; j < colOffsetSize; j++)
-                    if (((MatrixBlocks*)m_mChildren[0])->colOffset->el[j] != colOffset[j])
-                        goto must_expand;
+            // here the block structure fits the partition, so we can copy blocks
+            tmpBlocks = new ExpandedMatrixBlocks();
 
-                // here the block structure fits the partition, so we can copy blocks
-                tmpBlocks = new ExpandedMatrixBlocks();
+            tmpBlocks->bDeleteArrays = false;
+            tmpBlocks->valueType     = convertTo;
+            tmpBlocks->isRowMajor    = rowMajor_;
+            tmpBlocks->symmetry      = symmetry;
+            tmpBlocks->rowOffsetSize = rowOffsetSize;
+            tmpBlocks->colOffsetSize = colOffsetSize;
+            tmpBlocks->rowOffset     = rowOffset;
+            tmpBlocks->colOffset     = colOffset;
 
-                tmpBlocks->bDeleteArrays = false;
-                tmpBlocks->valueType     = convertTo;
-                tmpBlocks->isRowMajor    = rowMajor_;
-                tmpBlocks->symmetry      = symmetry;
-                tmpBlocks->rowOffsetSize = rowOffsetSize;
-                tmpBlocks->colOffsetSize = colOffsetSize;
-                tmpBlocks->rowOffset     = rowOffset;
-                tmpBlocks->colOffset     = colOffset;
+            tmpBlocks->blockNumber   = ((MatrixBlocks*)m_mChildren[0])->inumberOfChildren;
+            tmpBlocks->blocks        = new GeneralSparseMatrix*[tmpBlocks->blockNumber]; //leaks memory
+            tmpBlocks->blockRows     = new int[tmpBlocks->blockNumber]; //leaks memory
+            tmpBlocks->blockColumns  = new int[tmpBlocks->blockNumber]; //leaks memory
+            tmpBlockIdx              = new int[tmpBlocks->blockNumber];
 
-                tmpBlocks->blockNumber   = ((MatrixBlocks*)m_mChildren[0])->inumberOfChildren;
-                tmpBlocks->blocks        = new GeneralSparseMatrix*[tmpBlocks->blockNumber]; //leaks memory
-                tmpBlocks->blockRows     = new int[tmpBlocks->blockNumber]; //leaks memory
-                tmpBlocks->blockColumns  = new int[tmpBlocks->blockNumber]; //leaks memory
-                tmpBlockIdx              = new int[tmpBlocks->blockNumber];
+            for (int i=0; i < tmpBlocks->blockNumber; i++)
+            {
+                tmpBlocks->blocks[i]        = NULL;
+                tmpBlocks->blockRows[i]     = -1;
+                tmpBlocks->blockColumns[i]  = -1;
+                tmpBlockIdx[i]              = -1;
+            }
 
-                for (int i=0; i < tmpBlocks->blockNumber; i++)
-                {
-                    tmpBlocks->blocks[i]        = NULL;
-                    tmpBlocks->blockRows[i]     = -1;
-                    tmpBlocks->blockColumns[i]  = -1;
-                    tmpBlockIdx[i]              = -1;
-                }
+            // access the blocks; expand and convert if necessary
+            MatrixBlock* tmpChild;
 
-                // access the blocks; expand and convert if necessary
-                MatrixBlock* tmpChild;
+            for (unsigned int j=0; j < tmpBlocks->blockNumber; j++)
+            {
+                tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[0])->m_mChildren[j];
+                if (tmpChild->blockRowIdx == tmpChild->blockColIdx)
+                    tmpBlockIdx[j] 
+                        = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
+                else
+                    tmpBlockIdx[j]
+                        = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo,
+                                                      ENUM_MATRIX_SYMMETRY_unknown);
+                if (tmpBlockIdx[j] < 0)
+                    throw ErrorClass("expansion of matrix block failed in processBlocks()");
 
-                for (unsigned int j=0; j < tmpBlocks->blockNumber; j++)
-                {
-                    tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[0])->m_mChildren[j];
-std::cout << "expand a block in row " << tmpChild->blockRowIdx << ", col " << tmpChild->blockColIdx
-          << std::endl;  
-                    if (tmpChild->blockRowIdx == tmpChild->blockColIdx)
-                        tmpBlockIdx[j] 
-                            = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
-                    else
-                        tmpBlockIdx[j]
-                            = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo,
-                                                          ENUM_MATRIX_SYMMETRY_none);
-                    if (tmpBlockIdx[j] < 0)
-                        throw ErrorClass("expansion of matrix block failed in processBlocks()");
-
-                    tmpBlocks->blocks[j]       = tmpChild->expandedMatrixByElements[tmpBlockIdx[j]];
-                    tmpBlocks->blockRows[j]    = tmpChild->blockRowIdx;
-                    tmpBlocks->blockColumns[j] = tmpChild->blockColIdx;
+                tmpBlocks->blocks[j]       = tmpChild->expandedMatrixByElements[tmpBlockIdx[j]];
+                tmpBlocks->blockRows[j]    = tmpChild->blockRowIdx;
+                tmpBlocks->blockColumns[j] = tmpChild->blockColIdx;
 
 #ifndef NDEBUG
-                    ((GeneralSparseMatrix*)tmpBlocks->blocks[j])->printMatrix();
+                ((GeneralSparseMatrix*)tmpBlocks->blocks[j])->printMatrix();
 #endif
-                }
+            }
+
+            if (inumberOfChildren == 1)
+            {
                 expandedMatrixByBlocks.push_back(tmpBlocks);
                 delete [] tmpBlockIdx;
                 tmpBlockIdx = NULL;
@@ -2424,8 +2771,7 @@ must_expand:
             // Shortcuts might be possible if all constructors are blocks 
             // that are conformal with the desired structure.
             // However, the easy out is to expand the matrix, then disassemble it. 
-            int i = this->getExpandedMatrix(mtxIdx, tmpBlocks->isRowMajor,
-                                            tmpBlocks->valueType, tmpBlocks->symmetry);
+            int i = this->getExpandedMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
             if (i < 0)
                 throw ErrorClass("Matrix expansion failed in processBlocks()");
             tmpBlocks = this->disassembleMatrix(rowOffset, rowOffsetSize, 
@@ -2862,7 +3208,7 @@ OSMatrix::OSMatrix():
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     nType    = ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
-    symmetry = ENUM_MATRIX_SYMMETRY_none;
+    symmetry = ENUM_MATRIX_SYMMETRY_unknown;
 }// end of OSMatrix
 
 OSMatrix::~OSMatrix()
@@ -4210,10 +4556,7 @@ std::string ConstantMatrixElements::getNodeName()
 
 ENUM_MATRIX_TYPE ConstantMatrixElements::getInferredMatrixType()
 {
-std::cout << "at start of ConstantMatrixElements::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_constant;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of ConstantMatrixElements::getInferredMatrixType()
 
@@ -4449,10 +4792,7 @@ std::string ComplexMatrixElements::getNodeName()
 
 ENUM_MATRIX_TYPE ComplexMatrixElements::getInferredMatrixType()
 {
-std::cout << "at start of ComplexMatrixElements::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_complexConstant;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of ComplexMatrixElements::getInferredMatrixType()
 
@@ -4618,21 +4958,6 @@ bool ComplexMatrixValues::IsEqual(ComplexMatrixValues *that)
 
         for (unsigned int i = 0; i < this->numberOfEl; i++)
         {
-/*
-            if (this->el[i] == NULL)
-            {
-                if (that->el[i] != NULL)
-                    return false;
-            }
-            else
-                if (!this->el[i]->IsEqual(that->el[i]))
-                    return false;
-*/
-/*
-            if ((this->el[i]).real != (that->el[i]).real ||
-                (this->el[i]).imag != (that->el[i]).imag  )
-                    return false;
-*/
             if (this->el[i] != that->el[i])
                 return false;
         }
@@ -4707,10 +5032,7 @@ std::string VarReferenceMatrixElements::getNodeName()
 
 ENUM_MATRIX_TYPE VarReferenceMatrixElements::getInferredMatrixType()
 {
-std::cout << "at start of VarReferenceMatrixElements::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_varReference;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of VarReferenceMatrixElements::getInferredMatrixType()
 
@@ -4942,10 +5264,7 @@ std::string LinearMatrixElements::getNodeName()
 
 ENUM_MATRIX_TYPE LinearMatrixElements::getInferredMatrixType()
 {
-std::cout << "at start of LinearMatrixElements::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_linear;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of LinearMatrixElements::getInferredMatrixType()
 
@@ -5676,10 +5995,7 @@ std::string ComplexValuedExpressions::getNodeName()
 
 ENUM_MATRIX_TYPE ComplexValuedExpressions::getInferredMatrixType()
 {
-std::cout << "at start of ComplexValuedExpressions::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_complexValuedExpressions;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of ComplexValuedExpressions::getInferredMatrixType()
 
@@ -5993,10 +6309,7 @@ std::string ObjReferenceMatrixElements::getNodeName()
 
 ENUM_MATRIX_TYPE ObjReferenceMatrixElements::getInferredMatrixType()
 {
-std::cout << "at start of ObjReferenceMatrixElements::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_objReference;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of ObjReferenceMatrixElements::getInferredMatrixType()
 
@@ -6228,10 +6541,7 @@ std::string ConReferenceMatrixElements::getNodeName()
 
 ENUM_MATRIX_TYPE ConReferenceMatrixElements::getInferredMatrixType()
 {
-std::cout << "at start of ConReferenceMatrixElements::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_conReference;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of ConReferenceMatrixElements::getInferredMatrixType()
 
@@ -6549,10 +6859,7 @@ std::string MixedRowReferenceMatrixElements::getNodeName()
 
 ENUM_MATRIX_TYPE MixedRowReferenceMatrixElements::getInferredMatrixType()
 {
-std::cout << "at start of MixedRowReferenceMatrixElements::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_mixedRowReference;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of MixedRowReferenceMatrixElements::getInferredMatrixType()
 
@@ -6852,10 +7159,7 @@ std::string StringValuedMatrixElements::getNodeName()
 
 ENUM_MATRIX_TYPE StringValuedMatrixElements::getInferredMatrixType()
 {
-std::cout << "at start of StringValuedMatrixElements::getInferredMatrixType()" << std::endl;
     inferredMatrixType = ENUM_MATRIX_TYPE_string;
-std::cout << "matrix constructor has inferred matrixType "
-          << returnMatrixTypeString(inferredMatrixType) << std::endl;
     return inferredMatrixType;
 }// end of StringValuedMatrixElements::getInferredMatrixType()
 
@@ -7538,7 +7842,7 @@ GeneralSparseMatrix::GeneralSparseMatrix():
     numberOfColumns(-1),
     valueType(ENUM_MATRIX_TYPE_unknown),
     isRowMajor(false),
-    symmetry(ENUM_MATRIX_SYMMETRY_none),
+    symmetry(ENUM_MATRIX_SYMMETRY_unknown),
     startSize(-1),
     valueSize(-1),
     start(NULL),
@@ -7960,8 +8264,18 @@ bool GeneralSparseMatrix::allocateValueArray(int nValues)
     }
 }//end of allocateValueArray
 
-bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIndex, int targetIndex,
-                                                                double scalarMult, double scalarImag) 
+bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, 
+                                    int sourceIndex, int targetIndex, 
+                                    double scalarMult, double scalarImag)
+{
+    return copyValue(sourceMtx->value, sourceMtx->valueType, sourceIndex, targetIndex,
+                     scalarMult, scalarImag);
+}
+
+bool GeneralSparseMatrix::copyValue(MatrixElementValues* sourceElements,
+                                    ENUM_MATRIX_TYPE sourceType,
+                                    int sourceIndex, int targetIndex,
+                                    double scalarMult, double scalarImag) 
 {
     ComplexValuedExpressionTree* temp = NULL;
 
@@ -7971,7 +8285,7 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
             throw ErrorClass("in copyValue: value array of target matrix was never allocated!");
 
         int scaleType = 0;
-        if (scalarImag < 0 || scalarImag >0)
+        if (scalarImag < 0 || scalarImag > 0)
         {
             if (this->valueType != mergeMatrixType(this->valueType, ENUM_MATRIX_TYPE_complexConstant))
                 throw ErrorClass("in copyValue(): value array not properly allocated");
@@ -7993,29 +8307,29 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
             // and copying is much simpler as well
             case ENUM_MATRIX_TYPE_constant:
                 ((ConstantMatrixValues*)this->value)->el[targetIndex]
-                    = scalarMult*((ConstantMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                    = scalarMult*((ConstantMatrixValues*)sourceElements)->el[sourceIndex];
                 break;
 
             // if type is varReference, the scalar multiplier must be absent (i.e., 1.0)
             case ENUM_MATRIX_TYPE_varReference:
                 ((VarReferenceMatrixValues*)this->value)->el[targetIndex] 
-                    = ((VarReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                    = ((VarReferenceMatrixValues*)sourceElements)->el[sourceIndex];
                 break;
 
             // scalar multiplier must be 1.0 
             case ENUM_MATRIX_TYPE_objReference:
                 ((ObjReferenceMatrixValues*)this->value)->el[targetIndex]
-                    = ((ObjReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                    = ((ObjReferenceMatrixValues*)sourceElements)->el[sourceIndex];
                 break;
 
             // conReference is minimal, but the copying is a little more complicated
             // the scalar multiplier must again be 1
             case ENUM_MATRIX_TYPE_conReference:
                 ((ConReferenceMatrixValues*)this->value)->el[targetIndex] = new ConReferenceMatrixElement();
-                if (sourceMtx->valueType == ENUM_MATRIX_TYPE_conReference)
+                if (sourceType == ENUM_MATRIX_TYPE_conReference)
                 {
                     ((ConReferenceMatrixValues*)this->value)->el[targetIndex]
-                            ->deepCopyFrom(((ConReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex]);
+                            ->deepCopyFrom(((ConReferenceMatrixValues*)sourceElements)->el[sourceIndex]);
                 }
                 else 
                     throw ErrorClass ("undefined matrix element conversion");
@@ -8024,35 +8338,28 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
             // The other types may require conversion and more elaborate copying
             // First, complexConstant. The only legal conversion is from (real) constant
             case ENUM_MATRIX_TYPE_complexConstant:
-                if (sourceMtx->valueType == ENUM_MATRIX_TYPE_complexConstant)
+                if (sourceType == ENUM_MATRIX_TYPE_complexConstant)
                 {
-                     std::complex<double> (((ComplexMatrixValues*)this->value)->el[targetIndex])
-                                         = ((ComplexMatrixValues*)sourceMtx->value)->el[sourceIndex];  
+                        (((ComplexMatrixValues*)this->value)->el[targetIndex])
+                            = complexScalar*((ComplexMatrixValues*)sourceElements)->el[sourceIndex];  
                 }
-                else if (sourceMtx->valueType == ENUM_MATRIX_TYPE_constant)
+                else if (sourceType == ENUM_MATRIX_TYPE_constant)
                 {
-                    std::complex<double> (((ComplexMatrixValues*)this->value)->el[targetIndex])
-                        = convertToComplexMatrixElement(
-                                  ((ConstantMatrixValues*)sourceMtx->value)->el[sourceIndex]);  
+                    (((ComplexMatrixValues*)this->value)->el[targetIndex])
+                        = complexScalar*((ConstantMatrixValues*)sourceElements)->el[sourceIndex];
                 }
                 else 
                     throw ErrorClass ("undefined matrix element conversion");
                 break;
 
-                // deal with any scalar multiples
-                if (scaleType == 1)
-                    ((ComplexMatrixValues*)this->value)->el[targetIndex] *= scalarMult;
-                else if (scaleType == 2)
-                    ((ComplexMatrixValues*)this->value)->el[targetIndex] *= complexScalar;
-
             case ENUM_MATRIX_TYPE_linear:
                 ((LinearMatrixValues*)this->value)->el[targetIndex] = new LinearMatrixElement();
-                switch (sourceMtx->valueType)
+                switch (sourceType)
                 {
                     // linear elements do not have to be converted
                     case ENUM_MATRIX_TYPE_linear:
                         ((LinearMatrixValues*)this->value)->el[targetIndex]
-                            = ((LinearMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                            = ((LinearMatrixValues*)sourceElements)->el[sourceIndex];
 
                         // there may be a real-valued scalar, however
                         if (scaleType == 1)
@@ -8068,7 +8375,7 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                     // legal conversions: constant, varReference
                     case ENUM_MATRIX_TYPE_constant:
                         ((LinearMatrixValues*)this->value)->el[targetIndex]->constant
-                            = scalarMult*((ConstantMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                            = scalarMult*((ConstantMatrixValues*)sourceElements)->el[sourceIndex];
                         break;
 
                     case ENUM_MATRIX_TYPE_varReference:
@@ -8078,26 +8385,26 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                         ((LinearMatrixValues*)this->value)->el[targetIndex]->varIdx[0]
                             = new LinearMatrixElementTerm();
                         ((LinearMatrixValues*)this->value)->el[targetIndex]->varIdx[0]->idx 
-                            = ((VarReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                            = ((VarReferenceMatrixValues*)sourceElements)->el[sourceIndex];
                         ((LinearMatrixValues*)this->value)->el[targetIndex]->varIdx[0]->coef = scalarMult; 
                         break;
 
                     // other conversion are illegal
                     default: throw ErrorClass ("undefined matrix element conversion");
                         break;
-                }//end switch (sourceMtx->valueType)
+                }//end switch (sourceType)
                 break;
 
             case ENUM_MATRIX_TYPE_mixedRowReference:
                 ((ConReferenceMatrixValues*)
                     this->value)->el[targetIndex] = new ConReferenceMatrixElement();
-                switch (sourceMtx->valueType)
+                switch (sourceType)
                 {
                     // elements with constraint references do not have to be converted
                     case ENUM_MATRIX_TYPE_mixedRowReference:
                     case ENUM_MATRIX_TYPE_conReference:
                         ((ConReferenceMatrixValues*)this->value)->el[targetIndex]->deepCopyFrom(
-                             ((ConReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex]);
+                             ((ConReferenceMatrixValues*)sourceElements)->el[sourceIndex]);
                         break;
 
                     // only other legal possibility: objective references
@@ -8105,43 +8412,43 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                         ((ConReferenceMatrixValues*)
                             this->value)->el[targetIndex] = new ConReferenceMatrixElement();
                         ((ConReferenceMatrixValues*)this->value)->el[targetIndex]->conReference
-                            = ((ObjReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                            = ((ObjReferenceMatrixValues*)sourceElements)->el[sourceIndex];
                         break;
 
                     default:
                         throw ErrorClass ("undefined matrix element conversion");
                         break;
-                }//end switch (sourceMtx->valueType)
+                }//end switch (sourceType)
                 break;
 
             case ENUM_MATRIX_TYPE_realValuedExpressions:
             {
-                switch (sourceMtx->valueType)
+                switch (sourceType)
                 {
                     case ENUM_MATRIX_TYPE_constant:
                         ((RealValuedExpressionArray*)this->value)->el[targetIndex]
                             = convertToRealExpressionTree(
-                                        ((ConstantMatrixValues*)sourceMtx->value)->el[sourceIndex]);  
+                                        ((ConstantMatrixValues*)sourceElements)->el[sourceIndex]);  
                         break;
 
                     case ENUM_MATRIX_TYPE_varReference:
                         ((RealValuedExpressionArray*)this->value)->el[targetIndex]
                             = convertToRealExpressionTree(
-                                ((VarReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex], true);
+                                ((VarReferenceMatrixValues*)sourceElements)->el[sourceIndex], true);
                         break;
 
                     case ENUM_MATRIX_TYPE_realValuedExpressions:
                     {
                         ((RealValuedExpressionArray*)this->value)->el[targetIndex]
                             = ((RealValuedExpressionArray*)
-                                     sourceMtx->value)->el[sourceIndex]->cloneExpressionTree();
+                                     sourceElements)->el[sourceIndex]->cloneExpressionTree();
                         break;
                     }
 
                     case ENUM_MATRIX_TYPE_linear:
                         ((RealValuedExpressionArray*)this->value)->el[targetIndex]
                             = convertToRealExpressionTree(
-                                             ((LinearMatrixValues*)sourceMtx->value)->el[sourceIndex]);  
+                                             ((LinearMatrixValues*)sourceElements)->el[sourceIndex]);  
                         break;
 
                     case ENUM_MATRIX_TYPE_objReference:
@@ -8187,20 +8494,20 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
             {
                 temp = new ComplexValuedExpressionTree();
 
-                switch (sourceMtx->valueType)
+                switch (sourceType)
                 {
                     case ENUM_MATRIX_TYPE_complexValuedExpressions:
                     {
                         temp->m_treeRoot 
                             = ((ComplexValuedExpressionArray*)
-                                sourceMtx->value)->el[sourceIndex]->m_treeRoot->cloneExprNode();
+                                sourceElements)->el[sourceIndex]->m_treeRoot->cloneExprNode();
                         break;
                     }
 
                     case ENUM_MATRIX_TYPE_constant:
                     {
                         temp->m_treeRoot = new OSnLCNodeNumber();
-                        double tempVal = ((ConstantMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                        double tempVal = ((ConstantMatrixValues*)sourceElements)->el[sourceIndex];
                         if (scaleType == 2)
                         {
                             ((OSnLCNodeNumber*) 
@@ -8218,7 +8525,7 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                     {
                         temp->m_treeRoot = new OSnLCNodeNumber();
                         std::complex<double> tempVal
-                            = complexScalar*((ComplexMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                            = complexScalar*((ComplexMatrixValues*)sourceElements)->el[sourceIndex];
                         ((OSnLCNodeNumber*)temp->m_treeRoot)->setValue(tempVal);
                         break;
                     }
@@ -8229,7 +8536,7 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                         temp->m_treeRoot->m_mChildren[0] = new OSnLNodeVariable();
                         temp->m_treeRoot->m_mChildren[1] = new OSnLNodeNumber();
                         ((OSnLNodeVariable*)temp->m_treeRoot->m_mChildren[0])->idx
-                            = ((VarReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                            = ((VarReferenceMatrixValues*)sourceElements)->el[sourceIndex];
                         ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[1])->value  = 0.0;
                         break;
                     }
@@ -8240,8 +8547,8 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                         temp->m_treeRoot->m_mChildren[1] = new OSnLNodeNumber();
                         ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[1])->value  = 0.0;
                         temp->m_treeRoot->m_mChildren[0] 
-                            = ((RealValuedExpressionArray*)sourceMtx
-                                ->value)->el[sourceIndex]->m_treeRoot->cloneExprNode();
+                            = ((RealValuedExpressionArray*)sourceElements)->el[sourceIndex]
+                                ->m_treeRoot->cloneExprNode();
                         break;
                     }
 
@@ -8253,18 +8560,18 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                         ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[1])->value = 0.0;
 
                         int nn = ((LinearMatrixValues*)
-                                  sourceMtx->value)->el[sourceIndex]->numberOfVarIdx;
+                                  sourceElements)->el[sourceIndex]->numberOfVarIdx;
                         bool haveConstant;
 
                         if (nn == 0) 
                         {
                             temp->m_treeRoot->m_mChildren[0] = new OSnLNodeNumber();
                             ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[0])->value
-                                = ((LinearMatrixValues*)sourceMtx->value)->el[sourceIndex]->constant;
+                                = ((LinearMatrixValues*)sourceElements)->el[sourceIndex]->constant;
                         }
                         else
                         {
-                            if (((LinearMatrixValues*)sourceMtx->value)->el[sourceIndex]->constant == 0)
+                            if (((LinearMatrixValues*)sourceElements)->el[sourceIndex]->constant == 0)
                             {
                                 haveConstant = false;
                                 temp->m_treeRoot->m_mChildren[0] = new OSnLNodeSum();
@@ -8285,11 +8592,11 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                                 ((OSnLNodeVariable*)
                                     temp->m_treeRoot->m_mChildren[0]->m_mChildren[ii])->idx 
                                         = ((LinearMatrixValues*)
-                                            sourceMtx->value)->el[sourceIndex]->varIdx[ii]->idx;
+                                            sourceElements)->el[sourceIndex]->varIdx[ii]->idx;
                                 ((OSnLNodeVariable*)
                                     temp->m_treeRoot->m_mChildren[0]->m_mChildren[ii])->coef
                                         = ((LinearMatrixValues*)
-                                            sourceMtx->value)->el[sourceIndex]->varIdx[ii]->coef;
+                                            sourceElements)->el[sourceIndex]->varIdx[ii]->coef;
                             }
 
                             if (haveConstant)
@@ -8298,7 +8605,7 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                                 ((OSnLNodeNumber*)
                                     temp->m_treeRoot->m_mChildren[0]->m_mChildren[nn])->value
                                         = ((LinearMatrixValues*)
-                                            sourceMtx->value)->el[sourceIndex]->constant;
+                                            sourceElements)->el[sourceIndex]->constant;
                             }
                         }
                         ((ComplexValuedExpressionArray*)this->value)->el[targetIndex] = temp;
@@ -8325,13 +8632,13 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                         throw ErrorClass("undefined matrix element conversion");
                         break;
 
-                }// end of switch (sourceMtx->valueType)
+                }// end of switch (sourceType)
 
                 ((ComplexValuedExpressionArray*)this->value)->el[targetIndex] = temp;
 
                 //Deal with any scale factor
-                if (sourceMtx->valueType != ENUM_MATRIX_TYPE_constant   &&
-                    sourceMtx->valueType != ENUM_MATRIX_TYPE_complexConstant)
+                if (sourceType != ENUM_MATRIX_TYPE_constant   &&
+                    sourceType != ENUM_MATRIX_TYPE_complexConstant)
                 {
                     if (scalarMult < 1 || scalarMult > 1 ||
                         scalarImag < 0 || scalarImag > 0 )
@@ -8358,44 +8665,44 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                 outStr.str("");
                 outStr.clear();
 
-                switch (sourceMtx->valueType)
+                switch (sourceType)
                 {
                     case ENUM_MATRIX_TYPE_constant:
                         outStr << os_dtoa_format(((ConstantMatrixValues*)
-                                                        sourceMtx->value)->el[sourceIndex]);
+                                                        sourceElements)->el[sourceIndex]);
                         break;
 
                     case ENUM_MATRIX_TYPE_complexConstant:
                         outStr << "(" << os_dtoa_format(((ComplexMatrixValues*)
-                                                        sourceMtx->value)->el[sourceIndex].real());
+                                                        sourceElements)->el[sourceIndex].real());
                         outStr << "," << os_dtoa_format(((ComplexMatrixValues*)
-                                                        sourceMtx->value)->el[sourceIndex].imag()) << ")";
+                                                        sourceElements)->el[sourceIndex].imag()) << ")";
                         break;
 
                     case ENUM_MATRIX_TYPE_varReference:
                         outStr << "x_" 
-                               << ((VarReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                               << ((VarReferenceMatrixValues*)sourceElements)->el[sourceIndex];
                         break;
 
                     case ENUM_MATRIX_TYPE_objReference:
                         outStr << "o_" 
-                               << ((ObjReferenceMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                               << ((ObjReferenceMatrixValues*)sourceElements)->el[sourceIndex];
                         break;
 
                     case ENUM_MATRIX_TYPE_conReference:
                         outStr << "c_"
                                << ((ConReferenceMatrixValues*)
-                                            sourceMtx->value)->el[sourceIndex]->conReference
+                                            sourceElements)->el[sourceIndex]->conReference
                                << "." 
                                << returnConReferenceValueTypeString(
                                     ((ConReferenceMatrixValues*)
-                                            sourceMtx->value)->el[sourceIndex]->valueType);
+                                            sourceElements)->el[sourceIndex]->valueType);
                         break;
 
                     case ENUM_MATRIX_TYPE_mixedRowReference:
                     {
                         int tempi = ((ConReferenceMatrixValues*)
-                                            sourceMtx->value)->el[sourceIndex]->conReference;
+                                            sourceElements)->el[sourceIndex]->conReference;
                         if (tempi < 0)
                             outStr << "o_" 
                                    << tempi;
@@ -8405,18 +8712,18 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                                    << "." 
                                    << returnConReferenceValueTypeString(
                                         ((ConReferenceMatrixValues*)
-                                            sourceMtx->value)->el[sourceIndex]->valueType);
+                                            sourceElements)->el[sourceIndex]->valueType);
                         break;
                     }
 
                     case ENUM_MATRIX_TYPE_string:
-                        outStr << ((StringValuedMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                        outStr << ((StringValuedMatrixValues*)sourceElements)->el[sourceIndex];
                         break;
 
                     case ENUM_MATRIX_TYPE_linear:
                     {
                         LinearMatrixElement*  
-                            tempLin = ((LinearMatrixValues*)sourceMtx->value)->el[sourceIndex];
+                            tempLin = ((LinearMatrixValues*)sourceElements)->el[sourceIndex];
 
                         if (tempLin->constant < 0.0 || tempLin->constant > 0.0)
                             outStr <<   os_dtoa_format(tempLin->constant);
@@ -8453,10 +8760,10 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                     case ENUM_MATRIX_TYPE_realValuedExpressions:
                     {
                         std::vector<ExprNode*> postfixVec;
-                        if ( ((RealValuedExpressionArray*)sourceMtx->value)->el[sourceIndex] != NULL)
+                        if ( ((RealValuedExpressionArray*)sourceElements)->el[sourceIndex] != NULL)
                         {
                             postfixVec
-                                = ((RealValuedExpressionArray*) sourceMtx->value)
+                                = ((RealValuedExpressionArray*)sourceElements)
                                         ->el[sourceIndex]->getPostfixFromExpressionTree();
                             outStr << getExpressionTreeAsInfixString(postfixVec);
                         }
@@ -8468,10 +8775,10 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                     case ENUM_MATRIX_TYPE_complexValuedExpressions:
                     {
                         std::vector<ExprNode*> postfixVec;
-                        if ( ((ComplexValuedExpressionArray*)sourceMtx->value)->el[sourceIndex] != NULL)
+                        if ( ((ComplexValuedExpressionArray*)sourceElements)->el[sourceIndex] != NULL)
                         {
                             postfixVec
-                                = ((ComplexValuedExpressionArray*) sourceMtx->value)
+                                = ((ComplexValuedExpressionArray*)sourceElements)
                                         ->el[sourceIndex]->getPostfixFromExpressionTree();
                             outStr << getExpressionTreeAsInfixString(postfixVec);
                         }
@@ -8484,7 +8791,7 @@ bool GeneralSparseMatrix::copyValue(GeneralSparseMatrix* sourceMtx, int sourceIn
                         throw ErrorClass("undefined matrix element conversion");
                         break;
 
-                }// end switch (sourceMtx->valueType) 
+                }// end switch (sourceType) 
 
                 if (scaleType != 0)
                     throw ErrorClass("Scalar multiple not defined for string-valued elements");
@@ -8589,6 +8896,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertToOtherMajor(ENUM_MATRIX_TYPE c
         {
             miStart [ i ] = 0;
         }
+
         // for illustration assume we are converting from column to row major
         // i is indexing columns and j is indexing row numbers
         for (i = 0; i < iNumSource; i++)
@@ -8621,7 +8929,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertToOtherMajor(ENUM_MATRIX_TYPE c
             {
                 iTemp = miStart[this->index[j]];
                 miIndex [ iTemp] = i;
-                if (!tempMtx->copyValue(this, j, iTemp))
+                if (!tempMtx->copyValue(this->value, this->valueType, j, iTemp))
                     throw ErrorClass("Error copying a value in GeneralSparseMatrix::convertToOtherMajor()");
                 miStart[this->index[j]] ++;
             }
@@ -8685,18 +8993,18 @@ GeneralSparseMatrix* GeneralSparseMatrix::expandSymmetry(ENUM_MATRIX_TYPE conver
         tempMtx = new GeneralSparseMatrix();
 
         tempMtx->valueType       = convertTo;
-        tempMtx->symmetry        = symmetry;
+        tempMtx->symmetry        = ENUM_MATRIX_SYMMETRY_none;
 //        tempMtx->isRowMajor      = (this->isRowMajor == transpose_);
 //        tempMtx->numberOfRows    = ;
 //        tempMtx->numberOfColumns = numberOfColumns;
 
-        if ( (symmetry == ENUM_MATRIX_SYMMETRY_none) || 
-             (symmetry == ENUM_MATRIX_SYMMETRY_unknown) )
+        if ( (this->symmetry == ENUM_MATRIX_SYMMETRY_none) || 
+             (this->symmetry == ENUM_MATRIX_SYMMETRY_unknown) )
         {
             throw ErrorClass("Nothing to do!");
         }
-        else if ( (symmetry != ENUM_MATRIX_SYMMETRY_upper) && 
-                  (symmetry != ENUM_MATRIX_SYMMETRY_lower) )
+        else if ( (this->symmetry != ENUM_MATRIX_SYMMETRY_upper) && 
+                  (this->symmetry != ENUM_MATRIX_SYMMETRY_lower) )
         {
             throw ErrorClass("Requested symmetry type not yet implemented");
         }
@@ -8711,18 +9019,14 @@ GeneralSparseMatrix* GeneralSparseMatrix::expandSymmetry(ENUM_MATRIX_TYPE conver
         tempMtx->startSize = numberOfColumns + 1;
         tempMtx->start = new int[tempMtx->startSize]; 
 
-        if (!tempMtx->allocateValueArray(tempMtx->valueSize))
-            throw ErrorClass("Error allocating value array in GeneralSparseMatrix::expandSymmetry()");
-
         int i,j, iTemp;
         int iNumSource = this->startSize - 1;
 
         int* miStart = tempMtx->start;
-        int* miIndex = tempMtx->index;
     
         int mode;
-        if ( ( (symmetry == ENUM_MATRIX_SYMMETRY_upper) && !rowMajor_) ||
-             ( (symmetry == ENUM_MATRIX_SYMMETRY_lower) &&  rowMajor_) )
+        if ( ((symmetry == ENUM_MATRIX_SYMMETRY_upper) &&  rowMajor_) ||
+             ((symmetry == ENUM_MATRIX_SYMMETRY_lower) && !rowMajor_) )
             mode = 1;
         else
             mode = 2;
@@ -8733,7 +9037,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::expandSymmetry(ENUM_MATRIX_TYPE conver
         // so record the size of each column first 
         for ( i = 1; i < tempMtx->startSize; i++)
         {
-            miStart [ i ] = this->start[i+1] - start[i];
+            miStart [ i ] = this->start[i] - start[i-1];
         }
 
         // i is indexing columns and j is indexing row numbers
@@ -8745,7 +9049,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::expandSymmetry(ENUM_MATRIX_TYPE conver
                 // if this is larger than the column index i, we duplicate the value:
                 // we increase by 1 (or push back) the start of the column indexed
                 // by index[j] + 1, i.e., the start of the next column
-                // if equal to i, the element is on the main diagonal (kept, but not duplicated)
+                // if equal to i, the element is on the main diagonal (not duplicated)
                 // if less than i, then the matrix is not represented properly
                 if (mode == 1)
                 {
@@ -8773,8 +9077,12 @@ GeneralSparseMatrix* GeneralSparseMatrix::expandSymmetry(ENUM_MATRIX_TYPE conver
             miStart[i] += miStart [i - 1] ;
         }
 
-        tempMtx->valueSize = miStart[tempMtx->startSize];
+        tempMtx->valueSize = miStart[tempMtx->startSize-1];
         tempMtx->index = new int[tempMtx->valueSize];
+        int* miIndex = tempMtx->index;
+
+        if (!tempMtx->allocateValueArray(tempMtx->valueSize))
+            throw ErrorClass("Error allocating value array in GeneralSparseMatrix::expandSymmetry()");
 
         // now get the correct values
         // again assume we are reflecting the upper triangle into the lower
@@ -8785,9 +9093,9 @@ GeneralSparseMatrix* GeneralSparseMatrix::expandSymmetry(ENUM_MATRIX_TYPE conver
             // get row indices and values of the matrix
             for (j = this->start[i]; j < this->start[ i + 1 ]; j++)
             {
-                miIndex[i] = j;
                 iTemp = miStart[i];
-                if (!tempMtx->copyValue(this, i, iTemp))
+                miIndex[iTemp] = index[j];
+                if (!tempMtx->copyValue(this->value, this->valueType, j, iTemp))
                     throw ErrorClass("Error copying a value in GeneralSparseMatrix::convertType()");
                 miStart[i] ++;
 
@@ -8796,7 +9104,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::expandSymmetry(ENUM_MATRIX_TYPE conver
                 {
                     iTemp = miStart[this->index[j]];
                     miIndex [ iTemp] = i;
-                    if (!tempMtx->copyValue(this, j, iTemp))
+                    if (!tempMtx->copyValue(this->value, this->valueType, j, iTemp))
                         throw ErrorClass("Error copying a value in GeneralSparseMatrix::convertType()");
                     miStart[this->index[j]] ++;
                 }
@@ -8823,7 +9131,8 @@ GeneralSparseMatrix* GeneralSparseMatrix::expandSymmetry(ENUM_MATRIX_TYPE conver
 
 
 
-GeneralSparseMatrix* GeneralSparseMatrix::convertType(ENUM_MATRIX_TYPE convertTo_)
+GeneralSparseMatrix* GeneralSparseMatrix::convertType(ENUM_MATRIX_TYPE convertTo_,
+                                                      double scalarMult, double scalarImag)
 {
     ostringstream outStr;
 #ifndef NDEBUG
@@ -8872,7 +9181,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertType(ENUM_MATRIX_TYPE convertTo
             throw ErrorClass("Error allocating value array in GeneralSparseMatrix::convertType()");
 
         for (int i=0; i < tempMtx->valueSize; i++)
-            if (!tempMtx->copyValue(this, i, i))
+            if (!tempMtx->copyValue(this->value, this->valueType, i, i, scalarMult, scalarImag))
                 throw ErrorClass("Error copying a value in GeneralSparseMatrix::convertType()");
 
        return tempMtx;
@@ -8971,7 +9280,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertSymmetry(ENUM_MATRIX_SYMMETRY s
                         if (index[j] >= i)
                         {
                             tempMtx->index[tmpVal] = this->index[j];
-                            if (!tempMtx->copyValue(this, j, tmpVal)) 
+                            if (!tempMtx->copyValue(this->value, this->valueType, j, tmpVal)) 
                                 throw ErrorClass(
                                     "Error copying a value in GeneralSparseMatrix::convertSymmetry()");
                             tmpVal++;
@@ -9004,7 +9313,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertSymmetry(ENUM_MATRIX_SYMMETRY s
                         if (index[j] <= i)
                         {
                             tempMtx->index[tmpVal] = this->index[j];
-                            if (!tempMtx->copyValue(this, j, tmpVal)) 
+                            if (!tempMtx->copyValue(this->value, this->valueType, j, tmpVal)) 
                                 throw ErrorClass(
                                     "Error copying a value in GeneralSparseMatrix::convertSymmetry()");
                             tmpVal++;
@@ -9043,7 +9352,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertSymmetry(ENUM_MATRIX_SYMMETRY s
 ExpandedMatrixBlocks::ExpandedMatrixBlocks():
     valueType(ENUM_MATRIX_TYPE_unknown),
     isRowMajor(false),
-    symmetry(ENUM_MATRIX_SYMMETRY_none),
+    symmetry(ENUM_MATRIX_SYMMETRY_unknown),
     rowOffset(NULL),
     colOffset(NULL),
     rowOffsetSize(0),
@@ -9327,7 +9636,7 @@ ConReferenceMatrixElement* convertToConReferenceMatrixElement(int objref)
 
 std::complex<double> convertToComplexMatrixElement(double val)
 {
-    std::complex<double> tmp = val;
+    static std::complex<double> tmp = val;
     return tmp;
 }//end of convertToComplexMatrixElement(double val)
 

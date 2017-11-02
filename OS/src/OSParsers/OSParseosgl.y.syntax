@@ -907,8 +907,8 @@ matrixAttributes: matrixAttributeList
         ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
-            osglData->symmetry =  "none";
+//        if (osglData->symmetry == "default")
+//            osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
     }
@@ -1192,6 +1192,7 @@ baseMatrixStart: BASEMATRIXSTART
     osglData->baseMatrixEndColPresent = false;
     osglData->baseTransposePresent = false;
     osglData->scalarMultiplierPresent = false;
+    osglData->scalarImaginaryPartPresent = false;
     osglData->baseMatrixEndRow = -1;
     osglData->baseMatrixEndCol = -1;
 };
@@ -1223,6 +1224,8 @@ baseMatrixAttributes: baseMatrixAttList
         ((BaseMatrix*)osglData->tempC)->baseTranspose = osglData->baseTranspose;
     if (osglData->scalarMultiplierPresent == true)
         ((BaseMatrix*)osglData->tempC)->scalarMultiplier = osglData->scalarMultiplier;
+    if (osglData->scalarImaginaryPartPresent == true)
+        ((BaseMatrix*)osglData->tempC)->scalarImaginaryPart = osglData->scalarImaginaryPart;
 };
 
 baseMatrixAttList: | baseMatrixAttList baseMatrixAtt;
@@ -1236,7 +1239,8 @@ baseMatrixAtt:
     | osglBaseMatrixEndRowATT
     | osglBaseMatrixEndColATT
     | osglBaseTransposeATT
-    | osglScalarMultiplierATT;
+    | osglScalarMultiplierATT
+    | osglScalarImaginaryPartATT;
 
 
 baseMatrixEnd: GREATERTHAN BASEMATRIXEND | ENDOFELEMENT;
@@ -2874,6 +2878,16 @@ osglScalarMultiplierATT: SCALARMULTIPLIERATT QUOTE aNumber QUOTE
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one scalar multiplier attribute in <baseMatrix> element");
     osglData->scalarMultiplierPresent = true;   
     osglData->scalarMultiplier = parserData->tempVal;
+};
+
+osglScalarImaginaryPartATT: SCALARIMAGINARYPARTATT QUOTE aNumber QUOTE
+{
+    if ( *$2 != *$4 ) 
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    if (osglData->scalarImaginaryPartPresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one scalar multiplier imaginary part attribute in <baseMatrix> element");
+    osglData->scalarImaginaryPartPresent = true;   
+    osglData->scalarImaginaryPart = parserData->tempVal;
 };
 
 

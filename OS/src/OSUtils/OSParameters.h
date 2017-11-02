@@ -881,10 +881,10 @@ inline ENUM_MATRIX_TYPE mergeMatrixTypeProduct(ENUM_MATRIX_TYPE type1, ENUM_MATR
             type2 == ENUM_MATRIX_TYPE_unknown ||
             type1 == ENUM_MATRIX_TYPE_string  ||
             type2 == ENUM_MATRIX_TYPE_string  )
-            throw ErrorClass("Matrix types do not support addition");
+            throw ErrorClass("Matrix types do not support multiplication");
 
-        if (type1 == ENUM_MATRIX_TYPE_empty) return type2;
-        if (type2 == ENUM_MATRIX_TYPE_empty) return type1;
+        if (type1 == ENUM_MATRIX_TYPE_empty) return ENUM_MATRIX_TYPE_empty;
+        if (type2 == ENUM_MATRIX_TYPE_empty) return ENUM_MATRIX_TYPE_empty;
 
         if (type1 == ENUM_MATRIX_TYPE_complexValuedExpressions || 
             type2 == ENUM_MATRIX_TYPE_complexValuedExpressions) 

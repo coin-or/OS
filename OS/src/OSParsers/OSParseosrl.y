@@ -225,7 +225,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %token BASEMATRIXIDXATT TARGETMATRIXFIRSTROWATT TARGETMATRIXFIRSTCOLATT
 %token BASEMATRIXSTARTROWATT BASEMATRIXSTARTCOLATT BASEMATRIXENDROWATT BASEMATRIXENDCOLATT
-%token SCALARMULTIPLIERATT BLOCKROWIDXATT BLOCKCOLIDXATT REATT IMATT
+%token SCALARMULTIPLIERATT SCALARIMAGINARYPARTATT BLOCKROWIDXATT BLOCKCOLIDXATT REATT IMATT
 
 %token MATRIXVARIDXATT MATRIXOBJIDXATT MATRIXCONIDXATT
 
@@ -313,8 +313,10 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token MATRIXDIAGONALSTART MATRIXDIAGONALEND MATRIXDOTTIMESSTART MATRIXDOTTIMESEND
 %token MATRIXLOWERTRIANGLESTART MATRIXLOWERTRIANGLEEND MATRIXUPPERTRIANGLESTART MATRIXUPPERTRIANGLEEND
 %token MATRIXMERGESTART MATRIXMERGEEND MATRIXMINUSSTART MATRIXMINUSEND MATRIXNEGATESTART MATRIXNEGATEEND
-%token MATRIXPLUSSTART MATRIXPLUSEND MATRIXTIMESSTART MATRIXTIMESEND MATRIXPRODUCTSTART MATRIXPRODUCTEND
-%token MATRIXSCALARTIMESSTART MATRIXSCALARTIMESEND MATRIXSUBMATRIXATSTART MATRIXSUBMATRIXATEND
+%token MATRIXPLUSSTART MATRIXPLUSEND MATRIXTIMESSTART MATRIXTIMESEND
+%token MATRIXSUMSTART MATRIXSUMEND MATRIXPRODUCTSTART MATRIXPRODUCTEND
+%token MATRIXSCALARTIMESSTART MATRIXSCALARTIMESEND
+%token MATRIXSUBMATRIXATSTART MATRIXSUBMATRIXATEND
 %token MATRIXTRANSPOSESTART MATRIXTRANSPOSEEND MATRIXREFERENCESTART MATRIXREFERENCEEND
 %token IDENTITYMATRIXSTART IDENTITYMATRIXEND MATRIXINVERSESTART  MATRIXINVERSEEND
 
@@ -4761,8 +4763,8 @@ matrixAttributes: matrixAttributeList
         ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
-            osglData->symmetry =  "none";
+//        if (osglData->symmetry == "default")
+//            osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
     }
@@ -5046,6 +5048,7 @@ baseMatrixStart: BASEMATRIXSTART
     osglData->baseMatrixEndColPresent = false;
     osglData->baseTransposePresent = false;
     osglData->scalarMultiplierPresent = false;
+    osglData->scalarImaginaryPartPresent = false;
     osglData->baseMatrixEndRow = -1;
     osglData->baseMatrixEndCol = -1;
 };
@@ -5077,6 +5080,8 @@ baseMatrixAttributes: baseMatrixAttList
         ((BaseMatrix*)osglData->tempC)->baseTranspose = osglData->baseTranspose;
     if (osglData->scalarMultiplierPresent == true)
         ((BaseMatrix*)osglData->tempC)->scalarMultiplier = osglData->scalarMultiplier;
+    if (osglData->scalarImaginaryPartPresent == true)
+        ((BaseMatrix*)osglData->tempC)->scalarImaginaryPart = osglData->scalarImaginaryPart;
 };
 
 baseMatrixAttList: | baseMatrixAttList baseMatrixAtt;
@@ -5090,7 +5095,8 @@ baseMatrixAtt:
     | osglBaseMatrixEndRowATT
     | osglBaseMatrixEndColATT
     | osglBaseTransposeATT
-    | osglScalarMultiplierATT;
+    | osglScalarMultiplierATT
+    | osglScalarImaginaryPartATT;
 
 
 baseMatrixEnd: GREATERTHAN BASEMATRIXEND | ENDOFELEMENT;
@@ -6730,6 +6736,16 @@ osglScalarMultiplierATT: SCALARMULTIPLIERATT QUOTE aNumber QUOTE
     osglData->scalarMultiplier = parserData->tempVal;
 };
 
+osglScalarImaginaryPartATT: SCALARIMAGINARYPARTATT QUOTE aNumber QUOTE
+{
+    if ( *$2 != *$4 ) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if (osglData->scalarImaginaryPartPresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one scalar multiplier imaginary part attribute in <baseMatrix> element");
+    osglData->scalarImaginaryPartPresent = true;   
+    osglData->scalarImaginaryPart = parserData->tempVal;
+};
+
 
 /* 4. Attributes returning strings (that may be empty) */
 
@@ -7630,6 +7646,7 @@ OSnLMNode: matrixReference
          | matrixMinus
          | matrixNegate
          | matrixPlus
+         | matrixSum
          | matrixTimes
          | matrixProduct
          | matrixScalarTimes
@@ -7882,6 +7899,26 @@ matrixPlusStart: MATRIXPLUSSTART
 matrixPlusContent: OSnLMNode OSnLMNode MATRIXPLUSEND;
 
 
+matrixSum: MATRIXSUMSTART
+{
+    osnlData->nlNodePoint = new OSnLMNodeMatrixSum();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->matrixSumVec.push_back( osnlData->nlNodePoint);
+}
+anothermatrixsumnode MATRIXSUMEND
+{
+    osnlData->matrixSumVec.back()->m_mChildren 
+        = new ExprNode*[ osnlData->matrixSumVec.back()->inumberOfChildren];
+    osnlData->matrixSumVec.pop_back();
+};
+
+anothermatrixsumnode: | anothermatrixsumnode OSnLMNode
+{
+    osnlData->matrixSumVec.back()->inumberOfChildren++;
+};
+
+
+
 matrixTimes: matrixTimesStart matrixTimesContent;
 
 matrixTimesStart: MATRIXTIMESSTART 
@@ -7909,7 +7946,6 @@ anothermatrixproductnode: | anothermatrixproductnode OSnLMNode
 { 
     osnlData->matrixProductVec.back()->inumberOfChildren++; 
 };
-
 
 
 matrixScalarTimes: matrixScalarTimesStart matrixScalarTimesContent;

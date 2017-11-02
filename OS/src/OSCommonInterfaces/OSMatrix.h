@@ -2361,17 +2361,37 @@ public:
     bool allocateValueArray(int nValues); 
 
     /**
-     *  A method to copy one value from one generalSparseMatrix to another 
-     *  of possibly different type
-     *  @param sourceMtx is the source from which to copy
+     *  A method to copy one value from an array of MatrixElementValues  
+     *           to a generalSparseMatrix of possibly different type
+     *  @param sourceElements is the source array from which to copy
+     *  @param sourceType gives the type of elements in the source array
      *  @param sourceIndex gives the location within the source's value array to be copied from
      *  @param targetIndex gives the location within the target's value array to be copied to
      *  @param scalarMult if present, gives a real scalar by which to multiply the value to be copied
      *  @param scalarImag if present, gives the imaginary part of the scalar multiplier
      *  @return whether the copy operation was successful
+     *  @remark The method automatically converts the type element from the sourceType
+     *          to the type found in the target matrix (this->valueType)
+     */
+    bool copyValue(MatrixElementValues* sourceElements, ENUM_MATRIX_TYPE sourceType,
+                                        int sourceIndex, int targetIndex, 
+                                        double scalarMult = 1.0, double scalarImag = 0.0); 
+
+    /**
+     *  A method to copy one value from one generalSparseMatrix 
+     *           to another generalSparseMatrix of possibly different type
+     *  @param sourceElements is the source array from which to copy
+     *  @param sourceType gives the type of elements in the source array
+     *  @param sourceIndex gives the location within the source's value array to be copied from
+     *  @param targetIndex gives the location within the target's value array to be copied to
+     *  @param scalarMult if present, gives a real scalar by which to multiply the value to be copied
+     *  @param scalarImag if present, gives the imaginary part of the scalar multiplier
+     *  @return whether the copy operation was successful
+     *  @remark The method automatically converts the type element from the sourceType
+     *          to the type found in the target matrix (this->valueType)
      */
     bool copyValue(GeneralSparseMatrix* sourceMtx, int sourceIndex, int targetIndex, 
-                                                   double scalarMult = 1.0, double scalarImag = 0.0); 
+                                        double scalarMult = 1.0, double scalarImag = 0.0); 
 
     /**
      *  A method to change the orientation of a generalSparseMatrix 
@@ -2380,10 +2400,10 @@ public:
      *          of a matrix to a row-wise one and vice versa. (This means that row indices are
      *          changed into column indices and vice versa.) However, the same procedure can be
      *          used to find the transpose of a matrix. In this case, the new indices have the
-     *          same meaning (row indices, resp. column indices) as in the old matrix.
+     *          _same meaning_ (row indices, resp. column indices) as in the old matrix.
      *  @param convertTo_ gives the type of elements to be stored into the target matrix
      *  @param transpose_ specifies whether the matrix is to be transposed in the process
-     *          (i.e., the identity of the index array is to be adjusted)
+     *         (i.e., the identity of the index array is to be adjusted)
      *  @return the transformed matrix
      */
     GeneralSparseMatrix* convertToOtherMajor(ENUM_MATRIX_TYPE convertTo_, bool transpose_);
@@ -2392,9 +2412,12 @@ public:
      *  A method to change the type of elements in a generalSparseMatrix 
      *  and store the result into another generalSparseMatrix
      *  @param convertTo_ gives the type of elements to be stored into the target matrix
+     *  @param scalarMult if present, gives a real scalar by which to multiply the values
+     *  @param scalarImag if present, gives the imaginary part of the scalar multiplier
      *  @return the transformed matrix
      */
-    GeneralSparseMatrix* convertType(ENUM_MATRIX_TYPE convertTo_);
+    GeneralSparseMatrix* convertType(ENUM_MATRIX_TYPE convertTo_,
+                                     double scalarMult = 1.0, double scalarImag = 0.0);
 
     /**
      *  A method to change the type of symmetry used in storing a generalSparseMatrix 
@@ -2717,10 +2740,11 @@ public:
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the processed elements of the baseMatrix as a pointer to a GeneralSparseMatrix object.
      */
-     virtual GeneralSparseMatrix* 
-                    processBaseMatrix(OSMatrix** mtxIdx, bool rowMajor_, 
-                                      ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                                      ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
+     virtual GeneralSparseMatrix*
+                processBaseMatrix(
+                    OSMatrix** mtxIdx, bool rowMajor_, 
+                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A method to determine the block structure of a matrixType 
@@ -2781,18 +2805,20 @@ public:
 
     /**
      *  A method to repackage an elements constructor into the form required in the referencing matrixType. 
-     *  Processing may include transposing the elements and applying symmetry.
+     *  Processing may include transposing the elements, changing the type and applying symmetry.
      *
      *  @param nConst gives the number of the constructor within the constructor list
      *         of the parent matrix or block
      *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
      *         or column major.
+     *  @param convertTo_ can be used to force conversion of matrix elements to a specific form.
      *  @param symmetry_ can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the expanded elements as a pointer to a GeneralSparseMatrix object.
      */
     virtual GeneralSparseMatrix* 
         extractElements(int nConst, bool rowMajor,
+                        ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                         ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
     /**
      *  A method to expand a matrix transformation into the form required in the referencing matrixType. 
@@ -2815,14 +2841,14 @@ public:
 
     /**
      *  A method to process a matrixType into a block structure defined by 
-     *  the <blocks> element or elements.
-     *  @param mtxIdx    provides pointers to all defined matrices for use within transformations.
-     *  @param rowMajor_ indicates whether the blocks should be stored in row major (if true)
-     *         or column major.
+     *  @param mtxIdx     provides pointers to all defined matrices for use within transformations.
+     *  @param rowMajor_  indicates whether the blocks should be stored in row major (if true)
+     *                    or column major.
      *  @param convertTo_ is an optional parameter that can be used to covert the elements
-     *         of all blocks to a different type 
-     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
-     *         on the parameter value --- see OSParameters.h for definitions. The default is "none"
+     *                    of all blocks to a different type 
+     *  @param symmetry_  can be used to store only the upper or lower triangle, depending
+     *                    on the parameter value --- see OSParameters.h for definitions. 
+     *                    The default is "none".
      *  @return whether the operation was successful
      *
      *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
@@ -3093,7 +3119,7 @@ public:
      * @param numberOfColumns holds the number of columns. It is required. Use 1 for row vectors.
      * @param symmetry holds the type of symmetry used in the definition of the matrix. 
      *        For more information  see the enumeration ENUM_MATRIX_SYMMETRY in OSGeneral.h.
-     *        If no symmetry, use ENUM_MATRIX_SYMMETRY_none.
+     *        If no symmetry, use ENUM_MATRIX_SYMMETRY_unknown.
      * @param declaredMatrixType tracks the type of elements contained in this matrix.
      *        For more information  see the enumeration ENUM_MATRIX_TYPE in OSGeneral.h.
      *        If unsure, use ENUM_MATRIX_TYPE_unknown.

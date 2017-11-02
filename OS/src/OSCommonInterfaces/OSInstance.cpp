@@ -4267,8 +4267,9 @@ bool OSInstance::addMatrix(int arrayIndex, std::string name, int numberOfRows, i
     if (arrayIndex < 0 || arrayIndex > instanceData->matrices->numberOfMatrices) return false;
     if (instanceData->matrices->matrix == NULL) return false;
     instanceData->matrices->matrix[arrayIndex] = new OSMatrix();
-    return instanceData->matrices->matrix[arrayIndex]->setMatrix(name,numberOfRows,numberOfColumns,symmetry,
-                                         matrixType,ENUM_MATRIX_TYPE_unknown,inumberOfChildren,m_mChildren);
+    return instanceData->matrices->matrix[arrayIndex]->setMatrix(
+                name, numberOfRows, numberOfColumns, symmetry, matrixType,
+                ENUM_MATRIX_TYPE_unknown, inumberOfChildren, m_mChildren);
 }//addMatrix
 
 bool OSInstance::setConeNumber(int number)

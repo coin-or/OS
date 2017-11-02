@@ -111,7 +111,7 @@
 
 <!-- The matrices section can be expanded as needed. The first 32 matrices mostly test the parser,
      although some are reused later for testing various expansion methods -->
-        <matrices numberOfMatrices= " 59 " >
+        <matrices numberOfMatrices= " 66 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -265,7 +265,7 @@
                     </value>
                 </linearElements>
             </matrix>
-           <matrix numberOfColumns="2" numberOfRows="2" name="9-realValuedExpressions">
+            <matrix numberOfColumns="2" numberOfRows="2" name="9-realValuedExpressions">
                 <realValuedExpressions numberOfValues="4">
                     <start>
                         <el mult="3" incr="2">0</el>
@@ -524,7 +524,7 @@
                     </matrixTimes>
                 </transformation>
             </matrix>
-            <matrix numberOfColumns="2" numberOfRows="2" name="21-M6-times-M14---jumbled">
+            <matrix numberOfColumns="2" numberOfRows="2" name="21-M5-times-M14---jumbled">
                 <transformation>
                     <matrixTimes>
                         <matrixReference idx="5"></matrixReference>
@@ -533,16 +533,16 @@
                 </transformation>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="22-emptyMatrix"/>
-            <matrix numberOfColumns="2" numberOfRows="2" name="23-symmetricVarRef" symmetry="upper">
-                <varReferenceElements numberOfValues="2">
+            <matrix numberOfColumns="5" numberOfRows="5" name="23-symmetricVarRef" symmetry="upper">
+                <varReferenceElements numberOfValues="9">
                     <start>
-                        <el mult="3" incr="1">0</el>
+                        <el mult="5" incr="1">0</el>  <el>9</el>
                     </start>
                     <index>
-                        <el mult="2">0</el>
+                        <el mult="5">0</el>    <el mult="4" incr="1">1</el>
                     </index>
                     <value>
-                        <el mult="2" incr="1">0</el>
+                        <el mult="9" incr="1">0</el>
                     </value>
                 </varReferenceElements>
             </matrix>
@@ -2499,6 +2499,154 @@
                         <matrixReference idx="56"></matrixReference>
                         <matrixReference idx="57"></matrixReference>
                     </matrixPlus>
+                </transformation>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="3" name="59-M56-minus-M57">
+                <transformation>
+                    <matrixMinus>
+                        <matrixReference idx="56"></matrixReference>
+                        <matrixReference idx="57"></matrixReference>
+                    </matrixMinus>
+                </transformation>
+            </matrix>
+            <matrix numberOfColumns="3" numberOfRows="12" name="60-first summand for matrixSum test">
+                <constantElements numberOfValues="10">
+                    <start>
+                        <el>0</el>    <el>3</el>    <el>6</el>    <el>10</el>
+                    </start>
+                    <index>
+                        <el>4</el>
+                        <el>1</el>
+                        <el>7</el>
+                        <el>6</el>
+                        <el>9</el>
+                        <el>2</el>
+                        <el>3</el>
+                        <el>2</el>
+                        <el>1</el>
+                        <el>0</el>
+                    </index>
+                    <value>
+                        <el>2.0</el>
+                        <el>1.0</el>
+                        <el>3.0</el>
+                        <el>5.0</el>
+                        <el>6.0</el>
+                        <el>4.0</el>
+                        <el>10.0</el>
+                        <el>9.0</el>
+                        <el>8.0</el>
+                        <el>7.0</el>
+                    </value>
+                </constantElements>
+            </matrix>
+            <matrix numberOfColumns="3" numberOfRows="12" name="61-second summand for matrixSum test">
+                <constantElements numberOfValues="10">
+                    <start>
+                        <el>0</el>    <el>3</el>    <el>7</el>    <el>10</el>
+                    </start>
+                    <index>
+                        <el>7</el>
+                        <el>0</el>
+                        <el>1</el>
+                        <el>2</el>
+                        <el>6</el>
+                        <el>1</el>
+                        <el>11</el>
+                        <el>2</el>
+                        <el>8</el>
+                        <el>3</el>
+                    </index>
+                    <value>
+                        <el>13.0</el>
+                        <el>11.0</el>
+                        <el>12.0</el>
+                        <el>15.0</el>
+                        <el>16.0</el>
+                        <el>14.0</el>
+                        <el>17.0</el>
+                        <el>18.0</el>
+                        <el>20.0</el>
+                        <el>19.0</el>
+                    </value>
+                </constantElements>
+            </matrix>
+            <matrix numberOfColumns="3" numberOfRows="12" name="62-third summand for matrixSum test">
+                <constantElements numberOfValues="10">
+                    <start>
+                        <el>0</el>    <el>3</el>    <el>7</el>    <el>10</el>
+                    </start>
+                    <index>
+                        <el>4</el>
+                        <el>8</el>
+                        <el>2</el>
+                        <el>5</el>
+                        <el>9</el>
+                        <el>11</el>
+                        <el>1</el>
+                        <el>8</el>
+                        <el>0</el>
+                        <el>2</el>
+                    </index>
+                    <value>
+                        <el>22.0</el>
+                        <el>23.0</el>
+                        <el>21.0</el>
+                        <el>25.0</el>
+                        <el>26.0</el>
+                        <el>27.0</el>
+                        <el>24.0</el>
+                        <el>30.0</el>
+                        <el>28.0</el>
+                        <el>29.0</el>
+                    </value>
+                </constantElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="3" name="63-MatrixSum 60+61+62">
+                <transformation>
+                    <matrixSum>
+                        <matrixReference idx="60"></matrixReference>
+                        <matrixReference idx="61"></matrixReference>
+                        <matrixReference idx="62"></matrixReference>
+                    </matrixSum>
+                </transformation>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="64-Triangle test 1 - should be zero">
+                <transformation>
+                    <matrixMinus>
+                        <matrixPlus>
+                            <matrixLowerTriangle>
+                                <matrixReference idx="3"></matrixReference>
+                            </matrixLowerTriangle>
+                            <matrixUpperTriangle>
+                                <matrixReference idx="3"></matrixReference>
+                            </matrixUpperTriangle>
+                        </matrixPlus>
+                        <matrixPlus>
+                            <matrixDiagonal>
+                                <matrixReference idx="3"></matrixReference>
+                            </matrixDiagonal>
+                            <matrixReference idx="3"></matrixReference>
+                        </matrixPlus>
+                    </matrixMinus>
+                </transformation>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="65-Triangle test 2 - should be zero">
+                <transformation>
+                    <matrixMinus>
+                        <matrixSum>
+                            <matrixLowerTriangle includeDiagonal="false">
+                                <matrixReference idx="3"></matrixReference>
+                            </matrixLowerTriangle>
+                            <matrixUpperTriangle includeDiagonal="false">
+                                <matrixReference idx="3"></matrixReference>
+                            </matrixUpperTriangle>
+                            <matrixDiagonal>
+                                <matrixReference idx="3"></matrixReference>
+                            </matrixDiagonal>
+                        </matrixSum>
+                        <matrixReference idx="3"></matrixReference>
+                    </matrixMinus>
                 </transformation>
             </matrix>
 

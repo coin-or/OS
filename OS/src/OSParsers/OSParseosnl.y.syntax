@@ -508,6 +508,7 @@ OSnLMNode: matrixReference
          | matrixMinus
          | matrixNegate
          | matrixPlus
+         | matrixSum
          | matrixTimes
          | matrixProduct
          | matrixScalarTimes
@@ -760,6 +761,26 @@ matrixPlusStart: MATRIXPLUSSTART
 matrixPlusContent: OSnLMNode OSnLMNode MATRIXPLUSEND;
 
 
+matrixSum: MATRIXSUMSTART
+{
+    osnlData->nlNodePoint = new OSnLMNodeMatrixSum();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->matrixSumVec.push_back( osnlData->nlNodePoint);
+}
+anothermatrixsumnode MATRIXSUMEND
+{
+    osnlData->matrixSumVec.back()->m_mChildren 
+        = new ExprNode*[ osnlData->matrixSumVec.back()->inumberOfChildren];
+    osnlData->matrixSumVec.pop_back();
+};
+
+anothermatrixsumnode: | anothermatrixsumnode OSnLMNode
+{
+    osnlData->matrixSumVec.back()->inumberOfChildren++;
+};
+
+
+
 matrixTimes: matrixTimesStart matrixTimesContent;
 
 matrixTimesStart: MATRIXTIMESSTART 
@@ -787,7 +808,6 @@ anothermatrixproductnode: | anothermatrixproductnode OSnLMNode
 { 
     osnlData->matrixProductVec.back()->inumberOfChildren++; 
 };
-
 
 
 matrixScalarTimes: matrixScalarTimesStart matrixScalarTimesContent;

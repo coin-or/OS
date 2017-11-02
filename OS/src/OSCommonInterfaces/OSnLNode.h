@@ -219,6 +219,18 @@ public:
     virtual OSMatrix* calculateFunction_M(double *x);
 
     /**
+     * Calculate the function value given the current variable values.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from the OSnLTNode class.
+     *
+     * @param x holds the values of the variables in a double array.
+     * @return the function value given the current variable values.
+     * @remark this function will have different return value when implemented in
+     *         OSnLNode, OSnLMNode and OSnLCNode as well as their descendants.
+     */
+    //virtual OSMatrix* calculateFunction_T(double *x);
+
+    /**
      * Create the AD tape to be evaluated by AD.
      * This is an abstract method which is required to be implemented by the concrete
      * operator nodes that derive or extend from this OSnLNode class.

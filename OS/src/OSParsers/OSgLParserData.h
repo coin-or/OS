@@ -161,6 +161,7 @@ public:
     bool matrixVarIdxPresent;
     bool multPresent;
     bool scalarMultiplierPresent;
+    bool scalarImaginaryPartPresent;
     bool targetMatrixFirstRowPresent;
     bool targetMatrixFirstColPresent;
 
@@ -202,6 +203,7 @@ public:
     int matrixVarIdx;
     int mult;
     double scalarMultiplier;
+    double scalarImaginaryPart;
     int targetMatrixFirstRow;
     int targetMatrixFirstCol;
 

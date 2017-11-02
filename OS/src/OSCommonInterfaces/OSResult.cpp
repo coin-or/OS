@@ -6799,8 +6799,9 @@ bool OSResult::setMatrixVarValuesBlockStructure(int solIdx, int idx, int* colOff
 }//setMatrixVarValuesBlockStructure
 
 
-bool OSResult::setMatrixVarValuesBlockElements(int solIdx, int idx, int blkno, int blkRowIdx, int blkColIdx,
-            int nz, int* start, int* index, MatrixElementValues* value, ENUM_MATRIX_TYPE valueType,
+bool OSResult::setMatrixVarValuesBlockElements(int solIdx, int idx, int blkno,
+            int blkRowIdx, int blkColIdx, int nz, int* start, int* index,
+            MatrixElementValues* value, ENUM_MATRIX_TYPE valueType,
             ENUM_MATRIX_SYMMETRY symmetry, bool rowMajor)
 {
     try
@@ -6845,7 +6846,7 @@ bool OSResult::setMatrixVarValuesBlockElements(int solIdx, int idx, int blkno, i
 
         ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
                     ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
-                    ->m_mChildren[blkno])->symmetry = ENUM_MATRIX_SYMMETRY_lower;
+                    ->m_mChildren[blkno])->symmetry = symmetry;
 
         ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
                     ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
@@ -7141,7 +7142,7 @@ bool OSResult::setMatrixVariablesOtherResultBlockElements(int solIdx, int otherI
 
         ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
                     ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]
-                    ->m_mChildren[0])->m_mChildren[blkno])->symmetry = ENUM_MATRIX_SYMMETRY_lower;
+                    ->m_mChildren[0])->m_mChildren[blkno])->symmetry = symmetry;
 
         ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
                     ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]

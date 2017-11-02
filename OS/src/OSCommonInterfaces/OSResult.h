@@ -5137,9 +5137,11 @@ public:
      *        for which values are to be provided
      * @return whether the matrix variable attributes are set successfully or not.  
      */
-    bool setMatrixVarValuesAttributes(int solIdx, int idx, int matrixVarIdx, int numberOfRows, 
-            int numberOfColumns, ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_none, 
-            ENUM_MATRIX_TYPE type=ENUM_MATRIX_TYPE_unknown, std::string name="");
+    bool setMatrixVarValuesAttributes(int solIdx, int idx, int matrixVarIdx,
+                                      int numberOfRows, int numberOfColumns,
+                                      ENUM_MATRIX_SYMMETRY symmetry = ENUM_MATRIX_SYMMETRY_unknown, 
+                                      ENUM_MATRIX_TYPE type = ENUM_MATRIX_TYPE_unknown,
+                                      std::string name="");
 
     /**
      * A method to set the block structure for the values of a matrixVar
@@ -5196,7 +5198,7 @@ public:
      */
     bool setMatrixVarValuesBlockElements(int solIdx, int idx, int blkno, int blkRowIdx, int blkColIdx,
             int nz, int* start, int* index, MatrixElementValues* value, ENUM_MATRIX_TYPE valueType,
-            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_none, bool rowMajor=false);
+            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_unknown, bool rowMajor=false);
 
     /**
      * A method to set general attributes for another (non-standard/solver specific) result
@@ -5254,7 +5256,7 @@ public:
      */
     bool setMatrixVariablesOtherResultMatrixAttributes(int solIdx, int otherIdx, int matrixVarIdx, 
             int numberOfRows, int numberOfColumns, 
-            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_none, 
+            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_unknown, 
             ENUM_MATRIX_TYPE type=ENUM_MATRIX_TYPE_unknown, std::string name="");
 
     /**
@@ -5318,7 +5320,7 @@ public:
     bool setMatrixVariablesOtherResultBlockElements(int solIdx, int otherIdx, int matrixVarIdx, 
             int blkno, int blkRowIdx, int blkColIdx, int nz, int* start, int* index,
             MatrixElementValues* value, ENUM_MATRIX_TYPE valueType,
-            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_none, bool rowMajor=false);
+            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_unknown, bool rowMajor=false);
 
     /**
      * Set the [i]th optimization solution's other (non-standard/solver specific) solution-related results,

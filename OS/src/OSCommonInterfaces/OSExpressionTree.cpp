@@ -161,7 +161,7 @@ RealValuedExpressionTree* RealValuedExpressionTree::cloneExpressionTree()
     RealValuedExpressionTree *osTree;
     osTree = new RealValuedExpressionTree();
 #ifndef NDEBUG
-    outStr.str( std::string() );
+    outStr.str("");
     outStr.clear();
     outStr << "Allocate memory at address " << osTree << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
@@ -265,7 +265,7 @@ ComplexValuedExpressionTree* ComplexValuedExpressionTree::cloneExpressionTree()
     ComplexValuedExpressionTree *osTree;
     osTree = new ComplexValuedExpressionTree();
 #ifndef NDEBUG
-    outStr.str( std::string() );
+    outStr.str("");
     outStr.clear();
     outStr << "Allocate memory at address " << osTree << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
@@ -341,7 +341,7 @@ MatrixExpressionTree* MatrixExpressionTree::cloneExpressionTree()
     MatrixExpressionTree *osTree;
     osTree = new MatrixExpressionTree();
 #ifndef NDEBUG
-    outStr.str( std::string() );
+    outStr.str("");
     outStr.clear();
     outStr << "Allocate memory at address " << osTree << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
