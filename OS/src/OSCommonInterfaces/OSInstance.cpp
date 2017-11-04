@@ -5359,6 +5359,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
             {
                 m_miJacIndex[ iTemp] = posVarIdx->first;
                 m_mdJacValue[ iTemp] = 0;
+                //at this point we know where the original variable appears in the Jacobian; store location
+                posVarIdx->second = iTemp;
                 iTemp++;
             }
         }
@@ -5540,6 +5542,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
             {
                 m_miJacIndex[ k] = posVarIdx->first;
                 m_mdJacValue[ k] = 0;
+                //at this point we know where the original variable appears in the Jacobian; store location
+                posVarIdx->second = k;
                 k++;
             }
         }
@@ -6004,9 +6008,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                         if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  )
                         {
                             jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
-                            jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
                             // kipp change 1 to number of objective functions
-                            m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
+                            m_mdJacValue[jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
                         }
                         rowNum++;
                     }//end Jacobian calculation
@@ -6097,8 +6100,7 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
                         (*expTree->mapVarIdx).end()  )
                     {
                         jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
-                        jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
-                        m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
+                        m_mdJacValue[jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
                     }
                     rowNum++;
                 }//end Jacobian calculation
