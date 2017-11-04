@@ -50,7 +50,10 @@ OSiLReader::~OSiLReader()
     m_osnlData = NULL;
 }
 
-OSInstance* OSiLReader::readOSiL(const std::string& posil) throw(ErrorClass)
+OSInstance* OSiLReader::readOSiL(const std::string& posil)
+#if __cplusplus < 201100  
+    throw(ErrorClass)
+#endif
 {
     try
     {

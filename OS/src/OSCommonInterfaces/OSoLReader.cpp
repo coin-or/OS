@@ -73,7 +73,10 @@ OSoLReader::~OSoLReader()
     m_osnlData = NULL;
 }
 
-OSOption* OSoLReader::readOSoL(const std::string& posol) throw(ErrorClass)
+OSOption* OSoLReader::readOSoL(const std::string& posol)
+#if __cplusplus < 201100  
+    throw(ErrorClass)
+#endif
 {
     if (posol.length() > 0)
     {
