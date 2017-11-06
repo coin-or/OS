@@ -4295,9 +4295,12 @@ GeneralSparseMatrix* OSnLMNodeMatrixTranspose::expandNode(OSMatrix** mtxLoc, boo
 #endif
     try
     {
-        GeneralSparseMatrix* refMtx
-            = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, convertTo_, symmetry_);
-        GeneralSparseMatrix* returnMtx = refMtx->convertToOtherMajor(convertTo_, true);
+//        GeneralSparseMatrix* refMtx
+//            = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, convertTo_, symmetry_);
+//        GeneralSparseMatrix* returnMtx = refMtx->convertToOtherMajor(convertTo_, true);
+        GeneralSparseMatrix* returnMtx
+            = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, !rowMajor_, convertTo_, symmetry_);
+        returnMtx->isRowMajor = rowMajor_; 
         return returnMtx;
     }
     catch(const ErrorClass& eclass)

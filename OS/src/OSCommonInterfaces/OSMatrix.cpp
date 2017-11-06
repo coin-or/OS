@@ -2015,119 +2015,12 @@ bool MatrixType::printExpandedMatrix(int idx)
         outStr << "number of rows     " << numberOfRows << std::endl;
         outStr << "number of columns  " << numberOfColumns << std::endl;
 //        outStr << "number of nonzeros " << tmp->valueSize << std::endl;
-//        outStr << "type of nonzeros   " << returnMatrixTypeString(tmp->valueType) << std::endl;
+ //       outStr << "type of nonzeros   " << returnMatrixTypeString(tmp->valueType) << std::endl;
         outStr << "symmetry           " << returnMatrixSymmetryString(symmetry) << std::endl;
 
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
 
         this->expandedMatrixByElements[idx]->printMatrix();
-
-#if 0
-        outStr << std::endl << "These matrix arrays are organized ";             
-        if (tmp->isRowMajor)
-            outStr << "by rows" << std::endl;
-        else
-            outStr << "by columns" << std::endl;
-
-        outStr << std::endl << "starts: ";
-        for (int i=0; i < tmp->startSize; i++)
-            outStr << "  " << tmp->start[i];
-        outStr << std::endl;
-
-        outStr << std::endl << "indexes:";
-        for (int i=0; i < tmp->valueSize; i++)
-            outStr << "  " << tmp->index[i];
-        outStr << std::endl;
-
-        outStr << std::endl << "values: ";
-        if (tmp->valueType == ENUM_MATRIX_TYPE_constant)
-        {
-            for (int i=0; i < tmp->valueSize; i++)
-                outStr << "  " << ((ConstantMatrixValues*)tmp->value)->el[i];
-            outStr << std::endl;
-        }
-        else if (tmp->valueType == ENUM_MATRIX_TYPE_varReference)
-        {
-            for (int i=0; i < tmp->valueSize; i++)
-                outStr << "  " << ((VarReferenceMatrixValues*)tmp->value)->el[i];
-            outStr << std::endl;
-        }
-        else if (tmp->valueType == ENUM_MATRIX_TYPE_objReference) 
-        {
-            for (int i=0; i < tmp->valueSize; i++)
-                outStr << "  " << ((ObjReferenceMatrixValues*)tmp->value)->el[i];
-            outStr << std::endl;
-        }
-        else if (tmp->valueType == ENUM_MATRIX_TYPE_conReference) 
-        {
-            for (int i=0; i < tmp->valueSize; i++)
-                outStr << "  " << ((ConReferenceMatrixValues*)tmp->value)->el[i]->conReference;
-            outStr << std::endl;
-        }
-        else if (tmp->valueType == ENUM_MATRIX_TYPE_realValuedExpressions) 
-        {
-            std::vector<ExprNode*> postfixVec;
-            outStr << std::endl;
-            for (int i=0; i < tmp->valueSize; i++)
-            {
-                if (((RealValuedExpressionArray*)tmp->value)->el[i] != NULL)
-                {
-                    postfixVec = 
-                        ((RealValuedExpressionArray*)tmp->value)->el[i]->getPostfixFromExpressionTree();
-                    outStr << "element " << i << ": " 
-                           << getExpressionTreeAsInfixString(postfixVec) << std::endl;
-                }
-            }
-            outStr << std::endl;
-        }
-        else if (tmp->valueType == ENUM_MATRIX_TYPE_complexValuedExpressions) 
-        {
-            std::vector<ExprNode*> postfixVec;
-            outStr << std::endl;
-            for (int i=0; i < tmp->valueSize; i++)
-            {
-                if (((ComplexValuedExpressionArray*)tmp->value)->el[i] != NULL)
-                {
-                    postfixVec = 
-                        ((ComplexValuedExpressionArray*)tmp->value)->el[i]->getPostfixFromExpressionTree();
-                    outStr << "element " << i << ": " 
-                           << getExpressionTreeAsInfixString(postfixVec) << std::endl;
-                }
-            }
-            outStr << std::endl;
-        }
-        else if (tmp->valueType == ENUM_MATRIX_TYPE_linear) 
-        {
-            outStr << std::endl;
-            for (int i=0; i < tmp->valueSize; i++)
-            {
-                outStr << "element " << i << ": ";
-
-                double c = ((LinearMatrixElement*)((LinearMatrixValues*)tmp->value)->el[i])->constant;
-                int    m = ((LinearMatrixElement*)((LinearMatrixValues*)tmp->value)->el[i])->numberOfVarIdx;
-                if (c != 0)
-                {
-                    outStr << c;
-                    if (m > 0) 
-                        outStr << " + ";
-                }
-
-                LinearMatrixElementTerm* temp;
-                for (int j=0; j<m; j++)
-                {
-                    if (j > 0) 
-                        outStr << " + ";
-                    temp = ((LinearMatrixElement*)((LinearMatrixValues*)tmp->value)->el[i])->varIdx[j];
-                    if (temp->coef != 1)
-                        outStr << temp->coef << "*";
-                    outStr << "x[" << temp->idx << "]";
-                }
-                outStr << std::endl;
-            }
-            outStr << std::endl;
-        }
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
-#endif
 
         return true;
     }
@@ -7987,6 +7880,9 @@ bool GeneralSparseMatrix::printMatrix()
         outStr << "type of nonzeros   " << returnMatrixTypeString(valueType)    << std::endl;
         outStr << "symmetry           " << returnMatrixSymmetryString(symmetry) << std::endl;
 
+        outStr << "startSize: " << startSize << std::endl;
+        outStr << "valueSize: " << valueSize << std::endl;
+
         outStr << std::endl << "starts: ";
         for (int i=0; i < startSize; i++)
             outStr << "  " << start[i];
@@ -8877,7 +8773,15 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertToOtherMajor(ENUM_MATRIX_TYPE c
             tempMtx->numberOfColumns = numberOfColumns;
         }
 
-        tempMtx->startSize = (this->isRowMajor) ? numberOfColumns+1 : numberOfRows+1;
+        if (transpose_ == this->isRowMajor)
+            tempMtx->startSize = numberOfRows + 1;
+        else
+            tempMtx->startSize = numberOfColumns + 1;
+cout << "convert to other major: nRows = " << numberOfRows << "; nCols = " << numberOfColumns << endl;
+cout << "transpose: " << transpose_ << endl;
+cout << "rowMajor: calling matrix - " << this->isRowMajor << "; tempMtx - " << tempMtx->isRowMajor << endl;
+cout << "startsize: " << tempMtx->startSize << endl;
+
         tempMtx->valueSize =  this->valueSize;
 
         tempMtx->start = new int[tempMtx->startSize]; 
@@ -8928,6 +8832,8 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertToOtherMajor(ENUM_MATRIX_TYPE c
             for (j = this->start[i]; j < this->start[ i + 1 ]; j++)
             {
                 iTemp = miStart[this->index[j]];
+cout << "at line 8835 j=" << j << ", index[j]=" << this->index[j] << ", iTemp=" << iTemp 
+     << ", this->valueSize=" << this->valueSize << ", miStart=" << miStart[this->index[j]] << endl;
                 miIndex [ iTemp] = i;
                 if (!tempMtx->copyValue(this->value, this->valueType, j, iTemp))
                     throw ErrorClass("Error copying a value in GeneralSparseMatrix::convertToOtherMajor()");
