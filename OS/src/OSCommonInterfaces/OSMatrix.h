@@ -2266,6 +2266,12 @@ public:
     bool isRowMajor;
 
     /**
+     * isTranspose holds whether the stored elements represent the transposed matrix. 
+     * the default is false.
+     */
+    bool isTranspose;
+
+    /**
      *  To track the type of symmetry present in the matrix or block
      *  @remark for definitions, see OSParameters.h
      */
@@ -2435,6 +2441,11 @@ public:
      */
     GeneralSparseMatrix* expandSymmetry(ENUM_MATRIX_TYPE convertTo_, 
                                         bool transpose_, bool rowMajor_);
+
+    /**
+     *  A method to clone a GeneralSparseMatrix
+     */
+    GeneralSparseMatrix* clone();
 
     /**
      *  a method to determine whether the matrix is diagonal

@@ -4295,12 +4295,32 @@ GeneralSparseMatrix* OSnLMNodeMatrixTranspose::expandNode(OSMatrix** mtxLoc, boo
 #endif
     try
     {
-//        GeneralSparseMatrix* refMtx
-//            = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, convertTo_, symmetry_);
-//        GeneralSparseMatrix* returnMtx = refMtx->convertToOtherMajor(convertTo_, true);
-        GeneralSparseMatrix* returnMtx
+        GeneralSparseMatrix* tempMtx
             = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, !rowMajor_, convertTo_, symmetry_);
-        returnMtx->isRowMajor = rowMajor_; 
+
+        GeneralSparseMatrix* returnMtx = new GeneralSparseMatrix();
+        returnMtx->isRowMajor = rowMajor_;
+        returnMtx->isTranspose = true;
+        returnMtx->numberOfRows = tempMtx->numberOfColumns;
+        returnMtx->numberOfColumns = tempMtx->numberOfRows;
+
+        if (rowMajor_)
+            returnMtx->startSize = returnMtx->numberOfRows + 1;
+        else
+            returnMtx->startSize = returnMtx->numberOfColumns + 1;
+
+        returnMtx->symmetry  = tempMtx->symmetry;
+        returnMtx->valueSize = tempMtx->valueSize;
+        returnMtx->valueType = tempMtx->valueType;
+
+        returnMtx->start = tempMtx->start;
+        returnMtx->index = tempMtx->index;
+        returnMtx->value = tempMtx->value;
+
+        returnMtx->b_deleteStartArray = false;
+        returnMtx->b_deleteIndexArray = false;
+        returnMtx->b_deleteValueArray = false;
+
         return returnMtx;
     }
     catch(const ErrorClass& eclass)

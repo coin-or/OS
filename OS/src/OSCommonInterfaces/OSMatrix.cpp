@@ -7735,6 +7735,7 @@ GeneralSparseMatrix::GeneralSparseMatrix():
     numberOfColumns(-1),
     valueType(ENUM_MATRIX_TYPE_unknown),
     isRowMajor(false),
+    isTranspose(false),
     symmetry(ENUM_MATRIX_SYMMETRY_unknown),
     startSize(-1),
     valueSize(-1),
@@ -8773,6 +8774,8 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertToOtherMajor(ENUM_MATRIX_TYPE c
             tempMtx->numberOfColumns = numberOfColumns;
         }
 
+        tempMtx->isTranspose         = transpose_;
+
         if (transpose_ == this->isRowMajor)
             tempMtx->startSize = numberOfRows + 1;
         else
@@ -9253,6 +9256,41 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertSymmetry(ENUM_MATRIX_SYMMETRY s
         throw ErrorClass( eclass.errormsg);
     }
 }//end of GeneralSparseMatrix::convertSymmetry
+
+GeneralSparseMatrix* GeneralSparseMatrix::clone()
+{
+throw ErrorClass("GeneralSparseMatrix::clone() not implemented properly yet");
+/*
+    GeneralSparseMatrix* returnMtx = new GeneralSparseMatrix();
+    returnMtx->numberOfRows        = this->numberOfRows;
+    returnMtx->numberOfColumns     = this->numberOfColumns;
+    returnMtx->valueType           = this->valueType;
+    returnMtx->isRowMajor          = this->isRowMajor;
+    returnMtx->symmetry            = this->symmetry;
+    returnMtx->startSize           = this->startSize;
+    returnMtx->valueSize           = this->valueSize;
+    returnMtx->b_deleteStartArray  = this->b_deleteStartArray;
+    returnMtx->b_deleteIndexArray  = this->b_deleteIndexArray;
+    returnMtx->b_deleteValueArray  = this->b_deleteValueArray;
+
+    returnMtx->start = new int[startSize];
+    returnMtx->index = new int[valueSize];
+
+    for (int i=0; i<startSize; ++i)
+        returnMtx->start[i] = this->start[i];
+
+    for (int i=0; i<valueSize; ++i)
+        returnMtx->index[i] = this->index[i];
+
+------------------------------
+    MatrixElementValues* value;
+========================
+
+
+    return returnMtx;
+*/
+}// end of GeneralSparseMatrix::clone
+
 
 /** ---------- Methods for class ExpandedMatrixBlocks ---------- */
 ExpandedMatrixBlocks::ExpandedMatrixBlocks():
