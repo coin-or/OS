@@ -108,7 +108,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:element>
 			<xs:element name="tensors" type="Tensors" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
@@ -127,7 +127,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 		<xs:sequence>
 			<xs:element name="disjunctiveProgramming" type="DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
@@ -153,11 +153,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:element name="multilevelAndStochasticProgramming" type="MultilevelAndStochasticProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="parametricAnalysis" type="ParametricAnalysis" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -880,7 +875,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 	<!--TensorProgramming: experiment-->
 	<xs:complexType name="TensorProgramming">
 		<xs:annotation>
-			<xs:documentation>experiment--</xs:documentation>
+			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="tensorVariables" type="TensorVariables" minOccurs="0"/>
@@ -1751,17 +1746,17 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:choice>
 			<xs:element name="substitutions" type="ModificationUpdates" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="deletions" type="ModificationDeletions" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="additions" type="ModificationAdditions" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -1869,7 +1864,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="DeletableProblemComponent">
 				<xs:sequence minOccurs="0" maxOccurs="unbounded">
-					<xs:element name="parametricAnalysis" type="ModificationDeleteParametricAnalysis" minOccurs="0"/>
 					<xs:element name="disjunctions" type="ModificationDeleteDisjunctions" minOccurs="0"/>
 					<xs:element name="disjunctiveTerms" type="ModificationDeleteDisjunctiveTerms" minOccurs="0"/>
 				</xs:sequence>
@@ -2246,25 +2240,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:documentation>Delete the referenced node and all its direct and indirect descendant; distribute the probability among the siblings of the node.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-	</xs:complexType>
-	<xs:complexType name="ModificationDeleteParametricAnalysis">
-		<xs:sequence>
-			<xs:element name="param" type="ModificationDeleteParam" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree witih numberOfParam</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="ModificationDeleteParam">
-		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
-			<xs:annotation>
-				<xs:documentation>experiment</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="mult" type="NonnegativeInteger" default="1"/>
-		<xs:attribute name="incr" type="NonnegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="DeletableProblemComponent">
 		<xs:sequence>
@@ -2778,7 +2753,6 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:complexContent>
 			<xs:extension base="DeletableProblemComponent">
 				<xs:sequence>
-					<xs:element name="parametricAnalysis" type="ModificationDeleteParametricAnalysis" minOccurs="0"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -2814,20 +2788,6 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				<xs:documentation>disjunction is enforced only if logical conditioning constraint is TRUE</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-	</xs:complexType>
-	<!--Parametric analysis: draft-->
-	<xs:complexType name="ParametricAnalysis">
-		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the param child elements must agree with numberOfParam</xs:documentation>
-			</xs:annotation>
-			<xs:element name="param" type="Param" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfParam" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Distributions">
 		<xs:sequence>
