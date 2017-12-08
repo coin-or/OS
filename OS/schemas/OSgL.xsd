@@ -783,53 +783,6 @@
 The result of this transformation is aligned with the top left corner of the target matrix and is truncated or filled with zeros if sizes are not conformal.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<!-- replace reference to individual element types by a group  				
-				<xs:element name="constantElements" type="ConstantMatrixElements" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that are constant values, e.g., 5</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="complexElements" type="ComplexMatrixElements" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that are complex constant values, e.g., 1 - i</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="varReferenceElements" type="VarReferenceMatrixElements" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that reference scalar variables, e.g., x1</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="objReferenceElements" type="ObjReferenceMatrixElements" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that reference scalar objectives. (First objective has index -1, second objective -2, etc.)</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="conReferenceElements" type="ConReferenceMatrixElements" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that reference data items associated with scalar constraints, e.g., value, surplus, etc.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="linearElements" type="LinearMatrixElements" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that are linear combinations of scalar variables, e.g., 3x1 + x5 + 4</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="realValuedExpressions" type="RealValuedExpressions" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that are general expressions evaluating to real numbers, e.g., sin(x3)</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="complexValuedExpressions" type="ComplexValuedExpressions" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that are expressions evaluating to complex numbers, e.g., sqrt(-x2^2)</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="stringValuedElements" type="StringValuedMatrixElements" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>For elements that are constant string values, e.g., "active".</xs:documentation>
-					</xs:annotation>
-				</xs:element>
- -->
 				<xs:element name="blocks" type="MatrixBlocks" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>If no block children, the blocks element only gives partition information of the matrix. If there are multiple blocks elements, the partition information is derived from the *first* blocks element only.</xs:documentation>
@@ -1219,12 +1172,12 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		<xs:sequence>
 			<xs:element name="colOffset" type="NonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>The number of culumn offsets is one more than the number of blocks in each row of the decomposition. They give column indices of the leftmost column of each block. The last element will be equal to the number of columns in this MatrixType.</xs:documentation>
+					<xs:documentation>The number of culumn offsets is one more than the number of blocks in each row of the decomposition. They give column indices of the leftmost column of each block. The last element must be equal to the number of columns in this MatrixType.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="rowOffset" type="NonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>The number of row offsets is one more than the number of blocks in each column of the decomposition. They give row indices of the top row of each block. The last element will be equal to the number of rows in this MatrixType.</xs:documentation>
+					<xs:documentation>The number of row offsets is one more than the number of blocks in each column of the decomposition. They give row indices of the top row of each block. The last element must be equal to the number of rows in this MatrixType.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="block" type="MatrixBlock" minOccurs="0" maxOccurs="unbounded">
