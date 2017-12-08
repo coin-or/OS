@@ -94,7 +94,10 @@ OSrLReader::~OSrLReader()
 #endif
 }
 
-OSResult* OSrLReader::readOSrL(const std::string& posrl) throw(ErrorClass)
+OSResult* OSrLReader::readOSrL(const std::string& posrl)
+#if __cplusplus < 201100
+    throw(ErrorClass)
+#endif
 {
     if (posrl.length() > 0)
     {
