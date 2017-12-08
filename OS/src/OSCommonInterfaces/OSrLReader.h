@@ -65,7 +65,7 @@ public:
      * @return the OSResult object corresponding to the OSrL string.
      */
     OSResult *readOSrL(const std::string& posrl)
-#if __cpluscplus < 201100
+#if __cplusplus < 201100
      throw(ErrorClass)
 #endif
      ;
