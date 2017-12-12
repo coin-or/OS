@@ -996,7 +996,7 @@ inline int returnMatrixSymmetry(std::string symmetry)
     if (symmetry == "HermitianLower"    ) return ENUM_MATRIX_SYMMETRY_HermitianLower;
     if (symmetry == "skewHermitianUpper") return ENUM_MATRIX_SYMMETRY_skewHermitianUpper;
     if (symmetry == "skewHermitianLower") return ENUM_MATRIX_SYMMETRY_skewHermitianLower;
-    if (symmetry == "default"           ) return ENUM_MATRIX_SYMMETRY_unknown;
+    if (symmetry == "unknown"           ) return ENUM_MATRIX_SYMMETRY_unknown;
     return 0;
 }//returnMatrixSymmetry
 
@@ -1011,7 +1011,7 @@ inline std::string returnMatrixSymmetryString(ENUM_MATRIX_SYMMETRY symmetry)
     if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower    ) return "HermitianLower";
     if (symmetry == ENUM_MATRIX_SYMMETRY_skewHermitianUpper) return "skewHermitianUpper";
     if (symmetry == ENUM_MATRIX_SYMMETRY_skewHermitianLower) return "skewHermitianLower";
-    if (symmetry == ENUM_MATRIX_SYMMETRY_unknown           ) return "default";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_unknown           ) return "unknown";
     return "none";
 }//returnMatrixSymmetryString
 

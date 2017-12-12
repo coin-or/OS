@@ -9074,7 +9074,7 @@ yyreduce:
         ((OSMatrixWithMatrixVarIdx*)osglData->tempC)->matrixVarIdx = osglData->matrixVarIdx;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
+        if (osglData->symmetry == "unknown")
             osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -10322,7 +10322,7 @@ std::cout << "matrixVar is finished" << std::endl;
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "symmetry type not recognized");
         parserData->errorText = NULL;
         if (osglData->symmetry == "none")
-            osglData->symmetry =  "default";
+            osglData->symmetry =  "unknown";
         ((MatrixBlock*)osglData->tempC)->symmetry
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
     }

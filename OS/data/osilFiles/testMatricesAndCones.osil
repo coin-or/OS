@@ -1299,7 +1299,7 @@
                     </value>
                 </constantElements>
             </matrix>
-            <matrix numberOfRows="30" numberOfColumns="24" name="35-Expansion test 2 - Base matrices">
+            <matrix numberOfRows="25" numberOfColumns="24" name="35-Expansion test 2 - Base matrices">
                 <blocks numberOfBlocks="20">
                     <colOffset numberOfEl="5">
                         <el mult="5" incr="6">0</el> 
@@ -2447,7 +2447,7 @@
                 <transformation>
                     <matrixTimes>
                         <matrixReference idx="0"></matrixReference>
-                        <matrixReference idx="7"></matrixReference>
+                        <matrixReference idx="1"></matrixReference>
                     </matrixTimes>
                 </transformation>
             </matrix>
@@ -2602,7 +2602,7 @@
                     </value>
                 </constantElements>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="3" name="63-MatrixSum 60+61+62">
+            <matrix numberOfColumns="3" numberOfRows="12" name="63-MatrixSum 60+61+62">
                 <transformation>
                     <matrixSum>
                         <matrixReference idx="60"></matrixReference>

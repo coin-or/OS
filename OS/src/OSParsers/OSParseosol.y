@@ -5953,11 +5953,11 @@ matrixStart: MATRIXSTART
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
         throw ErrorClass("more matrices than specified");
-    osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
+    osglData->symmetryPresent = false;
     osglData->mtxConstructorVec.clear();
     osglData->mtxBlocksVec.clear();
     osglData->mtxBlkVec.clear();
@@ -5984,7 +5984,7 @@ matrixAttributes: matrixAttributeList
         ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
     if (osglData->symmetryPresent == true)
     {
-//        if (osglData->symmetry == "default")
+//        if (osglData->symmetry == "unknown")
 //            osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -6048,7 +6048,7 @@ matrixWithMatrixVarIdxAttributes: matrixWithMatrixVarIdxATTList
         ((OSMatrixWithMatrixVarIdx*)osglData->tempC)->matrixVarIdx = osglData->matrixVarIdx;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
+        if (osglData->symmetry == "unknown")
             osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -6115,7 +6115,7 @@ matrixWithMatrixObjIdxAttributes: matrixWithMatrixObjIdxATTList
         ((OSMatrixWithMatrixObjIdx*)osglData->tempC)->matrixObjIdx = osglData->matrixObjIdx;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
+        if (osglData->symmetry == "unknown")
             osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -6179,7 +6179,7 @@ matrixWithMatrixConIdxAttributes: matrixWithMatrixConIdxATTList
         ((OSMatrixWithMatrixConIdx*)osglData->tempC)->matrixConIdx = osglData->matrixConIdx;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
+        if (osglData->symmetry == "unknown")
             osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -7441,7 +7441,7 @@ matrixBlockAtt:
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "symmetry type not recognized");
         parserData->errorText = NULL;
         if (osglData->symmetry == "none")
-            osglData->symmetry =  "default";
+            osglData->symmetry =  "unknown";
         ((MatrixBlock*)osglData->tempC)->symmetry
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
     }

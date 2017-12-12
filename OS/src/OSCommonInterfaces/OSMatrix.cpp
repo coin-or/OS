@@ -793,41 +793,45 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
 //        tempMtx->startSize           = numberOfColumns + 1;
         tempMtx->isRowMajor          = rowMajor_;
 
-        int *majorDimOffset, *minorDimOffset;
+        int *majorDimOffset, *minorDimOffset, *majorDimStartPtr, *minorDimAdjust;
         if (rowMajor_)
         {
             tempMtx->startSize       = numberOfRows + 1;
             majorDimOffset           = tmpBlocks->rowOffset;
             minorDimOffset           = tmpBlocks->colOffset;
+            majorDimStartPtr         = tmpBlocks->blockRows;
+            minorDimAdjust           = tmpBlocks->blockColumns;
         }
         else
         {
             tempMtx->startSize       = numberOfColumns + 1;
             majorDimOffset           = tmpBlocks->colOffset;
             minorDimOffset           = tmpBlocks->rowOffset;
+            majorDimStartPtr         = tmpBlocks->blockColumns;
+            minorDimAdjust           = tmpBlocks->blockRows;
         }
         tempMtx->start               = new int[tempMtx->startSize];
         tempMtx->valueType           = convertTo;
         for (int i=0; i < tempMtx->startSize; i++)
             tempMtx->start[i] = 0;
 
-        // augment column lengths block by block
+        // augment column or row lengths block by block
         for (int i=0; i < tmpBlockNumber; i++)
         {
-//            int c0 = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]];
-//            int cN = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]+1];
-            int c0 = majorDimOffset[tmpBlocks->blockColumns[i]];
-            int cN = majorDimOffset[tmpBlocks->blockColumns[i]+1];
+            int c0 = majorDimOffset[majorDimStartPtr[i]];
+            int cN = majorDimOffset[majorDimStartPtr[i]+1];
             for (int j = c0; j < cN; j++)
             {
                 tempMtx->start[j+1] += ( tmpBlocks->blocks[i]->start[j+1-c0] 
                                        - tmpBlocks->blocks[i]->start[j  -c0] );
+cout << "at line 825: block=" << i << " row/col=" << j-c0;
+cout << " start[" << j+1 << "] is now " << tempMtx->start[j+1] << endl;
             }
         }
 
         for (int i=1; i < tempMtx->startSize; i++)
             tempMtx->start[i] += tempMtx->start[i-1];
-        tempMtx->valueSize = tempMtx->start[numberOfColumns];
+        tempMtx->valueSize = tempMtx->start[tempMtx->startSize-1];
         if (tempMtx->valueSize > 0)
             tempMtx->index = new int[tempMtx->valueSize];
 
@@ -838,15 +842,12 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
         // go through the blocks a second time to store values
         for (int i=0; i < tmpBlockNumber; i++)
         {
-//            int c0 = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]];
-//            int cN = tmpBlocks->colOffset[tmpBlocks->blockColumns[i]+1];
-            int c0      = majorDimOffset[tmpBlocks->blockColumns[i]];
-            int cN      = majorDimOffset[tmpBlocks->blockColumns[i]+1];
-            int row_adj = minorDimOffset[tmpBlocks->blockRows[i]];
+            int c0      = majorDimOffset[majorDimStartPtr[i]];
+            int cN      = majorDimOffset[majorDimStartPtr[i]+1];
+            int row_adj = minorDimOffset[minorDimAdjust[i]];
     
             for (int j = c0; j < cN; j++)
             {
-//                int loc = tempMtx->start[j];
                 for (int k = tmpBlocks->blocks[i]->start[j-c0];
                          k < tmpBlocks->blocks[i]->start[j-c0+1]; k++)
                 {
@@ -854,14 +855,13 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
                     if (!tempMtx->copyValue(tmpBlocks->blocks[i]->value,
                                        tmpBlocks->blocks[i]->valueType,
                                        k, tempMtx->start[j]))
-//                                       tmpBlocks->blocks[i]->index[k],tempMtx->start[j]))
                         throw ErrorClass("Error copying a value in MatrixType::expandBlocks()");
                     tempMtx->start[j]++;
                 }
             }
         }
     
-        for (int i=tempMtx->startSize; i > 0; i--)
+        for (int i=tempMtx->startSize-1; i > 0; i--)
             tempMtx->start[i] = tempMtx->start[i-1];
         tempMtx->start[0] = 0;
 
@@ -1526,7 +1526,8 @@ GeneralSparseMatrix* MatrixType::expandTransformation(int nConst, OSMatrix** mtx
 
 int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                                   ENUM_MATRIX_TYPE convertTo_,
-                                  ENUM_MATRIX_SYMMETRY symmetry_)
+                                  ENUM_MATRIX_SYMMETRY symmetry_,
+                                  bool transpose_)
 {
     ostringstream outStr;
 #ifndef NDEBUG
@@ -1535,6 +1536,9 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
         outStr << "return matrix elements in row major form" << std::endl;
     else    
         outStr << "return matrix elements in column major form" << std::endl;
+    if (transpose_)
+        outStr << " - apply transpose ";
+        outStr << " - apply symmetry " << returnMatrixSymmetryString(symmetry_);
     if (convertTo_ != ENUM_MATRIX_TYPE_unknown)
         outStr << " - convert to " << returnMatrixTypeString(convertTo_);
     outStr << std::endl;
@@ -1542,12 +1546,12 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
     outStr << " - declared type " << returnMatrixTypeString(getDeclaredMatrixType());
     outStr << " - inferred type " << returnMatrixTypeString(getInferredMatrixType());
     outStr << std::endl << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
 #endif
 
     GeneralSparseMatrix* tempMtx = NULL;
 
-    // these two dense columns track the locations of elements during the merge
+    // these two dense columns track the locations of elements when merging multiple constructors
     int* ctorNbr  = NULL;
     int* location = NULL;
 
@@ -1583,13 +1587,17 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                 {
                     thisMatch += 2; 
                 }
-                if (expandedMatrixByElements[i]->symmetry == symmetry)
+                if (expandedMatrixByElements[i]->isTranspose == transpose_)
                 {
                     thisMatch += 4;
                 }
+                if (expandedMatrixByElements[i]->symmetry == symmetry)
+                {
+                    thisMatch += 8;
+                }
                 if (thisMatch > bestMatch)
                 {
-                    if (thisMatch == 7) // a previous expansion meets all criteria; use it
+                    if (thisMatch == 15) // a previous expansion meets all criteria; use it
                         return i;
 
                     bestMatch = thisMatch;
@@ -1600,60 +1608,32 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
 
         // Here we need to create a new expansion and add it to the collection
 
-        tempMtx = new GeneralSparseMatrix(); // leaks memory
-        tempMtx->numberOfRows    = numberOfRows;
-        tempMtx->numberOfColumns = numberOfColumns;
+//        tempMtx = new GeneralSparseMatrix(); // leaks memory
+//        tempMtx->numberOfRows    = numberOfRows;
+//        tempMtx->numberOfColumns = numberOfColumns;
 
-        if (bestMatch > 0) // base the expansion on previous work
+        if (bestMatch > 4 && bestMatch != 12) // base the expansion on previous work
         {
             switch (bestMatch)
             {
-// cases 1-3 will rely on    GeneralSparseMatrix* expandSymmetry(ENUM_MATRIX_TYPE convertTo_, bool transpose_, bool rowMajor_)
-
-#if 0
-        if (symmetry != this->symmetry)
-        {
-            if (this->symmetry == ENUM_MATRIX_SYMMETRY_unknown)
-                this->symmetry  = symmetry;
-            else
-            {
-                if (symmetry == none)
-                    expandSymmetry;
-                else if (isCompatible(symmetry))
-                {
-                    if ( (this->symmetry == ENUM_MATRIX_SYMMETRY_none) || 
-                         (this->symmetry == ENUM_MATRIX_SYMMETRY_unknown) )
-                        imposeSymmetry;
-                    else
-                }
-                else
-                    throw ErrorClass("Incompatible symmetry resolution requested");
-            }
-        }
-#endif
-
-                case 1: //Transpose, then apply symmetry --- Can this be done in one operation?
-//                    throw ErrorClass("Requested conversion not yet implemented");
-                    tempMtx = expandedMatrixByElements[bestMatch_index]
-                                        ->expandSymmetry(convertTo, true, rowMajor_);
-                    break;
-                case 2: //Convert type and apply symmetry --- this should be doable in one operation
-//                    throw ErrorClass("Requested conversion not yet implemented");
-                    tempMtx = expandedMatrixByElements[bestMatch_index]
-                                        ->expandSymmetry(convertTo, false, rowMajor_);
-                    break;
-                case 3: //Just apply symmetry --- this is a simple copy operation
-//                    throw ErrorClass("Requested conversion not yet implemented");
-                    tempMtx = expandedMatrixByElements[bestMatch_index]
-                                        ->expandSymmetry(convertTo, false, rowMajor_);
-                    break;
-                case 4: //Transpose and convert
-                case 5: //Transpose only
+                //convert to other major (and change type)
+                case 5:
+                case 10:
+                case 11:
+                case 13:
                     tempMtx = expandedMatrixByElements[bestMatch_index]
                                         ->convertToOtherMajor(convertTo,false);
                     break;
-                case 6: //Just convert type
+                //Just convert type
+                case 6:
+                case 8:
+                case 14:
                     tempMtx = expandedMatrixByElements[bestMatch_index]->convertType(convertTo);
+                    break;
+                //Just record the best match for now --- transpose and symmetry adjustments follow
+                case 7:
+                case 9:
+                    tempMtx = expandedMatrixByElements[bestMatch_index];
                     break;
             }
 
@@ -1663,14 +1643,32 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             if (inferredType == ENUM_MATRIX_TYPE_unknown)
                 setInferredMatrixType(convertTo);
             expandedMatrixByElements.push_back(tempMtx);
+
+            //transpose or change symmetry if necessary
+            if (bestMatch == 5 || bestMatch == 6 || bestMatch == 7)
+            {
+                GeneralSparseMatrix* 
+                    tempMtx2 = tempMtx->expandSymmetry(convertTo, false, rowMajor_);
+                expandedMatrixByElements.push_back(tempMtx2);
+                tempMtx = tempMtx2;
+            }
+
+            if (bestMatch == 8 || bestMatch == 9 || bestMatch == 10 || bestMatch == 11)
+            {
+                GeneralSparseMatrix* 
+                    tempMtx3 = tempMtx->convertToTranspose(false);
+                expandedMatrixByElements.push_back(tempMtx3);
+            }
+
             return expandedMatrixByElements.size() - 1;
 
         }
 
-        // Here we need to expand from scratch
+        // Here we need to expand from scratch (cases 0-4, 12)
 
         // The complexity increases with the number and diversity of constructors
 
+        tempMtx = new GeneralSparseMatrix();
         // Start by checking for empty matrix
         if (inumberOfChildren == 0)
         {
@@ -1682,6 +1680,8 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             tempMtx->start           = new int[tempMtx->startSize];
             tempMtx->valueSize       = 0;
             tempMtx->valueType       = ENUM_MATRIX_TYPE_empty;
+            tempMtx->numberOfRows    = numberOfRows;
+            tempMtx->numberOfColumns = numberOfColumns;
             this->inferredMatrixType = ENUM_MATRIX_TYPE_empty;
             for (int i=0; i < tempMtx->startSize; i++)
                 tempMtx->start[i] = 0;
@@ -1748,8 +1748,10 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
         }
         else // two or more constructors --- worry about overwriting and number of elements
         {
-            tempMtx->symmetry = symmetry;
-            tempMtx->isRowMajor = rowMajor_;
+            tempMtx->numberOfRows    = numberOfRows;
+            tempMtx->numberOfColumns = numberOfColumns;
+            tempMtx->symmetry        = symmetry;
+            tempMtx->isRowMajor      = rowMajor_;
             int majorDim, minorDim;
 
             if (rowMajor_)
@@ -1787,6 +1789,8 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                 i0 = 1;
             }
 
+            GeneralSparseMatrix* tempMtx2;
+
             for (unsigned int i=i0; i < inumberOfChildren; i++)
             {
                 if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
@@ -1818,7 +1822,12 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                 else
                 {
                     tempExpansion[i] = this->extractElements(i,rowMajor_, convertTo, symmetry);
-//                    tempExpansion[i]->valueType = m_mChildren[i]->getMatrixType();
+                    if (tempExpansion[i]->isRowMajor != rowMajor_)
+                    {
+                        tempMtx2 = tempExpansion[i]->convertToOtherMajor(convertTo,false);
+                        expandedMatrixByElements.push_back(tempMtx2);
+                        tempExpansion[i] = tempMtx2;
+                    }
                 }
 
 #ifndef NDEBUG
@@ -9257,6 +9266,47 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertSymmetry(ENUM_MATRIX_SYMMETRY s
     }
 }//end of GeneralSparseMatrix::convertSymmetry
 
+GeneralSparseMatrix* GeneralSparseMatrix::convertToTranspose(bool copyValues_)
+{
+    GeneralSparseMatrix* tempMtx;
+    try
+    {
+        if (copyValues_)
+            tempMtx = this->clone();
+        else
+        {
+            tempMtx = new GeneralSparseMatrix();
+            tempMtx->isRowMajor = this->isRowMajor;
+            tempMtx->isTranspose = true;
+            tempMtx->numberOfRows = this->numberOfColumns;
+            tempMtx->numberOfColumns = this->numberOfRows;
+
+            if (this->isRowMajor)
+                tempMtx->startSize = tempMtx->numberOfRows + 1;
+            else
+                tempMtx->startSize = tempMtx->numberOfColumns + 1;
+
+            tempMtx->symmetry  = this->symmetry;
+            tempMtx->valueSize = this->valueSize;
+            tempMtx->valueType = this->valueType;
+
+            tempMtx->start = this->start;
+            tempMtx->index = this->index;
+            tempMtx->value = this->value;
+
+            tempMtx->b_deleteStartArray = false;
+            tempMtx->b_deleteIndexArray = false;
+            tempMtx->b_deleteValueArray = false;
+        }
+
+        return tempMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }    
+} // end of GeneralSparseMatrix::convertToTranspose
+
 GeneralSparseMatrix* GeneralSparseMatrix::clone()
 {
 throw ErrorClass("GeneralSparseMatrix::clone() not implemented properly yet");
@@ -9283,7 +9333,7 @@ throw ErrorClass("GeneralSparseMatrix::clone() not implemented properly yet");
         returnMtx->index[i] = this->index[i];
 
 ------------------------------
-    MatrixElementValues* value;
+    returnMtx->value = this->value->clone();
 ========================
 
 

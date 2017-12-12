@@ -3351,11 +3351,11 @@ matrixStart: MATRIXSTART
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
         throw ErrorClass("more matrices than specified");
-    osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
+    osglData->symmetryPresent = false;
     osglData->mtxConstructorVec.clear();
     osglData->mtxBlocksVec.clear();
     osglData->mtxBlkVec.clear();
@@ -3382,7 +3382,7 @@ matrixAttributes: matrixAttributeList
         ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
     if (osglData->symmetryPresent == true)
     {
-//        if (osglData->symmetry == "default")
+//        if (osglData->symmetry == "unknown")
 //            osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -3446,7 +3446,7 @@ matrixWithMatrixVarIdxAttributes: matrixWithMatrixVarIdxATTList
         ((OSMatrixWithMatrixVarIdx*)osglData->tempC)->matrixVarIdx = osglData->matrixVarIdx;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
+        if (osglData->symmetry == "unknown")
             osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -3513,7 +3513,7 @@ matrixWithMatrixObjIdxAttributes: matrixWithMatrixObjIdxATTList
         ((OSMatrixWithMatrixObjIdx*)osglData->tempC)->matrixObjIdx = osglData->matrixObjIdx;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
+        if (osglData->symmetry == "unknown")
             osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -3577,7 +3577,7 @@ matrixWithMatrixConIdxAttributes: matrixWithMatrixConIdxATTList
         ((OSMatrixWithMatrixConIdx*)osglData->tempC)->matrixConIdx = osglData->matrixConIdx;
     if (osglData->symmetryPresent == true)
     {
-        if (osglData->symmetry == "default")
+        if (osglData->symmetry == "unknown")
             osglData->symmetry =  "none";
         ((OSMatrix*)osglData->tempC)->symmetry 
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
@@ -4839,7 +4839,7 @@ matrixBlockAtt:
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "symmetry type not recognized");
         parserData->errorText = NULL;
         if (osglData->symmetry == "none")
-            osglData->symmetry =  "default";
+            osglData->symmetry =  "unknown";
         ((MatrixBlock*)osglData->tempC)->symmetry
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
     }
@@ -9523,32 +9523,9 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     // eat the white space
     BURNWHITESPACE( ch );
     for(i = 0; sizeOf[i]  == *ch; i++, ch++);
-    if(i != 6) {  osilerror_wrapper( ch,osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return NULL;}    
+    if(i != 6) {  osilerror_wrapper( ch,osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return false;}    
     // ch should be pointing to the first character after sizeOf
-    BURNWHITESPACE( ch ); \
-    if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return NULL;}  \
-    ch++; \
-    BURNWHITESPACE( ch ); \
-    if(*ch == '\"'){ \
-        ch++; \
-        BURNWHITESPACE( ch ); \
-        *p = ch; \
-        for( ; *ch != '\"'; ch++); \
-    }\
-    else{\
-        if(*ch == '\'') { \
-            ch++; \
-            BURNWHITESPACE( ch ); \
-            *p = ch; \
-            for( ; *ch != '\''; ch++); \
-        } \
-        else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return NULL;} \
-    }\
-    numChar = ch - *p; \
-    attText = new char[numChar + 1]; \
-    for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
-    attText[ki] = '\0'; \
-    attTextEnd = &attText[ki]; 
+    GETATTRIBUTETEXT;
     ch++;
     *dataSize = atoimod1( osillineno, attText, attTextEnd);
     delete [] attText;
@@ -9556,7 +9533,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     // eat the white space
     BURNWHITESPACE( ch );
     // better have an > sign or not valid
-    if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"<base64BinaryData> element does not have a proper closing >"); return NULL;}
+    if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"<base64BinaryData> element does not have a proper closing >"); return false;}
     ch++;
     // we are now pointing start of the data
     const char *b64textstart = ch;
@@ -9565,7 +9542,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     const char *b64textend = ch;
     // we should be pointing to </base64BinaryData>
     for(i = 0; endBase64BinaryData[i]  == *ch; i++, ch++);
-    if(i != 18) { osilerror_wrapper( ch,osillineno," problem with <base64BinaryData> element"); return NULL;}
+    if(i != 18) { osilerror_wrapper( ch,osillineno," problem with <base64BinaryData> element"); return false;}
     long int b64len = b64textend - b64textstart;
     b64string = new char[ b64len + 1]; 
     for(ki = 0; ki < b64len; ki++) b64string[ki] = b64textstart[ ki]; 
@@ -9573,7 +9550,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     // burn the white space
     BURNWHITESPACE( ch );
     // better have an > sign or not valid
-    if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"</base64BinaryData> element does not have a proper closing >"); return NULL;}
+    if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"</base64BinaryData> element does not have a proper closing >"); return false;}
     ch++;
     BURNWHITESPACE( ch );
     *p = ch;

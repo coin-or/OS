@@ -3120,12 +3120,14 @@ GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool ro
         {
             returnMtx->startSize = majorDim + 1;
             returnMtx->start     = new int[returnMtx->startSize];
-            returnMtx->start[0] = 0;
+            returnMtx->start[0]  = 0;
     
             val = new double[minorDim];
 
             for (j=0; j < minorDim; ++j)
+            {
                 val[j] = 0.0;
+            }
 
             // phase 0: count the number of nonzeroes and allocate space
             for (i=0; i < majorDim; ++i)
@@ -3193,11 +3195,18 @@ GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool ro
         }
 
         else
+        {
+cout << "Unsupported element type for OSnLMNodeMatrixPlus" << endl;
             throw ErrorClass("Unsupported element type for OSnLMNodeMatrixPlus");
+        }
 
 #ifndef NDEBUG
 	if (nonz != returnMtx->valueSize)
+    {
+cout << "OSnLMNodeMatrixPlus::expandNode(): Number of nonzeroes is inconsistent";
+cout << " - Have " << nonz << " expected " << returnMtx->valueSize << endl;
 		throw ErrorClass("OSnLMNodeMatrixPlus::expandNode(): Number of nonzeroes is inconsistent");
+    }
 #endif
 
         if (loc != NULL)
@@ -3324,11 +3333,12 @@ GeneralSparseMatrix* OSnLMNodeMatrixSum::expandNode(OSMatrix** mtxLoc, bool rowM
         for (j=0; j < minorDim; ++j)
             loc[j] = -1;
 
+//        nonz = 0;
 
         for (k=1; k<inumberOfChildren; ++k)
         {
             summandA = returnMtx;
-            summandB = ((OSnLMNode*)m_mChildren[1])->expandNode(mtxLoc, rowMajor_,
+            summandB = ((OSnLMNode*)m_mChildren[k])->expandNode(mtxLoc, rowMajor_,
                                                                 convertTo_, symmetry_);
             if (summandB == NULL) throw ErrorClass(
                              "OSnLMNodeMatrixSum::expandNode(): Error expanding matrix");
@@ -3340,7 +3350,7 @@ GeneralSparseMatrix* OSnLMNodeMatrixSum::expandNode(OSMatrix** mtxLoc, bool rowM
             returnMtx = new GeneralSparseMatrix();
 
             returnMtx->numberOfRows    = summandA->numberOfRows;
-            returnMtx->numberOfColumns = summandB->numberOfColumns;
+            returnMtx->numberOfColumns = summandA->numberOfColumns;
             returnMtx->isRowMajor      = rowMajor_;
             returnMtx->symmetry        = symmetry_;
 
@@ -3363,7 +3373,8 @@ GeneralSparseMatrix* OSnLMNodeMatrixSum::expandNode(OSMatrix** mtxLoc, bool rowM
                 returnMtx->start     = new int[returnMtx->startSize];
                 returnMtx->start[0] = 0;
     
-                // phase 0: count the number of nonzeroes and allocate space
+                // phase 0: update the number of nonzeroes and allocate space
+                nonz = 0;
                 for (i=0; i < majorDim; ++i)
                 {
                     for (j = summandA->start[i]; j < summandA->start[i+1]; ++j)
@@ -4656,13 +4667,13 @@ GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxLoc,
         
         if (rowMajor_)
         {
-            majorDim = returnMtx->numberOfRows;
-            minorDim = returnMtx->numberOfColumns;
+            majorDim = baseMtx->numberOfRows;
+            minorDim = baseMtx->numberOfColumns;
         }
         else
         {
-            majorDim = returnMtx->numberOfColumns;
-            minorDim = returnMtx->numberOfRows;
+            majorDim = baseMtx->numberOfColumns;
+            minorDim = baseMtx->numberOfRows;
         }
 
         returnMtx->startSize = majorDim + 1;
@@ -4681,7 +4692,7 @@ GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxLoc,
                 for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
                 {
                     if (baseMtx->index[j] <= i - min)
-                        nonz ++;
+                        nonz++;
                 }
                 returnMtx->start[i+1] = nonz;
             }
@@ -4693,7 +4704,7 @@ GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxLoc,
                 for (j = baseMtx->start[i]; j < baseMtx->start[i+1]; ++j)
                 {
                     if (baseMtx->index[j] >= i + min)
-                        nonz ++;
+                        nonz++;
                 }
                 returnMtx->start[i+1] = nonz;
             }
@@ -4717,7 +4728,7 @@ GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxLoc,
                         returnMtx->index[returnMtx->start[i]] = baseMtx->index[j];
                         if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
                             throw ErrorClass("Error copying a value in OSnLMNodeMatrixLowerTriangle::expandNode()");
-                        returnMtx->start[i] ++;
+                        returnMtx->start[i]++;
                     }
                 }
             }
@@ -4733,7 +4744,7 @@ GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxLoc,
                         returnMtx->index[returnMtx->start[i]] = baseMtx->index[j];
                         if (!returnMtx->copyValue(baseMtx, j, returnMtx->start[i]))
                             throw ErrorClass("Error copying a value in OSnLMNodeMatrixLowerTriangle::expandNode()");
-                        returnMtx->start[i] ++;
+                        returnMtx->start[i]++;
                     }
                 }
             }
@@ -4745,6 +4756,9 @@ GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxLoc,
             returnMtx->start[i] = returnMtx->start[i-1];
         }
         returnMtx->start[0] = 0;
+#ifndef NDEBUG
+        returnMtx->printMatrix();
+#endif
 
         return returnMtx;
     }
@@ -4956,13 +4970,13 @@ GeneralSparseMatrix* OSnLMNodeMatrixUpperTriangle::expandNode(OSMatrix** mtxLoc,
         
         if (rowMajor_)
         {
-            majorDim = returnMtx->numberOfRows;
-            minorDim = returnMtx->numberOfColumns;
+            majorDim = baseMtx->numberOfRows;
+            minorDim = baseMtx->numberOfColumns;
         }
         else
         {
-            majorDim = returnMtx->numberOfColumns;
-            minorDim = returnMtx->numberOfRows;
+            majorDim = baseMtx->numberOfColumns;
+            minorDim = baseMtx->numberOfRows;
         }
 
         returnMtx->startSize = majorDim + 1;
@@ -5045,6 +5059,9 @@ GeneralSparseMatrix* OSnLMNodeMatrixUpperTriangle::expandNode(OSMatrix** mtxLoc,
             returnMtx->start[i] = returnMtx->start[i-1];
         }
         returnMtx->start[0] = 0;
+#ifndef NDEBUG
+        returnMtx->printMatrix();
+#endif
 
         return returnMtx;
     }

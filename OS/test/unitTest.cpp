@@ -1024,7 +1024,7 @@ if (PARSER_TESTS)
             int expIdx;
             bool rowMajor = false;
 
-            for (int i=32; i < instance1->instanceData->matrices->numberOfMatrices; i++)
+            for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
             {
                 try
                 {

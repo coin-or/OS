@@ -2268,6 +2268,10 @@ public:
     /**
      * isTranspose holds whether the stored elements represent the transposed matrix. 
      * the default is false.
+     *
+     * @remark The transpose of a matrix is of course closely related to the matrix itself.
+     *         In fact, a column-wise representation of the transpose has data arrays that are
+     *         identical to a row-wise representation of the original matrix and vice versa.
      */
     bool isTranspose;
 
@@ -2432,6 +2436,14 @@ public:
      *  @return the transformed matrix
      */
     GeneralSparseMatrix* convertSymmetry(ENUM_MATRIX_SYMMETRY symmetry_);
+
+    /**
+     *  A method to transpose a GeneralSparseMatrix, which involves swapping the dimensions
+     *  The result is stored into another generalSparseMatrix with the same type of values
+     *  @param copyValues_ determines whether the arrays need to be duplicated
+     *  @return the transformed matrix
+     */
+    GeneralSparseMatrix* convertToTranspose(bool copyValues_);
 
     /**
      *  A method to change the type of symmetry used in storing a generalSparseMatrix 
@@ -2658,18 +2670,21 @@ public:
 
     /**
      *  a utility routine to expand a matrix into one of several different forms
-     *  the expansions are held in expandedMatrixByElements, a std::vector of GeneralSparseMatrix
+     *  The expansions are held in expandedMatrixByElements, a std::vector of GeneralSparseMatrix
      *  @param mtxIdx     provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
-     *                    The default value does not change the symmetry 
+     *                    The default value does not change the symmetry
+     *  @param transpose_ controls whether the expansion is of the matrix or its transpose
+     *                    The default is to expand the matrix in its natural form
      *  @return the index in the collection of expanded matrices corresponding to the current expansion
      *  @remark the return value is -1 in case of any error
      */
     int getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                           ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                          ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
+                          ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown,
+                          bool transpose_                = false);
 
 
     GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx,
@@ -2989,11 +3004,12 @@ public:
      *  @return the blocks as an ExpandedMatrixBlocks object, which is essentially 
      *          an array of general sparse matrices. 
      */
-    ExpandedMatrixBlocks* disassembleMatrix(int* rowPartition, int rowPartitionSize, 
-                                            int* colPartition, int colPartitionSize, 
-                                            OSMatrix** mtxIdx, bool rowMajor_, 
-                                            ENUM_MATRIX_TYPE valueType_    = ENUM_MATRIX_TYPE_unknown,
-                                            ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
+    ExpandedMatrixBlocks* 
+        disassembleMatrix(int* rowPartition, int rowPartitionSize, 
+                          int* colPartition, int colPartitionSize, 
+                          OSMatrix** mtxIdx, bool rowMajor_, 
+                          ENUM_MATRIX_TYPE valueType_    = ENUM_MATRIX_TYPE_unknown,
+                          ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A function to check for the equality of two objects
