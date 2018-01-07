@@ -39278,7 +39278,7 @@ case "$CXX" in
   cl* | *\cl* | */cl*)
      oslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOS.lib'
      if test $os_openmp = true; then
-         CXXFLAGS="$CXXFLAGS /openmp"
+         CXXFLAGS="$CXXFLAGS -openmp"
      fi
   ;;
   g++* | *\g++* | */g++*)
