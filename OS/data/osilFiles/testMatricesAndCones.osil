@@ -111,7 +111,7 @@
 
 <!-- The matrices section can be expanded as needed. The first 32 matrices mostly test the parser,
      although some are reused later for testing various expansion methods -->
-        <matrices numberOfMatrices= " 66 " >
+        <matrices numberOfMatrices= " 69 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -2648,6 +2648,160 @@
                         <matrixReference idx="3"></matrixReference>
                     </matrixMinus>
                 </transformation>
+            </matrix>
+
+<!-- The next three matrices re used to test the CSDP interface. They are made up of conformal symmetric blocks -->
+            <matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="66-CSDP matrix F0">
+                <blocks numberOfBlocks="2">
+                    <colOffset numberOfEl="4">
+                        <el>0</el>
+                        <el>2</el>
+                        <el>5</el>
+                        <el>7</el>
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
+                        <el>0</el>
+                        <el>2</el>
+                        <el>5</el>
+                        <el>7</el>
+                    </rowOffset>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <constantElements numberOfValues="3">
+                            <start>
+                                <el>0</el>
+                                <el>2</el>
+                                <el>3</el>
+                            </start>
+                            <index>
+                                <el>0</el>
+                                <el mult="2">1</el>
+                            </index>
+                            <value>
+                                <el>2.</el>
+                                <el>1.</el>
+                                <el>2.</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <constantElements numberOfValues="4">
+                            <start>
+                                <el>0</el>
+                                <el mult="3" incr="1">2</el>
+                            </start>
+                            <index>
+                                <el>0</el>
+                                <el>2</el>
+                                <el>1</el>
+                                <el>2</el>
+                            </index>
+                            <value>
+                                <el>3.</el>
+                                <el>1.</el>
+                                <el>2.</el>
+                                <el>3.</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="67-CSDP matrix F1">
+                <blocks numberOfBlocks="2">
+                    <colOffset numberOfEl="4">
+                        <el>0</el>
+                        <el>2</el>
+                        <el>5</el>
+                        <el>7</el>
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
+                        <el>0</el>
+                        <el>2</el>
+                        <el>5</el>
+                        <el>7</el>
+                    </rowOffset>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <constantElements numberOfValues="3">
+                            <start>
+                                <el>0</el>
+                                <el>2</el>
+                                <el>3</el>
+                            </start>
+                            <index>
+                                <el>0</el>
+                                <el mult="2">1</el>
+                            </index>
+                            <value>
+                                <el>3.</el>
+                                <el>1.</el>
+                                <el>3.</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="2">
+                        <constantElements numberOfValues="1">
+                            <start>
+                                <el>0</el>
+                                <el mult="2">1</el>
+                            </start>
+                            <index>
+                                <el>0</el>
+                            </index>
+                            <value>
+                                <el>1.</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="68-CSDP matrix F2">
+                <blocks numberOfBlocks="2">
+                    <colOffset numberOfEl="4">
+                        <el>0</el>
+                        <el>2</el>
+                        <el>5</el>
+                        <el>7</el>
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
+                        <el>0</el>
+                        <el>2</el>
+                        <el>5</el>
+                        <el>7</el>
+                    </rowOffset>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <constantElements numberOfValues="4">
+                            <start>
+                                <el>0</el>
+                                <el mult="3" incr="1">2</el>
+                            </start>
+                            <index>
+                                <el>0</el>
+                                <el>2</el>
+                                <el>1</el>
+                                <el>2</el>
+                            </index>
+                            <value>
+                                <el>3.</el>
+                                <el>1.</el>
+                                <el>4.</el>
+                                <el>5.</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="2">
+                        <constantElements numberOfValues="1">
+                            <start>
+                                <el mult="2">0</el>
+                                <el>1</el>
+                            </start>
+                            <index>
+                                <el>1</el>
+                            </index>
+                            <value>
+                                <el>1.</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                </blocks>
             </matrix>
 
 

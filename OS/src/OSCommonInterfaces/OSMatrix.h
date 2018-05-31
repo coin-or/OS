@@ -50,6 +50,11 @@ class OSMatrix;
  */  
 class IntVector;
 
+/**
+ * Lastly, a forward declaration within this header file ...
+ */
+class ExpandedMatrixBlocks;
+
 /*! \class MatrixNode
  *  \brief a generic class from which we derive matrix constructors
  *  (BaseMatrix, MatrixElements, MatrixTransformation and MatrixBlocks)
@@ -297,7 +302,7 @@ public:
  * \brief an abstract class to help represent the elements in a MatrixType object
  * From this we derive the following concrete classes used to store specific types of values:
  *     ConstantMatrixElements     (real-valued constants, such as 3.14) 
- *     ComplexMatrixElements      (complex-valued constants, such as 1 + 2.78*i)
+ *     ComplexMatrixElements      (complex-valued constants, such as 3.14 + 2.78*i)
  *     VarReferenceMatrixElements (elements of the form x_i - return current value of the variable)
  *     LinearMatrixElements       (elements of the form a_0 + a_1*x_{i_1} + ... + a_k*x_{i_k}) 
  *     RealValuedExpressions      (an expression tree with a    real-valued root)
@@ -332,6 +337,7 @@ public:
     /**
      *  To track the kind of symmetry present in the matrix element tag
      *  @remark for definitions, see OSParameters.h
+     *  @remark The default is to inherit from the containing MatrixType.
      */
     ENUM_MATRIX_SYMMETRY symmetry;
 
@@ -2278,6 +2284,7 @@ public:
     /**
      *  To track the type of symmetry present in the matrix or block
      *  @remark for definitions, see OSParameters.h
+     *  @remark The default is ENUM_MATRIX_SYMMETRY_none.
      */
     ENUM_MATRIX_SYMMETRY symmetry;
 
@@ -2454,6 +2461,29 @@ public:
     GeneralSparseMatrix* expandSymmetry(ENUM_MATRIX_TYPE convertTo_, 
                                         bool transpose_, bool rowMajor_);
 
+
+    /** 
+     *  A method to disassemble a GeneralSparseMatrix into individual blocks of specific structure
+     *  @param rowPartition defines the partition of the set of rows into the blocks  
+     *  @param rowPartitionSize gives the size of the rowPartition array
+     *  @param colPartition defines the partition of the set of columns into the blocks  
+     *  @param colPartitionSize gives the size of the colPartition array
+     *  @param mtxIdx provides pointers to all defined matrices for use within transformations.
+     *  @param rowMajor_ indicates whether the blocks are stored in row major form or not.
+     *  @param valueType_ indicates in which form to store the disassembled matrix
+     *         The default for this optional parameter is ENUM_MATRIX_TYPE_unknown
+     *  @param symmetry_ determines what kind of symmetry to use in representing the blocks.
+     *         If this parameter is missing, the default value is NO symmetry
+     *
+     *  @return the blocks as an ExpandedMatrixBlocks object, which is essentially 
+     *          an array of general sparse matrices. 
+     */
+    ExpandedMatrixBlocks* 
+        disassembleMatrix(int* rowPartition, int rowPartitionSize, 
+                          int* colPartition, int colPartitionSize, 
+                          OSMatrix** mtxIdx, bool rowMajor_, 
+                          ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_none);
+
     /**
      *  A method to clone a GeneralSparseMatrix
      */
@@ -2484,7 +2514,7 @@ public:
     ENUM_MATRIX_TYPE valueType;
 
     /**
-     * isRowMajor holds whether the (nonzero) values holding the data in each block
+     * isRowMajor holds whether the (nonzero) values containing the data in each block
      * are stored by column or row. If false, every block is stored by column.
      */
     bool isRowMajor;
@@ -2492,7 +2522,6 @@ public:
     /**
      *  To track the type of symmetry present in the matrix or block
      *  @remark for definitions, see OSParameters.h
-     *  @remark each block is stored in the same format
      */
     ENUM_MATRIX_SYMMETRY symmetry;
 
@@ -2542,7 +2571,7 @@ public:
 
     /**
      * blocks holds the blocks that make up the matrix.
-     * All blocks have the same type of values, the same symmetry, 
+     * All blocks have the same type of values 
      * and the same row/column major form.
      */
     GeneralSparseMatrix** blocks;
@@ -2591,6 +2620,7 @@ public:
     /**
      *  To track the type of symmetry present in the matrix or block
      *  @remark for definitions, see OSParameters.h
+     *  @remark The default is ENUM_MATRIX_SYMMETRY_none
      */
     ENUM_MATRIX_SYMMETRY symmetry;
 
@@ -2660,13 +2690,31 @@ public:
     /**
      *  Several tools to parse the constructor list of a matrix
      */
+    int  getNumberOfElementConstructors();
+    int  getNumberOfTransformationConstructors();
+    int  getNumberOfBlocksConstructors();
     bool matrixHasBase();
     bool matrixHasElements();
     bool matrixHasTransformations();
     bool matrixHasBlocks();
-    int  getNumberOfElementConstructors();
-    int  getNumberOfTransformationConstructors();
-    int  getNumberOfBlocksConstructors();
+
+    /**
+     *  a utility routine to determine if a MatrixType possesses a specific kind of symmetry
+     *  @param symmetry_ contains the symmetry type (see OSParameters.h) 
+     *  @param mtxIdx provides pointers to all defined matrices in case expansion is necessary.
+     *  @return true if the symmetry is found
+     *  @remark Symmetry may be thought of as a structural property or a representational one.
+     *          The representational form is captured in the data element "symmetry";
+     *          this method is concerned with the structural properties. For instance a 2x2
+     *          matrix is symmetric provided the elements a{1,2} and a{2,1} are equal, 
+     *          regardless of how the matrix is represented. Likewise, a matrix that is
+     *          represented using symmetry="lower" is a symmetric matrix, so the _structural_
+     *          query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_upper) will return true!
+     *          By the same token, the query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_none)
+     *          will return false if the matrix in fact is symmetric, and the query
+     *          matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_unknown) is nonsensical and throws an error.
+     */
+     bool matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mtxIdx = NULL);
 
     /**
      *  a utility routine to expand a matrix into one of several different forms
@@ -2866,7 +2914,7 @@ public:
                              ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
-     *  A method to process a matrixType into a block structure defined by 
+     *  A method to process a matrixType into a block structure defined by the data structure
      *  @param mtxIdx     provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_  indicates whether the blocks should be stored in row major (if true)
      *                    or column major.
@@ -2962,6 +3010,36 @@ public:
                                     OSMatrix** mtxIdx, bool appendToBlockArray, bool rowMajor, 
                                     ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                                     ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
+    /** 
+     *  A method to retrieve the blocks from a particular collection.
+     *  The result is an object of general sparse matrices, depending on the matrixType, 
+     *  of constant matrix elements, variable references, linear or nonlinear expressions, 
+     *  or objective and constraint references (possibly mixed).
+     *  @param rowPartition defines the partition of the set of rows into the blocks  
+     *  @param rowPartitionSize gives the size of the rowPartition array
+     *  @param colPartition defines the partition of the set of columns into the blocks  
+     *  @param colPartitionSize gives the size of the colPartition array
+     *  @param appendToBlockArray determines whether the blocks should be created if not found. 
+     *  @param mtxIdx   provides pointers to all defined matrices for use within transformations.
+     *  @param rowMajor indicates whether the blocks are stored in row major form or not.
+     *  @param convertTo_ is an optional parameter that can be used to covert the elements
+     *         of all blocks to a different type. 
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *
+     *  @return the index of the blocks collection within the vector of ExpandedMatrixBlocks objects,
+     *          each of which is essentially an array of general sparse matrices. 
+     *
+     *  @remark If blocks corresponding to the indicated partition do not exist,
+     *          this method can try to create them. This can be quite storage-intensive
+     *          and is controlled by the parameter appendToBlockArray. If no blocks
+     *          found (and appending is inhibited) return NULL.
+     */
+    int getBlockExpansion(int* rowPartition, int rowPartitionSize, 
+                          int* colPartition, int colPartitionSize, 
+                          OSMatrix** mtxIdx, bool appendToBlockArray, bool rowMajor, 
+                          ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                          ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /** 
      *  A method to retrieve the blocks from a particular <blocks> constructor.
@@ -3375,6 +3453,7 @@ public:
     int blockRowIdx;
     int blockColIdx;
 
+public:
     MatrixBlock();
     ~MatrixBlock();
 

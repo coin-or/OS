@@ -153,6 +153,7 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
 #include "OSOutput.h"
+#include "OSParameters.h"
 #include "CoinError.hpp"
 
 #include "OSDefaultSolver.h"  
@@ -1024,7 +1025,7 @@ if (PARSER_TESTS)
             int expIdx;
             bool rowMajor = false;
 
-            for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
+            for (int i=70; i < instance1->instanceData->matrices->numberOfMatrices; i++)
             {
                 try
                 {
@@ -1046,6 +1047,7 @@ if (PARSER_TESTS)
                     else
                         cout << endl << "Error during matrix expansion" << endl << endl;
 
+#if 0
                     ENUM_MATRIX_SYMMETRY 
                         tempSym = instance1->instanceData->matrices->matrix[i]->symmetry;
                     if ((tempSym != ENUM_MATRIX_SYMMETRY_none) &&
@@ -1062,7 +1064,7 @@ if (PARSER_TESTS)
                         else
                             cout << endl << "Error during matrix expansion" << endl << endl;
                     }
-
+#endif
                 }
                 catch(const ErrorClass& eclass)
                 {
@@ -9193,8 +9195,15 @@ if( THOROUGH == true){
         solver->osinstance = NULL;
         delete solver;
         solver = NULL;
+
+        ENUM_OUTPUT_LEVEL level1 = ENUM_OUTPUT_LEVEL_detailed_trace;
+        osoutput->SetPrintLevel("stdout", level1);
+
         delete osilreader;
-        osilreader = NULL;    
+        osilreader = NULL; 
+
+        osoutput->SetPrintLevel("stdout", DEFAULT_OUTPUT_LEVEL);
+   
         delete fileUtil;
         fileUtil = NULL;
         unitTestResult << "TEST " << nOfTest << ": Solved problem SDPA_ex.osil with Csdp" << std::endl;

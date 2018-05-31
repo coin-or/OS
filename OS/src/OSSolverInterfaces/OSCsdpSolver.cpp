@@ -109,6 +109,7 @@ CsdpSolver::~CsdpSolver()
         else
             delete[] C_matrix.blocks[i].data.mat;
     }
+    if (C_matrix.nblocks != -1)
     delete [] C_matrix.blocks;
 
     // Finally clear out mconstraints;
@@ -148,7 +149,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
     int*  blockSize   = NULL;
     int*  mtxRef      = NULL;
     bool* isdiag      = NULL;
-    ExpandedMatrixBlocks** mtxBlocks;
+    ExpandedMatrixBlocks** mtxBlocks = NULL;
     try
     {
         if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
@@ -224,6 +225,8 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         int  tempNColumnBlocks;
 
         int i0, itemp, imerge;
+
+// processBlockPartition();
 
         //do the same for all constraints
         for (int i=0; i < osinstance->getConstraintNumber(); i++)
@@ -378,7 +381,6 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         rhsValues = osinstance->getConstraintLowerBounds() - 1;
 
         // Set up storage and retrieve pointers.
-        GeneralSparseMatrix* tmpBlock;
         mtxBlocks = new ExpandedMatrixBlocks*[ncon+1];
         for (int j=0; j < ncon+1; j++)
             mtxBlocks[j] = NULL;
@@ -386,15 +388,24 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         // At this point we know the dimensions of all blocks.
         // Keep track of diagonal blocks. Note: isdiag is 1-indexed
         isdiag = new bool[nBlocks];
+        int expIdx;
         for (int i=1; i<nBlocks; i++)
             isdiag[i] = true;
 
+        GeneralSparseMatrix* tmpBlock;
         for (int j=0; j < ncon+1; j++)
         {
             try
             {
+                expIdx = osinstance->instanceData->matrices->matrix[mtxRef[j]]
+                            ->getBlockExpansion(blockOffset, nBlocks, blockOffset, nBlocks,
+                                                osinstance->instanceData->matrices->matrix,
+                                                true, false, ENUM_MATRIX_TYPE_constant);
+                if (expIdx < 0)
+                    throw ErrorClass("Error during block expansion in OSCsdpSolver");
+
                 mtxBlocks[j] = osinstance->instanceData->matrices->matrix[mtxRef[j]]
-                    ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,NULL,true,false);  //leaks memory
+                    ->expandedMatrixByBlocks[expIdx];
             }
             catch(const ErrorClass& eclass)
             {

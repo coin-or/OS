@@ -39,7 +39,8 @@ using std::endl;
 MatrixNode::MatrixNode():
     declaredMatrixType(ENUM_MATRIX_TYPE_unknown), 
     inferredMatrixType(ENUM_MATRIX_TYPE_unknown), 
-    nType (ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown),
+    nType (
+ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown),
     inumberOfChildren(),
     m_mChildren(NULL){
 #ifndef NDEBUG
@@ -263,6 +264,47 @@ bool MatrixType::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows,
     return false;
 }// end of MatrixType::alignsOnBlockBoundary()
 
+int  MatrixType::getNumberOfElementConstructors()
+{
+    int k = 0;
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
+    for (unsigned int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements)         k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexElements)          k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements)           k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements)           k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_realValuedExpressions)    k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexValuedExpressions) k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements)           k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements)           k++;
+    }
+    return k;
+}// end of getNumberOfElementConstructors
+
+
+int  MatrixType::getNumberOfTransformationConstructors()
+{
+    int k = 0;
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
+    for (unsigned int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) k++;
+    }
+    return k;
+}// end of getNumberOfTransformationConstructors
+
+
+int  MatrixType::getNumberOfBlocksConstructors()
+{
+    int k = 0;
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
+    for (unsigned int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks) k++;
+    }
+    return k;
+}// end of getNumberOfBlocksConstructors
 
 bool MatrixType::matrixHasBase()
 {
@@ -311,48 +353,377 @@ bool MatrixType::matrixHasBlocks()
 }// end of matrixHasBlocks
 
 
-int  MatrixType::getNumberOfElementConstructors()
+bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mtxIdx)
 {
-    int k = 0;
-    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
-    for (unsigned int i=0; i < inumberOfChildren; i++)
+/**
+ *  Symmetry may be thought of as a structural property or a representational one.
+ *  The representational form is captured in the data element "this->symmetry";
+ *  this method is concerned with the structural properties. For instance a 2x2
+ *  matrix is symmetric provided the elements a{1,2} and a{2,1} are equal, 
+ *  regardless of how the matrix is represented. Likewise, a matrix that is
+ *  represented using symmetry="lower" is a symmetric matrix, so the _structural_
+ *  query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_upper) will return true!
+ *  By the same token, the query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_none)
+ *  will return false if the matrix in fact is symmetric, and the query
+ *  matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_unknown) is nonsensical and throws an error.
+ */
+    GeneralSparseMatrix* newExpansion = NULL;
+    GeneralSparseMatrix* rowExpansion = NULL;
+    GeneralSparseMatrix* colExpansion = NULL;
+    ENUM_MATRIX_SYMMETRY symmetry= symmetry_;
+    int*    loc = NULL;
+    double* val = NULL;
+    std::complex<double>* cVal = NULL;
+
+    try
     {
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements)         k++;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexElements)          k++;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements)           k++;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements)           k++;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_realValuedExpressions)    k++;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexValuedExpressions) k++;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements)           k++;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements)           k++;
+        if (      symmetry == ENUM_MATRIX_SYMMETRY_unknown )
+            throw ErrorClass("matrixHasSymmetry: symmetry status \"unknown\" cannot be assessed");
+
+        ENUM_MATRIX_TYPE vType = this->getMatrixType();
+        if (vType == ENUM_MATRIX_TYPE_unknown && mtxIdx == 0 && 
+                  this->expandedMatrixByElements.size() == 0)
+            throw ErrorClass("matrixHasSymmetry: type of matrix values is not available");
+
+        if (vType != ENUM_MATRIX_TYPE_constant && 
+            vType != ENUM_MATRIX_TYPE_complexConstant)
+            throw ErrorClass("matrixHasSymmetry: nonconstant matrices not yet implemented");
+
+        if (this->numberOfRows != this->numberOfColumns)
+            return (symmetry == ENUM_MATRIX_SYMMETRY_none);
+    
+        if (this->symmetry   == symmetry)
+            return true;
+
+        if (      (symmetry  == ENUM_MATRIX_SYMMETRY_none) &&
+            (this->symmetry  != ENUM_MATRIX_SYMMETRY_none  &&
+             this->symmetry  != ENUM_MATRIX_SYMMETRY_unknown) )
+            return false;
+
+        if (this->symmetry  == ENUM_MATRIX_SYMMETRY_upper &&
+                  symmetry  == ENUM_MATRIX_SYMMETRY_lower )
+            return true;
+        if (this->symmetry  == ENUM_MATRIX_SYMMETRY_lower &&
+                  symmetry  == ENUM_MATRIX_SYMMETRY_upper )
+            return true;
+    
+        if (this->symmetry  == ENUM_MATRIX_SYMMETRY_skewUpper &&
+                  symmetry  == ENUM_MATRIX_SYMMETRY_skewLower )
+            return true;
+        if (this->symmetry  == ENUM_MATRIX_SYMMETRY_skewLower &&
+                  symmetry  == ENUM_MATRIX_SYMMETRY_skewUpper )
+            return true;
+    
+        if (this->symmetry  == ENUM_MATRIX_SYMMETRY_HermitianUpper &&
+                  symmetry  == ENUM_MATRIX_SYMMETRY_HermitianLower )
+            return true;
+        if (this->symmetry  == ENUM_MATRIX_SYMMETRY_HermitianLower &&
+                  symmetry  == ENUM_MATRIX_SYMMETRY_HermitianUpper )
+            return true;
+    
+        if (this->symmetry  == ENUM_MATRIX_SYMMETRY_skewHermitianUpper &&
+                  symmetry  == ENUM_MATRIX_SYMMETRY_skewHermitianLower )
+            return true;
+        if (this->symmetry  == ENUM_MATRIX_SYMMETRY_skewHermitianLower &&
+                  symmetry  == ENUM_MATRIX_SYMMETRY_skewHermitianUpper )
+            return true;
+    
+        if (this->symmetry  != ENUM_MATRIX_SYMMETRY_none &&
+            this->symmetry  != ENUM_MATRIX_SYMMETRY_unknown)
+            return false;
+
+        // here this->symmetry == none (i.e., the matrix is represented in a non-symmetric form),
+        // or this->symmetry == unknown (i.e., we do not know the representation format yet)
+        // but we are inquiring whether it could be compressed. This requires expansion and
+        // comparison of the row-wise and column-wise representations.
+        
+
+        int rowwiseIdx = -1;
+        int colwiseIdx = -1;
+
+        if (this->expandedMatrixByElements.size() > 0)
+        // previous expansions may be used and modified
+        {
+            int bestMatch;
+            int nextMatch;
+            int thisMatch;
+            int bestMatch_index;
+            int nextMatch_index;
+
+            // check for best non-symmetric expansion (or presence of a symmetric representation)
+            bestMatch = -1;
+            nextMatch = 0;
+            bestMatch_index = -1;
+            bool bestIsRowMajor = false;
+            ENUM_MATRIX_TYPE bestType = ENUM_MATRIX_TYPE_unknown;
+    
+            for (int i=0; i<expandedMatrixByElements.size(); i++)
+            {
+                if (expandedMatrixByElements[i]->symmetry == ENUM_MATRIX_SYMMETRY_unknown)
+                    throw ErrorClass("matrixHasSymmetry: symmetry structure of expansion unknown");
+
+                if (expandedMatrixByElements[i]->symmetry == ENUM_MATRIX_SYMMETRY_none)
+                {
+                    //only constant real or complex matrices can be handled
+                    if (expandedMatrixByElements[i]->valueType == ENUM_MATRIX_TYPE_constant ||
+                        expandedMatrixByElements[i]->valueType == ENUM_MATRIX_TYPE_complexConstant)
+                    {
+                        if (bestMatch_index == -1)
+                        {
+                            bestMatch_index = i;
+                            bestIsRowMajor  = ( expandedMatrixByElements[i]->isRowMajor &&
+                                               !expandedMatrixByElements[i]->isTranspose );
+                            bestType        =   expandedMatrixByElements[i]->valueType;
+                        }
+                        // try to find a mate
+                        else
+                        {
+                            if (expandedMatrixByElements[i]->isRowMajor != bestIsRowMajor &&
+                                expandedMatrixByElements[i]->valueType  == bestType )
+                            {
+                                if (bestIsRowMajor)
+                                {
+                                    rowwiseIdx = bestMatch_index;
+                                    colwiseIdx  = i;
+                                }
+                                else
+                                {
+                                    colwiseIdx = bestMatch_index;
+                                    rowwiseIdx  = i;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                // here there is a symmetric expansion. See if symmetry is compatible
+                else
+                {
+                    // Simplify as much as possible. (E.g., real-valued Hermitian matrices
+                    // are also symmetric; upper and lower forms are equivalent)
+                    if (vType == ENUM_MATRIX_TYPE_constant)
+                    {
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianUpper)
+                            symmetry  = ENUM_MATRIX_SYMMETRY_upper;
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower)
+                            symmetry  = ENUM_MATRIX_SYMMETRY_upper;
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_skewHermitianUpper)
+                            symmetry  = ENUM_MATRIX_SYMMETRY_skewUpper;
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_skewHermitianLower)
+                            symmetry  = ENUM_MATRIX_SYMMETRY_skewUpper;
+                    }
+                    else
+                    {
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_lower)
+                            symmetry  = ENUM_MATRIX_SYMMETRY_upper;
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_skewLower)
+                            symmetry  = ENUM_MATRIX_SYMMETRY_skewUpper;
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower)
+                            symmetry  = ENUM_MATRIX_SYMMETRY_HermitianUpper;
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_skewHermitianLower)
+                            symmetry  = ENUM_MATRIX_SYMMETRY_skewHermitianUpper;
+                    }
+
+                    ENUM_MATRIX_SYMMETRY expSymm = expandedMatrixByElements[i]->symmetry;
+                    if (symmetry == expSymm)
+                        return true;
+                    if ( symmetry == ENUM_MATRIX_SYMMETRY_upper &&
+                        ( expSymm == ENUM_MATRIX_SYMMETRY_lower || 
+                         (expSymm == ENUM_MATRIX_SYMMETRY_HermitianLower ||
+                          expSymm == ENUM_MATRIX_SYMMETRY_HermitianUpper ) && 
+                            vType == ENUM_MATRIX_TYPE_constant ))
+                        return true;
+                    if ( symmetry == ENUM_MATRIX_SYMMETRY_skewUpper &&
+                        ( expSymm == ENUM_MATRIX_SYMMETRY_skewLower || 
+                         (expSymm == ENUM_MATRIX_SYMMETRY_skewHermitianLower ||
+                          expSymm == ENUM_MATRIX_SYMMETRY_skewHermitianUpper ) && 
+                            vType == ENUM_MATRIX_TYPE_constant ))
+                        return true;
+                    if ( symmetry == ENUM_MATRIX_SYMMETRY_HermitianUpper &&
+                          expSymm == ENUM_MATRIX_SYMMETRY_HermitianLower ) 
+                        return true;
+                    if ( symmetry == ENUM_MATRIX_SYMMETRY_skewHermitianUpper &&
+                          expSymm == ENUM_MATRIX_SYMMETRY_skewHermitianLower ) 
+                        return true;
+                    return false;
+                }
+            }// end of for loop on i
+
+            //we should at least have one usable expansion
+            if (bestMatch_index < 0)
+                throw ErrorClass("matrixHasSymmetry: symmetry structure can not be determined");
+            else if (colwiseIdx == -1) // have found only usable expansion
+            {
+                newExpansion = 
+                    expandedMatrixByElements[bestMatch_index]->convertToOtherMajor(bestType, false);
+                expandedMatrixByElements.push_back(newExpansion);
+                if (bestIsRowMajor)
+                {
+                    rowwiseIdx = bestMatch_index;
+                    colwiseIdx = expandedMatrixByElements.size();
+                }
+                else
+                {
+                    colwiseIdx = bestMatch_index;
+                    rowwiseIdx = expandedMatrixByElements.size();
+                }
+            }
+            
+        }
+        // no previous expansions, so expand if possible
+        else if (mtxIdx != NULL)
+        {
+            colwiseIdx = this->getExpandedMatrix(mtxIdx, false, ENUM_MATRIX_TYPE_unknown,
+                                                                ENUM_MATRIX_SYMMETRY_none, false);
+            rowwiseIdx = this->getExpandedMatrix(mtxIdx, true,  ENUM_MATRIX_TYPE_unknown,
+                                                                ENUM_MATRIX_SYMMETRY_none, false);
+        }
+
+        else
+            throw ErrorClass("matrixHasSymmetry: symmetry structure cannot be determined");
+        
+        //here we should have two expansions, rowwiseIdx and colwiseIdx. Check to make sure
+        if (rowwiseIdx == -1 || colwiseIdx == -1)
+            throw ErrorClass("matrixHasSymmetry: symmetry structure cannot be determined");
+
+        //Now check that row-wise and column-wise expansions have the same off-diagonal content
+
+        int  i, j, k, l;
+        int  mtxDim;
+
+        rowExpansion = this->expandedMatrixByElements[rowwiseIdx];
+        colExpansion = this->expandedMatrixByElements[colwiseIdx];
+
+        mtxDim = rowExpansion->numberOfRows;
+        
+        loc = new int[mtxDim];
+        for (j=0; j < mtxDim; ++j)
+            loc[j] = -1;
+
+        if (vType == ENUM_MATRIX_TYPE_constant)
+        {
+            val = new double[mtxDim];
+
+            for (j=0; j < mtxDim; ++j)
+            {
+                val[j] = 0.0;
+            }
+        }
+        else
+        {
+            cVal = new std::complex<double>[mtxDim];
+
+            for (j=0; j < mtxDim; ++j)
+            {
+                cVal[j] = (0.0,0.0);
+            }
+        }
+
+        // phase 1: register the nonzeroes of the column-wise expansion
+        for (i=0; i < mtxDim; ++i)
+        {
+            for (j = colExpansion->start[i]; j < colExpansion->start[i+1]; ++j)
+            {
+                if (colExpansion->index[j] >= i)
+                {
+                    loc[colExpansion->index[j]] = 1;
+                    if (vType == ENUM_MATRIX_TYPE_constant)
+                    {
+                        val[colExpansion->index[j]] +=
+                            ((ConstantMatrixValues*)colExpansion->value)->el[j];
+                    }
+                    else
+                    {
+                        cVal[colExpansion->index[j]] +=
+                            ((ComplexMatrixValues*)colExpansion->value)->el[j];
+                    }
+                }
+            }
+
+            // second pass: identify matching locations and store the sum
+            for (j = rowExpansion->start[i]; j < rowExpansion->start[i+1]; ++j)
+            {
+                if (rowExpansion->index[j] >= i)
+                {
+                    if (loc[rowExpansion->index[j]] < 0)
+                    {
+                        goto pullThePlug;
+                    }
+                    if (vType == ENUM_MATRIX_TYPE_constant)
+                    {
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_upper)
+                            val[rowExpansion->index[j]] -=
+                                ((ConstantMatrixValues*)rowExpansion->value)->el[j];
+                        else
+                            val[rowExpansion->index[j]] +=
+                                ((ConstantMatrixValues*)rowExpansion->value)->el[j];
+                    }
+                    else
+                    {
+                        if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianUpper)
+                            cVal[rowExpansion->index[j]] -=
+                                conj(((ComplexMatrixValues*)rowExpansion->value)->el[j]);
+                        else
+                            cVal[rowExpansion->index[j]] +=
+                                conj(((ComplexMatrixValues*)rowExpansion->value)->el[j]);
+
+                    }
+                }
+            }
+
+            //at this point the value array should be zero. Verify and reset loc
+            for (j = colExpansion->start[i]; j < colExpansion->start[i+1]; ++j)
+            {
+                if (colExpansion->index[j] >= i)
+                {
+                    if (loc[colExpansion->index[j]] >= 0)
+                    {
+                        loc[colExpansion->index[j]] = -1;
+                        if (vType == ENUM_MATRIX_TYPE_constant)
+                        {
+                            if (abs(val[colExpansion->index[j]]) > 1.0e-10)
+                                goto pullThePlug;
+                        }
+                        else
+                        {
+                            if (abs(cVal[colExpansion->index[j]]) > 1.0e-10)
+                                goto pullThePlug;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+
+pullThePlug:
+        //garbage collection...
+ 
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (val != NULL)
+            delete [] val;
+        val = NULL;
+        if (cVal != NULL)
+            delete [] cVal;
+        cVal = NULL;
+        return false;
     }
-    return k;
-}// end of getNumberOfElementConstructors
-
-
-int  MatrixType::getNumberOfTransformationConstructors()
-{
-    int k = 0;
-    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
-    for (unsigned int i=0; i < inumberOfChildren; i++)
+    catch(const ErrorClass& eclass)
     {
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) k++;
+        //catch garbage cleanup
+        if (loc != NULL)
+            delete [] loc;
+        loc = NULL;
+        if (val != NULL)
+            delete [] val;
+        val = NULL;
+        if (cVal != NULL)
+            delete [] cVal;
+        cVal = NULL;
+        throw ErrorClass( eclass.errormsg);
     }
-    return k;
-}// end of getNumberOfTransformationConstructors
-
-
-int  MatrixType::getNumberOfBlocksConstructors()
-{
-    int k = 0;
-    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
-    for (unsigned int i=0; i < inumberOfChildren; i++)
-    {
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks) k++;
-    }
-    return k;
-}// end of getNumberOfBlocksConstructors
-
+}//end of matrixHasSymmetry
 
 GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowMajor_,
                                                     ENUM_MATRIX_TYPE convertTo_, 
@@ -710,7 +1081,8 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Inside expandBlocks()");
 #endif
 
-    GeneralSparseMatrix* tempMtx = new GeneralSparseMatrix();
+    GeneralSparseMatrix*  tempMtx   = NULL;
+    ExpandedMatrixBlocks* tmpBlocks = NULL;
 
     try
     {
@@ -724,7 +1096,7 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
         tempMtx = new GeneralSparseMatrix();
 
         // Here we have matching block partitions
-        ExpandedMatrixBlocks* tmpBlocks = new ExpandedMatrixBlocks();
+        tmpBlocks = new ExpandedMatrixBlocks();
 
         ENUM_MATRIX_TYPE convertTo = convertTo_;
         ENUM_MATRIX_TYPE inferredType = getMatrixType();
@@ -769,7 +1141,7 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
         for (unsigned int j=0; j<((MatrixBlocks*)m_mChildren[nConst])->inumberOfChildren; j++)
         {
             tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[nConst])->m_mChildren[j];
-            int iBlock = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
+            int iBlock = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo);
             if (iBlock < 0) 
                 throw ErrorClass("One or more blocks could not be expanded");
             tmpBlocks->blocks[tmpBlockNumber] = tmpChild->expandedMatrixByElements[iBlock];
@@ -865,7 +1237,11 @@ cout << " start[" << j+1 << "] is now " << tempMtx->start[j+1] << endl;
             tempMtx->start[i] = tempMtx->start[i-1];
         tempMtx->start[0] = 0;
 
+#ifndef NDEBUG
         tempMtx->printMatrix();
+#endif
+
+	delete tmpBlocks;
 
         return tempMtx;
     }
@@ -875,6 +1251,9 @@ cout << " start[" << j+1 << "] is now " << tempMtx->start[j+1] << endl;
         if (tempMtx != NULL)
             delete tempMtx;
         tempMtx = NULL;
+        if (tmpBlocks != NULL)
+            delete tmpBlocks;
+        tmpBlocks = NULL;
         throw ErrorClass( eclass.errormsg);
     }
 }// end of expandBlocks
@@ -908,6 +1287,9 @@ GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_,
         if (symmetry == ENUM_MATRIX_SYMMETRY_unknown)
             symmetry  = this->symmetry;
 
+        if (((MatrixElements*)m_mChildren[nConst])->symmetry == ENUM_MATRIX_SYMMETRY_unknown)
+            ((MatrixElements*)m_mChildren[nConst])->symmetry =  this->symmetry;
+
         // temporary check for symmetry --- remove once implemented
         if ( (symmetry != ENUM_MATRIX_SYMMETRY_unknown) && 
              (symmetry != ((MatrixElements*)m_mChildren[nConst])->symmetry) )
@@ -925,6 +1307,16 @@ GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_,
         tempMtx->valueSize       = ((MatrixElements*)m_mChildren[nConst])->numberOfValues;
         tempMtx->valueType       = ((MatrixElements*)m_mChildren[nConst])->getMatrixType();
 
+cout << "extractElements: convert ";
+if (((MatrixElements*)m_mChildren[nConst])->rowMajor) cout << "rowMajor "; else cout << "colMajor ";
+cout << " to "; if (rowMajor_) cout << "rowMajor "; else cout << "colMajor ";
+cout << endl;
+cout << " convert symmetry ";
+cout << returnMatrixSymmetryString(((MatrixElements*)m_mChildren[nConst])->symmetry);
+cout << " to " << returnMatrixSymmetryString(symmetry);
+cout << endl;
+cout << " convert matrix type " << returnMatrixTypeString(m_mChildren[nConst]->getMatrixType());
+cout << " to " << returnMatrixTypeString(convertTo) << endl;
         // Determine if data arrays can be used again or need to be duplicated
         if ( ( ((MatrixElements*)m_mChildren[nConst])->rowMajor       == rowMajor_) &&
              ( ((MatrixElements*)m_mChildren[nConst])->symmetry       == symmetry ) &&
@@ -1121,7 +1513,7 @@ GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_,
                 tempMtx2 = tempMtx->convertType(convertTo);
                 tempMtx2->printMatrix();
                 delete tempMtx;
-                tempMtx = NULL;
+                tempMtx = tempMtx2;
            }
 
             else if ( ((MatrixElements*)m_mChildren[nConst])->rowMajor != rowMajor_ ) 
@@ -1131,30 +1523,33 @@ GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_,
                 tempMtx2 = tempMtx->convertToOtherMajor(convertTo, false);
                 tempMtx2->printMatrix();
                 delete tempMtx;
-                tempMtx = NULL;
+                tempMtx = tempMtx2;
             }
 
             if ( (symmetry != ENUM_MATRIX_SYMMETRY_unknown) && 
              (symmetry != ((MatrixElements*)m_mChildren[nConst])->symmetry) )
             {
-                GeneralSparseMatrix* tt;
-                if (changeMode == 1)
-                    tt = tempMtx;
-                else
-                    tt = tempMtx2;
+//                GeneralSparseMatrix* tt;
+//                if (changeMode == 1)
+//                    tt = tempMtx;
+//                else
+//                    tt = tempMtx2;
 
-                tempMtx3 = tt->convertSymmetry(symmetry);
-                delete tt;
-                tt = NULL;
+                tempMtx3 = tempMtx->convertSymmetry(symmetry);
+//                delete tt;
+//                tt = NULL;
                 tempMtx3->printMatrix();
-                return tempMtx3;
+                delete tempMtx;
+                tempMtx = tempMtx3;
+//                return tempMtx3;
+                return tempMtx;
             }
             else
             {
-                if (changeMode == 1)
+ //               if (changeMode == 1)
                     return tempMtx;
-                else
-                    return tempMtx2;
+ //               else
+ //                   return tempMtx2;
             }
         }
 
@@ -1538,7 +1933,9 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
         outStr << "return matrix elements in column major form" << std::endl;
     if (transpose_)
         outStr << " - apply transpose ";
-        outStr << " - apply symmetry " << returnMatrixSymmetryString(symmetry_);
+
+    outStr << " - apply symmetry " << returnMatrixSymmetryString(symmetry_);
+
     if (convertTo_ != ENUM_MATRIX_TYPE_unknown)
         outStr << " - convert to " << returnMatrixTypeString(convertTo_);
     outStr << std::endl;
@@ -1642,7 +2039,8 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             tempMtx->isRowMajor = rowMajor_;
             if (inferredType == ENUM_MATRIX_TYPE_unknown)
                 setInferredMatrixType(convertTo);
-            expandedMatrixByElements.push_back(tempMtx);
+            if (bestMatch != 7 && bestMatch != 9)
+                expandedMatrixByElements.push_back(tempMtx);
 
             //transpose or change symmetry if necessary
             if (bestMatch == 5 || bestMatch == 6 || bestMatch == 7)
@@ -1723,6 +2121,8 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             }
             else // some kind of elements 
             {
+                if (((MatrixElements*)m_mChildren[0])->symmetry == ENUM_MATRIX_SYMMETRY_unknown)
+                    ((MatrixElements*)m_mChildren[0])->symmetry =  this->symmetry;
                 tempMtx = this->extractElements(0, rowMajor_, convertTo, symmetry);
                 if (tempMtx->isRowMajor == rowMajor_)
                 {
@@ -1730,7 +2130,7 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                     expandedMatrixByElements.push_back(tempMtx);
                     return expandedMatrixByElements.size() - 1;
                 }
-                else
+                else // matrix is in the wrong major and must be "turned"
                 {
                     GeneralSparseMatrix* tempMtx2;
                     tempMtx2 = tempMtx->convertToOtherMajor(convertTo,false);	
@@ -1825,7 +2225,8 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                     if (tempExpansion[i]->isRowMajor != rowMajor_)
                     {
                         tempMtx2 = tempExpansion[i]->convertToOtherMajor(convertTo,false);
-                        expandedMatrixByElements.push_back(tempMtx2);
+//                        expandedMatrixByElements.push_back(tempMtx2);
+                        delete tempExpansion[i];
                         tempExpansion[i] = tempMtx2;
                     }
                 }
@@ -2418,81 +2819,190 @@ GeneralSparseMatrix*
     return NULL;
 }// end of MatrixType::getMatrixBlockInColumnMajorForm
 
-ExpandedMatrixBlocks* MatrixType::getBlocks(int* rowPartition, int rowPartitionSize, 
-                                            int* colPartition, int colPartitionSize, 
-                                            OSMatrix** mtxIdx, bool appendToBlockArray, bool rowMajor,
-                                            ENUM_MATRIX_TYPE convertTo_, ENUM_MATRIX_SYMMETRY symmetry_)
+int MatrixType::getBlockExpansion(int* rowPartition, int rowPartitionSize, 
+                                  int* colPartition, int colPartitionSize, 
+                                  OSMatrix** mtxIdx, bool appendToBlockArray, bool rowMajor_,
+                                  ENUM_MATRIX_TYPE convertTo_, ENUM_MATRIX_SYMMETRY symmetry_)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Inside getBlocks()");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Inside getBlockExpansion()");
 #endif
 
+    ENUM_MATRIX_TYPE convertTo = convertTo_;
+    ENUM_MATRIX_TYPE inferredType = getMatrixType();
+    if (convertTo == ENUM_MATRIX_TYPE_unknown) 
+        convertTo  = inferredType;
+    if (convertTo != mergeMatrixType(convertTo, inferredType))
+       throw ErrorClass("Requested improper conversion of element values");
+
+    bool getNextCollection;
     // Try to find a collection of blocks that matches the criteria 
     for (unsigned int kount = 0; kount < expandedMatrixByBlocks.size(); kount++)
     {
         if (rowPartitionSize != expandedMatrixByBlocks[kount]->rowOffsetSize ||       
             colPartitionSize != expandedMatrixByBlocks[kount]->colOffsetSize ||
-            rowMajor         != expandedMatrixByBlocks[kount]->isRowMajor)
+            convertTo        != expandedMatrixByBlocks[kount]->valueType     ||
+            rowMajor_        != expandedMatrixByBlocks[kount]->isRowMajor)
             continue;
-        
-        for (int i=0; i < rowPartitionSize; i++)
-            if (rowPartition[i] != expandedMatrixByBlocks[kount]->rowOffset[i])
-                continue;
-        for (int i=0; i < colPartitionSize; i++)
-            if (colPartition[i] != expandedMatrixByBlocks[kount]->colOffset[i])
-                continue;
 
-        return expandedMatrixByBlocks[kount];
+        getNextCollection = false;
+        for (int i=0; i < rowPartitionSize; i++)
+        {
+            if (rowPartition[i] != expandedMatrixByBlocks[kount]->rowOffset[i])
+            {
+                getNextCollection = true;
+                break;
+            }
+        }
+        if (getNextCollection)
+            continue;
+
+        for (int i=0; i < colPartitionSize; i++)
+        {
+            if (colPartition[i] != expandedMatrixByBlocks[kount]->colOffset[i])
+            {
+                getNextCollection = true;
+                break;
+            }
+        }
+        if (getNextCollection)
+            continue;
+    
+        return kount;
     }
 
     // not found; create a new collection
-    if (!appendToBlockArray)
-        throw ErrorClass("getBlocks(): Cannot determine a suitable collection");
+    if (!appendToBlockArray || mtxIdx == NULL)
+        return -1;
 
-//    if (!processBlocks(mtxIdx, rowPartition, rowPartitionSize,
-//                               colPartition, colPartitionSize, rowMajor, convertTo_, symmetry_) )
-//       return NULL;
-    throw ErrorClass("getBlocks(): Alternate block expansion not yet implemented");
-    return expandedMatrixByBlocks.back();
-}// end of MatrixType::getBlocks
+    ExpandedMatrixBlocks* tmpBlocks;
+    std::vector<int> tmpBlockRows;
+    std::vector<int> tmpBlockColumns;
 
-/*
-ExpandedMatrixBlocks* getBlocks(int i, bool appendToBlockArray, bool rowMajor, 
-                                    ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
-                                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_none)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Inside getBlocks()");
-#endif
-
-    // Try to find a collection of blocks that matches the criteria 
-    for (unsigned int kount = 0; kount < expandedMatrixByBlocks.size(); kount++)
+    try
     {
-        if (rowPartitionSize != expandedMatrixByBlocks[kount]->rowOffsetSize ||       
-            colPartitionSize != expandedMatrixByBlocks[kount]->colOffsetSize ||
-            rowMajor         != expandedMatrixByBlocks[kount]->isRowMajor)
-            continue;
-        
-        for (int i=0; i < rowPartitionSize; i++)
-            if (rowPartition[i] != expandedMatrixByBlocks[kount]->rowOffset[i])
-                continue;
-        for (int i=0; i < colPartitionSize; i++)
-            if (colPartition[i] != expandedMatrixByBlocks[kount]->colOffset[i])
-                continue;
+        int expIdx;
+        bool expansionNeeded;
+        expansionNeeded = (inumberOfChildren != 1) || 
+                (m_mChildren[0]->getNodeType() != ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks);
 
-        return expandedMatrixByBlocks[kount];
+        if (!expansionNeeded)
+        {
+            //verify that block structure is conformal with target
+            if (rowPartitionSize != ((MatrixBlocks*) m_mChildren[0])->rowOffset->numberOfEl ||       
+                colPartitionSize != ((MatrixBlocks*) m_mChildren[0])->colOffset->numberOfEl )
+                expansionNeeded = true;
+
+            if (!expansionNeeded)
+            {
+                for (int i=0; i < rowPartitionSize; i++)
+                {
+                    if (rowPartition[i] != ((MatrixBlocks*) m_mChildren[0])->rowOffset->el[i])
+                    {
+                        expansionNeeded = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!expansionNeeded)
+            {
+                for (int i=0; i < colPartitionSize; i++)
+                {
+                    if (colPartition[i] != ((MatrixBlocks*) m_mChildren[0])->colOffset->el[i])
+                    {
+                        expansionNeeded = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!expansionNeeded)
+            {
+                tmpBlocks = new ExpandedMatrixBlocks();
+                tmpBlocks->blocks
+                    = new GeneralSparseMatrix*[((MatrixBlocks*) m_mChildren[0])->inumberOfChildren];
+                tmpBlocks->blockNumber =       ((MatrixBlocks*) m_mChildren[0])->inumberOfChildren;
+
+                for (int i=0; i < ((MatrixBlocks*) m_mChildren[0])->inumberOfChildren; ++i)
+                    tmpBlocks->blocks[i] = new GeneralSparseMatrix();
+
+                tmpBlocks->blockRows
+                    = new int[((MatrixBlocks*) m_mChildren[0])->inumberOfChildren];
+                tmpBlocks->blockColumns
+                    = new int[((MatrixBlocks*) m_mChildren[0])->inumberOfChildren];
+
+                //expand each block into a temporary matrix
+                for (int i=0; i < ((MatrixBlocks*) m_mChildren[0])->inumberOfChildren; ++i)
+                {
+                    expIdx = ((MatrixBlock*) ((MatrixBlocks*) m_mChildren[0])->m_mChildren[i])
+                                ->getExpandedMatrix(mtxIdx, rowMajor_, convertTo,symmetry_);
+                    if (expIdx < 0)
+                    {
+                        throw ErrorClass("Error expanding block in getBlockExpansion()");
+                    }
+                    else
+                    {
+                        tmpBlocks->blocks[i]
+                            = ((MatrixType*) ((MatrixBlocks*) 
+                                m_mChildren[0])->m_mChildren[i])->expandedMatrixByElements[expIdx];
+
+                        //tmpBlocks is an ExpandedMatrixBlocks object. Store all data items
+                        tmpBlocks->blockRows[i]
+                            = ((MatrixBlock*) ((MatrixBlocks*) 
+                                m_mChildren[0])->m_mChildren[i])->blockRowIdx;
+
+                        tmpBlocks->blockColumns[i]
+                            = ((MatrixBlock*) ((MatrixBlocks*) 
+                                m_mChildren[0])->m_mChildren[i])->blockColIdx;
+
+                   }
+                }
+
+                tmpBlocks->bDeleteArrays = false;
+                tmpBlocks->valueType     = convertTo;
+                tmpBlocks->isRowMajor    = rowMajor_;
+                tmpBlocks->symmetry      = symmetry_;
+                tmpBlocks->rowOffsetSize = rowPartitionSize;
+                tmpBlocks->colOffsetSize = colPartitionSize;
+
+                tmpBlocks->rowOffset = new int[rowPartitionSize];
+                tmpBlocks->colOffset = new int[colPartitionSize];
+
+                for (int i=0; i < rowPartitionSize; ++i)
+                    tmpBlocks->rowOffset[i] = rowPartition[i];
+
+                for (int i=0; i < colPartitionSize; ++i)
+                    tmpBlocks->colOffset[i] = colPartition[i];
+
+                expandedMatrixByBlocks.push_back(tmpBlocks);
+                return expandedMatrixByBlocks.size() - 1;
+            }
+        }
+
+        if (expansionNeeded)
+        {
+            expIdx = this->getExpandedMatrix(mtxIdx, rowMajor_, convertTo,symmetry_);
+            if (expIdx < 0)
+                return -1;
+            
+            tmpBlocks = this->expandedMatrixByElements[expIdx]
+                            ->disassembleMatrix(rowPartition, rowPartitionSize, 
+                                                colPartition, colPartitionSize, 
+                                                mtxIdx, rowMajor_, symmetry);
+            expandedMatrixByBlocks.push_back(tmpBlocks);
+            return expandedMatrixByBlocks.size() - 1;
+        }   
+
+
+    return -1;
     }
 
-    // not found; create a new collection
-    if (!appendToBlockArray) 
-        throw ErrorClass("getBlocks(): Cannot determine a suitable collection");
-
-    if (!processBlocks(mtxIdx, rowPartition, rowPartitionSize,
-                               colPartition, colPartitionSize, rowMajor, convertTo_, symmetry_)
-       return NULL;
-    return expandedMatrixByBlocks.back();
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
 }// end of MatrixType::getBlocks
-*/
 
 bool MatrixType::processBlocks(OSMatrix** mtxIdx, bool rowMajor_, 
                                ENUM_MATRIX_TYPE convertTo_, ENUM_MATRIX_SYMMETRY symmetry_)
@@ -2960,7 +3470,8 @@ MatrixElements::MatrixElements():
     rowMajor(false),
     numberOfValues(-1),
     start(NULL),
-    index(NULL)
+    index(NULL),
+    symmetry(ENUM_MATRIX_SYMMETRY_unknown)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
@@ -9307,6 +9818,222 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertToTranspose(bool copyValues_)
     }    
 } // end of GeneralSparseMatrix::convertToTranspose
 
+
+ExpandedMatrixBlocks* GeneralSparseMatrix::disassembleMatrix(int* rowPartition, int rowPartitionSize, 
+                                                    int* colPartition, int colPartitionSize, 
+                                                    OSMatrix** mtxIdx, bool rowMajor,
+                                                    ENUM_MATRIX_SYMMETRY symmetry_)
+{ 
+/*
+     We go through the nonzeros of the matrix to determine both the number of nonzero blocks
+     and the number of elements in each block. 
+     We do not know how many blocks there are, so we have to store them temporarily in a vector. 
+     As each block is detected, we extend the vector.
+     This keeps the blocks ordered by colIdx (assuming column major) and probably also 
+     by rowIdx within each column (assuming "normal" ordering of nonzeros). 
+     (This affects only the efficiency of the search routines, not the validity of the algorithm.)
+     After the counts have been established, we have to go through the nonzeros again to store values.
+     Finally we convert the vector to an array and return.
+ */
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Inside disassembleMatrix()");
+#endif
+    int lastBlock, currRow;
+    int blockCount, firstBlockInCol;
+    std::vector<GeneralSparseMatrix*> tmpBlocks;
+    int* tmpBlockRows; 
+    int* tmpBlockColumns;
+    bool found;
+    int  i, j, k;
+    int* elCount;
+
+    ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
+
+    if (symmetry == ENUM_MATRIX_SYMMETRY_unknown)
+//        symmetry  = this->symmetry;
+//    if (symmetry != this->symmetry)
+        throw ErrorClass("Cannot handle symmetry properly in expandBlocks()");
+
+    //This section is for column-wise representations --- row-wise will work analogously
+    if (!rowMajor)
+    {
+        firstBlockInCol = -1;
+
+        // OK. Start counting
+        blockCount = 0;
+        elCount = new int[rowPartitionSize-1];
+
+        for (i=0; i < colPartitionSize-1; i++) // i indexes a block of columns
+        {
+//            blk0 = blockCount;
+            for (j=0; j<rowPartitionSize-1; j++) 
+                elCount[j] = 0;
+            lastBlock = i;
+            if (lastBlock >= rowPartitionSize)
+                lastBlock  = rowPartitionSize - 1;
+
+            for (j=colPartition[i]; j<colPartition[i+1]; ++j) // j indexes a column within this block
+            {
+                for ( k = start[j]; k < start[j+1]; ++k )  // k indexes the elements in this column
+                {
+                    currRow = index[k];
+                    if (currRow < rowPartition[lastBlock] || currRow >= rowPartition[lastBlock+1])
+                    {
+                        found = false;
+                        int n = lastBlock + 1;
+                        while (!found && n < rowPartitionSize - 1)
+                        {
+//                            for (k=lastBlock+1; k < rowPartitionSize - 1; k++)
+                            if (currRow >= rowPartition[n+1])
+                                n++;
+                            else
+                            {
+                                found = true;
+                                lastBlock = n;
+                                break;
+                            }
+                        }
+                        if (!found)
+                            n = lastBlock - 1;
+                        while (!found && n >= 0)
+                        {
+//                            for (k=lastBlock-1; k >= 0; k--)
+                            if (currRow < rowPartition[n])
+                                n--;
+                            else
+                            {
+                                found = true;
+                                lastBlock = n;
+                                break;
+                            }
+                        }
+                        if (!found)
+                            throw ErrorClass("Invalid row information detected in disassembleMatrix()");
+
+                        elCount[lastBlock]++;
+                        if (elCount[lastBlock] == 1)
+                        {
+                            //add a new block
+                            GeneralSparseMatrix* tmpBlock = new GeneralSparseMatrix();
+                            blockCount++;
+                            if (firstBlockInCol < 0) 
+                                firstBlockInCol = blockCount - 1;
+                            tmpBlock->b_deleteStartArray = true;
+                            tmpBlock->b_deleteIndexArray = true;
+                            tmpBlock->b_deleteValueArray = true;
+                            tmpBlock->isRowMajor         = false;
+                            tmpBlock->symmetry           = symmetry;
+                            tmpBlock->numberOfRows       = numberOfRows;
+                            tmpBlock->numberOfColumns    = numberOfColumns;
+                            tmpBlock->valueType          = valueType;
+                            tmpBlock->startSize          = colPartition[i+1] - colPartition[i] + 1;
+                            tmpBlock->start              = new int[tmpBlock->startSize];
+    
+                            for (int n=0; n <= j - colPartition[i]; n++)
+                                tmpBlock->start[n] = 0;
+
+                            tmpBlocks.push_back(tmpBlock);
+                            if (firstBlockInCol < 0) 
+                                firstBlockInCol = blockCount - 1;
+                        }
+                    } // end of element
+                } // end of column
+
+                //store starts
+                for (k=firstBlockInCol; k < blockCount; k++)
+                    tmpBlocks[k]->start[j-colPartition[i] + 1] = elCount[k];
+
+            } // end of block of columns
+
+            // allocate space for indexes, values and block location 
+            for (k=firstBlockInCol; k < blockCount; k++)
+            {
+                tmpBlocks[k]->valueSize = elCount[k];
+                tmpBlocks[k]->index = new int[elCount[k]];
+                tmpBlocks[k]->value = new MatrixElementValues[elCount[k]];
+            }
+            tmpBlockRows    = new int[blockCount]; 
+            tmpBlockColumns = new int[blockCount];
+            for (j=0; j<blockCount; j++)
+            {
+                tmpBlockRows[j]    = -1;
+            } 
+            
+            lastBlock = i;            
+
+            // traverse a second time to get values
+            for (j=colPartition[i]; j<colPartition[i+1]; ++j) // j indexes a column within this block
+            {
+                for ( k = start[j]; k < start[j+1]; ++k )   // k indexes the elements in this column
+                {
+                    currRow = index[k];
+                    if (currRow < rowPartition[lastBlock] || currRow >= rowPartition[lastBlock+1])
+                    {
+                        found = false;
+                        int n;
+                        while (!found)
+                        {
+                            for (n=lastBlock+1; n < rowPartitionSize - 1; n++)
+                                if (currRow >= rowPartition[lastBlock] && 
+                                    currRow <  rowPartition[lastBlock+1])
+                                {
+                                    found = true;
+                                    lastBlock = n;
+                                    break;
+                                }
+                        }
+                        while (!found)
+                        {
+                            for (n=lastBlock-1; k >= 0; k--)
+                                if (currRow >= rowPartition[lastBlock] && 
+                                    currRow <  rowPartition[lastBlock+1])
+                                {
+                                    found = true;
+                                    lastBlock = n;
+                                    break;
+                                }
+                        }
+                    }
+                    if (tmpBlockRows[lastBlock] == -1)
+                    {
+                        tmpBlockRows[lastBlock] = j;
+                        tmpBlockColumns[lastBlock] = i;
+                    }
+                }
+ 
+                int k0 = 0;
+                tmpBlocks[lastBlock]->index[k-k0] = index[k] - rowPartition[j];
+                tmpBlocks[lastBlock]->value[k-k0] = value[k];
+            }
+        } // end of entire collection
+
+    } // end of column major 
+    else
+        throw ErrorClass("Row major not yet implemented in MatrixType::disassembleMatrix()");
+
+    ExpandedMatrixBlocks* returnArray = new ExpandedMatrixBlocks();
+/*
+    returnArray->bDeleteArrays = true;
+    returnArray->valueType     = matrixType;
+    returnArray->isRowMajor    = rowMajor;
+    returnArray->blockNumber   = tmpBlocks.size();
+    returnArray->rowOffset     = rowPartition;s
+    returnArray->colOffset     = colPartition;
+    returnArray->rowOffsetSize = rowPartitionSize;
+    returnArray->colOffsetSize = colPartitionSize;
+    returnArray->blocks        = new GeneralSparseMatrix*[tmpBlocks.size()];
+
+    for (unsigned int i=0; i<tmpBlocks.size();i++);
+    {
+        returnArray->blocks[i] = tmpBlocks[i];
+        returnArray->blockRows[i] = tmpBlockRows[i];
+        returnArray->blockColumns[i] = tmpBlockColumns[i];    
+    }
+*/
+    return returnArray;
+}//end of MatrixType::disassembleMatrix
+
+
 GeneralSparseMatrix* GeneralSparseMatrix::clone()
 {
 throw ErrorClass("GeneralSparseMatrix::clone() not implemented properly yet");
@@ -9376,8 +10103,8 @@ ExpandedMatrixBlocks::~ExpandedMatrixBlocks()
     outStr << "deleting ExpandedMatrixBlocks at address" << this << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-    if (bDeleteArrays)
-    {
+//    if (bDeleteArrays)
+//    {
         if (blockRows != NULL)
         {
 #ifndef NDEBUG
@@ -9402,6 +10129,9 @@ ExpandedMatrixBlocks::~ExpandedMatrixBlocks()
             delete [] blockColumns;
             blockColumns = NULL;
         }
+
+//    if (bDeleteArrays)
+    {
         if (blockNumber > 0 && blocks != NULL)
         {
             for (int i=0; i < blockNumber; i++)
@@ -9416,11 +10146,14 @@ ExpandedMatrixBlocks::~ExpandedMatrixBlocks()
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
                         ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif          
-                    delete blocks[i];
+                    if (bDeleteArrays)
+                        delete blocks[i];
+
                     blocks[i] = NULL;
                 }
             }
         }
+
         if (blocks != NULL) delete [] blocks;
         blocks = NULL;
     }
