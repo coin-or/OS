@@ -17,10 +17,18 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <sstream>
+#include <limits>
+#include <cstdio>
+
 #include "OSGeneral.h"
 #include "OSMathUtil.h"
-
-
+#include "OSParameters.h"
+#include "OSErrorClass.h"
+#include "OSOutput.h"
+#include "OSMatrix.h"
+#include "CoinFinite.hpp"
 
 //#define DEBUG
 
@@ -4615,6 +4623,11 @@ public:
     /** track whether numberOfConstraints has been set */
     bool numberOfConstraintsIsSet;
 
+    /** matrices is a pointer to a
+     *  Matrices object
+     */
+    Matrices* matrices;
+
     /** the options for the variables */
     VariableOption *variables;
 
@@ -5748,6 +5761,34 @@ public:
      * @return a pointer to an array of OtherConstraintOption objects
      */
     OtherConstraintOptionOrResult** getAllOtherConstraintOptions();
+
+    /**
+     *  Get the initial values for a particular matrix variable 
+     *  <p>
+     *
+     *  @param  mtxVarIdx is the index of the matrix variable to be retrieved
+     *  @return a pointer to a matrix expanded into GeneralSparseMatrix form
+     */
+    GeneralSparseMatrix* getInitialMatrixVar(int mtxVarIdx) throw (ErrorClass);
+
+    /**
+     *  Get the initial values for a particular matrix variable in block form
+     *  <p>
+     *
+     *  @param  mtxVarIdx is the index of the matrix variable to be retrieved
+     *  @param  rowPartition is an array of integer values describing the desired row partition
+     *  @param  rowPartitionSize gives the size of the rowPartition array
+     *  @param  colPartition is an array of integer values describing the desired column partition
+     *  @param  colPartitionSize gives the size of the colPartition array
+     *  @return a pointer to a matrix expanded into a particular block pattern
+     */
+    ExpandedMatrixBlocks* 
+        getInitialMatrixVarBlocks(int mtxVarIdx, 
+                                  int* rowPartition, int rowPartitionSize,
+                                  int* colPartition, int colPartitionSize,
+                                  ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown)
+                              throw (ErrorClass);
 
     /**
      * Get the options associated with a given solver

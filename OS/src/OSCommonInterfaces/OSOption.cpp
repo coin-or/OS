@@ -13,19 +13,7 @@
  *
  */
 
-
 #include "OSOption.h"
-#include "OSParameters.h"
-#include "OSGeneral.h"
-#include "OSErrorClass.h"
-#include "OSOutput.h"
-
-#include "CoinFinite.hpp"
-#include <iostream>
-#include <sstream>
-#include <limits>
-#include <cstdio>
-#include "OSMathUtil.h"
 
 using namespace std;
 
@@ -1323,6 +1311,7 @@ OptimizationOption::OptimizationOption():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Inside OptimizationOption Constructor");
 #endif
+    matrices = NULL;
     variables = NULL;
     objectives = NULL;
     constraints = NULL;
@@ -4612,7 +4601,66 @@ OtherConstraintOptionOrResult* OSOption::getOtherConstraintOption(int optionNumb
     }
     else
         throw ErrorClass("<optimization> object must be defined before getting the data");
-}//getOtherConstraintOption
+}//getOtherConstraintOption()
+
+/**
+ *  Get the initial values for a particular matrix variable in block form
+ */
+ExpandedMatrixBlocks* OSOption::getInitialMatrixVarBlocks(int mtxVarIdx, 
+                                                    int* rowPartition, int rowPartitionSize,
+                                                    int* colPartition, int colPartitionSize,
+                                                    ENUM_MATRIX_TYPE convertTo_,
+                                                    ENUM_MATRIX_SYMMETRY symmetry_ )
+                                                throw (ErrorClass)
+{
+    ExpandedMatrixBlocks* tmpBlocks = NULL;
+    try
+    {
+        if (rowPartition == NULL || rowPartitionSize < 2 ||
+            colPartition == NULL || colPartitionSize < 2 )
+            throw ErrorClass("bad block structure requested in getInitialMatrixVarBlocks()");
+
+        if (mtxVarIdx < 0) 
+            throw ErrorClass("mtxVarIdx must not be negative in getInitialMatrixVarBlocks()");
+
+        if (this->optimization == NULL)
+            return NULL;
+        if (this->optimization->matrixProgramming == NULL)
+            return NULL;
+        if (this->optimization->matrixProgramming->matrixVariables == NULL)
+            return NULL;
+        if (this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableValues == NULL)
+            return NULL;
+        
+        int n = this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableValues->numberOfMatrixVar;
+        for (int i=0; i < n; i++)
+        {
+            if (this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableValues->matrixVar[i] == NULL) continue;
+            if (this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableValues->matrixVar[i]->matrixVarIdx != mtxVarIdx) continue;
+            
+            int expIdx = this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableValues->matrixVar[i]
+                ->getBlockExpansion(rowPartition, rowPartitionSize,
+                                    colPartition, colPartitionSize,
+                                    this->optimization->matrices->matrix,
+                                    true, false, convertTo_, symmetry_);
+            if (expIdx < 0)
+               throw ErrorClass("Error during block expansion in OSOption");
+
+            tmpBlocks = this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableValues->matrixVar[i]->expandedMatrixByBlocks[expIdx];
+            return tmpBlocks;
+        }
+        return NULL;
+    }
+    catch (ErrorClass)
+    {
+    }
+}//getInitialMatrixVarBlocks()
 
 
 /**

@@ -479,52 +479,6 @@ public:
 }; // NonlinearExpressions
 
 
-/*! \class Matrices
- * \brief The in-memory representation of the
- * <b><matrices></b> element.
- */
-class Matrices
-{
-public:
-
-    /** The Matrices class constructor */
-    Matrices();
-
-    /** The Matrices class destructor */
-    ~Matrices();
-
-    /** numberOfMatrices is the number of
-     * <nl> elements in the
-     * <b><matrices></b> element.
-     */
-    int numberOfMatrices;
-
-    /** matrix is a pointer to an array of OSMatrix object pointers */
-    OSMatrix **matrix;
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(Matrices *that);
-
-    /**
-     *
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */    
-    bool deepCopyFrom(Matrices *that);
-}; // Matrices
 
 
 /*! \class Cone
@@ -3944,7 +3898,7 @@ public:
      * @param types holds a char array of variable types; use null if all variables are continuous;
      *        for a specfic variable in the array use C for Continuous, B for Binary, I for Integer, 
      *        S for String, D for semi-continuous, J for semi-integer (i.e., either 0 or integer >=n). 
-     * @param inits holds a double array of varible initial values; use null if no initial values. -- deprecated
+     * @param inits holds a double array of variable initial values; use null if no initial values. -- deprecated
      * @param initsString holds a std::string array of varible initial values; use null
      *        if no initial std::string values.  -- deprecated
      * @return whether the variables were set successfully.

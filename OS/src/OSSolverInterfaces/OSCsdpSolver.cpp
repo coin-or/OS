@@ -450,7 +450,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
             }
             else
             {
-                // There are off-diagonal elements (i.e., "matrix block")
+                // There are off-diagonal elements (i.e., "matrix block") --- treat as dense
                 C_matrix.blocks[blk].blocksize = blksz;
                 C_matrix.blocks[blk].blockcategory = MATRIX;
                 C_matrix.blocks[blk].data.mat = new double[blksz*blksz];
@@ -611,7 +611,6 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
 
     try
     {
-
         /* set default values first
          * Unfortunately there seems to be no way around a complete enumeration of options
          */
@@ -740,7 +739,135 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
 }//setSolverOptions
 
 
+/*
+ * Build an initial solution for an SDP problem.
+ */
+void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a, 
+    struct constraintmatrix *constraints, struct blockmatrix *pX0,
+    double **py0, struct blockmatrix *pZ0)  throw(ErrorClass)
+{
+    try
+    {
+        int i,j;
+        double alpha,beta;
+        double maxnrmA,nrmA;
+        double nrmC;
+        double scale1, scale2;
+        struct sparseblock *ptr;
+
+        /*
+         *  First, allocate storage for X0, y0, and Z0.
+         */
+        alloc_mat(C,pX0);
+        alloc_mat(C,pZ0);
+        *py0=(double *)malloc(sizeof(double)*(k+1));
+
+        if (py0 == NULL)
+        {
+            printf("Storage allocation failed!\n");
+            exit(10);
+        };
+
+        //if either initial primal or dual values are NULL, we need to compute alpha
+        /*
+         *  next, pick alpha=n*max_i((1+|a_i|)/(1+||A_i||)).  
+         */
+
+        maxnrmA=0.0;
+        alpha=0.0;
+        for (i=1; i<=k; i++)
+        {
+            nrmA=0.0;
+            ptr=constraints[i].blocks;
+
+            while (ptr != NULL)
+	        {
+	            for (j=1; j<=ptr->numentries; j++)
+	            {
+	                nrmA += (ptr->entries[j])*(ptr->entries[j]);
+	                if (ptr->iindices[j] != ptr->jindices[j])
+		                nrmA += (ptr->entries[j])*(ptr->entries[j]);
+	            }
+	            ptr=ptr->next;
+	        }
+
+            nrmA=sqrt(nrmA);
+            if (nrmA > maxnrmA)
+	            maxnrmA=nrmA;
+
+            if ((1+fabs(a[i]))/(1+nrmA) > alpha)
+               alpha=(1+fabs(a[i]))/(1+nrmA);
+
+        }
+
+        alpha=n*alpha;
+
+
+        // If initial dual values is NULL, compute beta
+        /*
+         * Next, calculate the F norm of C.
+         */
+
+        nrmC=Fnorm(C);
+
+        if (nrmC > maxnrmA)
+        {
+            beta=(1+nrmC)/sqrt(n*1.0);
+        }
+        else
+        {
+            beta=(1+maxnrmA)/sqrt(n*1.0);
+        }
+
+        
+        /*
+         * Now initial the values. Defaults are X=100*alpha*I, Z=100*beta*I, y=0.
+         */
+
+//        if (osoption-> ... == NULL)
+//        {
+            make_i(*pX0);
+            scale1=0.0;
+            scale2=10*alpha;
+            mat_mult(scale1,scale2,*pX0,*pX0,*pX0);
+//        }
+//        else
+//        {
+//            ...
+//        }
+
+//        if (osoption-> ... == NULL)
+//        {
+            make_i(*pZ0);
+            scale1=0.0;
+            scale2=10*beta;
+            mat_mult(scale1,scale2,*pZ0,*pZ0,*pZ0);
+//        }
+//        else
+//        {
+//            ...
+//        }
+
+
+
+//        if (osoption-> ... == NULL)
+//        {
+            for (i=1; i<=k; i++)
+                (*py0)[i]=0;
+//        }
+//        else
+//        {
+//            ...
+//        }
+
+        return;
+    }
 #if 0
+}
+
+
++++++++++++++++++++++++++++++++++++++++++++++
+
 void  CsdpSolver::setInitialValues() throw (ErrorClass)
 {
     std::ostringstream outStr;
@@ -844,6 +971,12 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
         }
         return;
     }
+
+
+
+#endif
+
+
     catch(const ErrorClass& eclass)
     {
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "Error while setting options in CSDPSolver\n");
@@ -853,8 +986,6 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
         throw ErrorClass( osrl) ;
     }
 }//end setInitialValues()
-
-#endif
 
  
 void  CsdpSolver::solve() throw (ErrorClass)
@@ -870,26 +1001,19 @@ void  CsdpSolver::solve() throw (ErrorClass)
     if( this->bSetSolverOptions == false) setSolverOptions();
     try
     {
-
-// what about initial values for X and Y? perhaps even y?
-//if osoption->optimization->constraints != NULL or
-//osoption->optimization->matrixVariables != NULL or
-//...->initialmatrix != NUll, set initial values. Make sure that defaults are there
-//in case X or Z is empty
-  
         /*
          * Create an initial solution.  This allocates space for X, y, and Z,
          * and sets initial values.
          */
-        //setInitialValues(nC_rows,ncon,C_matrix,mconstraints,&X,&y,&Z);
-//else
-        initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
+        setInitialValues(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
+//        initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
 
 
 
 
         //call solver
-        int returnCode = easy_sdp(nC_rows,ncon,C_matrix,rhsValues,mconstraints,0.0,&X,&y,&Z,&pobj,&dobj);
+        int returnCode = easy_sdp(nC_rows, ncon, C_matrix, rhsValues, 
+                                  mconstraints, 0.0, &X, &y, &Z, &pobj, &dobj);
 
         unsigned int solIdx = 0;
         unsigned int numberOfOtherVariableResults;

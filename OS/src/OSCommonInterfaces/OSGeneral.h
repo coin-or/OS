@@ -936,6 +936,53 @@ public:
     bool deepCopyFrom(TimeSpan *that);
 }; //TimeSpan
 
+/*! \class Matrices
+ * \brief The in-memory representation of the
+ * <b><matrices></b> element.
+ */
+class Matrices
+{
+public:
+
+    /** The Matrices class constructor */
+    Matrices();
+
+    /** The Matrices class destructor */
+    ~Matrices();
+
+    /** numberOfMatrices is the number of
+     * <nl> elements in the
+     * <b><matrices></b> element.
+     */
+    int numberOfMatrices;
+
+    /** matrix is a pointer to an array of OSMatrix object pointers */
+    OSMatrix **matrix;
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(Matrices *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(Matrices *that);
+}; // Matrices
+
 
 /*! \class OtherOptionOrResultElementString
  *  \brief the OtherOptionOrResultElementString class.

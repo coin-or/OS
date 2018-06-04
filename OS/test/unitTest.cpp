@@ -973,6 +973,8 @@ if (PARSER_TESTS)
             cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
             instance1 = osilreader->readOSiL( osil);
 
+cout << "Size of matrices: " << sizeof(instance1->instanceData->matrices->matrix) << endl;
+
             cout << "Write the OSInstance object to a temporary file (i.e., string)" << endl;
             std::string temposil = osilwriter->writeOSiL(instance1);
 

@@ -42,8 +42,8 @@ extern "C"
 {
 #include "declarations.h"
 #include "parameters.h"
+#include <math.h>
 }
-
 
 #include <cstddef>
 #include <cstdlib>
@@ -105,6 +105,21 @@ public:
      *  \return void.
      */
     virtual void  setSolverOptions() throw(ErrorClass);
+
+/*
+ * Build an initial solution for an SDP problem.
+ */
+
+    /*! \fn void initsoln(n,k,C,a,constraints,pX0,py0,pZ0)
+     *  \brief The implementation of the virtual functions.
+     *  \return void.
+     *  Set an initial solution. The main part of the method is copied 
+     *  from Brian Borchers' code Csdp, but we added the option of 
+     *  user-defined starting values.
+     */
+    void setInitialValues(int n, int k, struct blockmatrix C, double *a, 
+        struct constraintmatrix *constraints, struct blockmatrix *pX0,
+        double **py0, struct blockmatrix *pZ0)  throw(ErrorClass);
 
     /*! \fn  verifyForm()
      *  \brief Use to verify that the solver is appropriate. 

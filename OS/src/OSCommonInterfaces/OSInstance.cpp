@@ -852,52 +852,6 @@ NonlinearExpressions::~NonlinearExpressions()
 }//end ~NonlinearExpressions()
 
 
-Matrices::Matrices():
-    numberOfMatrices(0) ,
-    matrix(NULL)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
-        "Inside the Matrices Constructor");
-#endif
-}//end Matrices()
-
-Matrices::~Matrices()
-{
-    std::ostringstream outStr;
-
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
-        "Inside the Matrices Destructor");
-    outStr.str("");
-    outStr.clear();
-    outStr << "NUMBER OF MATRICES = " << numberOfMatrices << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
-#endif
-    int i;
-    if(numberOfMatrices > 0 && matrix != NULL)
-    {
-        for (i = 0; i < numberOfMatrices; i++)
-        {
-#ifndef NDEBUG
-            outStr.str("");
-            outStr.clear();
-            outStr << "DESTROYING MATRIX " << i << endl;
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
-#endif
-            if(matrix[i] != NULL)
-            {
-                delete matrix[i];
-                matrix[i] = NULL;
-            }
-        }
-    }
-    if(matrix != NULL)
-    {
-        delete[] matrix;
-        matrix = NULL;
-    }
-}//end ~Matrices()
 
 
 Cones::Cones():

@@ -309,7 +309,8 @@ int  MatrixType::getNumberOfBlocksConstructors()
 bool MatrixType::matrixHasBase()
 {
     return (inumberOfChildren > 0 && m_mChildren != NULL 
-                                  && m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix);
+                                  && m_mChildren[0]->nType ==
+                                         ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix);
 }// end of matrixHasBase
 
 
@@ -318,14 +319,15 @@ bool MatrixType::matrixHasElements()
     if (inumberOfChildren == 0 || m_mChildren == NULL) return false;
     for (unsigned int i=0; i < inumberOfChildren; i++)
     {
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements        ) return true;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexElements         ) return true;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements          ) return true;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements          ) return true;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_realValuedExpressions   ) return true;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexValuedExpressions) return true;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements          ) return true;
-        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements          ) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements        ||
+            m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexElements         ||
+            m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements          ||
+            m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements          ||
+            m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_realValuedExpressions   ||
+            m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexValuedExpressions||
+            m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements          ||
+            m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements           ) 
+            return true;
     }
     return false;
 }// end of matrixHasElements
@@ -730,7 +732,8 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Inside processBaseMatrix()");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace,
+        "Inside processBaseMatrix()");
 #endif
     try
     {
@@ -753,6 +756,9 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
 
         // Note: base matrix is always the first child
         OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
+        if (baseMtxPtr == NULL)
+            throw ErrorClass("processBaseMatrix(): Base matrix pointer is NULL!!!");
+
         m_mChildren[0]->inferredMatrixType = baseMtxPtr->getMatrixType();
 
         double scaleMult = ((BaseMatrix*)m_mChildren[0])->scalarMultiplier;
