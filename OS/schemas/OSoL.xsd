@@ -366,6 +366,7 @@
 	<xs:complexType name="MatrixVariableOption">
 		<xs:sequence>
 			<xs:element name="initialMatrixVariableValues" type="InitMatrixVariableValues" minOccurs="0"/>
+			<xs:element name="initialMatrixVariableDualValues" type="InitMatrixVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatrixVariableOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherMatrixVariableOptions" type="NonnegativeInteger" use="optional" default="0"/>

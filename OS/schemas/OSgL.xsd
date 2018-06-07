@@ -790,11 +790,6 @@ The result of this transformation is aligned with the top left corner of the tar
 				</xs:element>
 			</xs:choice>
 		</xs:sequence>
-		<xs:attribute name="symmetry" type="SymmetryType" use="optional" default="none">
-			<xs:annotation>
-				<xs:documentation>If symmetry is "upper", "skewUpper" or "HermitianUpper", any elements below the main diagonal are ignored and inferred from the upper triangle. If symmetry is "lower", "skewLower" or "HermitianLower", any elements above the main diagonal are ignored and inferred from the lower triangle.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 		<xs:attribute name="type" default="unknown">
 			<xs:annotation>
 				<xs:documentation>Describes the kind of values found in the elements of the matrix or block</xs:documentation>
@@ -824,6 +819,11 @@ The result of this transformation is aligned with the top left corner of the tar
 				<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="numberOfColumns" type="NonnegativeInteger" use="required"/>
 				<xs:attribute name="name" type="xs:string"/>
+				<xs:attribute name="symmetry" type="SymmetryType" use="optional" default="none">
+					<xs:annotation>
+						<xs:documentation>If symmetry is "upper", "skewUpper" or "HermitianUpper", any elements below the main diagonal are ignored and inferred from the upper triangle. If symmetry is "lower", "skewLower" or "HermitianLower", any elements above the main diagonal are ignored and inferred from the lower triangle. The default is "none".All constructors must be conformal with the pattern declared here.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -940,7 +940,11 @@ The result of this transformation is aligned with the top left corner of the tar
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="numberOfValues" type="NonnegativeInteger" use="required"/>
-		<xs:attribute name="symmetry" type="SymmetryType"/>
+		<xs:attribute name="symmetry" type="SymmetryType">
+			<xs:annotation>
+				<xs:documentation>Default is "none". May be declared solely to save space if info differs from parent.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixElements">
 		<xs:complexContent>
@@ -1199,6 +1203,11 @@ Each nonzero is a complex-valued expression</xs:documentation>
 				<xs:attribute name="blockColIdx" type="NonnegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>blockColIdx must be at least 0 and less than rowOffset array size</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="symmetry" type="SymmetryType" use="optional" default="none">
+					<xs:annotation>
+						<xs:documentation>If symmetry is "upper", "skewUpper" or "HermitianUpper", any elements below the main diagonal are ignored and inferred from the upper triangle. If symmetry is "lower", "skewLower" or "HermitianLower", any elements above the main diagonal are ignored and inferred from the lower triangle. The default is "unknown". Must be conformal with the containing matrix. </xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
