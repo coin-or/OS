@@ -3647,6 +3647,9 @@ public:
     /** initial values for the variables */
     InitMatrixVariableValues *initialMatrixVariableValues;
 
+    /** initial values for the variables */
+    InitMatrixVariableValues *initialMatrixVariableDualValues;
+
     /** other variable options */
     OtherMatrixVariableOptionOrResult **other;
 
@@ -5772,6 +5775,15 @@ public:
     GeneralSparseMatrix* getInitialMatrixVar(int mtxVarIdx) throw (ErrorClass);
 
     /**
+     *  Get the initial values for a particular dual matrix variable 
+     *  <p>
+     *
+     *  @param  mtxVarIdx is the index of the matrix variable to be retrieved
+     *  @return a pointer to a matrix expanded into GeneralSparseMatrix form
+     */
+    GeneralSparseMatrix* getInitialMatrixDualVar(int mtxVarIdx) throw (ErrorClass);
+
+    /**
      *  Get the initial values for a particular matrix variable in block form
      *  <p>
      *
@@ -5784,6 +5796,25 @@ public:
      */
     ExpandedMatrixBlocks* 
         getInitialMatrixVarBlocks(int mtxVarIdx, 
+                                  int* rowPartition, int rowPartitionSize,
+                                  int* colPartition, int colPartitionSize,
+                                  ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown)
+                              throw (ErrorClass);
+
+    /**
+     *  Get the initial values for a particular dual matrix variable in block form
+     *  <p>
+     *
+     *  @param  mtxVarIdx is the index of the matrix variable to be retrieved
+     *  @param  rowPartition is an array of integer values describing the desired row partition
+     *  @param  rowPartitionSize gives the size of the rowPartition array
+     *  @param  colPartition is an array of integer values describing the desired column partition
+     *  @param  colPartitionSize gives the size of the colPartition array
+     *  @return a pointer to a matrix expanded into a particular block pattern
+     */
+    ExpandedMatrixBlocks* 
+        getInitialMatrixDualVarBlocks(int mtxVarIdx, 
                                   int* rowPartition, int rowPartitionSize,
                                   int* colPartition, int colPartitionSize,
                                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,

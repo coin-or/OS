@@ -768,6 +768,13 @@ void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a,
             exit(10);
         };
 
+/*
+ExpandedMatrixBlocks* initPrimal = osoption->getInitialMatrixVarBlocks(0, 
+                                                    int* rowPartition, int rowPartitionSize,
+                                                    int* colPartition, int colPartitionSize,
+                                                    ENUM_MATRIX_TYPE_constant,
+                                                    ENUM_MATRIX_SYMMETRY_lower)
+ */
         //if either initial primal or dual values are NULL, we need to compute alpha
         /*
          *  next, pick alpha=n*max_i((1+|a_i|)/(1+||A_i||)).  

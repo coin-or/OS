@@ -1199,6 +1199,7 @@ MatrixVariableOption::MatrixVariableOption():
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Inside MatrixVariableOption Constructor");
 #endif
     initialMatrixVariableValues = NULL;
+    initialMatrixVariableDualValues = NULL;
     other = NULL;
 }// end MatrixVariableOption constructor
 
@@ -1211,6 +1212,12 @@ MatrixVariableOption::~MatrixVariableOption()
     {
         delete initialMatrixVariableValues;
         initialMatrixVariableValues = NULL;
+    }
+
+    if (initialMatrixVariableDualValues != NULL)
+    {
+        delete initialMatrixVariableDualValues;
+        initialMatrixVariableDualValues = NULL;
     }
 
     if (numberOfOtherMatrixVariableOptions > 0)
@@ -4661,6 +4668,65 @@ ExpandedMatrixBlocks* OSOption::getInitialMatrixVarBlocks(int mtxVarIdx,
     {
     }
 }//getInitialMatrixVarBlocks()
+
+/**
+ *  Get the initial values for a particular dual matrix variable in block form
+ */
+ExpandedMatrixBlocks* OSOption::getInitialMatrixDualVarBlocks(int mtxVarIdx, 
+                                                    int* rowPartition, int rowPartitionSize,
+                                                    int* colPartition, int colPartitionSize,
+                                                    ENUM_MATRIX_TYPE convertTo_,
+                                                    ENUM_MATRIX_SYMMETRY symmetry_ )
+                                                throw (ErrorClass)
+{
+    ExpandedMatrixBlocks* tmpBlocks = NULL;
+    try
+    {
+        if (rowPartition == NULL || rowPartitionSize < 2 ||
+            colPartition == NULL || colPartitionSize < 2 )
+            throw ErrorClass("bad block structure requested in getInitialMatrixDualVarBlocks()");
+
+        if (mtxVarIdx < 0) 
+            throw ErrorClass("mtxVarIdx must not be negative in getInitialMatrixDualVarBlocks()");
+
+        if (this->optimization == NULL)
+            return NULL;
+        if (this->optimization->matrixProgramming == NULL)
+            return NULL;
+        if (this->optimization->matrixProgramming->matrixVariables == NULL)
+            return NULL;
+        if (this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableDualValues == NULL)
+            return NULL;
+        
+        int n = this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableDualValues->numberOfMatrixVar;
+        for (int i=0; i < n; i++)
+        {
+            if (this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableDualValues->matrixVar[i] == NULL) continue;
+            if (this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableDualValues->matrixVar[i]->matrixVarIdx != mtxVarIdx) continue;
+            
+            int expIdx = this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableValues->matrixVar[i]
+                ->getBlockExpansion(rowPartition, rowPartitionSize,
+                                    colPartition, colPartitionSize,
+                                    this->optimization->matrices->matrix,
+                                    true, false, convertTo_, symmetry_);
+            if (expIdx < 0)
+               throw ErrorClass("Error during block expansion in OSOption");
+
+            tmpBlocks = this->optimization->matrixProgramming->matrixVariables
+                ->initialMatrixVariableDualValues->matrixVar[i]->expandedMatrixByBlocks[expIdx];
+            return tmpBlocks;
+        }
+        return NULL;
+    }
+    catch (ErrorClass)
+    {
+    }
+}//getInitialMatrixDualVarBlocks()
 
 
 /**
