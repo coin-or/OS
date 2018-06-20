@@ -129,25 +129,25 @@
  *   Then we use <b>createExpressionTreeFromPrefix</b> to create an expression. 
  *   We use <b>getPostfix()</b> to get the postfix vector back and compare with the 
  *   very first postfix vector and make sure they are the same. 
- */ 
+ */
 
-//#define DEBUG
+#define DEBUG
 //#define GUS_DEBUG
 
 #include "OSConfig.h"
 
 #ifdef OS_HAS_CPPAD
-#include <cppad/cppad.hpp> 
+#include <cppad/cppad.hpp>
 #endif
 
 #include "OSCoinSolver.h"
-#include "OSmps2OS.h" 
-#include "OSResult.h" 
+#include "OSmps2OS.h"
+#include "OSResult.h"
 #include "OSOption.h"
-#include "OSiLReader.h"        
-#include "OSiLWriter.h" 
-#include "OSoLReader.h"        
-#include "OSoLWriter.h" 
+#include "OSiLReader.h"
+#include "OSiLWriter.h"
+#include "OSoLReader.h"
+#include "OSoLWriter.h"
 #include "OSrLReader.h"          
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
@@ -9001,7 +9001,7 @@ if( THOROUGH == true){
         solver->osol = osol; 
 //        solver->osinstance = osilreader->readOSiL( osil);
 //        solver->osoption   = osolreader->readOSoL( osol);
-        cout << "call the COIN - Couenne Solver for wayneQuadraticr" << endl;
+        cout << "call the COIN - Couenne Solver for wayneQuadratic" << endl;
         //solver->buildSolverInstance();
         std::cout << " CALL SOLVE " << std::endl;
         solver->buildSolverInstance();
@@ -9055,7 +9055,7 @@ if( THOROUGH == true){
     OSrLWriter *tmp_writer = NULL;
     try{
 
-        cout << endl << "TEST " << ++nOfTest << ": Couenne solver on wayneQuadratic.osil" << endl << endl;
+        cout << endl << "TEST " << ++nOfTest << ": Couenne solver on wayneQuadratic.osil with iteration limit" << endl << endl;
 
         fileUtil = new FileUtil();
         osilreader = new OSiLReader(); 
@@ -9069,7 +9069,7 @@ if( THOROUGH == true){
         osol = fileUtil->getFileAsString( osolFileName.c_str());
         solver->osil = osil;
         solver->osol = osol; 
-        cout << "call the COIN - Couenne Solver for wayneQuadratic.osil" << endl;
+        cout << "call the COIN - Couenne solver for wayneQuadratic.osil" << endl;
         solver->buildSolverInstance();
     
         std::cout << " CALL SOLVE " << std::endl;
@@ -9227,7 +9227,77 @@ if( THOROUGH == true){
             delete fileUtil;
         fileUtil = NULL;
     }
+
+if (THOROUGH == true){
+    try{
+        // Try using initial values also
+        cout << endl << "TEST " << ++nOfTest << ": CSDP solver with initial values" << endl << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        osolreader = new OSoLReader(); 
+        solver = new CsdpSolver();    
+
+        ok = true;
+        osilFileName = dataDir  + "osilFiles" + dirsep + "SDPA_ex.osil";
+        osolFileName = dataDir  + "osolFiles" + dirsep + "SDPA_ex.osol";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = fileUtil->getFileAsString( osolFileName.c_str());
+        cout << "create a new Csdp Solver for OSiL string solution" << endl;
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osoption   = osolreader->readOSoL( osol);
+        cout << "call the Csdp Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 2.75;
+        //ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
+            cout << "Csdp solver solution for SDPA_ex checks." << endl;
+        }
+        else
+        {    cout << "Csdp solver solution for SDPA_ex in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass("Fail solving problem SDPA_ex.osil with initial values");
+
+        solver->osinstance = NULL;
+        delete solver;
+        solver = NULL;
+
+        delete osilreader;
+        osilreader = NULL; 
+
+        delete osolreader;
+        osolreader = NULL; 
+   
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem SDPA_ex.osil with initial values" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        //cout << "OSrL =  " <<  solver->osrl <<  endl;
+        cout << endl << endl << endl;
+        unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Csdp Solver:"
+                              << endl << eclass.errormsg << endl << endl;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+} // if THOROUGH
+#endif // if COIN_HAS_CSDP
 
     
 #ifdef COIN_HAS_LINDO

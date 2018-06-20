@@ -355,7 +355,7 @@ bool MatrixType::matrixHasBlocks()
 }// end of matrixHasBlocks
 
 
-bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mtxIdx)
+bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mtxArray)
 {
 /**
  *  Symmetry may be thought of as a structural property or a representational one.
@@ -383,7 +383,7 @@ bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mt
             throw ErrorClass("matrixHasSymmetry: symmetry status \"unknown\" cannot be assessed");
 
         ENUM_MATRIX_TYPE vType = this->getMatrixType();
-        if (vType == ENUM_MATRIX_TYPE_unknown && mtxIdx == 0 && 
+        if (vType == ENUM_MATRIX_TYPE_unknown && mtxArray == 0 && 
                   this->expandedMatrixByElements.size() == 0)
             throw ErrorClass("matrixHasSymmetry: type of matrix values is not available");
 
@@ -573,11 +573,11 @@ bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mt
             
         }
         // no previous expansions, so expand if possible
-        else if (mtxIdx != NULL)
+        else if (mtxArray != NULL)
         {
-            colwiseIdx = this->getExpandedMatrix(mtxIdx, false, ENUM_MATRIX_TYPE_unknown,
+            colwiseIdx = this->getExpandedMatrix(mtxArray, false, ENUM_MATRIX_TYPE_unknown,
                                                                 ENUM_MATRIX_SYMMETRY_none, false);
-            rowwiseIdx = this->getExpandedMatrix(mtxIdx, true,  ENUM_MATRIX_TYPE_unknown,
+            rowwiseIdx = this->getExpandedMatrix(mtxArray, true,  ENUM_MATRIX_TYPE_unknown,
                                                                 ENUM_MATRIX_SYMMETRY_none, false);
         }
 
@@ -727,7 +727,7 @@ pullThePlug:
     }
 }//end of matrixHasSymmetry
 
-GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowMajor_,
+GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxArray, bool rowMajor_,
                                                     ENUM_MATRIX_TYPE convertTo_, 
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -783,9 +783,9 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
         int i;
 
         if (((BaseMatrix*)m_mChildren[0])->baseTranspose)
-            i = baseMtxPtr->getExpandedMatrix(mtxIdx, !rowMajor_, convertTo, symmetry);
+            i = baseMtxPtr->getExpandedMatrix(mtxArray, !rowMajor_, convertTo, symmetry);
         else
-            i = baseMtxPtr->getExpandedMatrix(mtxIdx,  rowMajor_, convertTo, symmetry);
+            i = baseMtxPtr->getExpandedMatrix(mtxArray,  rowMajor_, convertTo, symmetry);
         if (i < 0) 
              throw ErrorClass("Base matrix could not be expanded");
 
@@ -972,7 +972,7 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
 
 
 GeneralSparseMatrix* MatrixType::expandBlocks( ExpandedMatrixBlocks* currentBlocks,
-                                               OSMatrix** mtxIdx, bool rowMajor_, 
+                                               OSMatrix** mtxArray, bool rowMajor_, 
                                                ENUM_MATRIX_TYPE convertTo_, 
                                                ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -1079,7 +1079,7 @@ GeneralSparseMatrix* MatrixType::expandBlocks( ExpandedMatrixBlocks* currentBloc
     }
 }// end of expandBlocks
 
-GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bool rowMajor_,
+GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxArray, bool rowMajor_,
                                                ENUM_MATRIX_TYPE convertTo_, 
                                                ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -1147,7 +1147,7 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
         for (unsigned int j=0; j<((MatrixBlocks*)m_mChildren[nConst])->inumberOfChildren; j++)
         {
             tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[nConst])->m_mChildren[j];
-            int iBlock = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo);
+            int iBlock = tmpChild->getExpandedMatrix(mtxArray, rowMajor_, convertTo);
             if (iBlock < 0) 
                 throw ErrorClass("One or more blocks could not be expanded");
             tmpBlocks->blocks[tmpBlockNumber] = tmpChild->expandedMatrixByElements[iBlock];
@@ -1297,9 +1297,9 @@ GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor_,
             ((MatrixElements*)m_mChildren[nConst])->symmetry =  this->symmetry;
 
         // temporary check for symmetry --- remove once implemented
-        if ( (symmetry != ENUM_MATRIX_SYMMETRY_unknown) && 
-             (symmetry != ((MatrixElements*)m_mChildren[nConst])->symmetry) )
-            throw ErrorClass("Cannot handle symmetry and transposition in extractElements()");
+//        if ( (symmetry != ENUM_MATRIX_SYMMETRY_unknown) && 
+//             (symmetry != ((MatrixElements*)m_mChildren[nConst])->symmetry) )
+//            throw ErrorClass("Cannot handle symmetry and transposition in extractElements()");
 
         if ( ((MatrixElements*)m_mChildren[nConst])->rowMajor )
             tempMtx->startSize   = numberOfRows + 1;
@@ -1844,7 +1844,7 @@ cout << " to " << returnMatrixTypeString(convertTo) << endl;
 }// end of extractElements
 
 
-GeneralSparseMatrix* MatrixType::expandTransformation(int nConst, OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* MatrixType::expandTransformation(int nConst, OSMatrix** mtxArray, bool rowMajor_, 
                                                       ENUM_MATRIX_TYPE convertTo_, 
                                                       ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -1890,7 +1890,7 @@ GeneralSparseMatrix* MatrixType::expandTransformation(int nConst, OSMatrix** mtx
         }
 
         tempMtx = ((MatrixTransformation*)
-                    m_mChildren[nConst])->transformation->expandNode(mtxIdx, rowMajor_, 
+                    m_mChildren[nConst])->transformation->expandNode(mtxArray, rowMajor_, 
                                                                      convertTo, symmetry);
 
         if (tempMtx == NULL)
@@ -1925,7 +1925,7 @@ GeneralSparseMatrix* MatrixType::expandTransformation(int nConst, OSMatrix** mtx
 }// end of expandTransformation
 
 
-int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
+int MatrixType::getExpandedMatrix(OSMatrix** mtxArray, bool rowMajor_,
                                   ENUM_MATRIX_TYPE convertTo_,
                                   ENUM_MATRIX_SYMMETRY symmetry_,
                                   bool transpose_)
@@ -2096,7 +2096,7 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
         {
             if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
             {
-                tempMtx = this->processBaseMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
+                tempMtx = this->processBaseMatrix(mtxArray, rowMajor_, convertTo, symmetry);
 //                tempMtx->valueType       = m_mChildren[0]->getMatrixType();
                 this->inferredMatrixType = m_mChildren[0]->getMatrixType();
             }
@@ -2105,22 +2105,22 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             {
 /*
                 //make sure the blocks have been expanded, then retrieve them 
-                if (!processBlocks(mtxIdx, rowMajor_, tempMtx->valueType, symmetry))
+                if (!processBlocks(mtxArray, rowMajor_, tempMtx->valueType, symmetry))
                     throw ErrorClass("error processing blocks in getExpandedMatrix()");
 
                 ExpandedMatrixBlocks* currentBlocks
                     = getBlocks(m_miRowPartition, m_iRowPartitionSize, m_miColumnPartition,
-                                m_iColumnPartitionSize, mtxIdx, true, rowMajor_, convertTo, symmetry);
+                                m_iColumnPartitionSize, mtxArray, true, rowMajor_, convertTo, symmetry);
 
-                tempMtx = expandBlocks(currentBlocks, mtxIdx, rowMajor_, convertTo, symmetry);
+                tempMtx = expandBlocks(currentBlocks, mtxArray, rowMajor_, convertTo, symmetry);
 */
-                tempMtx = expandBlocks(0, mtxIdx, rowMajor_, convertTo, symmetry);
+                tempMtx = expandBlocks(0, mtxArray, rowMajor_, convertTo, symmetry);
             }
 
             else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
             {
 //              transformation: see if we can do at least AB, A'B, AB'
-                tempMtx = expandTransformation(0, mtxIdx, rowMajor_, convertTo, symmetry);
+                tempMtx = expandTransformation(0, mtxArray, rowMajor_, convertTo, symmetry);
                 if ( convertTo_   == ENUM_MATRIX_TYPE_unknown && 
                      inferredType == ENUM_MATRIX_TYPE_unknown )
                     this->inferredMatrixType = tempMtx->valueType;
@@ -2186,7 +2186,7 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             {
                 OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
                 tempExpansion[0]
-                    = this->processBaseMatrix(mtxIdx, rowMajor_, ENUM_MATRIX_TYPE_unknown, symmetry);
+                    = this->processBaseMatrix(mtxArray, rowMajor_, ENUM_MATRIX_TYPE_unknown, symmetry);
                 if (tempExpansion[0] != NULL)
                 {
                     nv = tempExpansion[0]->valueSize;
@@ -2202,7 +2202,7 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                 if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
                 {
                     tempExpansion[i]
-                        = expandTransformation(i, mtxIdx, rowMajor_, convertTo, symmetry);
+                        = expandTransformation(i, mtxArray, rowMajor_, convertTo, symmetry);
                     if ( convertTo_   == ENUM_MATRIX_TYPE_unknown && 
                          inferredType == ENUM_MATRIX_TYPE_unknown )
                         inferredMatrixType = tempExpansion[i]->valueType;
@@ -2211,19 +2211,19 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
                 {
 /*
                     //make sure the blocks have been expanded, then retrieve them 
-                    if (!processBlocks(mtxIdx, rowMajor_, tempMtx->valueType, symmetry))
+                    if (!processBlocks(mtxArray, rowMajor_, tempMtx->valueType, symmetry))
                         throw ErrorClass("error processing blocks in getExpandedMatrix()");
 
                     ExpandedMatrixBlocks* currentBlocks
                         = getBlocks(m_miRowPartition,    m_iRowPartitionSize,
                                     m_miColumnPartition, m_iColumnPartitionSize,
-                                    mtxIdx, true, rowMajor_, convertTo, symmetry);
+                                    mtxArray, true, rowMajor_, convertTo, symmetry);
 
                     tempExpansion[i]
-                        = expandBlocks(currentBlocks, mtxIdx, rowMajor_, convertTo, symmetry);
+                        = expandBlocks(currentBlocks, mtxArray, rowMajor_, convertTo, symmetry);
 */
                     tempExpansion[i]
-                        = expandBlocks(i, mtxIdx, rowMajor_, convertTo, symmetry);
+                        = expandBlocks(i, mtxArray, rowMajor_, convertTo, symmetry);
                 }
                 else
                 {
@@ -2396,7 +2396,7 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
 }// end of getExpandedMatrix
 
 
-bool MatrixType::expandElements(OSMatrix** mtxIdx, bool rowMajor)
+bool MatrixType::expandElements(OSMatrix** mtxArray, bool rowMajor)
 {
     return NULL;
 }// end of expandElements
@@ -2445,6 +2445,80 @@ bool MatrixType::printExpandedMatrix(int idx)
         throw ErrorClass( eclass.errormsg);
     }
 }// end of printExpandedMatrix(int idx)
+
+bool MatrixType::printExpandedMatrixBlocks(int idx)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace,
+        "Inside printExpandedMatrixBlocks()");
+#endif
+    std::ostringstream outStr;
+    try
+    {
+        if (idx < 0 || idx >= expandedMatrixByBlocks.size())
+            throw ErrorClass("Invalid index value for printExpandedMatrixBlocks()");
+
+        outStr << std::endl;
+
+        if (getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix)
+        {
+            outStr << "matrix " << ((OSMatrix*)this)->idx;
+            if (((OSMatrix*)this)->name != "")
+                outStr << " ("  << ((OSMatrix*)this)->name << ")";
+            outStr << std::endl;
+        }
+        else if (getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_block)
+            outStr << "matrix block" << std::endl;
+        else
+            throw ErrorClass("matrix type unknown or not set");
+
+        outStr << "number of rows     " << ((MatrixType*)this)->numberOfRows    << std::endl;
+        outStr << "number of columns  " << ((MatrixType*)this)->numberOfColumns << std::endl;
+
+
+        ExpandedMatrixBlocks* tmpBlocks = expandedMatrixByBlocks[idx];
+
+        tmpBlocks->printBlocks();
+
+#if 0
+        outStr << "this collection of blocks has values of type "
+               << returnMatrixTypeString(tmpBlocks->valueType) << std::endl;
+        outStr << "symmetry           " 
+               << returnMatrixSymmetryString(tmpBlocks->symmetry) << std::endl;
+
+        outStr << std::endl << "row partition =";
+        for (int i=0; i < tmpBlocks->rowOffsetSize; i++)
+        {
+            outStr << tmpBlocks->rowOffset[i] << "  ";
+        }
+        outStr << std::endl;
+
+        outStr << std::endl << "col partition =";
+        for (int i=0; i < tmpBlocks->colOffsetSize; i++)
+        {
+            outStr << tmpBlocks->colOffset[i] << "  ";
+        }
+        outStr << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
+
+        for (int i=0; i < tmpBlocks->blockNumber; i++)
+        {
+            outStr.str("");
+            outStr.clear();
+            outStr << "Block " << i <<  " in row " << tmpBlocks->blockRows[i] 
+                                    << " and col " << tmpBlocks->blockColumns[i]  << std::endl;
+
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
+            tmpBlocks->blocks[i]->printMatrix();
+        }
+#endif
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of printExpandedMatrixBlocks(int idx)
 
 #if 0
 GeneralSparseMatrix* MatrixType::convertToOtherMajor(bool isColumnMajor)
@@ -2827,7 +2901,7 @@ GeneralSparseMatrix*
 
 int MatrixType::getBlockExpansion(int* rowPartition, int rowPartitionSize, 
                                   int* colPartition, int colPartitionSize, 
-                                  OSMatrix** mtxIdx, bool appendToBlockArray, bool rowMajor_,
+                                  OSMatrix** mtxArray, bool appendToBlockArray, bool rowMajor_,
                                   ENUM_MATRIX_TYPE convertTo_, ENUM_MATRIX_SYMMETRY symmetry_)
 {
 #ifndef NDEBUG
@@ -2878,7 +2952,7 @@ int MatrixType::getBlockExpansion(int* rowPartition, int rowPartitionSize,
     }
 
     // not found; create a new collection
-    if (!appendToBlockArray || mtxIdx == NULL)
+    if (!appendToBlockArray /*|| mtxArray == NULL*/)
         return -1;
 
     ExpandedMatrixBlocks* tmpBlocks;
@@ -2942,7 +3016,7 @@ int MatrixType::getBlockExpansion(int* rowPartition, int rowPartitionSize,
                 for (int i=0; i < ((MatrixBlocks*) m_mChildren[0])->inumberOfChildren; ++i)
                 {
                     expIdx = ((MatrixBlock*) ((MatrixBlocks*) m_mChildren[0])->m_mChildren[i])
-                                ->getExpandedMatrix(mtxIdx, rowMajor_, convertTo,symmetry_);
+                                ->getExpandedMatrix(mtxArray, rowMajor_, convertTo,symmetry_);
                     if (expIdx < 0)
                     {
                         throw ErrorClass("Error expanding block in getBlockExpansion()");
@@ -2988,14 +3062,14 @@ int MatrixType::getBlockExpansion(int* rowPartition, int rowPartitionSize,
 
         if (expansionNeeded)
         {
-            expIdx = this->getExpandedMatrix(mtxIdx, rowMajor_, convertTo,symmetry_);
+            expIdx = this->getExpandedMatrix(mtxArray, rowMajor_, convertTo,symmetry_);
             if (expIdx < 0)
                 return -1;
             
             tmpBlocks = this->expandedMatrixByElements[expIdx]
                             ->disassembleMatrix(rowPartition, rowPartitionSize, 
                                                 colPartition, colPartitionSize, 
-                                                mtxIdx, rowMajor_, symmetry);
+                                                mtxArray, rowMajor_, symmetry);
             expandedMatrixByBlocks.push_back(tmpBlocks);
             return expandedMatrixByBlocks.size() - 1;
         }   
@@ -3010,19 +3084,19 @@ int MatrixType::getBlockExpansion(int* rowPartition, int rowPartitionSize,
     }
 }// end of MatrixType::getBlocks
 
-bool MatrixType::processBlocks(OSMatrix** mtxIdx, bool rowMajor_, 
+bool MatrixType::processBlocks(OSMatrix** mtxArray, bool rowMajor_, 
                                ENUM_MATRIX_TYPE convertTo_, ENUM_MATRIX_SYMMETRY symmetry_)
 {
     int  cSize = getColumnPartitionSize(); 
     int  rSize = getRowPartitionSize();
     int* cPartition = getColumnPartition(); 
     int* rPartition = getRowPartition(); 
-    return processBlocks(mtxIdx, rPartition, rSize, cPartition, cSize,
+    return processBlocks(mtxArray, rPartition, rSize, cPartition, cSize,
                          rowMajor_, convertTo_, symmetry_);
 }// end of MatrixType::processBlocks
 
 
-bool MatrixType::processBlocks(OSMatrix** mtxIdx, int* rowOffset, int rowOffsetSize,
+bool MatrixType::processBlocks(OSMatrix** mtxArray, int* rowOffset, int rowOffsetSize,
                                int* colOffset, int colOffsetSize, bool rowMajor_,
                                ENUM_MATRIX_TYPE convertTo_, ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3128,10 +3202,10 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
                 tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[0])->m_mChildren[j];
                 if (tmpChild->blockRowIdx == tmpChild->blockColIdx)
                     tmpBlockIdx[j] 
-                        = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
+                        = tmpChild->getExpandedMatrix(mtxArray, rowMajor_, convertTo, symmetry);
                 else
                     tmpBlockIdx[j]
-                        = tmpChild->getExpandedMatrix(mtxIdx, rowMajor_, convertTo,
+                        = tmpChild->getExpandedMatrix(mtxArray, rowMajor_, convertTo,
                                                       ENUM_MATRIX_SYMMETRY_unknown);
                 if (tmpBlockIdx[j] < 0)
                     throw ErrorClass("expansion of matrix block failed in processBlocks()");
@@ -3155,12 +3229,12 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
 
             // here we do not have blocks fitting the partition, so we must expand
 must_expand:
-            int iTmp = this->getExpandedMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
+            int iTmp = this->getExpandedMatrix(mtxArray, rowMajor_, convertTo, symmetry);
             if (iTmp < 0) 
                 throw ErrorClass("matrix expansion failed in processBlocks()");
             tmpBlocks = this->disassembleMatrix(rowOffset, rowOffsetSize, 
                                                 colOffset, colOffsetSize, 
-                                                mtxIdx, rowMajor_, convertTo, symmetry);
+                                                mtxArray, rowMajor_, convertTo, symmetry);
             expandedMatrixByBlocks.push_back(tmpBlocks);
             return true;
         }
@@ -3189,12 +3263,12 @@ must_expand:
             // Shortcuts might be possible if all constructors are blocks 
             // that are conformal with the desired structure.
             // However, the easy out is to expand the matrix, then disassemble it. 
-            int i = this->getExpandedMatrix(mtxIdx, rowMajor_, convertTo, symmetry);
+            int i = this->getExpandedMatrix(mtxArray, rowMajor_, convertTo, symmetry);
             if (i < 0)
                 throw ErrorClass("Matrix expansion failed in processBlocks()");
             tmpBlocks = this->disassembleMatrix(rowOffset, rowOffsetSize, 
                                                 colOffset, colOffsetSize, 
-                                                mtxIdx, rowMajor_, convertTo, symmetry);
+                                                mtxArray, rowMajor_, convertTo, symmetry);
             expandedMatrixByBlocks.push_back(tmpBlocks);
         }
         return true;
@@ -3218,7 +3292,7 @@ must_expand:
 
 ExpandedMatrixBlocks* MatrixType::disassembleMatrix(int* rowPartition, int rowPartitionSize, 
                                                     int* colPartition, int colPartitionSize, 
-                                                    OSMatrix** mtxIdx, bool rowMajor, 
+                                                    OSMatrix** mtxArray, bool rowMajor, 
                                                     ENUM_MATRIX_TYPE valueType,
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 { 
@@ -3259,7 +3333,7 @@ ExpandedMatrixBlocks* MatrixType::disassembleMatrix(int* rowPartition, int rowPa
         firstBlockInCol = -1;
 //        if (expandedMatrixInColumnMajorForm == NULL)
 //            getExpandedMatrix(false);
-        int iMtx = getExpandedMatrix(mtxIdx, rowMajor, valueType, symmetry);
+        int iMtx = getExpandedMatrix(mtxArray, rowMajor, valueType, symmetry);
         GeneralSparseMatrix* tmpMatrix = expandedMatrixByElements[i];
 
         // OK. Start counting
@@ -3468,7 +3542,7 @@ GeneralSparseMatrix* MatrixType::extractBlock(int firstrow, int firstcol, int nr
 
 return NULL;
 }// end of MatrixType::extractBlock
-// end of methods for MatrixType
+
 
 
 /** ---------- Methods for class MatrixElements ---------- */
@@ -3676,7 +3750,7 @@ std::string OSMatrix::getNodeName()
 }// end of OSMatrix::getNodeName()
 
 
-bool OSMatrix::expandElements(OSMatrix** mtxIdx, bool rowMajor)
+bool OSMatrix::expandElements(OSMatrix** mtxArray, bool rowMajor)
 {
 #if 0
     //Check if expanded previously
@@ -3721,7 +3795,7 @@ bool OSMatrix::expandElements(OSMatrix** mtxIdx, bool rowMajor)
     {
         if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
         {
-            int  baseMtxIdx = ((BaseMatrix*)m_mChildren[0])->baseMatrixIdx;
+            int  basemtxArray = ((BaseMatrix*)m_mChildren[0])->baseMatrixIdx;
             OSMatrix* basematrix = 
             bool haveRowForm    = (baseMtx->ExpandedMatrixInRowMajorForm != NULL);
             bool haveColumnForm = (baseMtx->ExpandedMatrixInColumnMajorForm != NULL);
@@ -3756,7 +3830,7 @@ bool OSMatrix::expandElements(OSMatrix** mtxIdx, bool rowMajor)
         else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
         {
             ExpandedMatrixBlocks* currentBlocks = 
-                processBlocks(mtxIdx, int* rowOffsets, int* colOffsets,
+                processBlocks(mtxArray, int* rowOffsets, int* colOffsets,
                               bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
             ExpandedMatrixByBlocks.push_back(currentBlocks);
 
@@ -8214,7 +8288,7 @@ bool MatrixBlock::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows
     return (firstRow == 0 && firstColumn == 0 && nRows == numberOfRows && nCols == numberOfColumns);
 }// end of MatrixBlock::alignsOnBlockBoundary()
 
-bool MatrixBlock::expandElements(OSMatrix** mtxIdx, bool rowMajor)
+bool MatrixBlock::expandElements(OSMatrix** mtxArray, bool rowMajor)
 {
     return NULL;
 }// end of expandElements
@@ -9827,7 +9901,7 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertToTranspose(bool copyValues_)
 
 ExpandedMatrixBlocks* GeneralSparseMatrix::disassembleMatrix(int* rowPartition, int rowPartitionSize, 
                                                     int* colPartition, int colPartitionSize, 
-                                                    OSMatrix** mtxIdx, bool rowMajor,
+                                                    OSMatrix** mtxArray, bool rowMajor,
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 { 
 /*
@@ -10037,7 +10111,7 @@ ExpandedMatrixBlocks* GeneralSparseMatrix::disassembleMatrix(int* rowPartition, 
     }
 */
     return returnArray;
-}//end of MatrixType::disassembleMatrix
+}//end of GeneralSparseMatrix::disassembleMatrix
 
 
 GeneralSparseMatrix* GeneralSparseMatrix::clone()
@@ -10164,6 +10238,45 @@ ExpandedMatrixBlocks::~ExpandedMatrixBlocks()
         blocks = NULL;
     }
 }// end of ~ExpandedMatrixBlocks
+
+bool ExpandedMatrixBlocks::printBlocks()
+{
+    std::ostringstream outStr;
+
+    outStr << "this collection of blocks has values of type "
+           << returnMatrixTypeString(valueType) << std::endl;
+    outStr << "symmetry           " 
+           << returnMatrixSymmetryString(symmetry) << std::endl;
+
+    outStr << std::endl << "row partition =";
+    for (int i=0; i < rowOffsetSize; i++)
+    {
+        outStr << rowOffset[i] << "  ";
+    }
+    outStr << std::endl;
+
+    outStr << std::endl << "col partition =";
+    for (int i=0; i < colOffsetSize; i++)
+    {
+        outStr << colOffset[i] << "  ";
+    }
+    outStr << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
+
+    for (int i=0; i < blockNumber; i++)
+    {
+        outStr.str("");
+        outStr.clear();
+        outStr << "Block " << i <<  " in row " << blockRows[i] 
+                                << " and col " << blockColumns[i]  << std::endl;
+
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
+
+        blocks[i]->printMatrix();
+    }
+    return true;
+} // end of ExpandedMatrixBlocks::printBlocks()
+
 
 GeneralSparseMatrix* ExpandedMatrixBlocks::getBlock(int rowIdx, int colIdx)
 {

@@ -95,12 +95,12 @@ CsdpSolver::~CsdpSolver()
     // Note: Some data items are allocated in init_soln.c; these must be free'd. 
     // The others must be delete'd 
     if (y != NULL)
-        free(y); 
+        delete(y); // free(y); 
     y = NULL;
-    if (X.nblocks != -1)
-        free_mat(X);
-    if (Z.nblocks != -1)
-        free_mat(Z);
+//    if (X.nblocks != -1)
+//        free_mat(X);
+//    if (Z.nblocks != -1)
+//        free_mat(Z);
 
     for (int i=1; i<=C_matrix.nblocks; i++)
     {
@@ -111,6 +111,27 @@ CsdpSolver::~CsdpSolver()
     }
     if (C_matrix.nblocks != -1)
     delete [] C_matrix.blocks;
+
+    for (int i=1; i<=X.nblocks; i++)
+    {
+        if (X.blocks[i].blockcategory == DIAG) 
+            delete[] X.blocks[i].data.vec;
+        else
+            delete[] X.blocks[i].data.mat;
+    }
+    if (X.nblocks != -1)
+    delete [] X.blocks;
+
+    for (int i=1; i<=Z.nblocks; i++)
+    {
+        if (Z.blocks[i].blockcategory == DIAG) 
+            delete[] Z.blocks[i].data.vec;
+        else
+            delete[] Z.blocks[i].data.mat;
+    }
+    if (Z.nblocks != -1)
+    delete [] Z.blocks;
+
 
     // Finally clear out mconstraints;
     struct sparseblock *ptr;
@@ -422,7 +443,12 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
             }
         }
 
-        /** Allocate space for the C matrix (A0). */
+        /** Allocate space for the C matrix (A0). 
+         * 
+         *  Note: Each block is allocated, even a zero block.
+         *        Worse, if the block is deemed full (because one of the constraint
+         *        matrices A_i is not diagonal), a dense block of zeroes is created.
+         */
         C_matrix.nblocks=nBlocks-1;
         C_matrix.blocks = new blockrec[nBlocks];
 
@@ -712,7 +738,7 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
             optStr << "usexzgap="    <<                usexzgap     << std::endl;
             optStr << "tweakgap="    <<                tweakgap     << std::endl;
             optStr << "affine="      <<                affine       << std::endl;
-            optStr << "printlevel="  <<                printlevel   << std::endl;
+            optStr << "printlevel="  <<                pprintlevel  << std::endl;
             optStr << "perturbobj="  <<                perturbobj   << std::endl;
             optStr << "fastmode="    <<                fastmode     << std::endl;
 
@@ -738,9 +764,10 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
     }
 }//setSolverOptions
 
-
-/*
+/**
  * Build an initial solution for an SDP problem.
+ * The default value is taken from Brian Borchers' code CSDP.
+ * However, this initialization routine allows user-defined starting values
  */
 void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a, 
     struct constraintmatrix *constraints, struct blockmatrix *pX0,
@@ -748,6 +775,7 @@ void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a,
 {
     try
     {
+        std::ostringstream outStr;
         int i,j;
         double alpha,beta;
         double maxnrmA,nrmA;
@@ -756,234 +784,385 @@ void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a,
         struct sparseblock *ptr;
 
         /*
-         *  First, allocate storage for X0, y0, and Z0.
+         *  First, allocate storage for X0, Z0, and y0.
+         *  For X0 and Y0 use the same dimensions and structure as the C_matrix.
          */
-        alloc_mat(C,pX0);
-        alloc_mat(C,pZ0);
-        *py0=(double *)malloc(sizeof(double)*(k+1));
+        int nBlk  = C_matrix.nblocks + 1;
+        X.nblocks = C_matrix.nblocks;
+        Z.nblocks = C_matrix.nblocks;
+        X.blocks  = new blockrec[nBlk];
+        Z.blocks  = new blockrec[nBlk];
 
-        if (py0 == NULL)
+        /** Handle diagonal blocks and matrix blocks separately. */
+        for (int blk=1; blk < nBlk; blk++)
         {
-            printf("Storage allocation failed!\n");
-            exit(10);
-        };
+            int blksz = C_matrix.blocks[blk].blocksize;
+            X.blocks[blk].blocksize = blksz;
+            Z.blocks[blk].blocksize = blksz;
+            X.blocks[blk].blockcategory = C_matrix.blocks[blk].blockcategory;
+            Z.blocks[blk].blockcategory = C_matrix.blocks[blk].blockcategory;
+            if (C_matrix.blocks[blk].blockcategory == DIAG)
+            {
+                // diagonal block
+                X.blocks[blk].data.vec = new double[blksz+1];
+                Z.blocks[blk].data.vec = new double[blksz+1];
 
-/*
-ExpandedMatrixBlocks* initPrimal = osoption->getInitialMatrixVarBlocks(0, 
-                                                    int* rowPartition, int rowPartitionSize,
-                                                    int* colPartition, int colPartitionSize,
+                for (int i=1; i<=blksz; i++)
+                {
+                    X.blocks[blk].data.vec[i] = 0.0;
+                    Z.blocks[blk].data.vec[i] = 0.0;
+                }
+            }
+            else
+            {
+                // There are off-diagonal elements (i.e., "matrix block") --- treat as dense
+                X.blocks[blk].data.mat = new double[blksz*blksz];
+                Z.blocks[blk].data.mat = new double[blksz*blksz];
+
+                for (int i=1; i<=blksz; i++)
+                for (int j=1; j<=blksz; j++)
+                {
+                    X.blocks[blk].data.mat[ijtok(i,j,blksz)] = 0.0;
+                    Z.blocks[blk].data.mat[ijtok(i,j,blksz)] = 0.0;
+                }
+            }
+        }
+
+        y = new double[k+1];
+
+        /**
+         *  Retrieve user-defined initial values (if any)
+         *  Infer partition from the block sizes of the C matrix
+         */
+        int* blockPartition = new int[nBlk];
+        blockPartition[0] = 0;
+        for (int i=0; i < nBlk; i++)
+            blockPartition[i+1] = blockPartition[i] + C_matrix.blocks[i+1].blocksize;
+
+        ExpandedMatrixBlocks* initPrimal = NULL;
+        ExpandedMatrixBlocks* initDual   = NULL;
+
+        if (osoption != NULL)
+        {
+            OSMatrix** mtxArray = NULL;
+            if (osoption->optimization                   != NULL &&
+                osoption->optimization->matrices         != NULL &&
+                osoption->optimization->matrices->matrix != NULL)
+                mtxArray = osoption->optimization->matrices->matrix;
+
+            initPrimal = osoption->getInitialMatrixVarBlocks(0, mtxArray,
+                                                    blockPartition, nBlk,
+                                                    blockPartition, nBlk,
                                                     ENUM_MATRIX_TYPE_constant,
-                                                    ENUM_MATRIX_SYMMETRY_lower)
- */
-        //if either initial primal or dual values are NULL, we need to compute alpha
-        /*
-         *  next, pick alpha=n*max_i((1+|a_i|)/(1+||A_i||)).  
-         */
+                                                    ENUM_MATRIX_SYMMETRY_lower);
 
-        maxnrmA=0.0;
-        alpha=0.0;
-        for (i=1; i<=k; i++)
+            initDual = osoption->getInitialMatrixDualVarBlocks(0, mtxArray,
+                                                    blockPartition, nBlk,
+                                                    blockPartition, nBlk,
+                                                    ENUM_MATRIX_TYPE_constant,
+                                                    ENUM_MATRIX_SYMMETRY_lower);
+        }
+
+        if (initPrimal != NULL)
         {
-            nrmA=0.0;
-            ptr=constraints[i].blocks;
+            initPrimal->printBlocks();
 
-            while (ptr != NULL)
-	        {
-	            for (j=1; j<=ptr->numentries; j++)
+            /* Verify the shape: blockdiagonal, with blocks of the right shape */
+            if (!initPrimal->isBlockDiagonal())
+                throw ErrorClass("CsdpSolver::setInitialValues: matrix not block-diagonal");
+
+            for (int i=1; i < nBlk; i++)
+            {
+                if ( ( C_matrix.blocks[i].blockcategory == DIAG ) &&
+                     ( !(initPrimal->blocks[i-1]->isDiagonal() ) ) )
+                    throw ErrorClass("CsdpSolver::setInitialValues: matrix block not diagonal");
+            }
+        }
+
+        if (initDual != NULL)
+        {
+            initDual->printBlocks();
+
+            /* Check the shape again */
+            if (!initDual->isBlockDiagonal())
+                throw ErrorClass("CsdpSolver::setInitialDualValues: matrix not block-diagonal");
+
+            for (int i=1; i < nBlk; i++)
+            {
+                if ( ( C_matrix.blocks[i].blockcategory == DIAG ) &&
+                     ( !(initPrimal->blocks[i-1]->isDiagonal() ) ) )
+                    throw ErrorClass("CsdpSolver::setInitialDualValues: matrix block not diagonal");
+            }
+        }
+
+        /*  if either initial primal or dual values are NULL, we need to compute 
+         * 
+         *       alpha = n*max_i((1+|a_i|)/(1+||A_i||)).  
+         */
+        if (initPrimal == NULL || initDual == NULL)
+        {
+            maxnrmA = 0.0;
+            alpha   = 0.0;
+            for (i=1; i<=k; i++)
+            {
+                nrmA = 0.0;
+                ptr  = mconstraints[i].blocks;
+
+                while (ptr != NULL)
 	            {
-	                nrmA += (ptr->entries[j])*(ptr->entries[j]);
-	                if (ptr->iindices[j] != ptr->jindices[j])
-		                nrmA += (ptr->entries[j])*(ptr->entries[j]);
+	                for (j=1; j<=ptr->numentries; j++)
+	                {
+	                    nrmA += (ptr->entries[j])*(ptr->entries[j]);
+	                    if (ptr->iindices[j] != ptr->jindices[j])
+	    	                nrmA += (ptr->entries[j])*(ptr->entries[j]);
+	                }
+	                ptr = ptr->next;
 	            }
-	            ptr=ptr->next;
-	        }
 
-            nrmA=sqrt(nrmA);
-            if (nrmA > maxnrmA)
-	            maxnrmA=nrmA;
+                nrmA = sqrt(nrmA);
+                if (nrmA > maxnrmA)
+	                maxnrmA = nrmA;
 
-            if ((1+fabs(a[i]))/(1+nrmA) > alpha)
-               alpha=(1+fabs(a[i]))/(1+nrmA);
+                if ((1+fabs(a[i]))/(1+nrmA) > alpha)
+                    alpha = (1+fabs(a[i]))/(1+nrmA);
+            }
 
+            alpha = n*alpha;
         }
 
-        alpha=n*alpha;
-
-
-        // If initial dual values is NULL, compute beta
-        /*
-         * Next, calculate the F norm of C.
+        /* If initial dual values is NULL, we also need a default initial dual value
+         * based on the F norm of C.
          */
-
-        nrmC=Fnorm(C);
-
-        if (nrmC > maxnrmA)
+        if (initDual == NULL)
         {
-            beta=(1+nrmC)/sqrt(n*1.0);
-        }
-        else
-        {
-            beta=(1+maxnrmA)/sqrt(n*1.0);
-        }
+            nrmC = Fnorm(C_matrix);
 
+            if (nrmC > maxnrmA)
+            {
+                beta = (1+nrmC)/sqrt(n*1.0);
+            }
+            else
+            {
+                beta = (1+maxnrmA)/sqrt(n*1.0);
+            }
+        }
         
         /*
          * Now initial the values. Defaults are X=100*alpha*I, Z=100*beta*I, y=0.
          */
 
-//        if (osoption-> ... == NULL)
-//        {
-            make_i(*pX0);
-            scale1=0.0;
-            scale2=10*alpha;
-            mat_mult(scale1,scale2,*pX0,*pX0,*pX0);
-//        }
-//        else
-//        {
-//            ...
-//        }
+        if (initPrimal == NULL)
+        {
+            scale1=10*alpha;
 
-//        if (osoption-> ... == NULL)
-//        {
-            make_i(*pZ0);
-            scale1=0.0;
+            for (int blk=1; blk < nBlk; blk++)
+            {
+                int blksz = X.blocks[blk].blocksize;
+                if (X.blocks[blk].blockcategory == DIAG)
+                {
+                    for (int i=0; i < blksz; i++)
+                        X.blocks[blk].data.vec[i+1] = scale1;
+                }
+                else
+                {
+                    for (int i=1; i <= blksz; i++)
+                        X.blocks[blk].data.mat[ijtok(i,i,blksz)] = scale1;
+                }
+            }
+        }
+        else
+        {
+            // note that the matrix X0 was allocated already. Structure and shape is in place
+
+            /** Handle diagonal blocks and matrix blocks separately. */
+            for (int blk=1; blk < nBlk; blk++)
+            {
+                GeneralSparseMatrix* tmpBlock = initPrimal->getBlock(blk-1,blk-1);
+                int blksz = X.blocks[blk].blocksize;
+                if (X.blocks[blk].blockcategory == DIAG)
+                {
+                    if (tmpBlock != NULL)
+                    {
+                        for (int i=0; i < tmpBlock->valueSize; i++)
+                            X.blocks[blk].data.vec[tmpBlock->index[i]+1]
+                                = ((ConstantMatrixValues*)tmpBlock->value)->el[i];
+                    }
+                }
+                else
+                {
+                    if (tmpBlock != NULL)
+                    {
+                        for (int i=1; i < tmpBlock->startSize; i++)
+                        for (int j=tmpBlock->start[i-1]; j<tmpBlock->start[i]; j++)
+                        {
+                            X.blocks[blk].data.mat[ijtok(i,tmpBlock->index[j]+1,blksz)]
+                                = ((ConstantMatrixValues*)tmpBlock->value)->el[j];
+                            X.blocks[blk].data.mat[ijtok(tmpBlock->index[j]+1,i,blksz)]
+                                = ((ConstantMatrixValues*)tmpBlock->value)->el[j];
+                        }
+                    }
+                }
+            }
+        }
+
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+
+        outStr << std::endl << std::endl << "Initial X matrix:" << std::endl;
+        for (int blk=1; blk < nBlk; blk++)
+        {
+            int blksz = X.blocks[blk].blocksize;
+            if (X.blocks[blk].blockcategory == DIAG)
+            {
+                // diagonal block
+                outStr << "Block " << blk << " is diagonal; size = " << blksz << std::endl;
+                outStr << "   Diagonal entries: ";
+                for (int i=1; i<=blksz; i++)
+                {
+                    outStr << X.blocks[blk].data.vec[i] << "    ";
+                }
+                outStr << std::endl;
+            }
+            else
+            {
+                // dense matrix
+                outStr << "Block " << blk << " is dense; size = " << blksz << std::endl;
+
+                for (int i=1; i<=blksz; i++)
+                {
+                    outStr << std::endl << "col " << i << " has entries:" << std::endl;
+                    for (int j=1; j<=blksz; j++)
+                    {
+                        outStr << "(loc " << ijtok(i,j,blksz) << ") ";
+                        outStr << X.blocks[blk].data.mat[ijtok(i,j,blksz)] << std::endl;
+                    }
+                }
+                outStr << std::endl;
+            }
+        }
+        //osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_always, outStr.str());       
+#endif
+
+        if (initDual == NULL)
+        {
             scale2=10*beta;
-            mat_mult(scale1,scale2,*pZ0,*pZ0,*pZ0);
-//        }
-//        else
-//        {
-//            ...
-//        }
+
+            for (int blk=1; blk < nBlk; blk++)
+            {
+                int blksz = Z.blocks[blk].blocksize;
+                if (Z.blocks[blk].blockcategory == DIAG)
+                {
+                    for (int i=0; i < blksz; i++)
+                        Z.blocks[blk].data.vec[i+1] = scale2;
+                }
+                else
+                {
+                    for (int i=1; i <= blksz; i++)
+                        Z.blocks[blk].data.mat[ijtok(i,i,blksz)] = scale2;
+                }
+            }
+        }
+        else
+        {
+            /** Handle diagonal blocks and matrix blocks separately. */
+            for (int blk=1; blk < nBlk; blk++)
+            {
+                GeneralSparseMatrix* tmpBlock = initDual->getBlock(blk-1,blk-1);
+                int blksz = Z.blocks[blk].blocksize;
+                if (Z.blocks[blk].blockcategory == DIAG)
+                {
+                    if (tmpBlock != NULL)
+                    {
+                        for (int i=0; i < tmpBlock->valueSize; i++)
+                            Z.blocks[blk].data.vec[tmpBlock->index[i]+1]
+                                = ((ConstantMatrixValues*)tmpBlock->value)->el[i];
+                    }
+                }
+                else
+                {
+                    if (tmpBlock != NULL)
+                    {
+                        for (int i=1; i < tmpBlock->startSize; i++)
+                        for (int j=tmpBlock->start[i-1]; j<tmpBlock->start[i]; j++)
+                        {
+                            Z.blocks[blk].data.mat[ijtok(i,tmpBlock->index[j]+1,blksz)]
+                                = ((ConstantMatrixValues*)tmpBlock->value)->el[j];
+                            Z.blocks[blk].data.mat[ijtok(tmpBlock->index[j]+1,i,blksz)]
+                                = ((ConstantMatrixValues*)tmpBlock->value)->el[j];
+                        }
+                    }
+                }
+            }
+        }
+
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+
+        outStr << std::endl << std::endl << "Initial Z matrix:" << std::endl;
+        for (int blk=1; blk < nBlk; blk++)
+        {
+            int blksz = Z.blocks[blk].blocksize;
+            if (Z.blocks[blk].blockcategory == DIAG)
+            {
+                // diagonal block
+                outStr << "Block " << blk << " is diagonal; size = " << blksz << std::endl;
+                outStr << "   Diagonal entries: ";
+                for (int i=1; i<=blksz; i++)
+                {
+                    outStr << Z.blocks[blk].data.vec[i] << "    ";
+                }
+                outStr << std::endl;
+            }
+            else
+            {
+                // dense matrix
+                outStr << "Block " << blk << " is dense; size = " << blksz << std::endl;
+
+                for (int i=1; i<=blksz; i++)
+                {
+                    outStr << std::endl << "col " << i << " has entries:" << std::endl;
+                    for (int j=1; j<=blksz; j++)
+                    {
+                        outStr << "(loc " << ijtok(i,j,blksz) << ") ";
+                        outStr << Z.blocks[blk].data.mat[ijtok(i,j,blksz)] << std::endl;
+                    }
+                }
+                outStr << std::endl;
+            }
+        }
+        //osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_always, outStr.str());
+        
+#endif
 
 
+        /** Finally the dual variables for the original constraints */
+        double* initUBDuals = NULL;
+        double* initLBDuals = NULL;
 
-//        if (osoption-> ... == NULL)
-//        {
+        if (osoption != NULL)
+        {
+            initUBDuals = osoption->getInitDualVarUpperBoundsDense();
+            initLBDuals = osoption->getInitDualVarLowerBoundsDense();
+        }
+
+        if (initUBDuals != NULL && initLBDuals != NULL)
+        {
+            for (i=1; i<=k; i++)
+                (*py0)[i] = initUBDuals[i-1] + initLBDuals[i-1];
+        }
+        else
+        {
             for (i=1; i<=k; i++)
                 (*py0)[i]=0;
-//        }
-//        else
-//        {
-//            ...
-//        }
+
+        }
 
         return;
     }
-#if 0
-}
-
-
-+++++++++++++++++++++++++++++++++++++++++++++
-
-void  CsdpSolver::setInitialValues() throw (ErrorClass)
-{
-    std::ostringstream outStr;
-    try
-    {
-        if(osinstance->getObjectiveNumber() <= 0) 
-            throw ErrorClass("CSDP NEEDS AN OBJECTIVE FUNCTION\n(For pure feasibility problems, use zero function.)");
-        this->bSetSolverOptions = true;
-        /* set the default options */
-        //app->Options()->SetNumericValue("tol", 1e-9);
-        app->Options()->SetIntegerValue("print_level", 0);
-        app->Options()->SetIntegerValue("max_iter", 20000);
-        app->Options()->SetNumericValue("bound_relax_factor", 0, true, true);
-        app->Options()->SetStringValue("mu_strategy", "adaptive", true, true);
-        //app->Options()->SetStringValue("output_file", "csdp.out");
-        app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
-        // hessian constant for an LP
-        if( (osinstance->getNumberOfNonlinearExpressions() <= 0) && 
-            (osinstance->getNumberOfQuadraticTerms() <= 0) )
-        {
-            app->Options()->SetStringValue("hessian_constant", "yes", true, true);
-        }
-        if(osinstance->getObjectiveNumber() > 0)
-        {
-            if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0)
-            {
-                app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
-            }
-        }
-        /* end of the default options, now get options from OSoL */
-
-
-        if(osoption == NULL && osol.length() > 0)
-        {
-            m_osolreader = new OSoLReader();
-            osoption = m_osolreader->readOSoL( osol);
-        }
-
-        if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 )
-        {
-#ifndef NDEBUG
-            outStr.str("");
-            outStr.clear();
-            outStr << "number of solver options ";
-            outStr << osoption->getNumberOfSolverOptions();
-            outStr << std::endl;
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-            std::vector<SolverOptionOrResult*> optionsVector;
-            optionsVector = osoption->getSolverOptions( "csdp",true);
-            char *pEnd;
-            int i;
-            int num_csdp_options = optionsVector.size();
-            for(i = 0; i < num_csdp_options; i++)
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "num_csdp_options solver option  ";
-                outStr << optionsVector[ i]->name;
-                outStr << std::endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-                if(optionsVector[ i]->type == "numeric" )
-                {
-#ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "FOUND A NUMERIC OPTION  ";
-                    outStr << os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                    outStr << std::endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-                    app->Options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
-                }
-                else if(optionsVector[ i]->type == "integer" )
-                {
-#ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "FOUND AN INTEGER OPTION  ";
-                    outStr << atoi( optionsVector[ i]->value.c_str() );
-                    outStr << std::endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-                    app->Options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
-                }
-                else if(optionsVector[ i]->type == "string" )
-                {
-#ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "FOUND A STRING OPTION  ";
-                    outStr << optionsVector[ i]->value.c_str();
-                    outStr << std::endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-                    app->Options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
-                }
-            }
-        }
-        return;
-    }
-
-
-
-#endif
-
-
     catch(const ErrorClass& eclass)
     {
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "Error while setting options in CSDPSolver\n");
@@ -1012,11 +1191,16 @@ void  CsdpSolver::solve() throw (ErrorClass)
          * Create an initial solution.  This allocates space for X, y, and Z,
          * and sets initial values.
          */
-        setInitialValues(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
-//        initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
-
-
-
+        if (osoption                                  == NULL ||
+            osoption->optimization                    == NULL ||
+            osoption->optimization->matrixProgramming == NULL )
+        {        
+            initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
+        }
+        else
+        {
+            setInitialValues(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
+        }
 
         //call solver
         int returnCode = easy_sdp(nC_rows, ncon, C_matrix, rhsValues, 

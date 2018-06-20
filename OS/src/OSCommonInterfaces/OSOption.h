@@ -3644,10 +3644,10 @@ public:
     /** number of <other> child elements */
     int numberOfOtherMatrixVariableOptions;
 
-    /** initial values for the variables */
+    /** initial values for the matrix variables */
     InitMatrixVariableValues *initialMatrixVariableValues;
 
-    /** initial values for the variables */
+    /** initial values for the matrix variable duals */
     InitMatrixVariableValues *initialMatrixVariableDualValues;
 
     /** other variable options */
@@ -5788,6 +5788,8 @@ public:
      *  <p>
      *
      *  @param  mtxVarIdx is the index of the matrix variable to be retrieved
+     *  @param  mtxArray is a pointer to the <matrices> array, which may be needed
+     *          for the block expansion
      *  @param  rowPartition is an array of integer values describing the desired row partition
      *  @param  rowPartitionSize gives the size of the rowPartition array
      *  @param  colPartition is an array of integer values describing the desired column partition
@@ -5795,7 +5797,7 @@ public:
      *  @return a pointer to a matrix expanded into a particular block pattern
      */
     ExpandedMatrixBlocks* 
-        getInitialMatrixVarBlocks(int mtxVarIdx, 
+        getInitialMatrixVarBlocks(int mtxVarIdx, OSMatrix** mtxArray,
                                   int* rowPartition, int rowPartitionSize,
                                   int* colPartition, int colPartitionSize,
                                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
@@ -5807,6 +5809,8 @@ public:
      *  <p>
      *
      *  @param  mtxVarIdx is the index of the matrix variable to be retrieved
+     *  @param  mtxArray is a pointer to the <matrices> array, which may be needed
+     *          for the block expansion
      *  @param  rowPartition is an array of integer values describing the desired row partition
      *  @param  rowPartitionSize gives the size of the rowPartition array
      *  @param  colPartition is an array of integer values describing the desired column partition
@@ -5814,7 +5818,7 @@ public:
      *  @return a pointer to a matrix expanded into a particular block pattern
      */
     ExpandedMatrixBlocks* 
-        getInitialMatrixDualVarBlocks(int mtxVarIdx, 
+        getInitialMatrixDualVarBlocks(int mtxVarIdx, OSMatrix** mtxArray,
                                   int* rowPartition, int rowPartitionSize,
                                   int* colPartition, int colPartitionSize,
                                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,

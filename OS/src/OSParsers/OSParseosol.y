@@ -3387,7 +3387,6 @@ constraintsBody:  initialConstraintValues initialDualValues slacksInitialBasis o
 {
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
-
 };
 
 
@@ -3395,8 +3394,11 @@ constraintsBody:  initialConstraintValues initialDualValues slacksInitialBasis o
 initialConstraintValues: | initialConstraintValuesStart initialConstraintValuesAttributes initialConstraintValuesContent
 {
     if (!parserData->ignoreDataAfterErrors)
-        if (osoption->setInitConValues(osglData->numberOfCon, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <initialConstraintValues> failed");
+        if (osoption->setInitConValues(osglData->numberOfCon, parserData->idxArray,
+                                parserData->valArray, parserData->namArray) == false)
+            parserData->parser_errors 
+                += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, 
+                                "set <initialConstraintValues> failed");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->valArray;
@@ -3947,7 +3949,7 @@ matrixVariablesContent: matrixVariablesEmpty | matrixVariablesLaden;
 
 matrixVariablesEmpty: ENDOFELEMENT;
 
-matrixVariablesLaden: GREATERTHAN initialMatrixVariableValues otherMatrixVariableOptions  
+matrixVariablesLaden: GREATERTHAN initialMatrixVariableValues otherMatrixVariableOptions
                       matrixVariablesEnd;
 
 matrixVariablesEnd: MATRIXVARIABLESEND;
@@ -3956,26 +3958,30 @@ matrixVariablesEnd: MATRIXVARIABLESEND;
 
 initialMatrixVariableValues: | initialMatrixVariableValuesStart initialMatrixVariableValuesAttributes
                                initialMatrixVariableValuesContent
-    {
+    {//store initial matrix values
        if (osglData->matrixCounter < osglData->numberOfMatrixVar)  
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
                 "actual number of matrixVar less than number attribute");
-        osoption->optimization->matrixProgramming->matrixVariables->initialMatrixVariableValues->matrixVar
-            = osglData->matrixWithMatrixVarIdx;
+        osoption->optimization->matrixProgramming->matrixVariables->initialMatrixVariableValues
+            ->matrixVar = osglData->matrixWithMatrixVarIdx;
+        osoption->optimization->matrixProgramming->matrixVariables->initialMatrixVariableValues
+            ->numberOfMatrixVar = osglData->numberOfMatrixVar;
         osglData->matrixWithMatrixVarIdx = NULL;
     };
 
 initialMatrixVariableValuesStart: INITIALMATRIXVARIABLEVALUESSTART
-{
+{//allocate initial matrix values
     osoption->optimization->matrixProgramming->matrixVariables->initialMatrixVariableValues
-        = new InitMatrixVariableValues(); 
+        = new InitMatrixVariableValues();
+    osglData->numberOfMatrixVarPresent = false;
 };
 
 initialMatrixVariableValuesAttributes: osglNumberOfMatrixVarATT
-{    
-    osglData->numberOfMatrixVar = parserData->tempInt;
+{    //get number of initial matrix values
+//    osglData->numberOfMatrixVar = parserData->tempInt;
     osglData->matrixCounter = 0;
-std::cout << "initializing OSMatrixWithMatrixVarIdx array" << std::endl;
+std::cout << "initializing OSMatrixWithMatrixVarIdx array; expect " << parserData->tempInt 
+          << " matrices" << std::endl;
     osglData->matrixWithMatrixVarIdx = new OSMatrixWithMatrixVarIdx*[osglData->numberOfMatrixVar];
     for (int i=0; i < osglData->numberOfMatrixVar; i++)
         osglData->matrixWithMatrixVarIdx[i] = NULL;
@@ -4000,6 +4006,7 @@ std::cout << "processed initialMatrixVar; osglData->matrixCounter now = " << osg
 //osglData->matrixWithMatrixVarIdx[osglData->matrixCounter-1]->printMatrix();
 };
 
+
 otherMatrixVariableOptions: otherMatrixVariableOptionsArray
 {
         if (parserData->iOther > parserData->numberOfOtherMatrixVariableOptions)
@@ -4020,7 +4027,8 @@ otherMatrixVariableOptionsArray: | otherMatrixVariableOptionsArray otherMatrixVa
     };
 
 otherMatrixVariableOption: 
-    otherMatrixVariableOptionStart osglOtherMatrixVariableOptionOrResultAttributes emptyOtherMatrixVariableOptionEnd
+    otherMatrixVariableOptionStart osglOtherMatrixVariableOptionOrResultAttributes
+		 emptyOtherMatrixVariableOptionEnd
     {
         if (osglData->numberOfMatrixVar > 0)
         {
@@ -4036,12 +4044,18 @@ otherMatrixVariableOption:
         }
     }
   | otherMatrixVariableOptionStart osglOtherMatrixVariableOptionOrResultAttributes 
-                    GREATERTHAN osglOtherMatrixVariableOptionOrResultBody otherMatrixVariableOptionEnd
+    	GREATERTHAN osglOtherMatrixVariableOptionOrResultBody otherMatrixVariableOptionEnd
     {
         if (osglData->enumCounter < osglData->numberOfItems)
         {
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
                 "fewer <item> elements than specified");
+            parserData->ignoreDataAfterErrors = true;        
+        }
+        if (osglData->matrixCounter < osglData->numberOfMatrixVar)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "fewer <matrixVar> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -5705,10 +5719,9 @@ osglOtherMatrixVariableOptionOrResultATT:
 ;
 
 
-osglOtherMatrixVariableOptionOrResultBody: 
+osglOtherMatrixVariableOptionOrResultBody:
     osglOtherMatrixVariableOptionOrResultMatrixVarArray
     {
-
         if (osglData->matrixCounter < osglData->numberOfMatrixVar)
             std::cout << "actual number of matrixVar less than number attribute: "
                       << "encountered " << osglData->kounter << " out of " 

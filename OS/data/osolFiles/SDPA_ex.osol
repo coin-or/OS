@@ -22,7 +22,7 @@
                                 <el>5</el>
                                 <el>7</el>
                             </rowOffset>
-                            <block blockRowIdx="0" blockColIdx="0">
+                            <block blockRowIdx="0" blockColIdx="0" symmetry="lower">
                                 <constantElements numberOfValues="2">
                                     <start>
                                         <el mult="3" incr="1">0</el>
@@ -35,7 +35,7 @@
                                     </value>
                                 </constantElements>
                             </block>
-                            <block blockRowIdx="1" blockColIdx="1">
+                            <block blockRowIdx="1" blockColIdx="1" symmetry="lower">
                                 <constantElements numberOfValues="3">
                                     <start>
                                         <el mult="4" incr="1">0</el>
@@ -48,7 +48,7 @@
                                     </value>
                                 </constantElements>
                             </block>
-                            <block blockRowIdx="2" blockColIdx="2">
+                            <block blockRowIdx="2" blockColIdx="2" symmetry="lower">
                                 <constantElements numberOfValues="2">
                                     <start>
                                         <el mult="3" incr="1">0</el>
@@ -79,7 +79,7 @@
                                 <el>5</el>
                                 <el>7</el>
                             </rowOffset>
-                            <block blockRowIdx="0" blockColIdx="0">
+                            <block blockRowIdx="0" blockColIdx="0" symmetry="lower">
                                 <constantElements numberOfValues="2">
                                     <start>
                                         <el mult="3" incr="1">0</el>
@@ -92,7 +92,7 @@
                                     </value>
                                 </constantElements>
                             </block>
-                            <block blockRowIdx="1" blockColIdx="1">
+                            <block blockRowIdx="1" blockColIdx="1" symmetry="lower">
                                 <constantElements numberOfValues="3">
                                     <start>
                                         <el mult="4" incr="1">0</el>
@@ -105,7 +105,7 @@
                                     </value>
                                 </constantElements>
                             </block>
-                            <block blockRowIdx="2" blockColIdx="2">
+                            <block blockRowIdx="2" blockColIdx="2" symmetry="lower">
                                 <constantElements numberOfValues="2">
                                     <start>
                                         <el mult="3" incr="1">0</el>
@@ -123,10 +123,13 @@
                 </other>
             </matrixVariables>
         </matrixProgramming>
-        <solverOptions numberOfSolverOptions="3">
+        <solverOptions numberOfSolverOptions="1">
+<!--
             <solverOption name="axtol"  solver="csdp" value="1.0e-12" description="default is 1.0e-08"/>
             <solverOption name="atytol" solver="csdp" value="1.0e-12" description="default is 1.0e-08"/>
             <solverOption name="objtol" solver="csdp" value="1.0e-12" description="default is 1.0e-08"/>
+-->
+            <solverOption name="printlevel" solver="csdp" value="2"/>
         </solverOptions>
     </optimization>
 </osol>

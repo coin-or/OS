@@ -3103,10 +3103,9 @@ osglOtherMatrixVariableOptionOrResultATT:
 ;
 
 
-osglOtherMatrixVariableOptionOrResultBody: 
+osglOtherMatrixVariableOptionOrResultBody:
     osglOtherMatrixVariableOptionOrResultMatrixVarArray
     {
-
         if (osglData->matrixCounter < osglData->numberOfMatrixVar)
             std::cout << "actual number of matrixVar less than number attribute: "
                       << "encountered " << osglData->kounter << " out of " 

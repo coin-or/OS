@@ -4272,6 +4272,7 @@ double* OSOption::getInitDualVarLowerBoundsDense()
                 }
             }
         }
+        return NULL;
     }
     catch(const ErrorClass& eclass)
     {
@@ -4321,6 +4322,7 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
                 }
             }
         }
+        return NULL;
     }
     catch(const ErrorClass& eclass)
     {
@@ -4338,13 +4340,13 @@ double* OSOption::getInitDualVarUpperBoundsDense()
 {
     try
     {
-        int numberOfConstraints;
-        numberOfConstraints = this->getNumberOfConstraints();
-        if (numberOfConstraints < 0)
-            throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");
-
         if (this->optimization != NULL)
         {
+            int numberOfConstraints;
+            numberOfConstraints = this->getNumberOfConstraints();
+            if (numberOfConstraints < 0)
+                throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");
+
             if (this->optimization->constraints != NULL)
             {
                 if (this->optimization->constraints->initialDualValues != NULL)
@@ -4363,8 +4365,10 @@ double* OSOption::getInitDualVarUpperBoundsDense()
                     {
                         j = this->optimization->constraints->initialDualValues->con[i]->idx;
                         if (j >= 0 && j < numberOfConstraints)
+                        {
                             m_mdInitDualVarUpperBoundsDense[j]
                                 = this->optimization->constraints->initialDualValues->con[i]->ubDualValue;
+                        }
                         else
                             throw ErrorClass("Constraint index out of range");
                     }
@@ -4372,6 +4376,7 @@ double* OSOption::getInitDualVarUpperBoundsDense()
                 }
             }
         }
+        return NULL;
     }
     catch(const ErrorClass& eclass)
     {
@@ -4422,6 +4427,7 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
                 }
             }
         }
+        return NULL;
     }
     catch(const ErrorClass& eclass)
     {
@@ -4613,7 +4619,7 @@ OtherConstraintOptionOrResult* OSOption::getOtherConstraintOption(int optionNumb
 /**
  *  Get the initial values for a particular matrix variable in block form
  */
-ExpandedMatrixBlocks* OSOption::getInitialMatrixVarBlocks(int mtxVarIdx, 
+ExpandedMatrixBlocks* OSOption::getInitialMatrixVarBlocks(int mtxVarIdx, OSMatrix** matrixArray, 
                                                     int* rowPartition, int rowPartitionSize,
                                                     int* colPartition, int colPartitionSize,
                                                     ENUM_MATRIX_TYPE convertTo_,
@@ -4648,13 +4654,12 @@ ExpandedMatrixBlocks* OSOption::getInitialMatrixVarBlocks(int mtxVarIdx,
                 ->initialMatrixVariableValues->matrixVar[i] == NULL) continue;
             if (this->optimization->matrixProgramming->matrixVariables
                 ->initialMatrixVariableValues->matrixVar[i]->matrixVarIdx != mtxVarIdx) continue;
-            
+                        
             int expIdx = this->optimization->matrixProgramming->matrixVariables
                 ->initialMatrixVariableValues->matrixVar[i]
                 ->getBlockExpansion(rowPartition, rowPartitionSize,
                                     colPartition, colPartitionSize,
-                                    this->optimization->matrices->matrix,
-                                    true, false, convertTo_, symmetry_);
+                                    matrixArray, true, false, convertTo_, symmetry_);
             if (expIdx < 0)
                throw ErrorClass("Error during block expansion in OSOption");
 
@@ -4672,7 +4677,7 @@ ExpandedMatrixBlocks* OSOption::getInitialMatrixVarBlocks(int mtxVarIdx,
 /**
  *  Get the initial values for a particular dual matrix variable in block form
  */
-ExpandedMatrixBlocks* OSOption::getInitialMatrixDualVarBlocks(int mtxVarIdx, 
+ExpandedMatrixBlocks* OSOption::getInitialMatrixDualVarBlocks(int mtxVarIdx, OSMatrix** matrixArray,
                                                     int* rowPartition, int rowPartitionSize,
                                                     int* colPartition, int colPartitionSize,
                                                     ENUM_MATRIX_TYPE convertTo_,
@@ -4695,31 +4700,43 @@ ExpandedMatrixBlocks* OSOption::getInitialMatrixDualVarBlocks(int mtxVarIdx,
             return NULL;
         if (this->optimization->matrixProgramming->matrixVariables == NULL)
             return NULL;
-        if (this->optimization->matrixProgramming->matrixVariables
-                ->initialMatrixVariableDualValues == NULL)
+        if ( (this->optimization->matrixProgramming->matrixVariables->other == NULL) ||
+             (this->optimization->matrixProgramming->matrixVariables
+                  ->numberOfOtherMatrixVariableOptions == 0) )
             return NULL;
-        
-        int n = this->optimization->matrixProgramming->matrixVariables
-                ->initialMatrixVariableDualValues->numberOfMatrixVar;
-        for (int i=0; i < n; i++)
-        {
-            if (this->optimization->matrixProgramming->matrixVariables
-                ->initialMatrixVariableDualValues->matrixVar[i] == NULL) continue;
-            if (this->optimization->matrixProgramming->matrixVariables
-                ->initialMatrixVariableDualValues->matrixVar[i]->matrixVarIdx != mtxVarIdx) continue;
-            
-            int expIdx = this->optimization->matrixProgramming->matrixVariables
-                ->initialMatrixVariableValues->matrixVar[i]
-                ->getBlockExpansion(rowPartition, rowPartitionSize,
-                                    colPartition, colPartitionSize,
-                                    this->optimization->matrices->matrix,
-                                    true, false, convertTo_, symmetry_);
-            if (expIdx < 0)
-               throw ErrorClass("Error during block expansion in OSOption");
 
-            tmpBlocks = this->optimization->matrixProgramming->matrixVariables
-                ->initialMatrixVariableDualValues->matrixVar[i]->expandedMatrixByBlocks[expIdx];
-            return tmpBlocks;
+        int nOther = this->optimization->matrixProgramming->matrixVariables
+                         ->numberOfOtherMatrixVariableOptions;
+
+        for (int i=0; i < nOther; i++)
+        {
+            if (this->optimization->matrixProgramming->matrixVariables->other[i]->name !=
+                    "initialMatrixDuals") continue;
+
+            // found initial matrix duals. If this option is repeated, ignore all but the first
+            OtherMatrixVariableOptionOrResult* initialMatrixDuals =
+                this->optimization->matrixProgramming->matrixVariables->other[i];
+
+            if (initialMatrixDuals->numberOfMatrixVar == 0 || 
+                initialMatrixDuals->matrixVar         == NULL )
+                return NULL;
+        
+            for (int i=0; i < initialMatrixDuals->numberOfMatrixVar; i++)
+            {
+                if (initialMatrixDuals->matrixVar[i] == NULL) continue;
+                if (initialMatrixDuals->matrixVar[i]->matrixVarIdx != mtxVarIdx) continue;
+            
+                int expIdx = initialMatrixDuals->matrixVar[i]
+                    ->getBlockExpansion(rowPartition, rowPartitionSize,
+                                        colPartition, colPartitionSize,
+                                        matrixArray, true, false, convertTo_, symmetry_);
+                if (expIdx < 0)
+                    throw ErrorClass("Error during block expansion in OSOption");
+
+                tmpBlocks = initialMatrixDuals->matrixVar[i]->expandedMatrixByBlocks[expIdx];
+                return tmpBlocks;
+            }
+            return NULL;
         }
         return NULL;
     }

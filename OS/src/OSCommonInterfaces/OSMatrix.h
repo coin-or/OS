@@ -2468,7 +2468,7 @@ public:
      *  @param rowPartitionSize gives the size of the rowPartition array
      *  @param colPartition defines the partition of the set of columns into the blocks  
      *  @param colPartitionSize gives the size of the colPartition array
-     *  @param mtxIdx provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_ indicates whether the blocks are stored in row major form or not.
      *  @param valueType_ indicates in which form to store the disassembled matrix
      *         The default for this optional parameter is ENUM_MATRIX_TYPE_unknown
@@ -2479,9 +2479,9 @@ public:
      *          an array of general sparse matrices. 
      */
     ExpandedMatrixBlocks* 
-        disassembleMatrix(int* rowPartition, int rowPartitionSize, 
-                          int* colPartition, int colPartitionSize, 
-                          OSMatrix** mtxIdx, bool rowMajor_, 
+        disassembleMatrix(int* rowPartition,   int rowPartitionSize, 
+                          int* colPartition,   int colPartitionSize, 
+                          OSMatrix** mtxArray, bool rowMajor_, 
                           ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_none);
 
     /**
@@ -2594,6 +2594,12 @@ public:
      */
     ~ExpandedMatrixBlocks();
 
+    /**
+     *  a utility routine to print the blocks in this expansion
+     *  @return whether the operation was successful
+     */
+    bool printBlocks();
+
     /** 
      * a method to retrieve a particular block from a collection
      * @param rowIdx is the row index of the block to be retrieved
@@ -2701,7 +2707,7 @@ public:
     /**
      *  a utility routine to determine if a MatrixType possesses a specific kind of symmetry
      *  @param symmetry_ contains the symmetry type (see OSParameters.h) 
-     *  @param mtxIdx provides pointers to all defined matrices in case expansion is necessary.
+     *  @param mtxArray provides pointers to all defined matrices in case expansion is necessary.
      *  @return true if the symmetry is found
      *  @remark Symmetry may be thought of as a structural property or a representational one.
      *          The representational form is captured in the data element "symmetry";
@@ -2714,12 +2720,12 @@ public:
      *          will return false if the matrix in fact is symmetric, and the query
      *          matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_unknown) is nonsensical and throws an error.
      */
-     bool matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mtxIdx = NULL);
+     bool matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mtxArray = NULL);
 
     /**
      *  a utility routine to expand a matrix into one of several different forms
      *  The expansions are held in expandedMatrixByElements, a std::vector of GeneralSparseMatrix
-     *  @param mtxIdx     provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray   provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2729,7 +2735,7 @@ public:
      *  @return the index in the collection of expanded matrices corresponding to the current expansion
      *  @remark the return value is -1 in case of any error
      */
-    int getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
+    int getExpandedMatrix(OSMatrix** mtxArray, bool rowMajor_,
                           ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                           ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown,
                           bool transpose_                = false);
@@ -2744,6 +2750,13 @@ public:
      *  @return whether the operation was successful
      */
     bool printExpandedMatrix(int idx);
+
+    /**
+     *  a utility routine to print the expanded blocks of a matrix with block structure.
+     *  @param idx indicates which entry in the vector of expansions is to be printed
+     *  @return whether the operation was successful
+     */
+    bool printExpandedMatrixBlocks(int idx);
 
     /**
      *  get the size of the row partition of a matrix
@@ -2775,7 +2788,7 @@ public:
      *  get the column partition of the matrix
      *
      *  @return a vector of int corresponding to the partition points
-     *  of the columns of this matrix
+     *          of the columns of this matrix
      */
     int* getColumnPartition();
 
@@ -2785,11 +2798,13 @@ public:
      *  variable references, linear or nonlinear expressions, or objective and 
      *  constraint references (possibly mixed). (Values depend on the matrixType.)
      *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
-     *  @param mtxIdx   provides pointers to all defined matrices for use within transformations.
-     *  @param rowMajor can be used to store the objects in row major form.
+     *
+     *  @param  mtxArray provides pointers to all defined matrices for use within transformations.
+     *  @param  rowMajor can be used to store the objects in row major form.
+     *
      *  @return whether the operation was successful or not.
      */
-    virtual bool expandElements(OSMatrix** mtxIdx, bool rowMajor);
+    virtual bool expandElements(OSMatrix** mtxArray, bool rowMajor);
 
     /**
      * A method to convert a matrix to the other major. 
@@ -2805,7 +2820,7 @@ public:
      *  Processing may include cropping, scaling and transformation of the base matrix elements
      *  and may require that the baseMatrix itself be properly expanded first.
      *
-     *  @param mtxIdx provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_ indicates whether the baseMatrix should be stored in row major (if true)
      *         or column major.
      *  @param convertTo_ indicates the form of the value array in the expanded matrix
@@ -2816,7 +2831,7 @@ public:
      */
      virtual GeneralSparseMatrix*
                 processBaseMatrix(
-                    OSMatrix** mtxIdx, bool rowMajor_, 
+                    OSMatrix** mtxArray, bool rowMajor_, 
                     ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                     ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
@@ -2841,7 +2856,7 @@ public:
      *  the elements in some or all of the blocks.
      *
      *  @param currentBlocks is a pointer to the collection of blocks that is to be expanded
-     *  @param mtxIdx    provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray  provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_ indicates whether the expanded matrix should be stored in row major (if true)
      *         or column major.
      *  @param convertTo_ indicates the form of the value array in the expanded matrix
@@ -2851,7 +2866,7 @@ public:
      *  @return the expanded elements of all blocks as a pointer to a GeneralSparseMatrix object.
      */
      virtual GeneralSparseMatrix* 
-                expandBlocks( ExpandedMatrixBlocks* currentBlocks, OSMatrix** mtxIdx, bool rowMajor_,
+                expandBlocks( ExpandedMatrixBlocks* currentBlocks, OSMatrix** mtxArray, bool rowMajor_,
                               ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                               ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
@@ -2863,7 +2878,7 @@ public:
      *
      *  @param nConst indicates the position of the constructor in the array m_mChildren, the child
      *         elements of the current matrix (i.e., the list of constructors)
-     *  @param mtxIdx provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_ indicates whether the expanded matrix should be stored in row major (if true)
      *         or column major.
      *  @param convertTo_ indicates the form of the value array in the expanded matrix
@@ -2873,7 +2888,7 @@ public:
      *  @return the expanded elements of all blocks as a pointer to a GeneralSparseMatrix object.
      */
      virtual GeneralSparseMatrix* 
-                    expandBlocks( int nConst, OSMatrix** mtxIdx, bool rowMajor_,
+                    expandBlocks( int nConst, OSMatrix** mtxArray, bool rowMajor_,
                                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
@@ -2900,7 +2915,7 @@ public:
      *
      *  @param nConst     indicates the position of the constructor in the array m_mChildren, the child
      *                    elements of the current matrix (i.e., the list of constructors)
-     *  @param mtxIdx     provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray   provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_  indicates whether the baseMatrix should be stored in row major (if true)
      *                    or column major.
      *  @param convertTo_ can be used to force conversion of matrix elements to a specific form.
@@ -2909,13 +2924,13 @@ public:
      *  @return the expanded elements of the transformation as a pointer to a GeneralSparseMatrix object.
      */
     virtual GeneralSparseMatrix* 
-        expandTransformation(int nConst, OSMatrix** mtxIdx, bool rowMajor,
+        expandTransformation(int nConst, OSMatrix** mtxArray, bool rowMajor,
                              ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                              ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A method to process a matrixType into a block structure defined by the data structure
-     *  @param mtxIdx     provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray   provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_  indicates whether the blocks should be stored in row major (if true)
      *                    or column major.
      *  @param convertTo_ is an optional parameter that can be used to covert the elements
@@ -2930,13 +2945,13 @@ public:
      *          It is possible (though probably not advisable) to maintain multiple
      *          decompositions with different row and column partitions (see next method)
      */
-     virtual bool processBlocks(OSMatrix** mtxIdx, bool rowMajor_, 
+     virtual bool processBlocks(OSMatrix** mtxArray, bool rowMajor_, 
                                 ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
                                 ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  A method to process a matrixType into a specific block structure.
-     *  @param mtxIdx    provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray  provides pointers to all defined matrices for use within transformations.
      *  @param rowOffset defines a partition of the matrix rows into the blocks
      *  @param rowOffsetSize gives the number of elements in the rowOffset array 
      *  @param colOffset defines a partition of the matrix columns into the blocks
@@ -2953,7 +2968,7 @@ public:
      *          It is possible (though probably not advisable) to maintain multiple
      *          decompositions with different row and column partitions
      */
-     virtual bool processBlocks(OSMatrix** mtxIdx, int* rowOffset, int rowOffsetSize,
+     virtual bool processBlocks(OSMatrix** mtxArray, int* rowOffset, int rowOffsetSize,
                                 int* colOffset, int colOffsetSize, bool rowMajor_,
                                 ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
                                 ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
@@ -2990,7 +3005,7 @@ public:
      *  @param colPartition defines the partition of the set of columns into the blocks  
      *  @param colPartitionSize gives the size of the colPartition array
      *  @param appendToBlockArray determines whether the blocks should be created if not found. 
-     *  @param mtxIdx   provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor indicates whether the blocks are stored in row major form or not.
      *  @param convertTo_ is an optional parameter that can be used to covert the elements
      *         of all blocks to a different type. 
@@ -3007,7 +3022,7 @@ public:
      */
     ExpandedMatrixBlocks* getBlocks(int* rowPartition, int rowPartitionSize, 
                                     int* colPartition, int colPartitionSize, 
-                                    OSMatrix** mtxIdx, bool appendToBlockArray, bool rowMajor, 
+                                    OSMatrix** mtxArray, bool appendToBlockArray, bool rowMajor, 
                                     ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                                     ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
     /** 
@@ -3020,7 +3035,7 @@ public:
      *  @param colPartition defines the partition of the set of columns into the blocks  
      *  @param colPartitionSize gives the size of the colPartition array
      *  @param appendToBlockArray determines whether the blocks should be created if not found. 
-     *  @param mtxIdx   provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor indicates whether the blocks are stored in row major form or not.
      *  @param convertTo_ is an optional parameter that can be used to covert the elements
      *         of all blocks to a different type. 
@@ -3037,7 +3052,7 @@ public:
      */
     int getBlockExpansion(int* rowPartition, int rowPartitionSize, 
                           int* colPartition, int colPartitionSize, 
-                          OSMatrix** mtxIdx, bool appendToBlockArray, bool rowMajor, 
+                          OSMatrix** mtxArray, bool appendToBlockArray, bool rowMajor, 
                           ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                           ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
@@ -3072,7 +3087,7 @@ public:
      *  @param rowPartitionSize gives the size of the rowPartition array
      *  @param colPartition defines the partition of the set of columns into the blocks  
      *  @param colPartitionSize gives the size of the colPartition array
-     *  @param mtxIdx provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_ indicates whether the blocks are stored in row major form or not.
      *  @param valueType_ indicates in which form to store the disassembled matrix
      *         The default for this optional parameter is ENUM_MATRIX_TYPE_unknown
@@ -3085,7 +3100,7 @@ public:
     ExpandedMatrixBlocks* 
         disassembleMatrix(int* rowPartition, int rowPartitionSize, 
                           int* colPartition, int colPartitionSize, 
-                          OSMatrix** mtxIdx, bool rowMajor_, 
+                          OSMatrix** mtxArray, bool rowMajor_, 
                           ENUM_MATRIX_TYPE valueType_    = ENUM_MATRIX_TYPE_unknown,
                           ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
@@ -3192,11 +3207,11 @@ public:
      *  variable references, linear or nonlinear expressions, or objective and 
      *  constraint references (possibly mixed). (Values depend on the matrixType.)
      *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
-     *  @param mtxIdx   provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor can be used to store the objects in row major form.
      *  @return whether the operation was successful or not.
      */
-    virtual bool expandElements(OSMatrix** mtxIdx, bool rowMajor);
+    virtual bool expandElements(OSMatrix** mtxArray, bool rowMajor);
 
     /** 
      *  Check whether a submatrix aligns with the block partition of a matrix
@@ -3443,6 +3458,234 @@ public:
 };// class OSMatrixWithMatrixConIdx
 
 
+#if 0
+/*! \class MatrixVarValueReference 
+ * \brief this class is a minimalist replacement for OSMatrixWithMatrixVarIdx,
+ * to bring the treatment of matrices and matrix variables in OSoL and OSrL in line with OSiL
+ *
+ */
+class MatrixVarValueReference 
+{
+public:
+    /**     
+     *  Contains the index of the matrixVar (as derived from the problem instance in the OSiL file)
+     *  for which values are given using this object. (The value must be nonnegative.)
+     */
+    int matrixVarIdx;
+
+    /**     
+     *  Holds the index of the matrix (as defined in the <matrices> section of the OSoL or OSrL file)
+     *  which contains the values that are given using this object
+     */
+    int valueMatrixIdx;
+
+    /** 
+     *  These two vectors hold pointers to the expansion of the matrix in either full form or 
+     *  as a collection of blocks.
+     *  @remark: The expansions themselves are held in the OSMatrix object indicated in
+     *           valueMatrixIdx, but it is useful to have the data addressable from here 
+     */
+    std::vector<GeneralSparseMatrix* > expandedMatrixByElements;
+    std::vector<ExpandedMatrixBlocks*> expandedMatrixByBlocks;
+    
+
+public:
+    MatrixVarValueReference();
+    ~MatrixVarValueReference();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn OSMatrix *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual MatrixVarValueReference *cloneMatrixVarValueReference();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixVarValueReference *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin = 0, int iMax = 3);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixVarValueReference *that);
+};// class MatrixVarValueReference
+
+
+/*! \class MatrixObjValueReference 
+ * \brief this class is a minimalist replacement for OSMatrixWithMatrixObjIdx,
+ * to bring the treatment of matrices and matrix variables in OSoL and OSrL in line with OSiL
+ *
+ */
+class MatrixObjValueReference 
+{
+public:
+    /**     
+     *  Contains the index of the matrixObj (as derived from the problem instance in the OSiL file)
+     *  for which values are given using this object. (The value must be negative.)
+     */
+    int matrixObjIdx;
+
+    /**     
+     *  Holds the index of the matrix (as defined in the <matrices> section of the OSoL or OSrL file)
+     *  which contains the values that are given using this object
+     */
+    int valueMatrixIdx;
+
+    /** 
+     *  These two vectors hold pointers to the expansion of the matrix in either full form or 
+     *  as a collection of blocks.
+     *  @remark: The expansions themselves are held in the OSMatrix object indicated in
+     *           valueMatrixIdx, but it is useful to have the data addressable from here 
+     */
+    std::vector<GeneralSparseMatrix* > expandedMatrixByElements;
+    std::vector<ExpandedMatrixBlocks*> expandedMatrixByBlocks;
+    
+
+public:
+    MatrixObjValueReference();
+    ~MatrixObjValueReference();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn OSMatrix *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual MatrixObjValueReference *cloneMatrixObjValueReference();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixObjValueReference *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that an objective reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that an objective reference can take
+     */
+    bool setRandom(double density, bool conformant, int iMin = 0, int iMax = 3);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixObjValueReference *that);
+};// class MatrixObjValueReference
+
+/*! \class MatrixConValueReference 
+ * \brief this class is a minimalist replacement for OSMatrixWithMatrixConIdx,
+ * to bring the treatment of matrices and matrix variables in OSoL and OSrL in line with OSiL
+ *
+ */
+class MatrixConValueReference 
+{
+public:
+    /**     
+     *  Contains the index of the matrixCon (as derived from the problem instance in the OSiL file)
+     *  for which values are given using this object. (The value must be nonnegative.)
+     */
+    int matrixConIdx;
+
+    /**     
+     *  Holds the index of the matrix (as defined in the <matrices> section of the OSoL or OSrL file)
+     *  which contains the values that are given using this object
+     */
+    int valueMatrixIdx;
+
+    /** 
+     *  These two vectors hold pointers to the expansion of the matrix in either full form or 
+     *  as a collection of blocks.
+     *  @remark: The expansions themselves are held in the OSMatrix object indicated in
+     *           valueMatrixIdx, but it is useful to have the data addressable from here 
+     */
+    std::vector<GeneralSparseMatrix* > expandedMatrixByElements;
+    std::vector<ExpandedMatrixBlocks*> expandedMatrixByBlocks;
+    
+
+public:
+    MatrixConValueReference();
+    ~MatrixConValueReference();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn OSMatrix *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual MatrixConValueReference *cloneMatrixConValueReference();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixConValueReference *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a constraint reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a constraint reference can take
+     */
+    bool setRandom(double density, bool conformant, int iMin = 0, int iMax = 3);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixConValueReference *that);
+};// class MatrixConValueReference
+#endif
+
 /*! \class MatrixBlock
  * \brief a data structure to represent a MatrixBlock object (derived from MatrixType)
  *
@@ -3511,11 +3754,11 @@ public:
      *  variable references, linear or nonlinear expressions, or objective and 
      *  constraint references (possibly mixed). (Values depend on the matrixType.)
      *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
-     *  @param mtxIdx   provides pointers to all defined matrices for use within transformations.
+     *  @param mtxArray provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor can be used to store the objects in row major form.
      *  @return whether the operation was successful or not.
      */
-    virtual bool expandElements(OSMatrix** mtxIdx, bool rowMajor);
+    virtual bool expandElements(OSMatrix** mtxArray, bool rowMajor);
 
     /*! \fn MatrixBlock *cloneMatrixNode()
      *  \brief The implementation of the virtual functions.
