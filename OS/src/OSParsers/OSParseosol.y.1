@@ -49,7 +49,7 @@
 
 #define OSOPTION_AVAILABLE
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define YYDEBUG 1

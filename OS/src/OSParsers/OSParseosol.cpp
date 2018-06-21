@@ -3403,7 +3403,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[552] =
  * to place temporary data into the correct parser data object.
  */
 #line 23 "../../../../OS/src/OSParsers/OSParseosol.l"
-#define OSOLPARSERDEBUG
+//#define OSOLPARSERDEBUG
 
 #ifdef OSOLPARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext)

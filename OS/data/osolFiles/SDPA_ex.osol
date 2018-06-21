@@ -31,7 +31,7 @@
                                         <el mult="2" incr="1">0</el>
                                     </index>
                                     <value>
-                                        <el mult="2">1.1</el>
+                                        <el mult="2">.25</el>
                                     </value>
                                 </constantElements>
                             </block>
@@ -44,7 +44,7 @@
                                         <el mult="3" incr="1">0</el>
                                     </index>
                                     <value>
-                                        <el mult="3">1.2</el>
+                                        <el mult="3">2.5</el>
                                     </value>
                                 </constantElements>
                             </block>
@@ -57,7 +57,7 @@
                                         <el mult="2" incr="1">0</el>
                                     </index>
                                     <value>
-                                        <el mult="2">1.3</el>
+                                        <el mult="2">1.5</el>
                                     </value>
                                 </constantElements>
                             </block>
@@ -88,7 +88,7 @@
                                         <el mult="2" incr="1">0</el>
                                     </index>
                                     <value>
-                                        <el mult="2">2.1</el>
+                                        <el mult="2">1</el>
                                     </value>
                                 </constantElements>
                             </block>
@@ -101,7 +101,7 @@
                                         <el mult="3" incr="1">0</el>
                                     </index>
                                     <value>
-                                        <el mult="3">2.2</el>
+                                        <el mult="3">1</el>
                                     </value>
                                 </constantElements>
                             </block>
@@ -114,7 +114,7 @@
                                         <el mult="2" incr="1">0</el>
                                     </index>
                                     <value>
-                                        <el mult="2">2.3</el>
+                                        <el mult="2">1</el>
                                     </value>
                                 </constantElements>
                             </block>

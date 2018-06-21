@@ -1949,7 +1949,7 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxArray, bool rowMajor_,
     outStr << " - declared type " << returnMatrixTypeString(getDeclaredMatrixType());
     outStr << " - inferred type " << returnMatrixTypeString(getInferredMatrixType());
     outStr << std::endl << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 
     GeneralSparseMatrix* tempMtx = NULL;
@@ -2428,13 +2428,15 @@ bool MatrixType::printExpandedMatrix(int idx)
         else
             throw ErrorClass("matrix type unknown or not set");
 
+#ifndef NDEBUG
         outStr << "number of rows     " << numberOfRows << std::endl;
         outStr << "number of columns  " << numberOfColumns << std::endl;
 //        outStr << "number of nonzeros " << tmp->valueSize << std::endl;
- //       outStr << "type of nonzeros   " << returnMatrixTypeString(tmp->valueType) << std::endl;
+//        outStr << "type of nonzeros   " << returnMatrixTypeString(tmp->valueType) << std::endl;
         outStr << "symmetry           " << returnMatrixSymmetryString(symmetry) << std::endl;
 
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
 
         this->expandedMatrixByElements[idx]->printMatrix();
 
@@ -2480,40 +2482,9 @@ bool MatrixType::printExpandedMatrixBlocks(int idx)
 
         tmpBlocks->printBlocks();
 
-#if 0
-        outStr << "this collection of blocks has values of type "
-               << returnMatrixTypeString(tmpBlocks->valueType) << std::endl;
-        outStr << "symmetry           " 
-               << returnMatrixSymmetryString(tmpBlocks->symmetry) << std::endl;
-
-        outStr << std::endl << "row partition =";
-        for (int i=0; i < tmpBlocks->rowOffsetSize; i++)
-        {
-            outStr << tmpBlocks->rowOffset[i] << "  ";
-        }
-        outStr << std::endl;
-
-        outStr << std::endl << "col partition =";
-        for (int i=0; i < tmpBlocks->colOffsetSize; i++)
-        {
-            outStr << tmpBlocks->colOffset[i] << "  ";
-        }
-        outStr << std::endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
-
-        for (int i=0; i < tmpBlocks->blockNumber; i++)
-        {
-            outStr.str("");
-            outStr.clear();
-            outStr << "Block " << i <<  " in row " << tmpBlocks->blockRows[i] 
-                                    << " and col " << tmpBlocks->blockColumns[i]  << std::endl;
-
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
-            tmpBlocks->blocks[i]->printMatrix();
-        }
-#endif
         return true;
     }
+
     catch(const ErrorClass& eclass)
     {
         throw ErrorClass( eclass.errormsg);

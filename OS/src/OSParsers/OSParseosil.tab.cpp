@@ -93,7 +93,7 @@
 //#define CHECK_PARSE_TIME
 
 // debugging tools. uncomment as needed 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define YYDEBUG 1

@@ -20,7 +20,7 @@
  * to place temporary data into the correct parser data object.
  */
 %{
-#define OSOLPARSERDEBUG
+//#define OSOLPARSERDEBUG
 
 #ifdef OSOLPARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext)

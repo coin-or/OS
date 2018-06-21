@@ -31,6 +31,7 @@
 #include "CoinTime.hpp"
 
 #include <map>
+#include <cstdio>
 
 #include <iostream>
 #ifdef HAVE_CTIME
@@ -55,7 +56,7 @@ CsdpSolver::CsdpSolver()
         "inside CsdpSolver constructor\n");
 #endif
     osrlwriter = new OSrLWriter();
-    osresult = new OSResult();
+    osresult   = new OSResult();
     m_osilreader = NULL;
     m_osolreader = NULL;
     csdpErrorMsg = new std::string("");
@@ -72,6 +73,8 @@ CsdpSolver::CsdpSolver()
     X.nblocks = -1;
     y = NULL;
     Z.nblocks = -1;
+
+    tempOptionFile = "";
 }
 
 CsdpSolver::~CsdpSolver()
@@ -153,6 +156,12 @@ CsdpSolver::~CsdpSolver()
             }
         }
         delete[] mconstraints;
+    }
+    if (tempOptionFile != "")
+    {
+        int IOStatus = rename ( tempOptionFile.c_str(), "param.csdp" );
+        if (IOStatus != 0)
+            throw ErrorClass("CsdpSolver: Cannot restore param.csdp");                    
     }
 }
 
@@ -743,9 +752,20 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
             optStr << "fastmode="    <<                fastmode     << std::endl;
 
             FILE *paramfile;
+
+            //Check if param.csdp exists already
+            paramfile=fopen("param.csdp","r");
+            if (paramfile != 0)
+            {
+                tempOptionFile = "param7834910.csdp";
+                int IOStatus = rename ( "param.csdp", tempOptionFile.c_str() );
+                if (IOStatus != 0)
+                    throw ErrorClass("CsdpSolver: Cannot rename param.csdp");                    
+            }
+
             paramfile=fopen("param.csdp","w");
             if (!paramfile)
-                throw ErrorClass("File open error during option initialization");
+                throw ErrorClass("CsdpSolver: File open error during option initialization");
 
             fprintf(paramfile,"%s",(optStr.str()).c_str());
             fclose(paramfile);
@@ -1041,8 +1061,7 @@ void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a,
                 outStr << std::endl;
             }
         }
-        //osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_always, outStr.str());       
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
         if (initDual == NULL)
@@ -1133,9 +1152,7 @@ void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a,
                 outStr << std::endl;
             }
         }
-        //osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_always, outStr.str());
-        
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
 
@@ -1183,6 +1200,7 @@ void  CsdpSolver::solve() throw (ErrorClass)
     int* rowOffset = NULL;
     int* rowOffsetD = NULL;
 
+
     if( this->bCallbuildSolverInstance == false) buildSolverInstance();
     if( this->bSetSolverOptions == false) setSolverOptions();
     try
@@ -1191,16 +1209,7 @@ void  CsdpSolver::solve() throw (ErrorClass)
          * Create an initial solution.  This allocates space for X, y, and Z,
          * and sets initial values.
          */
-        if (osoption                                  == NULL ||
-            osoption->optimization                    == NULL ||
-            osoption->optimization->matrixProgramming == NULL )
-        {        
-            initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
-        }
-        else
-        {
-            setInitialValues(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
-        }
+        setInitialValues(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
 
         //call solver
         int returnCode = easy_sdp(nC_rows, ncon, C_matrix, rhsValues, 

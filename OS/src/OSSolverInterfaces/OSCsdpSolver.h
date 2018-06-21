@@ -82,6 +82,19 @@ class CsdpSolver : public DefaultSolver
     double *y;                              // dual variables of the constraints
     double pobj,dobj;                       // primal and dual objective values
 
+/**
+ *  CSDP is very peculiar about the way it communicates options: All options must be read from
+ *  a file that must be named param.csdp, and _all_ options must be given, in specific order.
+ *  To make the process a little more resilient, we follow these steps to set OSoL options:
+ *  1. Check whether file param.csdp exists already. If yes, rename it temporarily.
+ *     The temporary name is held in tempOptionFile.
+ *  2. Process the OSoL file and write any options found (along with default values
+ *     for all options not mentioned) into the file param.csdp.
+ *  3. After the solution has been found, restore the original param.csdp if necessary.
+ */
+private:
+    std::string tempOptionFile;
+
 public:
 
     /** the CsdpSolver class constructor */
