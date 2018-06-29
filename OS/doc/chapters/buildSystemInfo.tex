@@ -411,5 +411,37 @@ Here's a summary.
 
                         Lou
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Added 5-Sep-2017: stuff about various configeration files
+
+From gus: Files used in configuring the OS code
+
+BuildTools/headers/configall_system.h
+    used when there is no configure script 
+    includes configall_system_msc.h for windows systems
+    throws an error otherwise but could be extended for esoteric system
+    included in all project-specific files xxx/config_default.h, e.g., OS/src/config_default.h
+
+BuildTools/headers/configall_system_msc.h
+    sets windows-specific values (including Fortran compiler, etc.) system and compiler options 
+
+OS/src/config_default.h
+    includes configall_system.h and config_os_default.h
+    sets project specific macros (all of the form COIN_HAS_XXX)
+
+OS/src/config_os_default.h
+    sets "project specific public macros" of the form OS_HAS_XXX
+
+OS/src/config.h.in
+     similar content to config_default, but exact settings are defined by the configure step, which creates OS/src/config.h in the vpath directory
+
+OS/src/config_os.h.in
+     similar content to config_os_default, but exact settings are defined by the configure step, which creates OS/src/configos_.h in the vpath directory
+
+OSConfig.h
+    unifies different compile situations by including one of the preceding four OS-specific config files
+
+OSParameters.h
+    includes OSConfig.h and defines additional constants (such as OSDBL_MAX, OS_EPS, etc.) and types (i.e., OsXmlInt and OsXmlUInt)
 \end{verbatim}
 
