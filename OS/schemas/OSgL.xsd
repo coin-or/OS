@@ -860,6 +860,44 @@ The result of this transformation is aligned with the top left corner of the tar
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+<!-- Instead of OSMatrixWithXXXIdx, the following would make tre treatment of OSoL/OSrL consistent with OSiL
+	<xs:complexType name="MatrixVarValueReference">
+		<xs:attribute name="matrixVarIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>Must refer to a matrixVar defined in the problem instance (OSiL file)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="valueMatrixIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>Refers to a matrix previously defined in the "matrices" section</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="MatrixObjValueReference">
+		<xs:attribute name="matrixVarIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>Must refer to a matrixObj defined in the problem instance (OSiL file)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="valueMatrixIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>Refers to a matrix previously defined in the "matrices" section</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="MatrixConValueReference">
+		<xs:attribute name="matrixVarIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>Must refer to a matrixCon defined in the problem instance (OSiL file)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="valueMatrixIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>Refers to a matrix previously defined in the "matrices" section</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+-->
 	<xs:complexType name="MatrixConstructors" mixed="false"/>
 	<xs:complexType name="BaseMatrix" mixed="false">
 		<xs:annotation>
@@ -4194,7 +4232,11 @@ according to WolframMathWorld</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>used to declare a type for the "value" attribute above</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
 		<xs:attribute name="numberOfEnumerations" type="NonnegativeInteger" use="optional" default="0"/>

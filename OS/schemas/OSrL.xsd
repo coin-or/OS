@@ -186,6 +186,11 @@
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="tensors" type="Tensors" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="solution" type="OptimizationSolution" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>since version 2.0</xs:documentation>
@@ -376,6 +381,7 @@
 	<xs:complexType name="MatrixVariableSolution">
 		<xs:sequence>
 			<xs:element name="values" type="MatrixVariableValues" minOccurs="0"/>
+			<xs:element name="dualValues" type="MatrixVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatrixVariableOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherMatrixVariableResults" type="NonnegativeInteger" use="optional" default="0"/>
