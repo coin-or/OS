@@ -3520,6 +3520,66 @@
 			<xs:documentation>since version 1.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeGenPertDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum; 5th arg. shape.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="genPertDist" type="OSnLNodeGenPertDist" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGenPertCum">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum; 5th arg. shape.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="genPertCum" type="OSnLNodeGenPertCum" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGenPertInv">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum; 5th arg. shape.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="genPertInv" type="OSnLNodeGenPertInv" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeTriangularDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0. </xs:documentation>
