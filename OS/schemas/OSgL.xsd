@@ -696,7 +696,7 @@
 	</xs:complexType>
 	<xs:complexType name="Matrices">
 		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -712,12 +712,12 @@
 	</xs:complexType>
 	<xs:group name="MatrixElementsGroup">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:element name="constantElements" type="ConstantMatrixElements" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>For elements that are constant values, e.g., 5</xs:documentation>
+					<xs:documentation>For elements that are real-valued constants, e.g., 5</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="complexElements" type="ComplexMatrixElements" minOccurs="0">
@@ -776,7 +776,11 @@
 				<xs:annotation>
 					<xs:documentation>There can be arbitrarily many matrix constructors in arbitrary order. If a location is specfied more than once in the child elements, later information, including explicitly specified zeroes, replaces earlier information. </xs:documentation>
 				</xs:annotation>
-				<xs:group ref="MatrixElementsGroup" minOccurs="0"/>
+				<xs:group ref="MatrixElementsGroup" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>recommendation</xs:documentation>
+					</xs:annotation>
+				</xs:group>
 				<xs:element name="transformation" type="MatrixTransformation" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>To express the matrix M in terms of previously defined matrices, e.g., M = a a'. 
@@ -814,6 +818,9 @@ The result of this transformation is aligned with the top left corner of the tar
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OSMatrix">
+		<xs:annotation>
+			<xs:documentation>recommendation</xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="MatrixType">
 				<xs:attribute name="numberOfRows" type="NonnegativeInteger" use="required"/>
@@ -860,7 +867,7 @@ The result of this transformation is aligned with the top left corner of the tar
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-<!-- Instead of OSMatrixWithXXXIdx, the following would make tre treatment of OSoL/OSrL consistent with OSiL
+	<!-- Instead of OSMatrixWithXXXIdx, the following would make tre treatment of OSoL/OSrL consistent with OSiL
 	<xs:complexType name="MatrixVarValueReference">
 		<xs:attribute name="matrixVarIdx" use="required">
 			<xs:annotation>
