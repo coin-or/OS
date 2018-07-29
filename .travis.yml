@@ -52,5 +52,5 @@ before_script:
   - bash BuildTools/get.dependencies.sh fetch > /dev/null
 
 script:
-  - bash BuildTools/get.dependencies.sh build --with-cppad-incdir=$PWD/build/include --verbosity=2 --test
+  - bash BuildTools/get.dependencies.sh build --with-cppad-incdir=$PWD/build/include --verbosity=1 --test
 
