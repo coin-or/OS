@@ -1333,7 +1333,41 @@ From Stefan:  configure options
 10 Nov 15:18:38:   make -j4 test
 10 Nov 15:54:38:   cd /home/svigerske/nbBuildDir\CoinAll\releases-1.6.0-default\Clp\src
 
+%%%%%%%%%%%%%%%%%%%%%%%
 
+More on strtod_ASL from Ted:
+
+Re: Errors building OS
+Ted Ralphs [ted@lehigh.edu]
+Sent: 	September 28, 2018 4:12 PM
+To: 	
+Horand Gassmann
+Hmm, this issue with strtod_ASL seems to be very long-standing and has been addressed by various people over time. I found a long thread involving Stefan, Kipp, Laci, and some others that discussed it in my e-mail. Perhaps this is what you were referring to. Anyway, here are some other related bug reports.
+
+https://github.com/JuliaOpt/CoinOptServices.jl/issues/27#issuecomment-290960312
+https://github.com/coin-or/Couenne/issues/1#issuecomment-335386208
+
+I wouldn't bother anymore with David Gay. As far as I know, ASL is now maintained more sanely by others and is available on Github, where you could report any issues.
+
+https://github.com/ampl/mp
+
+The offending #define still seems to be there, but something related was even reported (and apparently fixed) already:
+
+https://github.com/ampl/mp/issues/85
+
+Let's sort this out first before reporting it, since it seems to be something new that has been fixed by others and may no longer be an issue.
+
+I just built stable/2.10 and it builds fine for me against trunk version of other dependencies (in order to ensure all relevant fixes are there). If you want to try that, just check out OptimizationSuite trunk:
+
+svn co https://projects.coin-or.org/svn/CoinBinary/OptimizationSuite/trunk
+
+and then in the OS subdirectory, do
+
+svn switch https://projects.coin-or.org/svn/OS/stable/2.10/OS
+
+Then you'll be getting latest of all other projects and stable of OS. 
+
+Ted
 
 
 
