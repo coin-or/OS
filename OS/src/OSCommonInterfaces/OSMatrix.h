@@ -2717,8 +2717,9 @@ public:
      *          represented using symmetry="lower" is a symmetric matrix, so the _structural_
      *          query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_upper) will return true!
      *          By the same token, the query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_none)
-     *          will return false if the matrix in fact is symmetric, and the query
-     *          matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_unknown) is nonsensical and throws an error.
+     *          will return false if the matrix is structurally or representationally symmetric, 
+     *          and the query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_unknown) is nonsensical
+     *          and throws an error.
      */
      bool matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mtxArray = NULL);
 

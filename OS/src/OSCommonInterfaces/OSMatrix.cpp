@@ -366,8 +366,9 @@ bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mt
  *  represented using symmetry="lower" is a symmetric matrix, so the _structural_
  *  query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_upper) will return true!
  *  By the same token, the query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_none)
- *  will return false if the matrix in fact is symmetric, and the query
- *  matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_unknown) is nonsensical and throws an error.
+ *  will return false if the matrix is structurally or representationally symmetric, 
+ *  and the query matrixHasSymmetry(ENUM_MATRIX_SYMMETRY_unknown) is nonsensical
+ *  and throws an error.
  */
     GeneralSparseMatrix* newExpansion = NULL;
     GeneralSparseMatrix* rowExpansion = NULL;
@@ -377,6 +378,10 @@ bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mt
     double* val = NULL;
     std::complex<double>* cVal = NULL;
 
+/** 
+ *  Note: this->symmetry  refers to the representational symmetry in the MatrixType
+ *              symmetry_ refers to the structural symmetry being investigated
+ */
     try
     {
         if (      symmetry == ENUM_MATRIX_SYMMETRY_unknown )
@@ -436,15 +441,15 @@ bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mt
 
         // here this->symmetry == none (i.e., the matrix is represented in a non-symmetric form),
         // or this->symmetry == unknown (i.e., we do not know the representation format yet)
-        // but we are inquiring whether it could be compressed. This requires expansion and
-        // comparison of the row-wise and column-wise representations.
+        // but we are inquiring whether symmetry is present (and the matrix could perhaps be
+        // compressed). This requires comparison of the row-wise and column-wise representations.
         
 
         int rowwiseIdx = -1;
         int colwiseIdx = -1;
 
         if (this->expandedMatrixByElements.size() > 0)
-        // previous expansions may be used and modified
+        // previous expansions may be used in the assessment
         {
             int bestMatch;
             int nextMatch;
@@ -486,7 +491,7 @@ bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mt
                                 if (bestIsRowMajor)
                                 {
                                     rowwiseIdx = bestMatch_index;
-                                    colwiseIdx  = i;
+                                    colwiseIdx = i;
                                 }
                                 else
                                 {
@@ -498,7 +503,8 @@ bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mt
                         }
                     }
                 }
-                // here there is a symmetric expansion. See if symmetry is compatible
+
+                // here there is a symmetric expansion. See if symmetry is compatible or not
                 else
                 {
                     // Simplify as much as possible. (E.g., real-valued Hermitian matrices
@@ -551,39 +557,60 @@ bool MatrixType::matrixHasSymmetry(ENUM_MATRIX_SYMMETRY symmetry_, OSMatrix** mt
                 }
             }// end of for loop on i
 
-            //we should at least have one usable expansion
+            // symmetry is still unclear. However, we should at least have one usable expansion
             if (bestMatch_index < 0)
                 throw ErrorClass("matrixHasSymmetry: symmetry structure can not be determined");
-            else if (colwiseIdx == -1) // have found only usable expansion
+
+            // have found only one usable expansion (neither rowwiseIdx nor colwiseIdx has been set)
+            else if (colwiseIdx == -1) 
             {
-                newExpansion = 
-                    expandedMatrixByElements[bestMatch_index]->convertToOtherMajor(bestType, false);
-                expandedMatrixByElements.push_back(newExpansion);
+                try
+                {
+                    newExpansion = expandedMatrixByElements[bestMatch_index]
+                                    ->convertToOtherMajor(bestType, false);
+                    expandedMatrixByElements.push_back(newExpansion);
+                }
+                catch(const ErrorClass& eclass)
+                {
+                    throw ErrorClass("Expansion of matrix failed in MatrixType::matrixHasSymmetry()");
+                }
+
                 if (bestIsRowMajor)
                 {
                     rowwiseIdx = bestMatch_index;
-                    colwiseIdx = expandedMatrixByElements.size();
+                    colwiseIdx = expandedMatrixByElements.size() - 1;//newExpansion;
                 }
                 else
                 {
                     colwiseIdx = bestMatch_index;
-                    rowwiseIdx = expandedMatrixByElements.size();
+                    rowwiseIdx = expandedMatrixByElements.size() - 1;//newExpansion;
                 }
             }
-            
-        }
-        // no previous expansions, so expand if possible
-        else if (mtxArray != NULL)
-        {
-            colwiseIdx = this->getExpandedMatrix(mtxArray, false, ENUM_MATRIX_TYPE_unknown,
-                                                                ENUM_MATRIX_SYMMETRY_none, false);
-            rowwiseIdx = this->getExpandedMatrix(mtxArray, true,  ENUM_MATRIX_TYPE_unknown,
-                                                                ENUM_MATRIX_SYMMETRY_none, false);
         }
 
-        else
-            throw ErrorClass("matrixHasSymmetry: symmetry structure cannot be determined");
-        
+        // no previous expansions, so expand if possible
+        else 
+        {
+            if (mtxArray == NULL)
+                throw ErrorClass("matrixHasSymmetry: symmetry structure cannot be determined");
+
+            try
+            {
+                colwiseIdx 
+                    = this->getExpandedMatrix(mtxArray, false, ENUM_MATRIX_TYPE_unknown,
+                                                               ENUM_MATRIX_SYMMETRY_none, false);
+                rowwiseIdx
+                    = this->getExpandedMatrix(mtxArray, true,  ENUM_MATRIX_TYPE_unknown,
+                                                               ENUM_MATRIX_SYMMETRY_none, false);
+//                expandedMatrixByElements.push_back(colwiseIdx);
+//                expandedMatrixByElements.push_back(rowwiseIdx);
+            }
+            catch(const ErrorClass& eclass)
+            {
+                throw ErrorClass("Expansion of matrix failed in MatrixType::matrixHasSymmetry()");
+            }
+        }// end of if (this->expandedMatrixByElements.size() > 0)
+
         //here we should have two expansions, rowwiseIdx and colwiseIdx. Check to make sure
         if (rowwiseIdx == -1 || colwiseIdx == -1)
             throw ErrorClass("matrixHasSymmetry: symmetry structure cannot be determined");
@@ -9735,6 +9762,9 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertSymmetry(ENUM_MATRIX_SYMMETRY s
         //here we impose symmetry by eliminating elements below or above the diagonal
         //depending on the value of symmetry_
 
+
+            // First verify that the matrix is indeed symmetric. Otherwise one should use
+            // a transformation such as matrixLowerTriangle()
             if (symmetry_ == ENUM_MATRIX_SYMMETRY_upper         || 
                 symmetry_ == ENUM_MATRIX_SYMMETRY_skewUpper     || 
                 symmetry_ == ENUM_MATRIX_SYMMETRY_HermitianUpper )
@@ -9804,9 +9834,13 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertSymmetry(ENUM_MATRIX_SYMMETRY s
             else
                 throw ErrorClass("Unknown or illegal symmetry conversion requested");
         }// end of if (this->symmetry == none)
+
+        //Here we blow up a symmetric matrix by adding the other triangle
         else if (symmetry == ENUM_MATRIX_SYMMETRY_none)
         {
         }
+
+        // Here we "turn" the matrix
         else
         {
             if (this->symmetry == ENUM_MATRIX_SYMMETRY_upper        || 
