@@ -9552,9 +9552,6 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     attText[ki] = '\0';
     attTextEnd = &attText[ki]; 
 
-
-
-    GETATTRIBUTETEXT;
     ch++;
     *dataSize = atoimod1( osillineno, attText, attTextEnd);
     delete [] attText;

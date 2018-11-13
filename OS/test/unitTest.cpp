@@ -9163,9 +9163,6 @@ if( THOROUGH == true){
         if(ok == false) throw ErrorClass("Fail solving problem SDPA_ex.osil with Csdp");
 
         std::cout << std::endl << "now test matrix extensions to OSrL" << std::endl;
-//        osrl = osrlwriter->writeOSrL( osresult);
-//        std::cout << std::endl << std::endl << "Here is osrl: " << std::endl << std::endl;
-//        std::cout << osrl << std::endl;
 
         OSrLReader* osrlreader = new OSrLReader();
         std::cout << std::endl << "Read OSrL string" << std::endl;

@@ -4530,9 +4530,9 @@ bool OSMatrixWithMatrixVarIdx::setRandom( double density, bool conformant, int i
     this->matrixVarIdx    = (int)(4*OSRand());
     if (OSRand() <= density) this->name = "random string";
     if (OSRand() <= density) this->declaredMatrixType
-        = /*returnMatrixTypeString(*/(ENUM_MATRIX_TYPE)(12*OSRand()+1)/*)*/;
+        = (ENUM_MATRIX_TYPE)(int)trunc(12*OSRand()+1);
     if (OSRand() <= density) this->symmetry
-        = /*returnMatrixSymmetryString(*/(ENUM_MATRIX_SYMMETRY)(9*OSRand()+1/*)*/);
+        = (ENUM_MATRIX_SYMMETRY)(int)trunc(9*OSRand()+1);
     return true;
 }//OSMatrixWithMatrixVarIdx::setRandom
 
@@ -4630,9 +4630,9 @@ bool OSMatrixWithMatrixObjIdx::setRandom( double density, bool conformant, int i
     this->matrixObjIdx    = -1 - (int)(4*OSRand());
     if (OSRand() <= density) this->name = "random string";
     if (OSRand() <= density) this->declaredMatrixType
-        = /*returnMatrixTypeString(*/(ENUM_MATRIX_TYPE)(12*OSRand()+1)/*)*/;
+        = (ENUM_MATRIX_TYPE)(int)trunc(12*OSRand()+1);
     if (OSRand() <= density) this->symmetry
-        = /*returnMatrixSymmetryString(*/(ENUM_MATRIX_SYMMETRY)(9*OSRand()+1/*)*/);
+        = (ENUM_MATRIX_SYMMETRY)(int)trunc(9*OSRand()+1);
     return true;
 }//OSMatrixWithMatrixObjIdx::setRandom
 
@@ -4730,9 +4730,9 @@ bool OSMatrixWithMatrixConIdx::setRandom( double density, bool conformant, int i
     this->matrixConIdx    = (int)(4*OSRand());
     if (OSRand() <= density) this->name = "random string";
     if (OSRand() <= density) this->declaredMatrixType
-        = /*returnMatrixTypeString(*/(ENUM_MATRIX_TYPE)(12*OSRand()+1)/*)*/;
+        = (ENUM_MATRIX_TYPE)(int)trunc(12*OSRand()+1);
     if (OSRand() <= density) this->symmetry
-        = /*returnMatrixSymmetryString(*/(ENUM_MATRIX_SYMMETRY)(9*OSRand()+1/*)*/);
+        = (ENUM_MATRIX_SYMMETRY)(int)trunc(9*OSRand()+1);
     return true;
 }//OSMatrixWithMatrixConIdx::setRandom
 
