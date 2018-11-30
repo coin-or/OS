@@ -67,7 +67,7 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="locationType" type="instanceLocationType" use="optional" default="local">
 					<xs:annotation>
-						<xs:documentation>if not one of the supported types, use "other:" followed by the type (in lower case)</xs:documentation>
+						<xs:documentation>if not one of the supported types, use "other:" followed by the type (in lower case). The default is "local".</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
@@ -77,6 +77,9 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="transportType" use="optional" default="osp">
+					<xs:annotation>
+						<xs:documentation>if not one of the supported types, use "other:" followed by the type (in lower case). The default is "osp".</xs:documentation>
+					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="osp"/>
@@ -102,6 +105,9 @@
 	<xs:complexType name="ServiceOption">
 		<xs:all>
 			<xs:element name="type" default="solver" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>default is "solver"</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
 						<xs:enumeration value="solver"/>

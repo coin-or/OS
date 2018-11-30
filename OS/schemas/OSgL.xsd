@@ -18,17 +18,29 @@
 		<xs:all>
 			<xs:element name="ID" type="xs:string" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>defines a reference for reuse in subsequent modifications. </xs:documentation>
+					<xs:documentation>defines a reference to allow reference to this instance in subsequent modifications. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="name" type="xs:string" minOccurs="0"/>
 			<xs:element name="source" type="xs:string" minOccurs="0"/>
 			<xs:element name="description" type="xs:string" minOccurs="0"/>
 			<xs:element name="fileCreator" type="xs:string" minOccurs="0"/>
-			<xs:element name="dateTimeCreated" type="xs:dateTime" minOccurs="0"/>
-			<xs:element name="dateTimeLastModified" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="creationDateTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date and time of the original file creation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="modificationDateTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date and time of the last modification to this file</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="version" type="xs:string" minOccurs="0"/>
-			<xs:element name="licence" type="xs:string" minOccurs="0"/>
+			<xs:element name="licence" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>distribution licence (e.g. Eclipse Public License) </xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:all>
 	</xs:complexType>
 	<xs:simpleType name="NumericType">
@@ -1955,6 +1967,30 @@ according to WolframMathWorld</xs:documentation>
 	<xs:element name="erlang" type="Erlang">
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="Gumbel">
+		<xs:annotation>
+			<xs:documentation>since version 2.0</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="mode" type="xs:double" use="required"/>
+		<xs:attribute name="shape" type="PositiveDouble" use="required"/>
+	</xs:complexType>
+	<xs:element name="gumbel" type="Gumbel">
+		<xs:annotation>
+			<xs:documentation>since version 2.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="Gompertz">
+		<xs:annotation>
+			<xs:documentation>since version 2.0</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="shape" type="PositiveDouble" use="required"/>
+		<xs:attribute name="scale" type="PositiveDouble" use="required"/>
+	</xs:complexType>
+	<xs:element name="gompertz" type="Gompertz">
+		<xs:annotation>
+			<xs:documentation>since version 2.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Gamma">
