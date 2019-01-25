@@ -4087,7 +4087,11 @@ Returns the current value of the indicated objective</xs:documentation>
 					<xs:element ref="simInput" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element ref="simOutput"/>
 				</xs:sequence>
-				<xs:attribute name="name" type="xs:IDREF" use="required"/>
+				<xs:attribute name="name" type="xs:IDREF" use="required">
+					<xs:annotation>
+						<xs:documentation>Must match the name of one of the defined externalFunction elements.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4106,7 +4110,11 @@ Returns the current value of the indicated objective</xs:documentation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 				<xs:attribute name="simName" type="xs:IDREF" use="optional"/>
-				<xs:attribute name="inputName" type="xs:IDREF" use="required"/>
+				<xs:attribute name="inputName" type="xs:IDREF" use="required">
+					<xs:annotation>
+						<xs:documentation>Must match the name of one of the inputs in the definition of the externalFunction.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4125,7 +4133,11 @@ Returns the current value of the indicated objective</xs:documentation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 				<xs:attribute name="simName" type="xs:IDREF" use="optional"/>
-				<xs:attribute name="outputName" type="xs:string" use="optional"/>
+				<xs:attribute name="outputName" type="xs:string" use="optional">
+					<xs:annotation>
+						<xs:documentation>If the externalFunction has more than one output element, this must be present and match the name of one of the output elements.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4141,6 +4153,9 @@ Returns the current value of the indicated objective</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The number and sequence of these arguments must correspond to the definition of the userFunction element.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="ExprNode"/>
 				</xs:sequence>
 				<xs:attribute name="name" type="xs:IDREF" use="required"/>
@@ -4149,7 +4164,8 @@ Returns the current value of the indicated objective</xs:documentation>
 	</xs:complexType>
 	<xs:element name="userF" type="OSnLNodeUserF" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0. </xs:documentation>
+			<xs:documentation>since version 1.0.  
+Returns a real value.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeArg">
@@ -4168,7 +4184,8 @@ Returns the current value of the indicated objective</xs:documentation>
 	</xs:complexType>
 	<xs:element name="arg" type="OSnLNodeArg" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0. </xs:documentation>
+			<xs:documentation>since version 1.0.
+Used only in the definition of a userFunction. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLCNodeUserF">
@@ -4178,6 +4195,9 @@ Returns the current value of the indicated objective</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
 				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The number and sequence of these arguments must correspond to the definition of the userFunction element.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="ExprNode"/>
 				</xs:sequence>
 				<xs:attribute name="name" type="xs:IDREF" use="required"/>
@@ -4186,7 +4206,8 @@ Returns the current value of the indicated objective</xs:documentation>
 	</xs:complexType>
 	<xs:element name="userCF" type="OSnLCNodeUserF" substitutionGroup="OSnLCNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0. </xs:documentation>
+			<xs:documentation>since version 1.0. 
+Returns a complex value.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLCNodeArg">
@@ -4215,6 +4236,9 @@ Returns the current value of the indicated objective</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The number and sequence of these arguments must correspond to the definition of the userFunction element.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="ExprNode"/>
 				</xs:sequence>
 				<xs:attribute name="name" type="xs:IDREF" use="required"/>
@@ -4223,7 +4247,8 @@ Returns the current value of the indicated objective</xs:documentation>
 	</xs:complexType>
 	<xs:element name="userMF" type="OSnLMNodeUserF" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0. </xs:documentation>
+			<xs:documentation>since version 1.0. 
+Returns a matrix value</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLMNodeArg">
@@ -4252,6 +4277,9 @@ Returns the current value of the indicated objective</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLTNode">
 				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The number and sequence of these arguments must correspond to the definition of the userFunction element.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="ExprNode"/>
 				</xs:sequence>
 				<xs:attribute name="name" type="xs:IDREF" use="required"/>
@@ -4260,7 +4288,8 @@ Returns the current value of the indicated objective</xs:documentation>
 	</xs:complexType>
 	<xs:element name="userTF" type="OSnLTNodeUserF" substitutionGroup="OSnLTNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0. </xs:documentation>
+			<xs:documentation>since version 1.0. 
+Returns a tensor value.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLTNodeArg">

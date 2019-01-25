@@ -2752,8 +2752,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="DeletableProblemComponent">
-				<xs:sequence>
-				</xs:sequence>
+				<xs:sequence/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

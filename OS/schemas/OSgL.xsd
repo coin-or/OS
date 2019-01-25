@@ -3883,7 +3883,14 @@ according to WolframMathWorld</xs:documentation>
 			<xs:element name="atUpper" type="IntVector" minOccurs="0"/>
 			<xs:element name="atEquality" type="IntVector" minOccurs="0"/>
 			<xs:element name="isFree" type="IntVector" minOccurs="0"/>
-			<xs:element name="superBasic" type="IntVector" minOccurs="0"/>
+			<xs:choice>
+				<xs:element name="superbasic" type="IntVector" minOccurs="0"/>
+				<xs:element name="superBasic" type="IntVector" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>deprecated and obsolescent. Keep for backward compatibility</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
 			<xs:element name="unknown" type="IntVector" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
