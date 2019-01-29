@@ -1802,7 +1802,8 @@ support: {0, 1, 2, 3,...}</xs:documentation>
 	</xs:complexType>
 	<xs:element name="geometric" type="Geometric">
 		<xs:annotation>
-			<xs:documentation>since version 1.0</xs:documentation>
+			<xs:documentation>since version 1.0
+support: {0, 1, 2, 3,...}</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="ShiftedGeometric">
@@ -1818,7 +1819,8 @@ support: {1, 2, 3,...}</xs:documentation>
 	</xs:complexType>
 	<xs:element name="shiftedGeometric" type="ShiftedGeometric">
 		<xs:annotation>
-			<xs:documentation>since version 1.0</xs:documentation>
+			<xs:documentation>since version 1.0
+support: {1, 2, 3,...}</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="NegativeBinomial">
@@ -1948,9 +1950,13 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="location" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="scale" type="xs:double" use="optional" default="1"/>
 		<xs:attribute name="shape" type="PositiveDouble" use="required"/>
+		<xs:attribute name="scale" type="PositiveDouble" use="optional" default="1"/>
+		<xs:attribute name="location" type="xs:double" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>To shift the support to the interval [a,+INF)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:element name="weibull" type="Weibull">
 		<xs:annotation>
@@ -2294,11 +2300,16 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="prob" type="Probability" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with N; each must be nonnegative and they must sum to 1</xs:documentation>
+					<xs:documentation>number must agree with numberOfProb; each must be nonnegative and they must sum to 1.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="N" type="PositiveInteger" use="required"/>
+		<xs:attribute name="N" type="PositiveInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>Number of trials</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfProb" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="multinomial" type="Multinomial">
 		<xs:annotation>
@@ -2386,13 +2397,13 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="cat" type="DirichletCategory" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="category" type="DirichletCategory" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with N</xs:documentation>
+					<xs:documentation>number must agree with numberOfCategories</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="N" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCategories" type="NonnegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DirichletCategory">
 		<xs:attribute name="shape" type="NonNegativeDouble" use="required"/>
@@ -2692,7 +2703,7 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>experimental</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="prob" type="Probability" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="optional" default="0.0"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonNumericalDiscrete">
 		<xs:annotation>
