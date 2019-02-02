@@ -1593,8 +1593,9 @@ equal tensor rank</xs:documentation>
 			<xs:element ref="gamma"/>
 			<xs:element ref="generalizedGamma"/>
 			<xs:element ref="beta"/>
-			<xs:element ref="generalBeta"/>
 			<xs:element ref="shiftedBeta"/>
+			<xs:element ref="pert"/>
+			<xs:element ref="generalizedBeta"/>
 			<xs:element ref="lognormal"/>
 			<xs:element ref="cauchy"/>
 			<xs:element ref="t"/>
@@ -1605,7 +1606,6 @@ equal tensor rank</xs:documentation>
 			<xs:element ref="logarithmic"/>
 			<xs:element ref="pareto"/>
 			<xs:element ref="rayleigh"/>
-			<xs:element ref="pert"/>
 			<xs:element ref="triangular"/>
 		</xs:choice>
 	</xs:group>
@@ -2029,40 +2029,51 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="degree1" type="PositiveDouble" use="required"/>
-		<xs:attribute name="degree2" type="PositiveDouble" use="required"/>
+		<xs:attribute name="alpha" type="PositiveDouble" use="required"/>
+		<xs:attribute name="beta" type="PositiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="beta" type="Beta">
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="GeneralBeta">
-		<xs:annotation>
-			<xs:documentation>since version 1.0</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="degree1" type="PositiveDouble" use="required"/>
-		<xs:attribute name="degree2" type="PositiveDouble" use="required"/>
-		<xs:attribute name="min" type="xs:double" use="required"/>
-		<xs:attribute name="max" type="xs:double" use="required"/>
-	</xs:complexType>
-	<xs:element name="generalBeta" type="GeneralBeta">
-		<xs:annotation>
-			<xs:documentation>since version 1.0</xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:complexType name="ShiftedBeta">
 		<xs:annotation>
-			<xs:documentation>since version 1.0</xs:documentation>
+			<xs:documentation>since version 1.0
+Support is [min,max]</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="degree1" type="PositiveDouble" use="required"/>
-		<xs:attribute name="degree2" type="PositiveDouble" use="required"/>
+		<xs:attribute name="alpha" type="PositiveDouble" use="required"/>
+		<xs:attribute name="beta" type="PositiveDouble" use="required"/>
 		<xs:attribute name="min" type="xs:double" use="required"/>
 		<xs:attribute name="max" type="xs:double" use="required"/>
 	</xs:complexType>
 	<xs:element name="shiftedBeta" type="ShiftedBeta">
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="GeneralizedBeta">
+		<xs:annotation>
+			<xs:documentation>since version 1.0
+See McDonald and Xu, Journal of Econometris 66 (1995).</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="a" type="xs:double" use="required"/>
+		<xs:attribute name="b" type="PositiveDouble" use="required"/>
+		<xs:attribute name="c" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minExclusive value="0"/>
+					<xs:maxExclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="p" type="PositiveDouble" use="required"/>
+		<xs:attribute name="q" type="PositiveDouble" use="required"/>
+	</xs:complexType>
+	<xs:element name="generalizedBeta" type="GeneralizedBeta">
+		<xs:annotation>
+			<xs:documentation>since version 1.0
+See McDonald and Xu, Journal of Econometris 66 (1995).</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Lognormal">
@@ -2208,8 +2219,12 @@ according to WolframMathWorld</xs:documentation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="min" type="xs:double" use="required"/>
+		<xs:attribute name="mode" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>mode must be between min and max.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="max" type="xs:double" use="required"/>
-		<xs:attribute name="mode" type="xs:double" use="required"/>
 	</xs:complexType>
 	<xs:element name="pert" type="Pert">
 		<xs:annotation>

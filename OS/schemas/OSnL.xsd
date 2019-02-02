@@ -2800,7 +2800,7 @@
 			<xs:documentation>since version 1.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeGeneralizedBetaDist">
+	<xs:complexType name="OSnLNodeShiftedBetaDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0. </xs:documentation>
 		</xs:annotation>
@@ -2808,7 +2808,67 @@
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="5" maxOccurs="5">
 					<xs:annotation>
-						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint of support; 5th argument: right endpoint of support.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="shiftedBetaDist" type="OSnLNodeShiftedBetaDist" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeShiftedBetaCum">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint of support; 5th argument: right endpoint of support.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="shiftedBetaCum" type="OSnLNodeShiftedBetaCum" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeShiftedBetaInv">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint of support; 5th argument: right endpoint of support.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="shiftedBetaInv" type="OSnLNodeShiftedBetaInv" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGeneralizedBetaDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="6" maxOccurs="6">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: a; 3rd argument: b; 4th argument: c; 5th argument: p; 6th argument: q. See McDonald and Xu, Journal of Econometris 66 (1995).</xs:documentation>
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
@@ -2826,9 +2886,9 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="5" maxOccurs="5">
+				<xs:sequence minOccurs="6" maxOccurs="6">
 					<xs:annotation>
-						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: a; 3rd argument: b; 4th argument: c; 5th argument: p; 6th argument: q. See McDonald and Xu, Journal of Econometris 66 (1995).</xs:documentation>
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
@@ -2846,9 +2906,9 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="5" maxOccurs="5">
+				<xs:sequence minOccurs="6" maxOccurs="6">
 					<xs:annotation>
-						<xs:documentation>1st argument: cumulative probability; 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: a; 3rd argument: b; 4th argument: c; 5th argument: p; 6th argument: q. See McDonald and Xu, Journal of Econometris 66 (1995).</xs:documentation>
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
@@ -7664,6 +7724,9 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="betaDist"/>
 			<xs:enumeration value="betaCum"/>
 			<xs:enumeration value="betaInv"/>
+			<xs:enumeration value="shiftedBetaDist"/>
+			<xs:enumeration value="shiftedBetaCum"/>
+			<xs:enumeration value="shiftedBetaInv"/>
 			<xs:enumeration value="generalizedBetaDist"/>
 			<xs:enumeration value="generalizedBetaCum"/>
 			<xs:enumeration value="generalizedBetaInv"/>
