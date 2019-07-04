@@ -86,7 +86,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 	</xs:group>
 	<xs:group name="DefinitionData">
 		<xs:sequence>
-			<xs:element name="userFunctions" type="UserFunctions_p" minOccurs="0">
+			<xs:element name="userFunctions" type="UserFunctions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
@@ -150,7 +150,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="multilevelAndStochasticProgramming" type="MultilevelAndStochasticProgramming" minOccurs="0">
+			<xs:element name="multilevelAndStochasticProgramming" type="MultilevelAndStochasticProgramming_try" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -3415,7 +3415,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:attribute name="numberOfStages" type="PositiveInteger" use="required"/>
 		<xs:attribute name="eventsFollowDecisions" type="xs:boolean" default="false">
 			<xs:annotation>
-				<xs:documentation>events and decisions, constraints, disjunctions, etc. can share a stage. By default events precede all decisions, etc. in a stage. This attribute can be used to reverse the order. </xs:documentation>
+				<xs:documentation>A stage can contain stochastic events, along with decisions, constraints, disjunctions, etc. By default, events precede all decisions, etc. in a stage. This attribute can be used to reverse the order. </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -3789,9 +3789,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="rootNode" type="RootNode"/>
-		</xs:sequence>
+		<xs:sequence/>
 	</xs:complexType>
 	<xs:complexType name="RootNode">
 		<xs:annotation>
@@ -3800,23 +3798,25 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:complexContent>
 			<xs:extension base="sNode">
 				<xs:attribute name="prob" type="Probability" use="optional" default="1"/>
+			</xs:extension>
+			<!--
 				<xs:attribute name="useCoreData" type="xs:boolean" use="optional" default="false">
 					<xs:annotation>
 						<xs:documentation>must be present if nodeData element is missing; if useCoreData is TRUE, ignore nodeData if present</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-			</xs:extension>
+	-->
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="StochasticNode">
+	<xs:complexType name="StochasticNode" mixed="false">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:complexContent>
+		<xs:complexContent mixed="false">
 			<xs:extension base="sNode">
-				<xs:attribute name="prob" type="Probability" use="required">
+				<xs:attribute name="prob" type="Probability" use="optional" default="1.0">
 					<xs:annotation>
-						<xs:documentation>This is the conditional probability of reaching this node given its parent node.</xs:documentation>
+						<xs:documentation>This is the conditional probability of reaching this node given its parent node. The default value is 1.</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 				<xs:attribute name="numberOfLinkingStages" type="NonnegativeInteger" default="1">
@@ -3831,18 +3831,19 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:choice minOccurs="0">
-				<xs:element name="nodeData" type="NodeData">
+		<xs:choice>
+			<xs:choice>
+				<xs:element name="nodeData" type="NodeData" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>nodal trees use local indexing for variables and constraints. To refer to variables or constraints in past tree nodes use the attribute "lag".
 Experiment.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="modifications" type="NodeModifications"/>
+				<xs:element name="modifications" type="NodeModifications" minOccurs="0"/>
+				<xs:element name="decompositionData" type="LevelsAndPathData" minOccurs="0"/>
 			</xs:choice>
 			<xs:element name="sNode" type="StochasticNode" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		</xs:choice>
 		<xs:attribute name="nodeID" type="xs:ID">
 			<xs:annotation>
 				<xs:documentation>used to provide a reference for later inheritance of data</xs:documentation>
@@ -4769,19 +4770,14 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="ImplicitTree">
 		<xs:sequence>
-			<xs:element name="rv" type="ImplicitTreeBlock" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="randVar" type="ImplicitTreeBlock" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfRV. Each random variable or vector is
+					<xs:documentation>number must agree with numberOfRandVar. Each random variable or vector is
 referenced by distributionIdx and is independent of all other rv's.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="softConstraints" type="SoftConstraints" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal - use for penalties, chance constraints and probabilistic objectives.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRV" type="NonnegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRandVar" type="NonnegativeInteger" use="required"/>
 		<xs:attribute name="ambiguityResolution">
 			<xs:annotation>
 				<xs:documentation>default is "max" for minimization problems, "min" for maximization problems</xs:documentation>
@@ -4872,13 +4868,13 @@ Default: identity matrix.</xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ImplicitTreeNonlinearTransformation">
-		<xs:choice minOccurs="0">
-			<xs:element name="userFunction" type="OSnLMNodeUserF">
+		<xs:sequence>
+			<xs:element name="userFunction" type="OSnLNodeUserF" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>must return a column vector of dimension equal to the number of stochastic elements.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-		</xs:choice>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="AutoRegressiveTerm">
 		<xs:attribute name="idx" type="NonnegativeInteger" use="required">
@@ -5182,6 +5178,39 @@ default is "scalar"</xs:documentation>
 			</xs:sequence>
 			<xs:element name="nodalTree" type="NodalTree" minOccurs="0"/>
 		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="MultilevelAndStochasticProgramming_try">
+		<xs:choice>
+			<xs:element name="decompositionData" type="LevelsAndPathData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>makes reference to the "instanceData" element  for the definition of the stages</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="root" type="StochasticNode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>builds a tree from local data</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="LevelsAndPathData">
+		<xs:sequence>
+			<xs:element name="levelsAndStages" type="TimeStages" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>makes reference to the "instanceData" element  for the definition of the stages</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
+			<xs:choice>
+				<xs:element name="implicitTree" type="ImplicitTree" minOccurs="0"/>
+				<xs:element name="scenarios" type="ScenarioTree" minOccurs="0"/>
+			</xs:choice>
+			<xs:element name="softConstraints" type="SoftConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal - use for penalties, chance constraints and probabilistic objectives.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:simpleType name="RefreshPointEnum">
 		<xs:restriction base="xs:string">
