@@ -150,7 +150,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="multilevelAndStochasticProgramming" type="MultilevelAndStochasticProgramming_try" minOccurs="0">
+			<xs:element name="multilevelAndStochasticProgramming" type="MultilevelAndStochasticProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -3796,9 +3796,8 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="sNode">
-				<xs:attribute name="prob" type="Probability" use="optional" default="1"/>
-			</xs:extension>
+			<xs:extension base="sNode"/>
+			<!--				<xs:attribute name="prob" type="Probability" use="optional" default="1"/> -->
 			<!--
 				<xs:attribute name="useCoreData" type="xs:boolean" use="optional" default="false">
 					<xs:annotation>
@@ -3814,14 +3813,14 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:annotation>
 		<xs:complexContent mixed="false">
 			<xs:extension base="sNode">
-				<xs:attribute name="prob" type="Probability" use="optional" default="1.0">
+				<xs:attribute name="prob" type="Probability" use="required">
 					<xs:annotation>
-						<xs:documentation>This is the conditional probability of reaching this node given its parent node. The default value is 1.</xs:documentation>
+						<xs:documentation>This is the conditional probability of reaching this node given its parent node. </xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 				<xs:attribute name="numberOfLinkingStages" type="NonnegativeInteger" default="1">
 					<xs:annotation>
-						<xs:documentation>governs the length of the history that can influence the present node as well as the offsets for variable and constraint references</xs:documentation>
+						<xs:documentation>governs the length of the history that can influence the present node as well as the offsets for variable and constraint references. The default value is 1, to give linkage between nodes in two consecutive stages.</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
@@ -3840,7 +3839,11 @@ Experiment.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="modifications" type="NodeModifications" minOccurs="0"/>
-				<xs:element name="decompositionData" type="LevelsAndPathData" minOccurs="0"/>
+				<xs:element name="decompositionData" type="LevelsAndPathData" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>elements in this scope make reference to the nodeData of the current node.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 			</xs:choice>
 			<xs:element name="sNode" type="StochasticNode" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
@@ -5168,25 +5171,12 @@ default is "scalar"</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="MultilevelAndStochasticProgramming">
 		<xs:choice>
-			<xs:sequence>
-				<xs:element name="levelsOrTimeStages" type="TimeStages" minOccurs="0"/>
-				<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
-				<xs:choice>
-					<xs:element name="implicitTreeData" type="ImplicitTree" minOccurs="0"/>
-					<xs:element name="scenarioData" type="ScenarioTree" minOccurs="0"/>
-				</xs:choice>
-			</xs:sequence>
-			<xs:element name="nodalTree" type="NodalTree" minOccurs="0"/>
-		</xs:choice>
-	</xs:complexType>
-	<xs:complexType name="MultilevelAndStochasticProgramming_try">
-		<xs:choice>
 			<xs:element name="decompositionData" type="LevelsAndPathData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>makes reference to the "instanceData" element  for the definition of the stages</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="root" type="StochasticNode" minOccurs="0">
+			<xs:element name="root" type="RootNode" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>builds a tree from local data</xs:documentation>
 				</xs:annotation>
@@ -5195,11 +5185,7 @@ default is "scalar"</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="LevelsAndPathData">
 		<xs:sequence>
-			<xs:element name="levelsAndStages" type="TimeStages" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>makes reference to the "instanceData" element  for the definition of the stages</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="levelsAndStages" type="TimeStages" minOccurs="0"/>
 			<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
 			<xs:choice>
 				<xs:element name="implicitTree" type="ImplicitTree" minOccurs="0"/>
