@@ -9357,7 +9357,7 @@ std::cout << " number of items seen: " << osglData->kounter << std::endl;
 
     {
     for (int i=0; i<osglData->numberOfEl; i++)
-        if (osglData->osglIntArray < 0)
+        if (osglData->osglIntArray[i] < 0)
             throw ErrorClass("negative entry detected in nonnegativeIntVector");
 }
 
