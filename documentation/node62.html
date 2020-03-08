@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Solving Problems Locally</TITLE>
+<META NAME="description" CONTENT="Solving Problems Locally">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node63.html">
+<LINK REL="previous" HREF="node61.html">
+<LINK REL="up" HREF="node60.html">
+<LINK REL="next" HREF="node63.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1027"
+  HREF="node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1023"
+  HREF="node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1017"
+  HREF="node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1025"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1028"
+  HREF="node63.html">Solving Problems Remotely with</A>
+<B> Up:</B> <A NAME="tex2html1024"
+  HREF="node60.html">The OSSolverService</A>
+<B> Previous:</B> <A NAME="tex2html1018"
+  HREF="node61.html">OSSolverService Input Parameters</A>
+ &nbsp; <B>  <A NAME="tex2html1026"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000132000000000000000">
+Solving Problems Locally</A>
+</H2>
+
+<P>
+Generally, when solving a problem locally the user will use the <TT>solve</TT> service method. The <TT>solve</TT> method is invoked synchronously and waits for the solver to return the result.  This is illustrated in Figure <A HREF="#figure:ossolverservicelocal">16</A>. As illustrated, the <TT>OSSolverService</TT> reads a file on the hard drive with the optimization instance, usually in OSiL format. The optimization instance is parsed into a string which is passed to the <TT>OSLibrary</TT> which is linked with various solvers. The result of the optimization is passed back to the <TT>OSSolverService</TT> as a string in OSrL format.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:ossolverservicelocal"></A><A NAME="2774"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 16:</STRONG>
+A local call to <TT>solve</TT>.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER"><IMG
+  WIDTH="190" HEIGHT="217" ALIGN="BOTTOM" BORDER="0"
+ SRC="./OSSolverServiceLocal.png"
+ ALT="Image OSSolverServiceLocal">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Here is an example of using a configure file,  <TT>testlocal.config</TT>, to invoke <TT>Ipopt</TT> locally using the <TT>solve</TT> command.
+
+<P>
+<PRE>
+-osil ../data/osilFiles/parincQuadratic.osil
+-solver ipopt
+-serviceMethod solve
+-browser /Applications/Firefox.app/Contents/MacOS/firefox
+-osrl /Users/kmartin/temp/test.osrl
+</PRE>
+
+<P>
+The first line of <TT>testlocal.config</TT> gives the local location of the OSiL file, <TT>parincQuadratic.osil</TT>, that contains the problem instance. The second parameter, <TT>-solver ipopt</TT>,  is the solver to be invoked, in this case COIN-OR Ipopt. The third parameter <TT>-serviceMethod solve</TT> is not really needed, but included only for illustration. The default  solver service is <TT>solve.</TT>  The fourth parameter is the location of the browser on the local machine. It will read the OSrL file on the local machine using the path specified by the value of the <TT>osrl</TT> parameter, in this case <TT>/Users/kmartin/temp/test.osrl.</TT>
+
+<P>
+Parameters may also be contained in an XML-file in OSoL format. In the configuration file <TT>testlocalosol.config</TT> we illustrate specifying the instance location in an OSoL file.
+<PRE>
+-osol ../data/osolFiles/demo.osol
+-solver clp
+</PRE>
+The file <TT>demo.osol</TT> is
+
+<P>
+<BR>
+<IMG
+ WIDTH="428" HEIGHT="163" ALIGN="BOTTOM" BORDER="0"
+ SRC="img147.png"
+ ALT="\begin{verbatimtab}[4]
+&lt;?xml version=''1.0'' encoding=''UTF-8''?&gt;
+&lt;osol xmlns=''...
+...les/parincLinear.osil
+&lt;/instanceLocation&gt;
+&lt;/general&gt;
+&lt;/osol&gt;
+\end{verbatimtab}">
+<BR>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1027"
+  HREF="node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1023"
+  HREF="node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1017"
+  HREF="node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1025"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1028"
+  HREF="node63.html">Solving Problems Remotely with</A>
+<B> Up:</B> <A NAME="tex2html1024"
+  HREF="node60.html">The OSSolverService</A>
+<B> Previous:</B> <A NAME="tex2html1018"
+  HREF="node61.html">OSSolverService Input Parameters</A>
+ &nbsp; <B>  <A NAME="tex2html1026"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

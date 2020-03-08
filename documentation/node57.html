@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Function Evaluation Methods</TITLE>
+<META NAME="description" CONTENT="Function Evaluation Methods">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node58.html">
+<LINK REL="previous" HREF="node56.html">
+<LINK REL="up" HREF="node55.html">
+<LINK REL="next" HREF="node58.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html959"
+  HREF="node58.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html955"
+  HREF="node55.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html949"
+  HREF="node56.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html957"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html960"
+  HREF="node58.html">Gradient Evaluation Methods</A>
+<B> Up:</B> <A NAME="tex2html956"
+  HREF="node55.html">Using OSInstance Methods: High</A>
+<B> Previous:</B> <A NAME="tex2html950"
+  HREF="node56.html">Sparsity Methods</A>
+ &nbsp; <B>  <A NAME="tex2html958"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000123200000000000000">
+Function Evaluation Methods</A>
+</H3>
+
+<P>
+There are several overloaded methods for calculating objective and constraint values.  The method
+<PRE>
+double *calculateAllConstraintFunctionValues(double* x, bool new_x)
+</PRE>
+will return a <TT>double</TT> pointer to an array of constraint function values evaluated at <TT>x.</TT>  If the value of <TT>x</TT> has not changed since the last function call, then <TT>new&#5;Fx</TT> should be set to <TT>false</TT> and the most recent function values are returned.  When using this method, with this signature,  all function values are calculated in <TT>double</TT> using an <TT>OSExpressionTree</TT> object.
+
+<P>
+A second signature for the <TT>calculateAllConstraintFunctionValues</TT> is
+<PRE>
+double *calculateAllConstraintFunctionValues(double* x, double *objLambda,
+    double *conLambda, bool new_x, int highestOrder)
+</PRE>
+In this  signature, <TT>x</TT> is a pointer to the current primal values, <TT>objLambda</TT> is a vector of dual multipliers, <TT>conLambda</TT> is a vector of dual multipliers on the constraints,  <TT>new&#5;Fx</TT> is true if any components of <TT>x</TT> have changed since the last evaluation, and <TT>highestOrder</TT> is the highest order of derivative to be calculated at this iteration. The following code snippet illustrates defining a set of variable values for the example we are using and then the function call.
+<PRE>
+double* x = new double[4]; //primal variables
+double* z = new double[2]; //Lagrange multipliers on constraints
+double* w = new double[1]; //Lagrange multiplier on objective
+x[ 0] = 1;    // primal variable 0
+x[ 1] = 5;    // primal variable 1
+x[ 2] = 10;   // primal variable 2
+x[ 3] = 5;    // primal variable 3
+z[ 0] = 2;    // Lagrange multiplier on constraint 0
+z[ 1] = 1;    // Lagrange multiplier on constraint 1
+w[ 0] = 1;    // Lagrange multiplier on the objective function
+calculateAllConstraintFunctionValues(x, w, z,  true, 0);
+</PRE>
+When making all high level calls for function, gradient, and Hessian evaluations we pass all the primal variables in the <TT>x</TT> argument, not just the nonlinear variables. Underneath the call, the nonlinear variables are identified and used in AD function calls.
+
+<P>
+The use of the parameters  <TT>new&#5;Fx</TT> and <TT>highestOrder</TT>  is important and requires further explanation.    The parameter  <TT>highestOrder</TT>  is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that is required of the current iterate. For example, if  a callback requires a function evaluation and <TT>highestOrder = 0</TT> then only the function is evaluated at the current iterate.  However,  if <TT>highestOrder = 2</TT> then the function call
+<PRE>
+calculateAllConstraintFunctionValues(x, w, z, true, 2)
+</PRE>
+will trigger  first and second derivative evaluations in addition to the function evaluations.
+
+<P>
+In the <TT>OSInstance</TT> class code,  every time a forward (<TT>forwardAD</TT>) or reverse sweep (<TT>reverseAD</TT>) is executed a private  member, <TT>m&#5;FiHighestOrderEvaluated</TT>  is  set to the order of the sweep. For example, <TT>forwardAD(1, x)</TT> will result in <TT>m&#5;FiHighestOrderEvaluated = 1</TT>.  Just knowing the value  of  <TT>new&#5;Fx</TT> alone is not sufficient. It is also necessary  to know <TT>highestOrder</TT> and compare it with <TT>m&#5;FiHighestOrderEvaluated.</TT>  For example, if  <TT>new&#5;Fx</TT>  is  false,  but <TT>m&#5;FiHighestOrderEvaluated = 0</TT>,  and   the callback requires a Hessian calculation, then it is necessary to calculate the first and second derivatives at the current iterate.
+
+<P>
+There are <I>exactly two</I> conditions that  require a new function or derivative evaluation.   A new evaluation is required if and only if
+
+<P>
+<DL COMPACT>
+<DT>1.</DT>
+<DD>The value of <TT>new&#5;Fx</TT> is  true
+
+<P>
+<DIV ALIGN="CENTER">
+-OR-
+
+</DIV>
+
+<P>
+</DD>
+<DT>2.</DT>
+<DD>For the callback function the value of the input parameter <TT>highestOrder</TT> is strictly greater than the current value  of    <TT>m&#5;FiHhighestOrderEvaluated.</TT>
+</DD>
+</DL>
+
+<P>
+For an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order derivative that is required from inside <I>any</I> callback - not just the Hessian evaluation callback. For example, in <TT>Ipopt,</TT> if  <TT>eval&#5;Fg</TT>  or <TT>eval&#5;Ff</TT> are called, and  for the current iterate, <TT>eval&#5;Fjac</TT> and <TT>eval&#5;Fhess</TT> are also going to be called, then  a more efficient AD implementation is possible if the Lagrange multipliers are available for <TT>eval&#5;Fg</TT> and <TT>eval&#5;Ff</TT>.
+
+<P>
+Currently, whenever <TT>new&#5;Fx = true</TT> in the underlying AD implementation we do not retape (record into the CppAD data structure)  the function. This is because we currently throw an exception if there are any logical operators involved in the AD calculations. This may change in a future implementation.
+
+<P>
+There are also similar methods for objective function evaluations.  The method
+<PRE>
+double calculateFunctionValue(int idx, double* x, bool new_x);
+</PRE>
+ will return the value of any constraint or objective function indexed by <TT>idx</TT>. This method works strictly with <TT>double</TT> data using an <TT>OSExpressionTree</TT> object.
+
+<P>
+There is also a public variable, <TT>bUseExpTreeForFunEval</TT> that, if set to <TT>true</TT>, will cause the method
+<PRE>
+calculateAllConstraintFunctionValues(x, objLambda,  conLambda, true, highestOrder)
+</PRE>
+to also use the OS expression tree for function evaluations when <TT>highestOrder = 0</TT> rather than use the operator overloading in the CppAD tape.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html959"
+  HREF="node58.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html955"
+  HREF="node55.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html949"
+  HREF="node56.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html957"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html960"
+  HREF="node58.html">Gradient Evaluation Methods</A>
+<B> Up:</B> <A NAME="tex2html956"
+  HREF="node55.html">Using OSInstance Methods: High</A>
+<B> Previous:</B> <A NAME="tex2html950"
+  HREF="node56.html">Sparsity Methods</A>
+ &nbsp; <B>  <A NAME="tex2html958"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

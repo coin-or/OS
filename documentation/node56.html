@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Sparsity Methods</TITLE>
+<META NAME="description" CONTENT="Sparsity Methods">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node57.html">
+<LINK REL="previous" HREF="node55.html">
+<LINK REL="up" HREF="node55.html">
+<LINK REL="next" HREF="node57.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html947"
+  HREF="node57.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html943"
+  HREF="node55.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html937"
+  HREF="node55.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html945"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html948"
+  HREF="node57.html">Function Evaluation Methods</A>
+<B> Up:</B> <A NAME="tex2html944"
+  HREF="node55.html">Using OSInstance Methods: High</A>
+<B> Previous:</B> <A NAME="tex2html938"
+  HREF="node55.html">Using OSInstance Methods: High</A>
+ &nbsp; <B>  <A NAME="tex2html946"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000123100000000000000">
+Sparsity Methods</A>
+</H3>
+
+<P>
+Many  solvers such as Ipopt (<TT><A NAME="tex2html76"
+  HREF="projects.coin-or.org/Ipopt">projects.coin-or.org/Ipopt</A></TT>) or Knitro (<TT><A NAME="tex2html77"
+  HREF="www.ziena.com">www.ziena.com</A></TT>) require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.  Note well that the constraint matrix of the example in Section <A HREF="node52.html#section:lowlevelADcalls">9.2</A>
+constitutes only the last two rows of (<A HREF="node52.html#eq:definef">24</A>) but does include the linear terms.  The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
+<BR>
+<IMG
+ WIDTH="740" HEIGHT="207" ALIGN="BOTTOM" BORDER="0"
+ SRC="img142.png"
+ ALT="\begin{verbatimtab}[4]
+SparseJacobianMatrix *sparseJac;
+sparseJac = osinstance-&gt;...
+...'
+col idx = ''&lt;&lt; *(sparseJac-&gt;indexes + k) &lt;&lt; std::endl;
+}
+}
+\end{verbatimtab}">
+<BR>
+For the example problem this will produce
+<PRE>
+JACOBIAN SPARSITY PATTERN
+number constant terms in constraint 0 is 0
+row idx = 0  col idx = 1
+row idx = 0  col idx = 3
+number constant terms in constraint 1 is 1
+row idx = 1  col idx = 2
+row idx = 1  col idx = 0
+row idx = 1  col idx = 3
+</PRE>
+The   constant term in constraint 1 corresponds to the linear term <IMG
+ WIDTH="30" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img143.png"
+ ALT="$ 7x_2$">,
+which is added after the algorithmic differentiation has taken place.
+However, the linear  term <IMG
+ WIDTH="30" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img141.png"
+ ALT="$ 5x_1$"> in equation 0 does not
+contribute a nonzero in the Jacobian, as it is combined with the
+term <IMG
+ WIDTH="53" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img82.png"
+ ALT="$ 1.37x_1$"> that is treated as a nonlinear term and
+therefore accounted for explicitly.
+The <TT>SparseJacobianMatrix</TT> object has a data member <TT>starts</TT> which is the index of the start of each constraint row. The <TT>int</TT> data member <TT>indexes</TT>  gives  is the variable index of every potentially nonzero derivative. There is also a <TT>double</TT> data member  <TT>values</TT> that will the value of the partial derivative of the corresponding index at each iteration. Finally, there is an <TT>int</TT> data member <TT>conVals</TT> that is the number of constant terms in each gradient. A constant term is a partial derivative that cannot change at an iteration.  A variable is considered to have a constant derivative  if it appears in the <TT>&lt;linearConstraintCoefficients&gt;</TT> section  but not in the <TT>&lt;nonlinearExpressions&gt;</TT>.  For a row indexed by <TT>idx</TT> the variable indices are in the  <TT>indexes</TT> array between the elements <TT>sparseJac-&gt;starts + idx</TT> and <TT>sparseJac-&gt;starts + idx + 1.</TT>   The first  <TT>sparseJac-&gt;conVals + idx</TT> variables listed are indices o!
+
+<P>
+f  variables with constant derivatives. In this example, when <TT>idx</TT> is 1, there is one  variable with a constant derivative and it is variable <IMG
+ WIDTH="27" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img144.png"
+ ALT="$ x_{2}.$"> (Actually variable <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$ x_{1}$"> has a constant derivative but the code does not check to see if variables that appear in the <TT>&lt;nonlinearExpressions&gt;</TT> section have constant derivative.) The  variables with constant derivatives never appear in the AD evaluation.
+
+<P>
+The following code illustrates how to get the sparsity pattern of the Hessian of the Lagrangian.
+<PRE>
+SparseHessianMatrix *sparseHessian;
+sparseHessian = osinstance-&gt;getLagrangianHessianSparsityPattern( );
+for(idx = 0; idx &lt; sparseHessian-&gt;hessDimension; idx++){
+	std::cout &lt;&lt;  "Row Index = " &lt;&lt; *(sparseHessian-&gt;hessRowIdx + idx) ;
+	std::cout &lt;&lt;  "  Column Index = " &lt;&lt; *(sparseHessian-&gt;hessColIdx + idx);
+}
+</PRE>
+The <TT>SparseHessianMatrix</TT> class has the <TT>int</TT> data members <TT>hessRowIdx</TT> and <TT>hessColIdx</TT> for indexing  potential nonzero elements in the Hessian matrix. The <TT>double</TT> data member <TT>hessValues</TT> holds the value of the respective second derivative at each iteration.   The data member <TT>hessDimension</TT> is the number of nonzero elements in the Hessian.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html947"
+  HREF="node57.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html943"
+  HREF="node55.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html937"
+  HREF="node55.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html945"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html948"
+  HREF="node57.html">Function Evaluation Methods</A>
+<B> Up:</B> <A NAME="tex2html944"
+  HREF="node55.html">Using OSInstance Methods: High</A>
+<B> Previous:</B> <A NAME="tex2html938"
+  HREF="node55.html">Using OSInstance Methods: High</A>
+ &nbsp; <B>  <A NAME="tex2html946"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

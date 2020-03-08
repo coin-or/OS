@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Using MATLAB</TITLE>
+<META NAME="description" CONTENT="Using MATLAB">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="previous" HREF="node41.html">
+<LINK REL="up" HREF="node39.html">
+<LINK REL="next" HREF="node43.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html769"
+  HREF="node43.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html765"
+  HREF="node39.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html761"
+  HREF="node41.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html767"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html770"
+  HREF="node43.html">OSParsers</A>
+<B> Up:</B> <A NAME="tex2html766"
+  HREF="node39.html">OSModelInterfaces</A>
+<B> Previous:</B> <A NAME="tex2html762"
+  HREF="node41.html">Converting AMPL nl Files</A>
+ &nbsp; <B>  <A NAME="tex2html768"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000103300000000000000"></A><A NAME="section:usingmatlab"></A>
+<BR>
+Using MATLAB
+</H3>
+
+<P>
+Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The <TT>OSMatlab</TT> class functions much like <TT>OSnl2osil</TT> and <TT>OSmps2osil</TT> and takes MATLAB arrays and creates an OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the <TT>OSMatlab</TT> class it is necessary to  compile <TT>matlabSolver.cpp</TT>  into  a MATLAB Executable file.  The <TT>matlabSolver.cpp</TT> file is in the <TT>OSModelInterfaces</TT> directory even though it is not part of the OS library. The following steps should be followed.
+
+<P>
+<DL COMPACT>
+<DT><B>Step  1:</B></DT>
+<DD>In the project root run <TT>make install.</TT>
+
+<P>
+</DD>
+<DT><B>Step  2:</B></DT>
+<DD>Either leave <TT>matlabSolver.cpp</TT> in the  the <TT>OSModelInterfaces</TT> or copy it to another desired directory.
+
+<P>
+</DD>
+<DT><B>Step 3:</B></DT>
+<DD>Edit the MATLAB  <B>mexopts.sh</B> (UNIX) or <TT>mexopts.bat</TT>  so that the <TT>CXXFLAGS</TT> option includes the header files in the <TT>cppad</TT> directory and the <TT>include</TT> directory in the project root. For example, it  should look like:
+<PRE>
+CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/include'
+</PRE>
+
+<P>
+Next edit the <TT>CXXLIBS</TT> flag so that the OS and supporting libraries are included. For example, it should look like:
+
+<P>
+<PRE>
+CXXLIBS="$MLIBS -lstdc++
+    -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib
+    -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib
+    -lOS  -lIpopt -lOsiCbc -lOsiClp -lCbc -lCgl -lOsi -lClp -lCoinUtils  -lm"
+</PRE>
+
+<P>
+For a UNIX system the <TT>mexopts.sh</TT> file will usually be found in a directory with the release name in <TT><IMG
+ WIDTH="18" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="img21.png"
+ ALT="$ \sim$">/.matlab</TT>. For example,
+<TT><IMG
+ WIDTH="18" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="img21.png"
+ ALT="$ \sim$">/.matlab/R14SP3</TT>.
+
+<P>
+On a Windows system, the <TT>mexopts.bat</TT> file will usually be in a directory with the release name in <TT>C:<!-- MATH
+ $\backslash$
+ -->
+<IMG
+ WIDTH="13" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img22.png"
+ ALT="$ \backslash$">Documents and Settings<!-- MATH
+ $\backslash$
+ -->
+<IMG
+ WIDTH="13" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img22.png"
+ ALT="$ \backslash$">Username<!-- MATH
+ $\backslash$
+ -->
+<IMG
+ WIDTH="13" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img22.png"
+ ALT="$ \backslash$">Application Data<!-- MATH
+ $\backslash$
+ -->
+<IMG
+ WIDTH="13" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img22.png"
+ ALT="$ \backslash$">Mathworks<!-- MATH
+ $\backslash$
+ -->
+<IMG
+ WIDTH="13" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img22.png"
+ ALT="$ \backslash$">MATLAB</TT>
+
+<P>
+</DD>
+<DT><B>Step 4:</B></DT>
+<DD>Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file <TT>matlabSolver.cpp</TT>.  Execute the command:
+
+<P>
+<PRE>
+mex -v matlabSolver.cpp
+</PRE>
+
+<P>
+On a MAC OS X the resulting executable will be named <TT>matlabSolver.mexmac</TT>. On the Windows system the file is named <TT>matlabSolver.mexw32</TT>.
+
+<P>
+</DD>
+<DT><B>Step 5:</B></DT>
+<DD>Set the MATLAB path to include the directory with the <TT>matlabSolver</TT> executable. Also, put  the <I>m-file</I> <TT>callMatlabSolver.m</TT> in a directory which is on a MATLAB path.  This file is in the <TT>OSModelInterfaces</TT> directory.
+
+<P>
+</DD>
+</DL>
+
+<P>
+To use the <TT>matlabSolver</TT> it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.
+
+<P>
+<P></P>
+<DIV ALIGN="CENTER"><TABLE CELLPADDING="0" WIDTH="100%" ALIGN="CENTER">
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="LEFT">Minimize</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="104" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img23.png"
+ ALT="$\displaystyle \quad 10 x_{1} + 9 x_{2}$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:parinobj">(5)</A></TD></TR>
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="LEFT">Subject to</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="92" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img24.png"
+ ALT="$\displaystyle \quad .7x_{1} + x_{2}$"></TD>
+<TD NOWRAP ALIGN="LEFT"><IMG
+ WIDTH="49" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img25.png"
+ ALT="$\displaystyle \le 630$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:parinccon1">(6)</A></TD></TR>
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="114" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img26.png"
+ ALT="$\displaystyle .5x_{1} + (5/6) x_{2}$"></TD>
+<TD NOWRAP ALIGN="LEFT"><IMG
+ WIDTH="49" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img27.png"
+ ALT="$\displaystyle \le 600$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:parinccon2">(7)</A></TD></TR>
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="100" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img28.png"
+ ALT="$\displaystyle x_{1} + (2/3) x_{2}$"></TD>
+<TD NOWRAP ALIGN="LEFT"><IMG
+ WIDTH="49" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img29.png"
+ ALT="$\displaystyle \le 708$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:parinccon3">(8)</A></TD></TR>
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="96" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img30.png"
+ ALT="$\displaystyle .1x_{1} + .25 x_{2}$"></TD>
+<TD NOWRAP ALIGN="LEFT"><IMG
+ WIDTH="49" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img31.png"
+ ALT="$\displaystyle \le 135$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:parinccon4">(9)</A></TD></TR>
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="47" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img32.png"
+ ALT="$\displaystyle x_{1}, x_{2}$"></TD>
+<TD NOWRAP ALIGN="LEFT"><IMG
+ WIDTH="31" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img7.png"
+ ALT="$\displaystyle \ge 0$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:parincnonneg">(10)</A></TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL"><P></P>
+
+<P>
+The MATLAB representation of this problem in MATLAB arrays is
+<PRE>
+% the number of constraints
+numCon = 4;
+% the number of variables
+numVar = 2;
+% variable types
+VarType='CC';
+% constraint types
+A = [.7  1; .5  5/6; 1   2/3  ; .1   .25];
+BU = [630 600  708  135];
+BL = [];
+OBJ = [10  9];
+VL = [-inf -inf];
+VU = [];
+ObjType = 1;
+% leave Q empty if there are no quadratic terms
+Q = [];
+prob_name = 'ParInc Example'
+password = 'chicagoesmuyFRIO';
+%
+%
+%the solver
+solverName = 'lindo';
+%the remote service service address
+%if left empty we solve locally
+serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
+% now solve
+callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ...
+    VarType, Q, prob_name, password, solverName, serviceAddress)
+</PRE>
+This example m-file is in the <TT>data</TT> directory and is file <TT>parincLinear.m</TT>. Note that in addition to the problem formulation we can specify which solver to use through the <TT>solverName</TT> variable.  If solution with a remote solver is desired this can be specified with the <TT>serviceAddress</TT> variable.  If the <TT>serviceAddress</TT> is left empty, i.e.
+<PRE>
+serviceAddress='';
+</PRE>
+then a local solver is used. In this case  it is crucial that the appropriate solver is linked in with the <TT>matlabSolver</TT> executable using the <TT>CXXLIBS</TT> option.
+
+<P>
+The data directory  also contains the m-file  <TT>template.m</TT> which contains extensive comments about how to formulate the problems in MATLAB.  A second example which is a quadratic problem is given in the Appendix. The appropriate m-file is <TT>markowitz.m</TT>.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html769"
+  HREF="node43.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html765"
+  HREF="node39.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html761"
+  HREF="node41.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html767"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html770"
+  HREF="node43.html">OSParsers</A>
+<B> Up:</B> <A NAME="tex2html766"
+  HREF="node39.html">OSModelInterfaces</A>
+<B> Previous:</B> <A NAME="tex2html762"
+  HREF="node41.html">Converting AMPL nl Files</A>
+ &nbsp; <B>  <A NAME="tex2html768"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

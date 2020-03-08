@@ -1,0 +1,298 @@
+<html><!-- InstanceBegin template="/Templates/OS.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>OS Process</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  <link rel="icon" href="images/os1.ico">
+  <link rel="SHORTCUT ICON" href="images/os1.ico">
+  <link rel="stylesheet" href="css/os_styles.css" type="text/css">
+  <link rel="stylesheet" href="css/ddmenu.css" type="text/css">
+
+  <script type="text/javascript" src="js/ddmenu.js"></script>
+  <!-- InstanceBeginEditable name="head" -->
+  <style type="text/css">
+<!--
+.style3 {color: #000066}
+-->
+  </style>
+  <!-- InstanceEndEditable -->
+  <style type="text/css">
+<!--
+.style2 {font-size: larger}
+.style3 {
+	color: #666666;
+	font-weight: bold;
+}
+-->
+  </style>
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- start header table -->
+<table width="847" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="1"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="201"><img src="images/spacer.gif" width="175" height="1" alt=""></td>
+<td width="634"><img src="images/spacer.gif" width="599" height="1" alt=""></td>
+<td width="1"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="10"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+</tr>
+<tr>
+<td rowspan="4" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="56" alt=""></td>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="774" height="2" alt=""></td>
+<td rowspan="4" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="56" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="2" alt=""></td>
+</tr>
+<tr>
+<td rowspan="2"><a href="welcome.html"><img src="images/os1.jpg" width="115" height="87" alt="Optimization Services" border="0"></a></td>
+<td><div align="right">
+  <p align="center" class="nava style2">&nbsp;</p>
+  <table width="600" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="1"><div align="center"></div></td>
+      <td width="80"><div align="center"><a href="http://projects.coin-or.org/OS/register"><strong>Register</strong></a></div></td>
+      <td width="61"><div align="center"><a href="http://projects.coin-or.org/OS/login"><strong>Login</strong></a></div></td>
+      <td width="90"><div align="center"><a href="os_download.html"><strong>Download</strong></a></div></td>
+      <td width="68"><div align="center"><a href="os_license.html"><strong>License</strong></a></div></td>
+      <td width="150"><div align="center"><a href="http://groups.google.com/group/optimizationservices"><strong>OS Newsgroup  (hosted @ Google) </strong></a></div></td>
+      <!--td width="73"><div align="center"><a href="../login.html"><strong>Login</strong></a></div></td-->
+      <td width="150"><div align="center" class="style3"><a href="http://projects.coin-or.org/OS">OS  Developer Site (hosted @ COIN-OR)</a></div></td>
+    </tr>
+  </table>
+  </div></td>
+</tr>
+<tr>
+
+<td class="nav" valign="middle">
+    <!-- begin main menu bar -->
+    <ul class="ddmenu">
+	  <li><a href="os_overview.html">OVERVIEW</a> 
+        <ul>
+        	<li><a href="optimizationservices.html">Optimization Services (OS)</a></li>
+			<li><a href="optimizationservicesprotocol.html">Optimization Services Protocol (OSP)</a></li>
+			<li><a href="os_motivation.html">The OS Motivation</a></li>
+			<li><a href="os_components.html">The OS Components</a></li>
+			<li><a href="os_process.html">The OS Process</a></li>
+			<li><a href="os_customers.html">The OS Customers</a></li>
+			<li><a href="distributedComputingBackground.html">Distributed Computing Background</a></li>
+            <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+	  <li><a href="standard_overview.html">STANDARDS</a> 
+        <ul>
+        	<li><a href="standard_overview.html">Overview</a></li>
+        	<li><a href="OSiL.html">OSiL (instance)</a></li>
+        	<li><a href="OSiL_SE.html">--OSiL/SE (Stochastic Ext.)</a></li>
+        	<li><a href="OSrL.html">OSrL (result)</a></li>
+        	<li><a href="OSoL.html">OSoL (option)</a></li>
+        	<li><a href="OSaL.html">OSaL (analysis)</a></li>
+        	<li><a href="OSeL.html">OSeL (entity)</a></li>
+        	<li><a href="OSpL.html">OSpL (process)</a></li>
+        	<li><a href="OSbL.html">OSbL (benchmark)</a></li>
+        	<li><a href="OSqL.html">OSqL (query)</a></li>
+        	<li><a href="OSuL.html">OSuL (uri/url)</a></li>
+        	<li><a href="OSsL.html">OSsL (simulation)</a></li>
+        	<li><a href="OShL.html">OShL (hook up)</a></li>
+        	<li><a href="OSdL.html">OSdL (discover)</a></li>
+        	<li><a href="OScL.html">OScL (call simulation)</a></li>
+        	<li><a href="OSgL.html">OSgL (general)</a></li>
+        	<li><a href="OSnL.html">OSnL (nonlinear)</a></li>
+        	<li><a href="OSlL.html">OSlL (linear) == LPFML</a></li>
+        	<li><a href="OSRepository.html">OSRepository.xsd</a></li>
+        	<li><a href="OSRegistry.html">OSRegistry.xsd</a></li>
+
+        </ul>
+      </li>
+	  <li>|</li>
+      <li><a href="projects_overview.html">PROJECTS</a>
+        <ul>
+          <li><a href="projects_overview.html">Overview</a></li>
+        	<li><a href="projects_impact.html">IMPACT Solver/Service</a></li>
+        	<li><a href="projects_osml.html">OSmL - OS Modeling</a></li>
+        	<li><a href="projects_osrepository.html">OS Repository</a></li>
+        	<li><a href="projects_gui.html">OS GUI</a></li>
+        	<li><a href="projects_binary.html">OS Binary</a></li>
+        	<li><a href="projects_interface.html">OS Interface & OSI2</a></li>
+        	<li><a href="os_neos.html">OS and NEOS</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+      <li><a href="services_overview.html">SERVICES</a>
+        <ul>
+          <li><a href="services_overview.html">Overview</a></li>
+          <li><a href="services_osregistry.html">OS Registry Service</a></li>
+          <li><a href="services_hosting.html">Service Hosting</a></li>
+          <li><a href="os_neos.html">OS and NEOS</a></li>
+          <li><a href="services_support.html">Support</a></li>
+          <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+	  <li>|</li>
+      <li><a href="publications_overview.html">PUBLICATIONS</a> 
+        <ul>
+          <li><a href="publications_overview.html">Overview</a></li>
+          <li><a href="publications_research.html">Researches</a></li>
+          <li><a href="publications_conferences.html">Conferences</a></li>
+          <li><a href="publications_papers.html">Papers</a></li>
+          <li><a href="publications_presentations.html">Presentations</a></li>
+          <li><a href="publications_api.html">APIs</a></li>
+          <li><a href="publications_faq.html">FAQs</a></li>
+          <li><a href="os_related.html">Related Sites</a></li>
+          <li><a href="os_related_research.html">Related Research</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+      <li><a href="os_about.html">ABOUT</a> 
+        <ul>
+
+
+
+	      <li><a href="index.html">Home</a></li>
+          <li><a href="os_about.html">About Us</a></li>
+		  <li><a href="os_contact.html">Contact Us</a></li>		  
+          <li><a href="os_related.html">Related Sites</a></li>
+          <li><a href="os_related_research.html">Related Research</a></li>
+          <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+    </ul>
+    <!-- end main menu bar --></td>
+
+
+</tr>
+<tr>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="774" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+</tr>
+</table>
+<!-- end header table -->
+
+<!-- start body table -->
+<table width="837" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td colspan="5" bgcolor="#6F5D51"><img src="images/spacer.gif" width="776" height="10" alt=""></td>
+</tr>
+<tr>
+<td colspan="5" bgcolor="#666666"><img src="images/spacer.gif" width="776" height="1" alt=""></td>
+</tr>
+<tr>
+<!-- start column one -->
+<td width="177" valign="top"><p><!--img src="../images/searstower.jpg" width="194" height="251" alt="" border="0"-->
+    <!-- InstanceBeginEditable name="QuickLinks" -->
+    <p>&nbsp;</p>
+    <div class="subnava">
+      <p><a href="os_framework.html"><span class="style4">OS as a </span>framework <span class="style4">for optimization systems</span></a></p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnava">
+      <p><a href="os_orInfrastrcuture.html"> <span class="style4">OS as a </span>computational infrastructure <span class="style4">for Operations Research (OR)</span></a></p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnav">
+      <p><a href="os_neos.html" class="style7"><span class="style4">OS as a </span><span class="style3">next generation Network Enabled Optimization System (NEOS)</span></a></p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnav">
+      <p><a href="os_orInternet.html" class="style7"><span class="style4">OS as the </span><span class="style3">Operations Research (OR) Internet</span></a></p>
+    </div>
+    <br>
+<!-- InstanceEndEditable --></p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p></td>
+<!-- end column one -->
+<td width="1" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="23"><img src="images/spacer.gif" width="23" height="400" alt=""></td>
+<!-- start column two -->
+<td width="450" valign="top" class="bodytxt"><!-- InstanceBeginEditable name="MainBody" -->
+  <p><span class="bodyhdr"><b>OS Process </b></span></p>
+  <p><a href="images/osComponents.jpg"><img src="images/osComponents.jpg" alt="osComponents" width="540" height="236" border="0"></a></p>
+  <p>The process of the optimization  system in the above figure is self-explanatory. Typically the process starts  from a modeler who has a model (1) to be solved. He constructs the model in an  MLE (2). The MLE in turn compiles the model and generates an instance  representation (3). The MLE then delegates a communication agent (4) to send  the instance to a solver (7). In a local environment, where there is no agent,  the link between 4 and 7 is an interface through which the MLE instantiates the  solver in memory. In a distributed environment, the MLE may first discover a  registered solver through registry (5), therefore the respective discovery link  between 4 and 5 and registration link between 5 and 7. The communication with  the analyzer (6) is similar to that with a solver (7). The link between  communication agent (4) and simulation (8) means that the agent may call the  simulation to get a function value, although in an optimization scenario, it is  usually the solver (7) that calls the simulation (8) iteratively. </p>
+  <p>The triangle between communication  agent (4), registry (5) and solver (7) is called a Service-oriented  Architecture (SOA). The design philosophy of SOA serves as the basis of our  Optimization Services framework. A &ldquo;service&rdquo; is intended to serve customers.  For our optimization system, there are mainly three categories of &ldquo;human&rdquo;  customers:</p>
+  <ol>
+    <li><strong>Application developers</strong> create and build system components such as modeling language  environments and solvers as part of a larger optimization system. The  components together take care of such generic functions as managing data,  solving optimization problems, and presenting solutions nicely.</li>
+    <li><strong>Modelers</strong> work  in a modeling language environment or GUI to build optimization models and get  acceptable solutions.</li>
+    <li><strong>Users</strong> run  application packages that perform optimization at some stage through the  optimization system. Users are usually the ultimate customers of any  optimization system. </li>
+  </ol>
+  <p>Modelers and  application developers may see optimization in different ways. For modelers, a  mathematical program is an abstract representation to be analyzed and  understood; for application developers, a mathematical program is a concrete  instance to be represented, communicated and solved. Modelers benefit most  immediately from innovations that help people to choose and experiment with  optimization software. Some application developers are also modelers, while  others deal mainly with the inputs and outputs of optimization models set up by  modelers. Users may not even realize that they are running optimization system  components such as solvers, although they are often aware of optimization  goals, such as minimizing costs or maximizing profits. </p>
+  <p>The  decentralized architecture of Optimization Services makes it similar to the  Internet. </p>
+  <p>Internet</p>
+  <p><a href="images/os_internet.jpg"><img src="images/os_internet.jpg" alt="os_internet" width="323" height="188" hspace="12" border="0" align="left"></a></p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p><a href="images/os_orInternet.jpg"><img src="images/os_orInternet.jpg" alt="os_orInternet" width="336" height="177" border="0"></a></p>
+  <p>In order to &ldquo;surf the Internet&rdquo; (above figure, top), a user uses an Internet browser to view the  Web pages, which usually contain interactive links and forms. Clicking the  links and filling in forms are what we call the user inputs. In the scenario of  Optimization Services (above figure, bottom), the user is a modeler and his inputs are a  model and the model&rsquo;s data. Instead of the browser, the modeler constructs the  model in a Modeling Language Environment or in a Graphical User Interface (GUI)  environment and instead of sending the model inputs to a web server, the MLE or  GUI sends the inputs to an OS server. The OS server hosts solvers rather than  Web pages. Although the Internet existed long before it became popular, the  entertaining Web pages were what made the Internet successful. The same can be  said about Optimization Services. Without the actual &ldquo;contents&rdquo; provided by the  solvers, OS is just an empty skeleton that can never be widely used no matter  how well the skeleton is designed.<strong> </strong> </p>
+  <p>To further apply the analogy, it is  never the browser that contacts a web server. Rather the browser opens a  socket, and through the socket, the browser sends the request and waits for the  response. These all happen without the user&rsquo;s knowledge. The exact equivalent  of the socket in Optimization Services is the communication agent. The MLE or  GUI delegates the agent to send an optimization instance to the remote OS  server that hosts the solver. Like the socket, the agent understands all the  communication protocols in order to establish the connection. But instead of  using the HTTP protocol and sending/receiving HTML instances, the agent uses  the OSP communication protocol and sends/receives OS instances.&nbsp; </p>
+  <p>Nowadays people heavily rely on  search engines to find Web pages. The Optimization Services registry serves the  function of a search engine. But unlike the Internet search engines, there has  to be a unique registry in the whole Optimization Services system to ensure  Quality of Service (QoS). Communication agents always know where the registry  is, as there is only one. This registry has complete information of available  services, as this is the only place that the services can register. The OS  registry will not be overburdened as no software is connected through it. When  a certain query is sent to the OS registry, usually from an MLE or GUI, the OS  registry returns the locations of the found software and the MLE or GUI makes a  peer-to-peer contact with the software at the provided location. This discovery  process is similar to the search engine process, with the exception that  everything in the OS system happens automatically between the software  components, without user interaction. </p>
+  <p>On the opposite side of the discovery  process is the registration process. In the case of the Internet, it is usually  the search engine &ldquo;crawlers&rdquo; that automatically collect the contents of all the  Web pages. In the Optimization Services case, it is the OR software developer&rsquo;s  responsibility to send the required information to, and get approved by, the OS  registry, possibly through a mixture of automatic and manual procedures. This  is primarily due to two reasons. One is that the quantity of OR software  packages is not nearly large enough to be crawled efficiently. A second, and  more important reason, is that the requirement of QoS on the OS registry is  much stricter in order to ensure smooth functioning between OS components. The  mechanism of &ldquo;wantonly&rdquo; crawling and storing &ldquo;unwarranted&rdquo; things found on the  hyperlink paths degrades the Optimization Services. </p>
+  <p>In the following figure, we show that most of the components in the  Optimization Services system have a corresponding similar part in the Internet  architecture. The similarity is not the initial intention of the OS project;  rather it is the result that both are good designs based on a decentralized  architecture. </p>
+  <p><a href="images/os_analogyToInternet.jpg"><img src="images/os_analogyToInternet.jpg" alt="os_analogyToInternet" width="630" height="270" border="0"></a></p>
+  <p>&nbsp;</p>
+<!-- InstanceEndEditable -->
+  <p><br>
+  </p></td>
+<!-- end column two --> 
+<!-- start column three -->
+<td width="186" align="right" valign="top"><p/>
+  <p><!-- InstanceBeginEditable name="Blurb1" --><!-- InstanceEndEditable --></p>
+  <p><!-- InstanceBeginEditable name="Blurb2" --><!-- InstanceEndEditable --></p>
+  <p><!-- InstanceBeginEditable name="Blurb3" --><!-- InstanceEndEditable --></p></td>
+<!-- end column three -->
+</tr>
+<tr>
+<td><img src="images/spacer.gif" width="152" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="23" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="450" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="150" height="1" alt=""></td>
+</tr>
+</table>
+<!-- end body table -->
+
+<!-- start footer table -->
+<table width="836" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="400"><img src="images/spacer.gif" width="400" height="10" alt=""></td>
+<td width="436"><img src="images/spacer.gif" width="376" height="10" alt=""></td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="776" height="1" alt=""></td>
+</tr>
+<tr>
+<td colspan="2"><img src="images/spacer.gif" width="1" height="5" alt=""></td>
+</tr>
+<tr>
+<td class="footer">&nbsp;</td>
+<td align="right" class="footer">&#169; Optimization Services (OS) 2006 | All rights reserved.</td>
+</tr>
+</table>
+<!-- end footer table -->
+<!--script type="text/javascript">
+google_ad_client = "pub-9660334810015606";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text_image";
+google_ad_channel = "";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "000066";
+google_color_text = "333333";
+google_color_url = "666666";
+
+</script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script-->
+</body>
+<!-- InstanceEnd --></html>

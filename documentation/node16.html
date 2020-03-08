@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>MSYS</TITLE>
+<META NAME="description" CONTENT="MSYS">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="previous" HREF="node15.html">
+<LINK REL="up" HREF="node12.html">
+<LINK REL="next" HREF="node17.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html438"
+  HREF="node17.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html434"
+  HREF="node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html430"
+  HREF="node15.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html436"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html439"
+  HREF="node17.html">VPATH Installations</A>
+<B> Up:</B> <A NAME="tex2html435"
+  HREF="node12.html">Building the OS Project</A>
+<B> Previous:</B> <A NAME="tex2html431"
+  HREF="node15.html">MinGW</A>
+ &nbsp; <B>  <A NAME="tex2html437"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00072400000000000000">
+MSYS</A>
+</H3>
+
+<P>
+MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice, such as the Microsoft command line C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run <TT>configure</TT>  scripts and <TT>Makefiles</TT>.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom the food chain in terms of tools provided. However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with TortoiseSVN) and that the <TT>cl</TT> compiler is present.  The project is built using the following steps.
+
+<P>
+<P>
+<B>Note:</B>
+
+<P>
+
+<UL>
+<LI>If you wish to use the third-party software with MSYS it is best to get <TT>wget</TT>. See <A HREF="node12.html#section:windowsintall"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
+</LI>
+<LI>Do not put any imbedded blanks in the path to the OS project.
+ 
+</LI>
+</UL>
+
+<P>
+Execute the following steps to use the Microsoft C++ cl compiler with MSYS.
+
+<P>
+<DL COMPACT>
+<DT>Step 1.</DT>
+<DD>Download <TT>MSYS</TT> at
+
+<P>
+<DIV ALIGN="CENTER">
+<TT><A NAME="tex2html27"
+  HREF="http://sourceforge.net/project/showfiles.php?group_id=2435&amp;package_id=24963">http://sourceforge.net/project/showfiles.php?group_id=2435&amp;package_id=24963</A></TT>
+</DIV>
+
+<P>
+and install.  Double clicking on the MSYS icon will open a Bourne shell window.
+
+<P>
+</DD>
+<DT>Step 2.</DT>
+<DD>Download  Visual Studio Express C++ at
+
+<P>
+<TT><A NAME="tex2html28"
+  HREF="http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx">http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx</A></TT>
+<P>
+and install.
+
+<P>
+</DD>
+<DT>Step 3.</DT>
+<DD>The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+
+<P>
+<TT><A NAME="tex2html29"
+  HREF="http://msdn2.microsoft.com/en-us/express/aa700755.aspx">http://msdn2.microsoft.com/en-us/express/aa700755.aspx</A></TT>
+<P>
+and install.
+
+<P>
+</DD>
+<DT>Step 4.</DT>
+<DD>Set the Visual Studio environment variables so that paths to the necessary libraries and header files  are recognized.  Assuming that a standard installation was done for the Visual Studio Express and the Windows Platform SDK set the variables as follows:
+
+<P>
+<PRE>
+PATH=C:\Program Files\Microsoft Visual Studio 8\Common7\IDE;
+C:\Program Files\Microsoft Visual Studio 8\VC\BIN;
+C:\Program Files\Microsoft Visual Studio 8\Common7\Tools;
+C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\bin;
+C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;
+C:\Program Files\Microsoft Visual Studio 8\VC\VCPackages
+
+
+INCLUDE=C:\Program Files\Microsoft Visual Studio 8\VC\INCLUDE;
+C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include
+
+LIB = C:\Program Files\Microsoft Visual Studio 8\VC\LIB;
+C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\lib;
+C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib
+</PRE>
+
+<P>
+The environment variables can be set using the <TT>System Properties</TT> in the Windows <TT>Control Panel</TT>.
+
+<P>
+</DD>
+<DT>Step 5.</DT>
+<DD>In the MSYS command window connect to the root of the OS project and run  <TT>configure</TT>  script  and then <TT>make</TT> as described in Section <A HREF="node11.html#section:unixbuilds">4.1</A>.
+
+<P>
+</DD>
+</DL>
+
+<P>
+<B>Run an Example!</B>  If <TT>make test</TT> works, proceed to Section <A HREF="node60.html#section:ossolverservice">10</A> to run the key executable, <TT>OSSolverService</TT>.
+
+<P>
+Microsoft Windows users that wish to obtain MSYS for building the OS project can download the appropriate software at <TT><A NAME="tex2html30"
+  HREF="http://sourceforge.net/project/showfiles.php?group_id=2435">http://sourceforge.net/project/showfiles.php?group_id=2435</A></TT>.  The user may find this Web site confusing.   It is only necessary to  download what is referred to as the <B>MSYS Base System</B>.  As of this writing the most recent version is MSYS-1.0.11.  This file is listed as <TT>bash-3.1-MSYS-1.0.11</TT> and the  binary download is
+
+<P>
+<FONT SIZE="-1"><TT><A NAME="tex2html31"
+  HREF="http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582&amp;big_mirror=1">http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582&amp;big_mirror=1</A></TT></FONT>
+
+<P>
+This will provide the necessary Bourne shell for executing the configure scripts.
+Users that want to edit the source code in the parsers described in Section  <A HREF="node43.html#section:osparsers">7.4</A> will need the additional  tools , <B>flex</B> and <B>bison.</B>  These are listed at the Web site as
+
+<P>
+<PRE>
+bison-2.3-MSYS-1.0.11
+flex-2.5.33-MSYS-1.0.11
+regex-0.12-MSYS-1.0.11
+</PRE>
+The last one contains an important DLL, msys-regex-0.dll, without which flex
+will not start.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html438"
+  HREF="node17.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html434"
+  HREF="node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html430"
+  HREF="node15.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html436"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html439"
+  HREF="node17.html">VPATH Installations</A>
+<B> Up:</B> <A NAME="tex2html435"
+  HREF="node12.html">Building the OS Project</A>
+<B> Previous:</B> <A NAME="tex2html431"
+  HREF="node15.html">MinGW</A>
+ &nbsp; <B>  <A NAME="tex2html437"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

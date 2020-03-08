@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>VPATH Installations</TITLE>
+<META NAME="description" CONTENT="VPATH Installations">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node18.html">
+<LINK REL="previous" HREF="node12.html">
+<LINK REL="up" HREF="node10.html">
+<LINK REL="next" HREF="node18.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html450"
+  HREF="node18.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html446"
+  HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html440"
+  HREF="node16.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html448"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html451"
+  HREF="node18.html">Using Ipopt</A>
+<B> Up:</B> <A NAME="tex2html447"
+  HREF="node10.html">Building and Testing the</A>
+<B> Previous:</B> <A NAME="tex2html441"
+  HREF="node16.html">MSYS</A>
+ &nbsp; <B>  <A NAME="tex2html449"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00073000000000000000">
+VPATH Installations</A>
+</H2>
+
+<P>
+It is possible to build the OS project in a directory that is different from
+the directory where the source code is present. This is called a <TT>VPATH</TT>
+compiliation.  A <TT>VPATH</TT>  compilation  is very useful if you wish to
+build several versions (e.g. debug and non-debug versions, or versions with
+availability of various combinations of third-party software) of the OS
+project from a single copy the source code.
+
+<P>
+For  example, assume you wish to build a debug version of the OS project in
+the directory <TT>vpath-debug</TT> and that <TT>../COIN-OS</TT> is the path to the
+root of the OS project distribution.  From the <TT>vpath-debug</TT> directory,
+run <TT>configure</TT> as follows:
+
+<P>
+<PRE>
+../COIN-OS/configure --enable-debug
+</PRE>
+After you run <TT>configure</TT>, the OS project directory structure will be
+present in the <TT>vpath-debug</TT> directory along with all of the necessary
+<TT>Makefile</TT>s.  Next from the <TT>vpath-debug</TT> directory execute
+
+<P>
+<PRE>
+make
+</PRE>
+and all of  the libraries created will be in their respective directories
+inside <TT>vpath-debug</TT> and not <TT>../COIN-OS</TT>.
+
+<P>
+<B>Note:</B> If you have already run the <TT>configure</TT> script
+inside the <TT>../COIN-OS</TT> directory, you cannot do a <TT>VPATH</TT> build
+until you have run
+<PRE>
+make distclean
+</PRE>
+in the <TT>../COIN-OS</TT> directory.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html450"
+  HREF="node18.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html446"
+  HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html440"
+  HREF="node16.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html448"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html451"
+  HREF="node18.html">Using Ipopt</A>
+<B> Up:</B> <A NAME="tex2html447"
+  HREF="node10.html">Building and Testing the</A>
+<B> Previous:</B> <A NAME="tex2html441"
+  HREF="node16.html">MSYS</A>
+ &nbsp; <B>  <A NAME="tex2html449"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

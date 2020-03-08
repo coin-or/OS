@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>OSAgent</TITLE>
+<META NAME="description" CONTENT="OSAgent">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node34.html">
+<LINK REL="previous" HREF="node32.html">
+<LINK REL="up" HREF="node32.html">
+<LINK REL="next" HREF="node34.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html658"
+  HREF="node34.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html654"
+  HREF="node32.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html648"
+  HREF="node32.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html656"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html659"
+  HREF="node34.html">OSCommonInterfaces</A>
+<B> Up:</B> <A NAME="tex2html655"
+  HREF="node32.html">The OS Library Components</A>
+<B> Previous:</B> <A NAME="tex2html649"
+  HREF="node32.html">The OS Library Components</A>
+ &nbsp; <B>  <A NAME="tex2html657"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000101000000000000000"></A><A NAME="section:osagent"></A>
+<BR>
+OSAgent
+</H2>
+
+<P>
+The <TT>OSAgent</TT>  part of the library is used to facilitate communication with remote solvers. It is not used if the solver is invoked locally (i.e. on the same machine).   There are two key classes in the <TT>OSAgent</TT> component of the OS library. The two classes are <TT>OSSolverAgent</TT> and <TT>WSUtil</TT>.
+
+<P>
+The <TT>OSSolverAgent</TT> class is used  contact a remote solver service.  For example, assume that <TT>sOSiL</TT> is a string with a problem instance and <TT>sOSoL</TT> is a string with solver options. Then the following code will call a solver service and invoke the <TT>the solve</TT> method.
+<PRE>
+OSSolverAgent *osagent;
+string serviceLocation = http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+osagent = new OSSolverAgent(  serviceLocation );
+string sOSrL = osagent-&gt;solve(sOSiL, sOSoL);
+</PRE>
+Other methods in the <TT>OSSolverAgent</TT> class are <TT>send</TT>, <TT>retrieve</TT>, <TT>getJobID</TT>, <TT>knock</TT>, and <TT>kill</TT>.  The use of these methods is described in Section <A HREF="node63.html#section:servicemethods">10.3</A>.
+
+<P>
+The methods in the <TT>OSSolverAgent</TT> class call methods in the <TT>WSUtil</TT> class that perform such tasks as creating and parsing SOAP messages and making low level socket calls to the server running the solver service. The average user will not use methods in the <TT>WSUtil</TT> class, but they are available to anyone wanting to make socket calls or create SOAP messages.
+
+<P>
+There is also a method, <TT>fileUpload</TT> in the OSAgentClass that is used to upload files from the hard drive of a client to the server. It is very fast and does not involve SOAP or Web Services. The <TT>fileUpload</TT>  method is illustrated and described in the example code <TT>fileUpload.cpp</TT> described in Section <A HREF="node74.html#section:fileupload">12.2</A>.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html658"
+  HREF="node34.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html654"
+  HREF="node32.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html648"
+  HREF="node32.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html656"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html659"
+  HREF="node34.html">OSCommonInterfaces</A>
+<B> Up:</B> <A NAME="tex2html655"
+  HREF="node32.html">The OS Library Components</A>
+<B> Previous:</B> <A NAME="tex2html649"
+  HREF="node32.html">The OS Library Components</A>
+ &nbsp; <B>  <A NAME="tex2html657"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

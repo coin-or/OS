@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Documentation</TITLE>
+<META NAME="description" CONTENT="Documentation">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node29.html">
+<LINK REL="previous" HREF="node27.html">
+<LINK REL="up" HREF="node10.html">
+<LINK REL="next" HREF="node29.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html587"
+  HREF="node29.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html583"
+  HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html577"
+  HREF="node27.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html585"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html588"
+  HREF="node29.html">Platforms</A>
+<B> Up:</B> <A NAME="tex2html584"
+  HREF="node10.html">Building and Testing the</A>
+<B> Previous:</B> <A NAME="tex2html578"
+  HREF="node27.html">Bug Reporting</A>
+ &nbsp; <B>  <A NAME="tex2html586"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00077000000000000000"></A><A NAME="section:documentation"></A>
+<BR>
+Documentation
+</H2>
+
+<P>
+If you have Doxygen  (<TT><A NAME="tex2html41"
+  HREF="www.doxygen.org">www.doxygen.org</A></TT>) available (the executable <TT>doxygen</TT> should be in the <TT>path</TT> command) then executing
+<PRE>
+make doxydoc
+</PRE>
+in the project root directory will result in the Doxygen documentation being generated and stored in the <TT>doxydoc</TT> folder in the project root.
+
+<P>
+In order to view the documentation, open a browser and open the file
+<PRE>
+projectroot/doxydoc/html/index.html
+</PRE>
+
+<P>
+By default, running Doxygen will generate documentation for only the  OS project.  Documentation will not be generated for the other COIN-OR projects in the project root. In the <TT>doxydoc</TT>  folder is a configuration file <TT>doxygen.conf</TT>.  This configuration file contains the <TT>EXCLUDE</TT> parameter
+
+<P>
+<PRE>
+EXCLUDE =  Cbc \
+   Cgl \
+   Clp \
+   CoinUtils \
+   cppad \
+   SYMPHONY \
+   Vol \
+   DyLP \
+   ThirdParty \
+   Osi \
+   include
+</PRE>
+
+<P>
+This file can be edited, and any project for which documentation is desired, can be deleted from the <TT>EXCLUDE</TT> list.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Other third-Party Software</TITLE>
+<META NAME="description" CONTENT="Other third-Party Software">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node27.html">
+<LINK REL="previous" HREF="node18.html">
+<LINK REL="up" HREF="node10.html">
+<LINK REL="next" HREF="node20.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html474"
+  HREF="node20.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html470"
+  HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html464"
+  HREF="node18.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html472"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html475"
+  HREF="node20.html">AMPL</A>
+<B> Up:</B> <A NAME="tex2html471"
+  HREF="node10.html">Building and Testing the</A>
+<B> Previous:</B> <A NAME="tex2html465"
+  HREF="node18.html">Using Ipopt</A>
+ &nbsp; <B>  <A NAME="tex2html473"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00075000000000000000">
+Other third-Party Software</A>
+</H2>
+
+<P>
+This is software not available for download at <TT><A NAME="tex2html34"
+  HREF="www.coin-or.org">www.coin-or.org</A></TT>. The default OS project is configured out-of-the-box with the COIN-OR  projects <TT>Cbc</TT>, <TT>Clp</TT>, <TT>Cgl</TT>, <TT>CoinUtils</TT>, <TT>CppAD</TT>,  <TT>DyLP</TT>, <TT>SYMPHONY</TT>, and <TT>Vol</TT>.  However, the project is also designed to work with other COIN-OR projects and several other open source and commercial software projects.
+
+<P>
+In many of the header files there are <TT>#include</TT> statements inside <TT>#ifdef</TT>  statements. For example,
+<PRE>
+#ifdef COIN_HAS_LINDO
+#include "LindoSolver.h"
+#endif
+#ifdef COIN_HAS_IPOPT
+#include "IpoptSolver.h"
+#endif
+</PRE>
+In the <TT>inc</TT> subdirectory of the <TT>OS</TT>  directory, there is a header file, <TT>config&#5;Fos.h</TT> that defines the values of the
+<PRE>
+COIN_HAS_XXXXX
+</PRE>
+variables. If the project is configured with the simple <TT>./configure</TT> command given in Step 3 with no arguments, then in the <TT>config&#5;Fos.h</TT> these variables associated with the third-party software will be undefined. For example.
+<PRE>
+/* Define to 1 if the Cplex package is used */
+/* #undef COIN_HAS_CPX */
+</PRE>
+unlike the configured COIN-OR projects that appear as
+<PRE>
+/* Define to 1 if the Clp package is used */
+#define COIN_HAS_CLP 1
+</PRE>
+In the following subsections we  describe how to incorporate various  third-party packages into the OS project and see to it that the
+<PRE>
+COIN_HAS_XXXXX
+</PRE>
+variable is defined in  <TT>config&#5;Fos.h</TT>.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html476"
+  HREF="node20.html">AMPL</A>
+<LI><A NAME="tex2html477"
+  HREF="node21.html">Cplex</A>
+<LI><A NAME="tex2html478"
+  HREF="node22.html">GLPK</A>
+<LI><A NAME="tex2html479"
+  HREF="node23.html">Knitro</A>
+<LI><A NAME="tex2html480"
+  HREF="node24.html">LINDO</A>
+<LI><A NAME="tex2html481"
+  HREF="node25.html">MATLAB</A>
+<LI><A NAME="tex2html482"
+  HREF="node26.html">Library Paths</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

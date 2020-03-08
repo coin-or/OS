@@ -1,0 +1,119 @@
+.ddmenu, .ddmenu ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    line-height: 2;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #999999;
+}
+
+.ddmenu a {
+    display: block;
+    text-align: left;
+    text-decoration: none;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: #3399FF;
+    xxx_width: 10em;
+    xxx_border-width: 1;
+    xxx_border-style: solid;
+}
+
+.ddmenu li {
+    float: left;
+    border-width: 0;
+    background: #ffffff;
+}
+
+.ddmenu ul a {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+.ddmenu ul a:hover {
+    text-decoration: underline;
+}
+
+.ddmenu li ul {
+    border-width: 1;
+    border-style: solid;
+}
+
+.ddmenu li li {
+    border-top: 1px;
+    border-style: solid;
+    border-color: #ffffff;
+    width: 16em;
+}
+
+.ddmenu li ul {
+    position: absolute;
+    width: 16em;
+    left: -999em;
+    border-width: 1;
+}
+
+.ddmenu li ul ul {
+    margin: -1.75em 0 0 13.5em;
+}
+
+/* Highlight text of "current" item in top-level menu */
+.ddmenu li a.selnav {
+    color: 000066;
+}
+
+.ddmenu li:hover, .ddmenu li.sfhover {
+    background: #ffffff;
+    color: #666666;
+}
+
+.ddmenu li:hover a, .ddmenu li.sfhover a {
+    background: #eeeeee;
+    color: 000066;
+}
+
+.ddmenu li:hover li a, .ddmenu li.sfhover li a {
+    color: #666666;
+}
+
+.ddmenu li:hover li:hover a, .ddmenu li.sfhover li.sfhover a {
+    color: 000066;
+}
+
+.ddmenu li:hover li:hover li a, .ddmenu li.sfhover li.sfhover li a {
+    color: #666666;
+}
+
+.ddmenu li:hover li:hover li:hover a, .ddmenu li.sfhover li.sfhover li.sfhover a {
+    color: 000066;
+}
+
+.ddmenu li:hover li:hover li:hover li a, .ddmenu li.sfhover li.sfhover li.sfhover li a {
+    color: #666666;
+}
+
+.ddmenu li:hover li:hover li:hover li:hover a, .ddmenu li.sfhover li.sfhover li.sfhover li.sfhover a {
+    color: 000066;
+}
+
+.ddmenu li:hover ul, .ddmenu li.sfhover ul {
+    left: auto;
+}
+
+.ddmenu li:hover ul ul, .ddmenu li.sfhover ul ul {
+    left: -999em;
+}
+
+.ddmenu li:hover ul, .ddmenu li li:hover ul, .ddmenu li.sfhover ul, .ddmenu li li.sfhover ul {
+    left: auto;
+}
+
+.ddmenu li:hover ul ul, .ddmenu li:hover ul ul ul, .ddmenu li.sfhover ul ul, .ddmenu li.sfhover ul ul ul {
+    left: -999em;
+}
+
+.ddmenu li:hover ul, .ddmenu li li:hover ul, .ddmenu li li li:hover ul, .ddmenu li.sfhover ul, .ddmenu li li.sfhover ul, .ddmenu li li li.sfhover ul {
+    left: auto;
+}

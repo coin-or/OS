@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Quick Roadmap</TITLE>
+<META NAME="description" CONTENT="Quick Roadmap">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node6.html">
+<LINK REL="previous" HREF="node4.html">
+<LINK REL="up" HREF="osUsersManual_1.html">
+<LINK REL="next" HREF="node6.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html284"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html280"
+  HREF="osUsersManual_1.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html274"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html282"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html285"
+  HREF="node6.html">Downloading the OS Project</A>
+<B> Up:</B> <A NAME="tex2html281"
+  HREF="osUsersManual_1.html">Optimization Services 1.0 User's</A>
+<B> Previous:</B> <A NAME="tex2html275"
+  HREF="node4.html">The Optimization Services (OS)</A>
+ &nbsp; <B>  <A NAME="tex2html283"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00050000000000000000"></A><A NAME="section:roadmap"></A>
+<BR>
+Quick Roadmap
+</H1>
+
+<P>
+If you want to:
+
+<P>
+
+<UL>
+<LI>Download  the OS source code - see Section <A HREF="node6.html#section:download">3</A>.
+
+<P>
+</LI>
+<LI>Build the OS project from the source code - see Section <A HREF="node10.html#section:build">4</A>.
+
+<P>
+</LI>
+<LI>Use the OS library to build model instances or use solver APIs - see Sections  <A HREF="node39.html#section:osmodelinterfaces">7.3</A>,  <A HREF="node44.html#section:ossolverinterfaces">7.5</A>, and <A HREF="node46.html#section:osinstanceAPI">8</A>.
+
+<P>
+</LI>
+<LI>Use the OSSolverService to read files in nl, OSiL, or MPS format and call a solver locally or remotely - see Section <A HREF="node60.html#section:ossolverservice">10</A>.
+
+<P>
+</LI>
+<LI>Use AMPL to solve problems either locally or remotely with a COIN-OR solver, Cplex, GLPK, Knitro, or LINDO - see Section <A HREF="node73.html#section:amplclient">12.1</A>.
+
+<P>
+</LI>
+<LI>Build a remote solver service using Apache Tomcat - see Section <A HREF="node71.html#section:tomcat">11</A>.
+
+<P>
+</LI>
+<LI>Use MATLAB to generate problem instances in OSiL format and call a solver either remotely or locally - see Section <A HREF="node42.html#section:usingmatlab">7.3.3</A>.
+
+<P>
+</LI>
+<LI>Use the OS library for algorithmic differentiation (in conjunction with COIN-OR CppAD) - see Section <A HREF="node50.html#section:ad">9</A>.
+</LI>
+</UL>
+
+<P>
+The OS project is very extensive and relies on many other COIN-OR projects.  This may not be desirable for modeling language and solver developers that just wish to use the OS API in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download that consists of all the code for the OS API and for reading and writing instance and solution files. We refer to this version of the project as <TT>OSCommon</TT> and the code for this project is synched  with the corresponding stable and release versions of the code. For example, to get Stable 1.1 of <TT>OSCommon</TT> use the svn command
+<PRE>
+svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html284"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html280"
+  HREF="osUsersManual_1.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html274"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html282"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html285"
+  HREF="node6.html">Downloading the OS Project</A>
+<B> Up:</B> <A NAME="tex2html281"
+  HREF="osUsersManual_1.html">Optimization Services 1.0 User's</A>
+<B> Previous:</B> <A NAME="tex2html275"
+  HREF="node4.html">The Optimization Services (OS)</A>
+ &nbsp; <B>  <A NAME="tex2html283"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

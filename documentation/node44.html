@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>OSSolverInterfaces</TITLE>
+<META NAME="description" CONTENT="OSSolverInterfaces">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node45.html">
+<LINK REL="previous" HREF="node43.html">
+<LINK REL="up" HREF="node32.html">
+<LINK REL="next" HREF="node45.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html793"
+  HREF="node45.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html789"
+  HREF="node32.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html783"
+  HREF="node43.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html791"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html794"
+  HREF="node45.html">OSUtils</A>
+<B> Up:</B> <A NAME="tex2html790"
+  HREF="node32.html">The OS Library Components</A>
+<B> Previous:</B> <A NAME="tex2html784"
+  HREF="node43.html">OSParsers</A>
+ &nbsp; <B>  <A NAME="tex2html792"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000105000000000000000"></A><A NAME="section:ossolverinterfaces"></A>
+<BR>
+OSSolverInterfaces
+</H2>
+
+<P>
+The <TT>OSSolverInterfaces</TT> library is designed to facilitate linking the OS library with various solver APIs. We first describe how to take a problem instance in OSiL format and connect to a solver that has a COIN-OR OSI interface.  See the OSI project <TT><A NAME="tex2html71"
+  HREF="www.projects.coin-or.org/Osi">www.projects.coin-or.org/Osi</A></TT>.   We then describe hooking to the COIN-OR nonlinear code <TT>Ipopt.</TT> See <TT><A NAME="tex2html72"
+  HREF="www.projects.coin-or.org/Ipopt">www.projects.coin-or.org/Ipopt</A></TT>.  Finally we describe hooking to two commercial solvers KNITRO and LINDO.
+
+<P>
+The OS library has been tested with the following solvers using the Osi Interface.
+
+<P>
+
+<UL>
+<LI>Cbc
+</LI>
+<LI>Clp
+</LI>
+<LI>Cplex
+</LI>
+<LI>DyLP
+</LI>
+<LI>Glpk
+</LI>
+<LI>SYMPHONY
+</LI>
+<LI>Vol
+</LI>
+</UL>
+
+<P>
+In the <TT>OSSolverInterfaces</TT> library there is an abstract class <TT>DefaultSolver</TT> that has the following key members:
+
+<P>
+<PRE>
+std::string osil;
+std::string osol;
+std::string osrl;
+OSInstance *osinstance;
+OSResult  *osresult;
+</PRE>
+and the pure virtual function
+<PRE>
+virtual void solve() = 0 ;
+</PRE>
+In order to use a solver through the COIN-OR <TT>Osi</TT> interface it is necessary to create an object in the <TT>CoinSolver</TT> class which inherits from the <TT>DefaultSolver</TT> class and implements the appropriate <TT>solve()</TT> function.  We illustrate with the Clp solver.
+
+<P>
+<PRE>
+DefaultSolver *solver  = NULL;
+solver = new CoinSolver();
+solver-&gt;m_sSolverName = "clp";
+</PRE>
+
+<P>
+Assume that the data file containing the problem has been read into the string <TT>osil</TT> and the solver options are in the string <TT>osol</TT>. Then the <TT>Clp</TT> solver is invoked as follows.
+
+<P>
+<PRE>
+solver-&gt;osil = osil;
+solver-&gt;osol = osol;
+solver-&gt;solve();
+</PRE>
+
+<P>
+Finally, get the solution in <TT>OSrL</TT> format as follows
+
+<P>
+<PRE>
+cout &lt;&lt; solver-&gt;osrl &lt;&lt; endl;
+</PRE>
+
+<P>
+Even though LINDO and KNITRO are commercial solvers and do not have a COIN-OR <TT>Osi</TT> interface these solvers are used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
+
+<P>
+<PRE>
+solver = new LindoSolver();
+</PRE>
+
+<P>
+Similarly for KNITRO and Ipopt. In the case of  KNITRO, the <TT>KnitroSolver</TT> class inherits from both <TT>DefaultSolver</TT> class and the KNITRO <TT>NlpProblemDef</TT> class. See <TT><A NAME="tex2html73"
+  HREF="http://www.ziena.com/docs/knitroman.pdf">http://www.ziena.com/docs/knitroman.pdf</A></TT> for more information on the KNITRO solver C++ implementation and the <TT>NlpProblemDef</TT> class. Similarly, for Ipopt the <TT>IpoptSolver</TT> class inherits from both the  <TT>DefaultSolver</TT> class and the Ipopt <TT>TNLP</TT> class.  See <TT><A NAME="tex2html74"
+  HREF="https://projects.coin-or.org/Ipopt/browser/stable/3.2/Ipopt/doc/documentation.pdf?format=raw">https://projects.coin-or.org/Ipopt/browser/stable/3.2/Ipopt/doc/documentation.pdf?format=raw</A></TT> for more information on the Ipopt solver C++ implementation and the <TT>TNLP</TT> calss.
+
+<P>
+In the examples above,  the problem instance was assumed to be read from a file into the string <TT>osil</TT> and then into the class member <TT>solver-&gt;osil.</TT> However, everything can be done entirely in memory. For example, it is possible to use the <TT>OSInstance</TT> class to create an in-memory problem representation and give this representation directly to a solver class that inherits from <TT>DefaultSolver</TT>. The class member to use is <TT>osinstance.</TT> This is illustrated in the example given in Section <A HREF="node78.html#subsection:exampleOSInstanceGeneration">13.3</A>.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html793"
+  HREF="node45.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html789"
+  HREF="node32.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html783"
+  HREF="node43.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html791"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html794"
+  HREF="node45.html">OSUtils</A>
+<B> Up:</B> <A NAME="tex2html790"
+  HREF="node32.html">The OS Library Components</A>
+<B> Previous:</B> <A NAME="tex2html784"
+  HREF="node43.html">OSParsers</A>
+ &nbsp; <B>  <A NAME="tex2html792"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>
