@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The retrieve Service Method</TITLE>
+<META NAME="description" CONTENT="The retrieve Service Method">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node67.html">
+<LINK REL="previous" HREF="node65.html">
+<LINK REL="up" HREF="node63.html">
+<LINK REL="next" HREF="node67.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1080"
+  HREF="node67.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1076"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1070"
+  HREF="node65.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1078"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1081"
+  HREF="node67.html">The getJobID Service Method</A>
+<B> Up:</B> <A NAME="tex2html1077"
+  HREF="node63.html">Solving Problems Remotely with</A>
+<B> Previous:</B> <A NAME="tex2html1071"
+  HREF="node65.html">The send Service Method</A>
+ &nbsp; <B>  <A NAME="tex2html1079"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000133300000000000000"></A><A NAME="section:retrieve"></A>
+<BR>
+The  <TT>retrieve</TT> Service Method
+</H3>
+
+<P>
+The <TT>retrieve</TT> method is used to get information the instance solution.  This method has a single string argument which is an OSoL instance. Here is an example of using the <TT>retrieve</TT> method with <TT>OSSolverService</TT>.
+<PRE>
+./OSSolverService -config ../data/configFiles/testremoteRetrieve.config
+</PRE>
+The <TT>testremoteRetrieve.config</TT> file is
+<PRE>
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+-osol ../data/osolFiles/retrieve.osol
+-serviceMethod retrieve
+-osrl /home/kmartin/temp/test.osrl
+</PRE>
+and the <TT>retrieve.osol</TT> file is
+<BR>
+<IMG
+ WIDTH="382" HEIGHT="120" ALIGN="BOTTOM" BORDER="0"
+ SRC="img150.png"
+ ALT="\begin{verbatimtab}[4]
+&lt;?xml version=''1.0'' encoding=''UTF-8''?&gt;
+&lt;osol xmlns=''...
+...g''&gt;
+&lt;general&gt;
+&lt;jobID&gt;123456abcd&lt;/jobID&gt;
+&lt;/general&gt;
+&lt;/osol&gt;
+\end{verbatimtab}">
+<BR>
+The OSoL file <TT>retrieve.osol</TT> contains a tag <TT>&lt;jobID&gt;</TT> that is communicated to the remote service. The remove service locates the result and returns it as a string. The string that is returned is an OSrL instance.  The user must modify the line
+<PRE>
+-osrl /home/kmartin/temp/test.osrl
+</PRE>
+to reflect a valid path for their own machine.  Also, the <TT>&lt;jobID&gt;</TT> should reflect a <TT>&lt;jobID&gt;</TT> that was previously submitted. The <TT>send()</TT> and <TT>retrieve()</TT>  <TT>&lt;jobID&gt;</TT> must match up.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

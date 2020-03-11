@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Setting up a Solver Service with Tomcat</TITLE>
+<META NAME="description" CONTENT="Setting up a Solver Service with Tomcat">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node72.html">
+<LINK REL="previous" HREF="node60.html">
+<LINK REL="up" HREF="osUsersManual_1.html">
+<LINK REL="next" HREF="node72.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1138"
+  HREF="node72.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1134"
+  HREF="osUsersManual_1.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1128"
+  HREF="node70.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1136"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1139"
+  HREF="node72.html">Applications</A>
+<B> Up:</B> <A NAME="tex2html1135"
+  HREF="osUsersManual_1.html">Optimization Services 1.0 User's</A>
+<B> Previous:</B> <A NAME="tex2html1129"
+  HREF="node70.html">Summary</A>
+ &nbsp; <B>  <A NAME="tex2html1137"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION000140000000000000000"></A><A NAME="section:tomcat"></A>
+<BR>
+Setting up a Solver Service with Tomcat
+</H1>
+
+<P>
+Download the java binary distribution at
+<PRE>
+os-distribution-release_number.zip
+</PRE>
+
+<P>
+The server side of the Java distribution is based on the Tomcat 5.5 implementation. After unpacking <TT>os-distribution-release&#5;Fnumber.zip</TT> there is a directory <TT>os-server-1.0</TT> and a single file <TT>os.war</TT>.  For users that have not installed the Tomcat server,   <TT>os-server-1.0</TT> contains  all of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running do the following to setup a  Tomcat server  with the OS Solver Service on a <B>Unix system</B>:
+
+<P>
+<DL COMPACT>
+<DT>Step 1.</DT>
+<DD>Put the folder  <TT>os-server-1.0</TT>   in the desired location for the OS Solver Service on the server machine.
+
+<P>
+</DD>
+<DT>Step 2.</DT>
+<DD>Connect to the Tomcat <TT>bin</TT> directory in the <TT>os-server-1.0</TT> root and execute <TT>./startup.sh</TT>.
+
+<P>
+</DD>
+<DT>Step 3.</DT>
+<DD>Test to see if the server is running the <TT>OSSolverService</TT>.  Open a browser on the server and enter the URL
+<PRE>
+http://localhost:8080/os/OSSolverService.jws
+</PRE>
+or
+<PRE>
+http://127.0.0.1:8080/os/OSSolverService.jws
+</PRE>
+You should see a message <TT>Click to see the WSDL</TT>.  Click on the link and you should see an XML description of the various methods available from the <TT>OSSolverService</TT>.
+
+<P>
+</DD>
+<DT>Step 4.</DT>
+<DD>On a client machine, create  the file <TT>testremote.config</TT> with the following lines of text
+<PRE>
+-serviceLocation http://***.***.***.***:8080/os/OSSolverService.jws
+-osil /parincLinear.osil
+</PRE>
+where ***.***.***.*** is the IP address of the Tomcat server machine. Then, assuming the files <TT>testremote.config</TT> and <TT>parincLinear.osil</TT> are in the same directory on the client machine as the <TT>OSSolverService</TT> execute:
+<PRE>
+./OSSolverService -config testremote.config
+</PRE>
+You should get back an OSrL message saying the problem was optimized.
+
+<P>
+</DD>
+</DL>
+
+<P>
+In a Windows environment you may want to start the Tomcat server as a service so you can log off (not shutdown) the machine and have the server continue to run. On a <B>Windows machine</B> do the following:
+
+<P>
+<DL COMPACT>
+<DT>Step 1.</DT>
+<DD>Put the folder  <TT>os-server-1.0</TT>   in the desired location for the OS Solver Service on the server machine.
+
+<P>
+</DD>
+<DT>Step 2.</DT>
+<DD>Connect to the Tomcat <TT>bin</TT> directory in the <TT>os-server-1.0</TT> root and execute
+<PRE>
+service.bat install
+</PRE>
+This will install Tomcat as a Windows service.  To remove the service execute
+<PRE>
+service.bat remove
+</PRE>
+
+<P>
+</DD>
+<DT>Step 3.</DT>
+<DD>Connect to the Tomcat <TT>bin</TT> directory and and double click on the <TT>tomcat5w.exe</TT> application.  This will open a Window for controlling the Tomcat server.
+
+<P>
+</DD>
+<DT>Step 4.</DT>
+<DD>Select the <TT>Startup</TT> tab and set the <TT>Working Directory</TT> to the path to <TT>os-server-1.0</TT>.
+
+<P>
+</DD>
+<DT>Step 5.</DT>
+<DD>Select the <TT>General</TT> tab and then click the <TT>Start</TT> button.
+
+<P>
+</DD>
+<DT>Step 6.</DT>
+<DD>Same as Step 3 for Unix.
+
+<P>
+</DD>
+<DT>Step 7:</DT>
+<DD>Same as Step 4 for Unix.
+
+<P>
+</DD>
+</DL>
+
+<P>
+<P>
+<B>Note:</B>
+There are many ways to start the Tomcat server and the exact way you choose may be different. See <TT><A NAME="tex2html84"
+  HREF="http://tomcat.apache.org/">http://tomcat.apache.org/</A></TT> and check out Tomcat version 5.5 for more detail. But do remember to properly set the <TT>Tomcat Working Directory</TT> to the path to <TT>os-server-1.0</TT>. By default, if you start Tomcat on Windows, the <TT>Working Directory</TT> is set to the Windows system folder, which will yield unpredictable results.
+
+<P>
+<P>
+If you already have a Tomcat server with Axis installed do the following:
+<DL COMPACT>
+<DT>1.</DT>
+<DD>copy the file <TT>os.war</TT> into the Tomcat <TT>WEB-INF</TT> directory in the <TT>ROOT</TT> folder under <TT>webapps</TT>.
+
+<P>
+</DD>
+<DT>2.</DT>
+<DD>Follow Steps 2-5 outlined above.
+</DD>
+</DL>
+
+<P>
+In the directory,
+<PRE>
+os-server-1.0/webapps/os/WEB-INF/code/OSConfig
+</PRE>
+there is a configuration file <TT>OSParameter.xml</TT> that can be modified to fit individual user needs. You can configure such parameters as service name, service URL/URI. Refer to the xml file for more detail. Descriptions for all the parameters are within the file itself.
+
+<P>
+<P>
+Below is a summary of the common and important directories and files you may want to know.
+
+<P>
+
+<UL>
+<LI><PRE>
+os-server-1.0/webapps/os/
+</PRE>
+contains the OS Web application. All directories and files outside of this folder are Tomcat server related.
+</LI>
+<LI><PRE>
+os-server-1.0/webapps/os/WEB-INF
+</PRE>
+contains private and important os configuration, library, class and executable files to run the Optimization Service. All files and directories outside of this folder but within the <TT>/os</TT> Web application folder are publicly viewable (e.g. Web pages).
+</LI>
+<LI><PRE>
+os-server-1.0/webapps/os/WEB-INF/code/OSConfig
+</PRE>
+contains configuration files for Optimization Services, such as the <TT>OSParameter.xml</TT> file.
+</LI>
+<LI><PRE>
+os-server-1.0/webapps/os/WEB-INF/code/temp
+</PRE>
+contains temporarily saved files such as submitted OSiL/OSoL input files, and OSrL output files. This folder can get bigger as the service starts to run more jobs. For maintenance purpose, you may want to keep an eye on it.
+</LI>
+<LI><PRE>
+os-server-1.0/webapps/os/WEB-INF/code/log
+</PRE>
+contains log files from the running services in the current Web application.
+</LI>
+<LI><PRE>
+os-server-1.0/webapps/os/WEB-INF/code/solver
+</PRE>
+contains solver binaries that actually carry out the optimization process.
+</LI>
+<LI><PRE>
+os-server-1.0/webapps/os/WEB-INF/code/backup
+</PRE>
+contains backup files from some of the above directories. This folder can get bigger as the service starts to run more jobs.
+</LI>
+<LI><PRE>
+os-server-1.0/webapps/os/WEB-INF/classes
+</PRE>
+contains class files to run the Optimization Services.
+</LI>
+<LI><PRE>
+os-server-1.0/webapps/os/WEB-INF/lib
+</PRE>
+contains library files needed by the Optimization Services.
+</LI>
+<LI><PRE>
+os-server-1.0/conf
+</PRE>
+contains configuration files for the Tomcat server, such as http server port.
+</LI>
+<LI><PRE>
+os-server-1.0/bin
+</PRE>
+contains executables and scripts to start and shutdown the Tomcat server.
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1138"
+  HREF="node72.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1134"
+  HREF="osUsersManual_1.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1128"
+  HREF="node70.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1136"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1139"
+  HREF="node72.html">Applications</A>
+<B> Up:</B> <A NAME="tex2html1135"
+  HREF="osUsersManual_1.html">Optimization Services 1.0 User's</A>
+<B> Previous:</B> <A NAME="tex2html1129"
+  HREF="node70.html">Summary</A>
+ &nbsp; <B>  <A NAME="tex2html1137"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

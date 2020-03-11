@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Mapping Rules</TITLE>
+<META NAME="description" CONTENT="Mapping Rules">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node38.html">
+<LINK REL="previous" HREF="node36.html">
+<LINK REL="up" HREF="node34.html">
+<LINK REL="next" HREF="node38.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html710"
+  HREF="node38.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html706"
+  HREF="node34.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html700"
+  HREF="node36.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html708"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html711"
+  HREF="node38.html">The OSExpressionTree OSnLNode Classes</A>
+<B> Up:</B> <A NAME="tex2html707"
+  HREF="node34.html">OSCommonInterfaces</A>
+<B> Previous:</B> <A NAME="tex2html701"
+  HREF="node36.html">Creating an OSInstance Object</A>
+ &nbsp; <B>  <A NAME="tex2html709"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000102300000000000000">
+Mapping Rules</A>
+</H3>
+
+<P>
+The <TT>OSInstance</TT> class has two member classes, <TT>InstanceHeader</TT> and <TT>InstanceData</TT>.  These correspond to the OSiL schema's complexTypes <TT>InstanceHeader</TT> and <TT>InstanceData</TT>, and to the XML elements <TT>&lt;instanceHeader&gt;</TT> and <TT>&lt;instanceData&gt;</TT>.
+
+<P>
+Moving down one level, Figure&nbsp;<A HREF="#figure:instancedata">12</A> shows that the <TT>InstanceData</TT> class has in turn the member classes <TT>Variables</TT>, <TT>Objectives</TT>, <TT>Constraints</TT>, <TT>LinearConstraintCoefficients</TT>, <TT>QuadraticCoefficients</TT>, and <TT>NonlinearExpressions</TT>, corresponding to the respective elements in the OSiL schema with the same name.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:osinstance"></A><A NAME="2659"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 11:</STRONG>
+The <TT>OSInstance</TT> class</CAPTION>
+<TR><TD><IMG
+ WIDTH="340" HEIGHT="146" BORDER="0"
+ SRC="img16.png"
+ ALT="\begin{figure}\centering
+\small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{...
+... \\ [0pt]
+\} ; //class OSInstance\\ [0pt]
+\end{tabular} }} \bigskip
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:instancedata"></A><A NAME="2661"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 12:</STRONG>
+The <TT>InstanceData</TT> class</CAPTION>
+<TR><TD><IMG
+ WIDTH="574" HEIGHT="222" BORDER="0"
+ SRC="img17.png"
+ ALT="\begin{figure}\centering
+\small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{...
+...sions;\\ [0pt]
+\} ; // class InstanceData
+\end{tabular} }} \bigskip
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:osinstancevariables"></A><A NAME="2665"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 13:</STRONG>
+The <TT>&lt;variables&gt;</TT> element as an <TT>OSInstance</TT> object</CAPTION>
+<TR><TD><IMG
+ WIDTH="762" HEIGHT="676" BORDER="0"
+ SRC="img18.png"
+ ALT="\begin{figure}\centering
+\scriptsize {\obeyspaces\let =\
+\fbox{\tt\begin{tabula...
+...anceData.variables.var[1].type=C;
+\end{tabular} }} \medskip\\ [0pt]
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Figure <A HREF="#figure:osinstancevariables">13</A> uses the <TT>Variables</TT> class to provide a closer look at the correspondence between schema and class. On the right, the <TT>Variables</TT> class contains a <TT>number</TT> data member and a sequence of <TT>var</TT> objects of class <TT>Variable</TT>. The <TT>Variable</TT> class has <TT>lb</TT> (double), <TT>ub</TT> (double), <TT>name</TT> (string), <TT>init</TT> (double), and <TT>type</TT> (char) data members. On the left the corresponding XML complexTypes are shown, with arrows indicating the correspondences. The following rules describe the mapping between the OSiL schema and the <TT>OSInstance</TT> class.
+<DL COMPACT>
+<DT><!-- MATH
+ $\triangleright$
+ -->
+<IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img19.png"
+ ALT="$ \triangleright$"></DT>
+<DD>Each complexType in an OSiL schema corresponds to a class in <TT>OSInstance.</TT> Thus the OSiL schema's complexType <TT>Variable</TT> corresponds to <TT>OSInstance</TT>'s class <TT>Variable</TT>.  Elements in an actual XML file then correspond to objects in <TT>OSInstance</TT>; for example, the <TT>&lt;var&gt;</TT> element that is of type <TT>Variable</TT> in an OSiL file corresponds to a <TT>var</TT> object in class <TT>Variable</TT> of <TT>OSInstance</TT>.
+
+<P>
+</DD>
+<DT><!-- MATH
+ $\triangleright$
+ -->
+<IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img19.png"
+ ALT="$ \triangleright$"></DT>
+<DD>An attribute or element used in the definition of a <TT>complexType</TT> is a member of the corresponding <TT>OSInstance</TT> class, and the type of the attribute or element matches the type of the member.  In Figure&nbsp;<A HREF="#figure:osinstancevariables">13</A>, for example, <TT>lb</TT> is an attribute of the OSiL <TT>complexType</TT> named <TT>Variable</TT>, and <TT>lb</TT> is a member of the <TT>OSInstance</TT> class <TT>Variable</TT>; both have type <TT>double</TT>.  Similarly, <TT>var</TT> is an element in the definition of the OSiL <TT>complexType</TT> named <TT>Variables</TT>, and <TT>var</TT> is a member of the <TT>OSInstance</TT> class <TT>Variables</TT>; the <TT>var</TT> element has type <TT>Variable</TT> and the <TT>var</TT> member is a <TT>Variable</TT> object.
+
+<P>
+</DD>
+<DT><!-- MATH
+ $\triangleright$
+ -->
+<IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img19.png"
+ ALT="$ \triangleright$"></DT>
+<DD>A schema sequence corresponds to an array. For example, in Figure&nbsp;<A HREF="#figure:osinstancevariables">13</A> the complexType <TT>Variables</TT> has a sequence of <TT>&lt;var&gt;</TT> elements that are of type <TT>Variable</TT>, and the corresponding <TT>Variables</TT> class has a member that is an array of type <TT>Variable</TT>.
+
+<P>
+</DD>
+</DL>
+General nonlinear terms are stored in the data structure as <TT>OSExpressionTree</TT> objects, which are the subject of the next section.
+
+<P>
+The <TT>OSInstance</TT> class has a collection of <TT>get()</TT> , <TT>set()</TT>, and <TT>calculate()</TT> methods that act as an API for the optimization instance and described in Section <A HREF="node46.html#section:osinstanceAPI">8</A>.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html710"
+  HREF="node38.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html706"
+  HREF="node34.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html700"
+  HREF="node36.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html708"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html711"
+  HREF="node38.html">The OSExpressionTree OSnLNode Classes</A>
+<B> Up:</B> <A NAME="tex2html707"
+  HREF="node34.html">OSCommonInterfaces</A>
+<B> Previous:</B> <A NAME="tex2html701"
+  HREF="node36.html">Creating an OSInstance Object</A>
+ &nbsp; <B>  <A NAME="tex2html709"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

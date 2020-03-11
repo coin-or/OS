@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The OSExpressionTree OSnLNode Classes</TITLE>
+<META NAME="description" CONTENT="The OSExpressionTree OSnLNode Classes">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="previous" HREF="node37.html">
+<LINK REL="up" HREF="node34.html">
+<LINK REL="next" HREF="node39.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html720"
+  HREF="node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html716"
+  HREF="node34.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html712"
+  HREF="node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html718"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html721"
+  HREF="node39.html">OSModelInterfaces</A>
+<B> Up:</B> <A NAME="tex2html717"
+  HREF="node34.html">OSCommonInterfaces</A>
+<B> Previous:</B> <A NAME="tex2html713"
+  HREF="node37.html">Mapping Rules</A>
+ &nbsp; <B>  <A NAME="tex2html719"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000102400000000000000"></A><A NAME="section:osexpressiontreeclass"></A>
+<BR>
+The OSExpressionTree OSnLNode Classes
+</H3>
+
+<P>
+The <TT>OSExpressionTree</TT> class provides the in-memory representation of the nonlinear terms.  Our design goal is  to allow for efficient parsing of OSiL instances, while providing an API that meets the needs of diverse solvers.  Conceptually, any nonlinear expression in the objective or constraints is represented by a tree.  The expression tree for the nonlinear part of the objective function (<A HREF="node31.html#eq:roobj">1</A>), for example, has the form illustrated in Figure&nbsp;<A HREF="#figure:expressiontree">14</A>.  The choice of a data structure to store such a tree -- along with the associated methods of an API -- is a key aspect in the design of the <TT>OSInstance</TT> class.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:expressiontree"></A><A NAME="2666"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 14:</STRONG>
+Conceptual expression tree for the nonlinear part of the objective (<A HREF="node31.html#eq:roobj">1</A>).</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER"><IMG
+  WIDTH="1502" HEIGHT="1044" ALIGN="BOTTOM" BORDER="0"
+ SRC="./expressiontree.png"
+ ALT="Image expressiontree">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+A base abstract class <TT>OSnLNode</TT> is defined and  all of an OSiL file's
+operator and operand elements used in defining a
+nonlinear expression are extensions of the base element type <TT>OSnLNode</TT>. There is an element type <TT>OSnLNodePlus</TT>, for example, that
+extends <TT>OSnLNode</TT>; then in an OSiL instance
+file, there are <TT>&lt;plus&gt;</TT> elements that are of type <TT>OSnLNodePlus</TT>.   Each <TT>OSExpressionTree</TT> object contains a pointer to an <TT>OSnLNode</TT> object that is the root of the corresponding expression tree.  To every element that extends the <TT>OSnLNode</TT> type in an OSiL instance file, there corresponds a class that derives from the <TT>OSnLNode</TT> class in an <TT>OSInstance</TT> data structure.  Thus we can construct an expression tree of homogenous nodes, and methods that operate on the expression tree to calculate function values, derivatives, postfix notation, and the like do not require switches or complicated logic.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:calcfunction"></A><A NAME="1036"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 15:</STRONG>
+The function calculation method for the ``plus'' node class with polymorphism</CAPTION>
+<TR><TD><IMG
+ WIDTH="482" HEIGHT="146" BORDER="0"
+ SRC="img20.png"
+ ALT="\begin{figure}\centering
+\small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{...
+.../calculateFunction\\ [0pt]
+\end{tabular} }} \medskip\vspace{-8pt}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+The <TT>OSInstance</TT> class has a variety of <TT>calculate()</TT> methods, based on two pure virtual functions in the <TT>OSInstance</TT> class.  The first of these, <TT>calculateFunction()</TT>, takes an array of <TT>double</TT> values corresponding to decision variables, and evaluates the expression tree for those values.  Every class
+that extends <TT>OSnLNode</TT> must implement this method.  As an example, the <TT>calculateFunction</TT> method for the <TT>OSnLNodePlus</TT> class is shown in Figure <A HREF="#figure:calcfunction">15</A>.  Because the OSiL instance file must be validated against its schema, and in the schema each <TT>&lt;OSnLNodePlus&gt;</TT> element is specified to have exactly two child elements, this <TT>calculateFunction</TT> method can assume that there are
+exactly two children of the node that it is operating on.  The use of polymorphism and recursion makes adding new operator elements easy; it is simply a matter of adding a new class and implementing the <TT>calculateFunction()</TT> method for it.
+
+<P>
+Although in the OSnL schema, there are 200+ nonlinear operators, only the following <TT>OSnLNode</TT> classes are currently supported in our implementation.
+
+<P>
+
+<UL>
+<LI>OSnLNodeVariable
+</LI>
+<LI>OSnLNodeTimes
+</LI>
+<LI>OSnLNodePlus
+</LI>
+<LI>OSnLNodeSum
+</LI>
+<LI>OSnLNodeMinus
+</LI>
+<LI>OSnLNodeNegate
+</LI>
+<LI>OSnLNodeDivide
+</LI>
+<LI>OSnLNodePower
+</LI>
+<LI>OSnLNodeProduct
+</LI>
+<LI>OSnLNodeLn
+</LI>
+<LI>OSnLNodeSqrt
+</LI>
+<LI>OSnLNodeSquare
+</LI>
+<LI>OSnLNodeSin
+</LI>
+<LI>OSnLNodeCos
+</LI>
+<LI>OSnLNodeExp
+</LI>
+<LI>OSnLNodeif
+</LI>
+<LI>OSnLNodeAbs
+</LI>
+<LI>OSnLNodeMax
+</LI>
+<LI>OSnLNodeMin
+</LI>
+<LI>OSnLNodeE
+</LI>
+<LI>OSnLNodePI
+</LI>
+<LI>OSnLNodeAllDiff
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html720"
+  HREF="node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html716"
+  HREF="node34.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html712"
+  HREF="node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html718"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html721"
+  HREF="node39.html">OSModelInterfaces</A>
+<B> Up:</B> <A NAME="tex2html717"
+  HREF="node34.html">OSCommonInterfaces</A>
+<B> Previous:</B> <A NAME="tex2html713"
+  HREF="node37.html">Mapping Rules</A>
+ &nbsp; <B>  <A NAME="tex2html719"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

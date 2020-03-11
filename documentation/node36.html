@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Creating an OSInstance Object</TITLE>
+<META NAME="description" CONTENT="Creating an OSInstance Object">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node37.html">
+<LINK REL="previous" HREF="node35.html">
+<LINK REL="up" HREF="node34.html">
+<LINK REL="next" HREF="node37.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html698"
+  HREF="node37.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html694"
+  HREF="node34.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html688"
+  HREF="node35.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html696"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html699"
+  HREF="node37.html">Mapping Rules</A>
+<B> Up:</B> <A NAME="tex2html695"
+  HREF="node34.html">OSCommonInterfaces</A>
+<B> Previous:</B> <A NAME="tex2html689"
+  HREF="node35.html">The OSInstance Class</A>
+ &nbsp; <B>  <A NAME="tex2html697"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000102200000000000000">
+Creating an <TT>OSInstance</TT> Object</A>
+</H3>
+
+<P>
+The OSCommonInterfaces component contains an <TT>OSiLReader</TT>  class for reading an instance in an OSiL string and creating an in-memory <TT>OSInstance</TT> object.  Assume that <TT>sOSiL</TT> is a string with an instance in OSiL format. Creating an <TT>OSInstance</TT> object is illustrated in Figure <A HREF="#figure:creatingosinstanceobject">10</A>.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:creatingosinstanceobject"></A><A NAME="2657"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 10:</STRONG>
+Creating an <TT>OSInstance</TT> Object</CAPTION>
+<TR><TD><IMG
+ WIDTH="380" HEIGHT="78" BORDER="0"
+ SRC="img15.png"
+ ALT="\begin{figure}\centering
+\begin{verbatim}OSiLReader *osilreader = NULL;
+OSInst...
+...LReader();
+osinstance = osilreader-&gt;readOSiL( sOSiL);\end{verbatim}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

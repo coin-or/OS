@@ -1,0 +1,802 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Using OSInstance Methods: Low Level Calls</TITLE>
+<META NAME="description" CONTENT="Using OSInstance Methods: Low Level Calls">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node55.html">
+<LINK REL="previous" HREF="node51.html">
+<LINK REL="up" HREF="node50.html">
+<LINK REL="next" HREF="node53.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html897"
+  HREF="node53.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html893"
+  HREF="node50.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html887"
+  HREF="node51.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html895"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html898"
+  HREF="node53.html">First Derivative Reverse Sweep</A>
+<B> Up:</B> <A NAME="tex2html894"
+  HREF="node50.html">The OS Algorithmic Differentiation</A>
+<B> Previous:</B> <A NAME="tex2html888"
+  HREF="node51.html">Algorithmic Differentiation: Brief Review</A>
+ &nbsp; <B>  <A NAME="tex2html896"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000122000000000000000"></A><A NAME="section:lowlevelADcalls"></A>
+<BR>
+Using OSInstance Methods: Low Level Calls
+</H2>
+
+<P>
+The code snippets used in this section  are from the example code <TT>algorithmicDiffTest.cpp</TT> in the <TT>algorithmicDiffTest</TT> folder in the <TT>examples</TT> folder.  The  code is based on the following example.
+
+<P>
+<P></P>
+<DIV ALIGN="CENTER"><TABLE CELLPADDING="0" WIDTH="100%" ALIGN="CENTER">
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="LEFT">Minimize</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="87" HEIGHT="39" ALIGN="MIDDLE" BORDER="0"
+ SRC="img74.png"
+ ALT="$\displaystyle \quad x_{0}^{2} + 9x_{1}$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:adobj">(20)</A></TD></TR>
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="LEFT">s.t.</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="234" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img75.png"
+ ALT="$\displaystyle 33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1}$"></TD>
+<TD NOWRAP ALIGN="LEFT"><IMG
+ WIDTH="40" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img76.png"
+ ALT="$\displaystyle \le 10$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:adeq0">(21)</A></TD></TR>
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="115" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img77.png"
+ ALT="$\displaystyle \ln(x_{0} x_{3}) + 7x_{2}$"></TD>
+<TD NOWRAP ALIGN="LEFT"><IMG
+ WIDTH="40" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img5.png"
+ ALT="$\displaystyle \ge 10$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:adeq1">(22)</A></TD></TR>
+<TR VALIGN="MIDDLE">
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="98" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img78.png"
+ ALT="$\displaystyle x_{0}, x_{1}, x_{2}, x_{3}$"></TD>
+<TD NOWRAP ALIGN="LEFT"><IMG
+ WIDTH="31" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img7.png"
+ ALT="$\displaystyle \ge 0$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+<A NAME="eq:adeq2">(23)</A></TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL"><P></P>
+
+<P>
+The OSiL representation of the instance  (<A HREF="#eq:adobj">20</A>)-(<A HREF="#eq:adeq2">23</A>) is given in Appendix <A HREF="node82.html#section:adexample">14.3</A>.  This example is designed to illustrate several features of OSiL. Note that in constraint  (<A HREF="#eq:adeq0">21</A>) the constant 33 appears in the <TT>&lt;con&gt;</TT> element corresponding to this constraint and the constant 105 appears as a <TT>&lt;number&gt;</TT> OSnL node in the <TT>&lt;nonlinearExpressions&gt;</TT> section.   This distinction is important, as it will lead to different treatment by the code as
+documented below. There are no nonlinear terms in the instance that involve variable <IMG
+ WIDTH="27" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img79.png"
+ ALT="$ x_{1}.$"> The terms <IMG
+ WIDTH="30" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img80.png"
+ ALT="$ 5x_{1}$"> in  (<A HREF="#eq:adeq0">21</A>) and <IMG
+ WIDTH="30" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img81.png"
+ ALT="$ 7 x_{2}$"> in (<A HREF="#eq:adeq1">22</A>) are expressed in the <TT>objectives</TT> and <TT>&lt;linearConstraintCoefficients&gt;</TT>
+sections, respectively, and will again receive special treatment by the code. However, the term <IMG
+ WIDTH="53" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img82.png"
+ ALT="$ 1.37x_1$"> in (<A HREF="#eq:adeq0">21</A>),
+along with the term <IMG
+ WIDTH="30" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img83.png"
+ ALT="$ 2x_3$">, is expressed in the <TT>&lt;nonlinearExpressions&gt;</TT> section.          Variables <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$ x_{1}$"> and <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img84.png"
+ ALT="$ x_{2}$"> do not appear in any nonlinear terms. However, in the OSInstance API, variable <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$ x_{1}$"> appears in the   <TT>&lt;nonlinearExpressions&gt;</TT> section; hence it  is treated as a nonlinear variable for purposes of algorithmic differentiation. Variable <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img84.png"
+ ALT="$ x_{2}$"> never appears in the  <TT>&lt;nonlinearExpressions&gt;</TT> section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations. Variables that do not appear in the <TT>&lt;nonlinearExpressions&gt;</TT> are never part of the algorithmic differentiation calculations.
+
+<P>
+Ignoring the nonnegativity constraints, instance (<A HREF="#eq:adobj">20</A>)-(<A HREF="#eq:adeq2">23</A>)  defines a mapping  from <!-- MATH
+ $\mathbb{R}^{4}$
+ -->
+<IMG
+ WIDTH="24" HEIGHT="21" ALIGN="BOTTOM" BORDER="0"
+ SRC="img85.png"
+ ALT="$ \mathbb{R}^{4}$"> to <!-- MATH
+ $\mathbb{R}^{3}.$
+ -->
+<IMG
+ WIDTH="29" HEIGHT="21" ALIGN="BOTTOM" BORDER="0"
+ SRC="img86.png"
+ ALT="$ \mathbb{R}^{3}.$">
+
+<P>
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+\left[
+        \begin{array}{r}
+            x_0^2+9x_1 \\
+            33 - 105 + 1.37x_1 + 2x_3 + 5x_1 \\
+            \ln (x_0x_3) + 7x_2
+        \end{array}
+    \right]
+&=&
+    \left[
+        \begin{array}{r}
+            9x_1 \\
+            33 + 5x_1 \\
+            7x_2
+        \end{array}
+    \right]
++
+    \left[
+        \begin{array}{r}
+            x_0^2 \\
+            - 105 + 1.37x_1 + 2x_3  \\
+            \ln (x_0x_3)
+        \end{array}
+    \right]
+  \nonumber  \\
+  &=&  \left[
+        \begin{array}{r}
+            9x_1 \\
+            33 + 5x_1 \\
+            7x_2
+        \end{array}
+    \right]
++
+    \left[
+        \begin{array}{r}
+            f_1(x) \\
+            f_2(x) \\
+            f_3(x)
+        \end{array}
+    \right]
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="259" HEIGHT="82" BORDER="0"
+ SRC="img87.png"
+ ALT="\begin{displaymath}\left[
+\begin{array}{r}
+x_0^2+9x_1 \\
+33 - 105 + 1.37x_1 + 2x_3 + 5x_1 \\
+\ln (x_0x_3) + 7x_2
+\end{array}\right]\end{displaymath}"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="311" HEIGHT="82" BORDER="0"
+ SRC="img88.png"
+ ALT="\begin{displaymath}\left[
+\begin{array}{r}
+9x_1 \\
+33 + 5x_1 \\
+7x_2
+\end{arra...
+... \\
+- 105 + 1.37x_1 + 2x_3 \\
+\ln (x_0x_3)
+\end{array}\right]\end{displaymath}"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT">&nbsp;</TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="193" HEIGHT="82" BORDER="0"
+ SRC="img89.png"
+ ALT="\begin{displaymath}\left[
+\begin{array}{r}
+9x_1 \\
+33 + 5x_1 \\
+7x_2
+\end{arra...
+...begin{array}{r}
+f_1(x) \\
+f_2(x) \\
+f_3(x)
+\end{array}\right]\end{displaymath}"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:definef"></A><!-- MATH
+ \begin{eqnarray}
+\hbox{\rm where}\ f(x) :=
+\left[
+        \begin{array}{r}
+            f_1(x) \\
+            f_2(x) \\
+            f_3(x)
+        \end{array}    \right]
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="186" HEIGHT="82" BORDER="0"
+ SRC="img90.png"
+ ALT="\begin{displaymath}\hbox{\rm where}\ f(x) :=
+\left[
+\begin{array}{r}
+f_1(x) \\
+f_2(x) \\
+f_3(x)
+\end{array} \right]\end{displaymath}"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(24)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+The OSiL representation for the instance  in  (<A HREF="#eq:adobj">20</A>)-(<A HREF="#eq:adeq2">23</A>)  is read into an in-memory OSInstance object as follows (we assume that <TT>osil</TT> is a <TT>string</TT> with the OSiL instance)
+<PRE>
+osilreader = new OSiLReader();
+osinstance = osilreader-&gt;readOSiL( &amp;osil);
+</PRE>
+There is a method in the <TT>OSInstance</TT> class, <TT>initForAlgDiff()</TT> that is used to initialize the nonlinear data structures.  A call to this method
+<PRE>
+osinstance-&gt;initForAlgDiff( );
+</PRE>
+will generate a map of the indices of the nonlinear variables. This is critical because the algorithmic differentiation only operates on variables that appear in the <TT>&lt;nonlinearExpressions&gt;</TT> section.  An example of this map follows.
+<PRE>
+std::map&lt;int, int&gt; varIndexMap;
+std::map&lt;int, int&gt;::iterator posVarIndexMap;
+varIndexMap = osinstance-&gt;getAllNonlinearVariablesIndexMap( );
+for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap
+	!= varIndexMap.end(); ++posVarIndexMap){
+	std::cout &lt;&lt;  "Variable Index = "   &lt;&lt; posVarIndexMap-&gt;first  &lt;&lt; std::endl ;
+}
+</PRE>
+The variable indices listed are 0, 1, and 3. Variable 2 does not appear in the <TT>&lt;nonlinearExpressions&gt;</TT> section and is not included in <TT>varIndexMap</TT>.  That is, <IMG
+ WIDTH="15" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img68.png"
+ ALT="$ f$"> will be considered as a map from <!-- MATH
+ $\mathbb{R}^{3}$
+ -->
+<IMG
+ WIDTH="24" HEIGHT="21" ALIGN="BOTTOM" BORDER="0"
+ SRC="img91.png"
+ ALT="$ \mathbb{R}^{3}$"> to <!-- MATH
+ $\mathbb{R}^{3}.$
+ -->
+<IMG
+ WIDTH="29" HEIGHT="21" ALIGN="BOTTOM" BORDER="0"
+ SRC="img86.png"
+ ALT="$ \mathbb{R}^{3}.$">
+
+<P>
+Once the nonlinear structures are initialized it is possible to take derivatives using algorithmic differentiation.   Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree (or operation sequence) representation of <IMG
+ WIDTH="15" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img68.png"
+ ALT="$ f$">.  The two key <TT>public</TT> algorithmic differentiation  methods in the <TT>OSInstance</TT> class are <TT>forwardAD</TT> and <TT>reverseAD</TT>.   These are actually  generic ``wrappers'' around the corresponding CppAD methods with the same signature.  This keeps the OS API  public methods independent of any underlying algorithmic differentiation package.
+
+<P>
+The <TT>forwardAD</TT> signature is
+<PRE>
+std::vector&lt;double&gt; forwardAD(int k, std::vector&lt;double&gt; vdX);
+</PRE>
+where <IMG
+ WIDTH="14" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img92.png"
+ ALT="$ k$"> is the highest order Taylor coefficient of <IMG
+ WIDTH="15" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img68.png"
+ ALT="$ f$"> to be returned,  <IMG
+ WIDTH="32" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img93.png"
+ ALT="$ \tt vdX$"> is a vector of doubles in <!-- MATH
+ $\mathbb{R}^{n},$
+ -->
+<IMG
+ WIDTH="31" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img94.png"
+ ALT="$ \mathbb{R}^{n},$"> and the function return is a vector of doubles in <!-- MATH
+ $\mathbb{R}^{m}.$
+ -->
+<IMG
+ WIDTH="34" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$ \mathbb{R}^{m}.$"> Thus, <IMG
+ WIDTH="14" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img92.png"
+ ALT="$ k$"> corresponds to the <IMG
+ WIDTH="14" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img92.png"
+ ALT="$ k$"> in Equations  (<A HREF="node51.html#eq:xTaylorCoeff">12</A>) and (<A HREF="node51.html#eq:yTaylorCoeff">14</A>),  where <TT>vdX</TT> corresponds to the <IMG
+ WIDTH="33" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img50.png"
+ ALT="$ x^{(k)}$"> in Equation (<A HREF="node51.html#eq:xTaylorCoeff">12</A>), and the <IMG
+ WIDTH="32" HEIGHT="40" ALIGN="MIDDLE" BORDER="0"
+ SRC="img95.png"
+ ALT="$ y^{(k)}$"> in Equation (<A HREF="node51.html#eq:yTaylorCoeff">14</A>) is the vector in range space returned by the call to <TT>forwardAD</TT>.    For example, by  Equation (<A HREF="node51.html#eq:forward0Result">15</A>) the following call will evaluate each component function defined in (<A HREF="#eq:definef">24</A>) corresponding only to the nonlinear part of (<A HREF="#eq:definef">24</A>) - the part denoted by <IMG
+ WIDTH="38" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img63.png"
+ ALT="$ f(x)$">.
+<PRE>
+funVals = osinstance-&gt;forwardAD(0, x0);
+</PRE>
+Since there are three components in the vector defined by  (<A HREF="#eq:definef">24</A>), the return value  <TT>funVals</TT> will have three components. For an input vector,
+<PRE>
+x0[0] = 1; // the value for variable x0 in function f
+x0[1] = 5; // the value for variable x1 in function f
+x0[2] = 5; // the value for variable x3 in function f
+</PRE>
+the values returned by <TT>osinstance-&gt;forwardAD(0, x0)</TT>  are 1, -63.15, and 1.6094, respectively.
+The Jacobian of the example in (<A HREF="#eq:definef">24</A>) is
+
+<P>
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:jac"></A><!-- MATH
+ \begin{eqnarray}
+J =
+\left[
+\begin{array}{rrrr}
+2x_{0} &9.00&0.00&0.00   \\
+0.00&6.37&0.00&2.00 \\
+1/x_{0}&0.00&7.00&1/x_{3}
+\end{array}
+\right]
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="247" HEIGHT="82" BORDER="0"
+ SRC="img96.png"
+ ALT="\begin{displaymath}J =
+\left[
+\begin{array}{rrrr}
+2x_{0} &amp;9.00&amp;0.00&amp;0.00 \\
+0.00&amp;6.37&amp;0.00&amp;2.00 \\
+1/x_{0}&amp;0.00&amp;7.00&amp;1/x_{3}
+\end{array}\right]\end{displaymath}"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(25)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+and the Jacobian <IMG
+ WIDTH="23" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img97.png"
+ ALT="$ J_f$"> of the nonlinear part is
+<P></P>
+<DIV ALIGN="CENTER"><A NAME="eq:jac2"></A><!-- MATH
+ \begin{equation}
+J_f = \left[
+        \begin{array}{ccc}
+            2x_0 & 0.00 & 0.00 \\
+            0.00  & 1.37 & 2.00 \\
+            1/x_0 & 0.00 & 1/x_3
+        \end{array}
+    \right]
+\end{equation}
+ -->
+<TABLE CELLPADDING="0" WIDTH="100%" ALIGN="CENTER">
+<TR VALIGN="MIDDLE">
+<TD NOWRAP ALIGN="CENTER"><IMG
+ WIDTH="218" HEIGHT="82" ALIGN="MIDDLE" BORDER="0"
+ SRC="img98.png"
+ ALT="$\displaystyle J_f = \left[ \begin{array}{ccc} 2x_0 &amp; 0.00 &amp; 0.00 \\ 0.00 &amp; 1.37 &amp; 2.00 \\ 1/x_0 &amp; 0.00 &amp; 1/x_3 \end{array} \right]$"></TD>
+<TD NOWRAP WIDTH="10" ALIGN="RIGHT">
+(26)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL"><P></P>
+When <!-- MATH
+ $x_{0} = 1,$
+ -->
+<IMG
+ WIDTH="59" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img99.png"
+ ALT="$ x_{0} = 1,$"> <!-- MATH
+ $x_{1} = 5,$
+ -->
+<IMG
+ WIDTH="59" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img100.png"
+ ALT="$ x_{1} = 5,$"> <!-- MATH
+ $x_{2} = 10,$
+ -->
+<IMG
+ WIDTH="67" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img101.png"
+ ALT="$ x_{2} = 10,$"> and <IMG
+ WIDTH="54" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img102.png"
+ ALT="$ x_{3} = 5$"> the Jacobian <IMG
+ WIDTH="23" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img97.png"
+ ALT="$ J_f$">
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:jac3"></A><!-- MATH
+ \begin{eqnarray}
+J_f = \left[
+        \begin{array}{ccc}
+            2.00 & 0.00 & 0.00 \\
+            0.00 & 1.37 & 2.00 \\
+            1.00 & 0.00 & 0.20
+        \end{array}
+    \right]
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="199" HEIGHT="82" BORDER="0"
+ SRC="img103.png"
+ ALT="\begin{displaymath}J_f = \left[
+\begin{array}{ccc}
+2.00 &amp; 0.00 &amp; 0.00 \\
+0.00 &amp; 1.37 &amp; 2.00 \\
+1.00 &amp; 0.00 &amp; 0.20
+\end{array}\right]\end{displaymath}"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(27)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+A forward sweep with <IMG
+ WIDTH="46" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img104.png"
+ ALT="$ k = 1$"> will calculate the Jacobian column-wise.  See
+(<A HREF="node51.html#eq:forward1Result">16</A>).  The following code will return column 3 of the Jacobian (<A HREF="#eq:jac3">27</A>) which corresponds to nonlinear variable <IMG
+ WIDTH="27" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img105.png"
+ ALT="$ x_{3}.$">
+<PRE>
+x1[0] = 0;
+x1[1] = 0;
+x1[2] = 1;
+osinstance-&gt;forwardAD(1, x1);
+</PRE>
+
+<P>
+Now calculate second derivatives.  To illustrate we use the results in (<A HREF="node51.html#eq:forward2Resulta">17</A>)-(<A HREF="node51.html#eq:forward2Resultc">19</A>) and calculate
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+\frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{0} \partial x_{3}}  \quad k = 1, 2, 3.
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="181" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img106.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{0} \partial x_{3}} \quad k = 1, 2, 3.$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+Variables <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$ x_{0}$"> and <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img107.png"
+ ALT="$ x_{3}$"> are the first and third nonlinear variables so by  (<A HREF="node51.html#eq:forward2Resultb">18</A>) the <IMG
+ WIDTH="32" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img108.png"
+ ALT="$ x^{(1)}$"> should be the sum of the <IMG
+ WIDTH="30" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img109.png"
+ ALT="$ e^{(1)}$"> and <IMG
+ WIDTH="30" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img110.png"
+ ALT="$ e^{(3)}$"> unit vectors and used in the  first-order forward sweep calculation.
+<PRE>
+x1[0] = 1;
+x1[1] = 0;
+x1[2] = 1;
+osinstance-&gt;forwardAD(1, x1);
+</PRE>
+Next set <!-- MATH
+ $x^{(2)} = 0$
+ -->
+<IMG
+ WIDTH="64" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img66.png"
+ ALT="$ x^{(2)} = 0$"> and do a second-order forward sweep.
+<PRE>
+std::vector&lt;double&gt; x2( n);
+x2[0] = 0;
+x2[1] = 0;
+x2[2] = 0;
+osinstance-&gt;forwardAD(2, x2);
+</PRE>
+This call returns the vector of  values
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -.52
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="259" HEIGHT="46" ALIGN="MIDDLE" BORDER="0"
+ SRC="img111.png"
+ ALT="$\displaystyle y_{1}^{(2)} = 1, \quad y_{2}^{(2)} = 0, \quad y_{3}^{(2)} = -.52$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+By inspection of (<A HREF="#eq:jac2">26</A>),
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+\frac{\partial^2 f_{1}(x^{(0)})}{\partial x_{0} \partial x_{0}}  &=& 2 \\
+ \frac{\partial^2 f_{2}(x^{(0)})}{\partial x_{0} \partial x_{0}}  &=&  0\\
+ \frac{\partial^2 f_{3}(x^{(0)})}{\partial x_{0} \partial x_{0}}  &=& -1 \\
+ \frac{\partial^2 f_{1}(x^{(0)})}{\partial x_{3} \partial x_{3}}  &=& 0 \\
+ \frac{\partial^2 f_{2}(x^{(0)})}{\partial x_{3} \partial x_{3}}  &=& 0\\
+ \frac{\partial^2 f_{3}(x^{(0)})}{\partial x_{3} \partial x_{3}}  &=& -.04
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img112.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{1}(x^{(0)})}{\partial x_{0} \partial x_{0}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="13" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img113.png"
+ ALT="$\displaystyle 2$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img114.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{2}(x^{(0)})}{\partial x_{0} \partial x_{0}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP>0</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img115.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{3}(x^{(0)})}{\partial x_{0} \partial x_{0}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="27" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img116.png"
+ ALT="$\displaystyle -1$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img117.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{1}(x^{(0)})}{\partial x_{3} \partial x_{3}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP>0</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img118.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{2}(x^{(0)})}{\partial x_{3} \partial x_{3}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP>0</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img119.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{3}(x^{(0)})}{\partial x_{3} \partial x_{3}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="40" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img120.png"
+ ALT="$\displaystyle -.04$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+Then by (<A HREF="node51.html#eq:forward2Resultc">19</A>),
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+\frac{\partial^2 f_{1}(x^{(0)})}{\partial x_{0} \partial x_{3}}  &=&  y_{1}^{(2)}  -  \frac{1}{2} \left(  \frac{\partial^2 f_{1}(x^{(0)})}{\partial x_{0} \partial x_{0}}   +   \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{3} \partial x_{3}}   \right) =   1 -  \frac{1}{2}(2 +  0) = 0 \\
+ \frac{\partial^2 f_{2}(x^{(0)})}{\partial x_{0} \partial x_{3}}  &=&   y_{2}^{(2)}  -  \frac{1}{2} \left(  \frac{\partial^2 f_{2}(x^{(0)})}{\partial x_{0} \partial x_{0}}   +   \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{3} \partial x_{3}}   \right)  = 0 -  \frac{1}{2}(0 +  0) = 0 \\
+ \frac{\partial^2 f_{3}(x^{(0)})}{\partial x_{0} \partial x_{3}}  &=&  y_{3}^{(2)}  -  \frac{1}{2} \left(  \frac{\partial^2 f_{3}(x^{(0)})}{\partial x_{0} \partial x_{0}}   +   \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{3} \partial x_{3}}   \right) = -.52 -  \frac{1}{2}(-1 - .04) = 0
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img121.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{1}(x^{(0)})}{\partial x_{0} \partial x_{3}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="426" HEIGHT="71" ALIGN="MIDDLE" BORDER="0"
+ SRC="img122.png"
+ ALT="$\displaystyle y_{1}^{(2)} - \frac{1}{2} \left( \frac{\partial^2 f_{1}(x^{(0)})}...
+...}(x^{(0)})}{\partial x_{3} \partial x_{3}} \right) = 1 - \frac{1}{2}(2 + 0) = 0$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img123.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{2}(x^{(0)})}{\partial x_{0} \partial x_{3}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="426" HEIGHT="71" ALIGN="MIDDLE" BORDER="0"
+ SRC="img124.png"
+ ALT="$\displaystyle y_{2}^{(2)} - \frac{1}{2} \left( \frac{\partial^2 f_{2}(x^{(0)})}...
+...}(x^{(0)})}{\partial x_{3} \partial x_{3}} \right) = 0 - \frac{1}{2}(0 + 0) = 0$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="84" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img125.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{3}(x^{(0)})}{\partial x_{0} \partial x_{3}}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="480" HEIGHT="71" ALIGN="MIDDLE" BORDER="0"
+ SRC="img126.png"
+ ALT="$\displaystyle y_{3}^{(2)} - \frac{1}{2} \left( \frac{\partial^2 f_{3}(x^{(0)})}...
+...0)})}{\partial x_{3} \partial x_{3}} \right) = -.52 - \frac{1}{2}(-1 - .04) = 0$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+Making all of the first and second derivative calculations using forward sweeps is most effective when the number of rows exceeds the number of variables.
+
+<P>
+The <TT>reverseAD</TT> signature is
+<PRE>
+std::vector&lt;double&gt; reverseAD(int k, std::vector&lt;double&gt; vdlambda);
+</PRE>
+where <TT>vdlambda</TT> is a vector of Lagrange multipliers.  This method returns a vector in the range space. If a reverse sweep of order <IMG
+ WIDTH="14" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img92.png"
+ ALT="$ k$"> is called, a forward sweep of all orders  through  <IMG
+ WIDTH="44" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img127.png"
+ ALT="$ k -1$"> must have been made prior to the call.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html899"
+  HREF="node53.html">First Derivative Reverse Sweep Calculations</A>
+<LI><A NAME="tex2html900"
+  HREF="node54.html">Second Derivative Reverse Sweep Calculations</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html897"
+  HREF="node53.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html893"
+  HREF="node50.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html887"
+  HREF="node51.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html895"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html898"
+  HREF="node53.html">First Derivative Reverse Sweep</A>
+<B> Up:</B> <A NAME="tex2html894"
+  HREF="node50.html">The OS Algorithmic Differentiation</A>
+<B> Previous:</B> <A NAME="tex2html888"
+  HREF="node51.html">Algorithmic Differentiation: Brief Review</A>
+ &nbsp; <B>  <A NAME="tex2html896"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

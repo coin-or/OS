@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Get Methods</TITLE>
+<META NAME="description" CONTENT="Get Methods">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node48.html">
+<LINK REL="previous" HREF="node46.html">
+<LINK REL="up" HREF="node46.html">
+<LINK REL="next" HREF="node48.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html830"
+  HREF="node48.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html826"
+  HREF="node46.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html820"
+  HREF="node46.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html828"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html831"
+  HREF="node48.html">Set Methods</A>
+<B> Up:</B> <A NAME="tex2html827"
+  HREF="node46.html">The OSInstance API</A>
+<B> Previous:</B> <A NAME="tex2html821"
+  HREF="node46.html">The OSInstance API</A>
+ &nbsp; <B>  <A NAME="tex2html829"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000111000000000000000">
+Get Methods</A>
+</H2>
+
+<P>
+The <TT>get()</TT> methods are used by other classes to access data in an existing <TT>OSInstance</TT> object or get an expression tree representation of an instance in postfix or prefix format.   Assume <TT>osinstance</TT> is an object in the <TT>OSInstance</TT> class created as illustrated in Figure <A HREF="node36.html#figure:creatingosinstanceobject">10</A>. Then, for example,
+<PRE>
+osinstance-&gt;getVariableNumber();
+</PRE>
+will return an integer which is the number of variables in the problem,
+<PRE>
+osintance-&gt;getVariableTypes();
+</PRE>
+will return a <TT>char</TT> pointer to the variable types (<TT>C</TT> for continuous, <TT>B</TT> for binary, and <TT>I</TT> for general integer),
+<PRE>
+getVariableLowerBounds();
+</PRE>
+will  return a <TT>double</TT> pointer to the lower bound on each variable. There are similar <TT>get</TT> methods for the constraints. There are numerous <TT>get</TT> methods for the data in the <TT>&lt;linearConstraintCoefficients&gt;</TT>  element, the <TT>&lt;quadraticCoefficients&gt;</TT> element, and the <TT>&lt;nonlinearExpressions&gt;</TT> element.
+
+<P>
+When an <TT>osinstance</TT> object is created, it is stored as in expression tree in an <TT>OSExpressionTree</TT> object. However, some solver APIs (e.g. LINDO) may take the data in a different format such as postfix and prefix. There are methods to return the data in either postfix or prefix format.
+
+<P>
+First define a <TT>vector</TT> of pointers to <TT>OSnLNode</TT> objects.
+<PRE>
+std::vector&lt;OSnLNode*&gt; postfixVec;
+</PRE>
+then get the expression tree for the objective function (index = -1) as a postfix vector of nodes.
+<PRE>
+postfixVec = osinstance-&gt;getNonlinearExpressionTreeInPostfix( -1);
+</PRE>
+If, for example, the <TT>osinstance</TT> object was the in-memory representation of   the instance illustrated in  Section <A HREF="node81.html#section:rosenbrockXML">14.2</A> then the code
+<PRE>
+for (i = 0 ; i &lt; n; i++){
+	cout &lt;&lt; postfixVec[i]-&gt;snodeName &lt;&lt; endl;	
+}
+</PRE>
+will produce
+<PRE>
+number
+variable
+minus
+number
+power
+number
+variable
+variable
+number
+power
+minus
+number
+power
+times
+plus
+</PRE>
+The method, <TT>processNonlinearExpressions()</TT> in the <TT>LindoSolver</TT> class in the <TT>OSSolverInterfaces</TT> library component illustrates using a postfix vector of <TT>OSnLNode</TT> objects to build a Lindo model instance.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html830"
+  HREF="node48.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html826"
+  HREF="node46.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html820"
+  HREF="node46.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html828"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html831"
+  HREF="node48.html">Set Methods</A>
+<B> Up:</B> <A NAME="tex2html827"
+  HREF="node46.html">The OSInstance API</A>
+<B> Previous:</B> <A NAME="tex2html821"
+  HREF="node46.html">The OSInstance API</A>
+ &nbsp; <B>  <A NAME="tex2html829"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

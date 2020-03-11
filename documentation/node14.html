@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Cygwin</TITLE>
+<META NAME="description" CONTENT="Cygwin">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node15.html">
+<LINK REL="previous" HREF="node13.html">
+<LINK REL="up" HREF="node12.html">
+<LINK REL="next" HREF="node15.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html416"
+  HREF="node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html412"
+  HREF="node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html406"
+  HREF="node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html414"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html417"
+  HREF="node15.html">MinGW</A>
+<B> Up:</B> <A NAME="tex2html413"
+  HREF="node12.html">Building the OS Project</A>
+<B> Previous:</B> <A NAME="tex2html407"
+  HREF="node13.html">Microsoft Visual Studio (MSVS)</A>
+ &nbsp; <B>  <A NAME="tex2html415"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00072200000000000000">
+Cygwin</A>
+</H3>
+
+<P>
+<TT>Cygwin</TT> provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See <TT>www.cygwin.com</TT>.   Cygwin can be used with the Gnu Compiler Collection (gcc) or with the Microsoft <TT>cl</TT> compiler.
+
+<P>
+<B>Using Cygwin with gcc:</B>  With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section <A HREF="node7.html#section:svn">3.1</A>. If you have previously downloaded Cygwin with version gnome make version 3.81-1,  you must obtain a fixed 3.81 version from <TT><A NAME="tex2html18"
+  HREF="http://www.cmake.org/files/cygwin/make.exe">http://www.cmake.org/files/cygwin/make.exe</A></TT>. (See also  the Cygwin mailing list postings <TT><A NAME="tex2html19"
+  HREF="http://cygwin.com/ml/cygwin/2006-09/msg00315.html">http://cygwin.com/ml/cygwin/2006-09/msg00315.html</A></TT> and <TT><A NAME="tex2html20"
+  HREF="http://cygwin.com/ml/cygwin/2006-09/msg00153.html">http://cygwin.com/ml/cygwin/2006-09/msg00153.html</A></TT>).  See also the discussion at <TT><A NAME="tex2html21"
+  HREF="https://projects.coin-or.org/BuildTools/wiki/current-issues">https://projects.coin-or.org/BuildTools/wiki/current-issues</A></TT>.
+
+<P>
+<P>
+<B>Using Cygwin with Microsoft cl:</B>   Users who are extremely adventuresome and have an abundance  of free time on their hands may wish to use Cygwin with the Microsoft <TT>cl</TT> compiler to build the OS project.   The following steps have led to a successful build.
+
+<P>
+<DL COMPACT>
+<DT>Step 1:</DT>
+<DD>Download <TT>Cygwin</TT>  from <TT><A NAME="tex2html22"
+  HREF="http://www.cygwin.com/setup.exe">http://www.cygwin.com/setup.exe</A></TT> and install.
+
+<P>
+</DD>
+<DT>Step 2:</DT>
+<DD>Download  Visual Studio Express C++ at  <TT><A NAME="tex2html23"
+  HREF="http://msdn2.microsoft.com/en-us/express/aa975050.aspx">http://msdn2.microsoft.com/en-us/express/aa975050.aspx</A></TT>.
+
+<P>
+</DD>
+<DT>Step 3:</DT>
+<DD>The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+
+<P>
+<TT><A NAME="tex2html24"
+  HREF="http://msdn2.microsoft.com/en-us/express/aa700755.aspx">http://msdn2.microsoft.com/en-us/express/aa700755.aspx</A></TT>
+<P>
+and install.
+
+<P>
+</DD>
+<DT>Step 4:</DT>
+<DD>Set the Cygwin search path configuration. This is important.
+This step is necessary to insure that Cygwin   looks for compilers, linkers, etc in the correct order.  The right order of directories  is: MSVS command directories, Cygwin command directories, and finally Windows command directories.  This is illustrated below.
+
+<P>
+
+<UL>
+<LI>First, Cygwin should look in the Microsoft Visual Studio directories.  If a standard Visual Studio install is done, the following  should be part of the Cygwin search path
+
+<P>
+<PRE>
+.
+:/cygdrive/c/Program Files/Microsoft Visual Studio 8/Common7/IDE
+:/cygdrive/c/Program Files/Microsoft Visual Studio 8/VC/bin
+:/cygdrive/c/Program Files/Microsoft Visual Studio 8/Common7/Tools
+:/cygdrive/c/Program Files/Microsoft Visual Studio 8/SDK/v2.0/Bin
+:/cygdrive/c/Program Files/Microsoft Visual Studio 8/VC/vcpackages
+:/cygdrive/c/WINDOWS/Microsoft.NET/Framework/v2.0.50727
+</PRE>
+
+<P>
+</LI>
+<LI>Second, Cygwin should next search its  command directories.  The following is typical of a standard install.
+
+<P>
+<PRE>
+/bin:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin
+</PRE>
+
+<P>
+</LI>
+<LI>Third, Cygwin should search the Windows specific command directories.  The following is typical.
+
+<P>
+<PRE>
+:/cygdrive/c/WINDOWS/system32:/cygdrive/c/WINDOWS
+:/cygdrive/c/WINDOWS/System32/Wbem:/cygdrive/c/Program Files/ATI Technologies/ATI Control Panel
+:/cygdrive/c/Program Files/Common Files/Roxio Shared/DLLShared/
+:/cygdrive/c/Program Files/QuickTime/QTSystem/:/cygdrive/c/Program Files/Microsoft SQL Server/90/Tools/binn/
+:/cygdrive/c/Program Files/Microsoft Platform SDKfor Windows Server 2003 R2/Bin/
+:/cygdrive/c/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Bin/WinNT/
+:/cygdrive/c/Program Files/SSH Communications Security/SSH Secure Shell
+:/cygdrive/c/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Bin/
+:/cygdrive/c/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Bin/WinNT/
+:/cygdrive/d/SSH
+</PRE>
+
+<P>
+</LI>
+</UL>
+Open the Cygwin shell and check the value of <TT>$PATH</TT>. If directories don't appear in an order described above, then  <TT>$PATH</TT> value needs to be reset.
+
+<P>
+</DD>
+<DT>Step 5:</DT>
+<DD>Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build without Ipopt. Issue the following command in the project root.
+<PRE>
+./configure COIN_SKIP_PROJECTS=Ipopt --enable-doscompile=msvc
+</PRE>
+
+<P>
+If you wish to build with Ipopt, then FORTRAN is required and Visual Studio does not ship with a FORTRAN compiler. The following is a work-around.
+
+<P>
+<DL COMPACT>
+<DT>Step a.</DT>
+<DD>Obtain one of the   Harwell Subroutine Library (HSL) routines <TT>ma27ad.f</TT> or <TT>MA57ad.f</TT>.  See <TT><A NAME="tex2html25"
+  HREF="http://www.cse.scitech.ac.uk/nag/hsl/">http://www.cse.scitech.ac.uk/nag/hsl/</A></TT>.  Put the Harwell code in the directory <TT>ThirdParty/HSL</TT>.
+
+<P>
+</DD>
+<DT>Step b.</DT>
+<DD>Follow the instructions for downloading and installing the <TT>f2c</TT> compiler from Netlib.  The installation instructions for this are in the <TT>INSTALL</TT> file in
+<PRE>
+../data/BuildTools/compile_f2c
+</PRE>
+
+<P>
+</DD>
+<DT>Step c.</DT>
+<DD>Run configure
+
+<P>
+<PRE>
+ ./configure  --enable-doscompile=msvc
+</PRE>
+
+<P>
+</DD>
+</DL>
+
+<P>
+</DD>
+</DL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html416"
+  HREF="node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html412"
+  HREF="node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html406"
+  HREF="node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html414"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html417"
+  HREF="node15.html">MinGW</A>
+<B> Up:</B> <A NAME="tex2html413"
+  HREF="node12.html">Building the OS Project</A>
+<B> Previous:</B> <A NAME="tex2html407"
+  HREF="node13.html">Microsoft Visual Studio (MSVS)</A>
+ &nbsp; <B>  <A NAME="tex2html415"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

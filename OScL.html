@@ -1,0 +1,513 @@
+<html><!-- InstanceBegin template="/Templates/OS.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>OScL (call simulation)</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  <link rel="icon" href="images/os1.ico">
+  <link rel="SHORTCUT ICON" href="images/os1.ico">
+  <link rel="stylesheet" href="css/os_styles.css" type="text/css">
+  <link rel="stylesheet" href="css/ddmenu.css" type="text/css">
+
+  <script type="text/javascript" src="js/ddmenu.js"></script>
+  <!-- InstanceBeginEditable name="head" -->
+  <style type="text/css">
+<!--
+.style4 {color: #000066; font-weight: bold; }
+.style5 {font-size: x-small}
+-->
+  </style>
+  <!-- InstanceEndEditable -->
+  <style type="text/css">
+<!--
+.style2 {font-size: larger}
+.style3 {
+	color: #666666;
+	font-weight: bold;
+}
+-->
+  </style>
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- start header table -->
+<table width="847" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="1"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="201"><img src="images/spacer.gif" width="175" height="1" alt=""></td>
+<td width="634"><img src="images/spacer.gif" width="599" height="1" alt=""></td>
+<td width="1"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="10"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+</tr>
+<tr>
+<td rowspan="4" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="56" alt=""></td>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="774" height="2" alt=""></td>
+<td rowspan="4" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="56" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="2" alt=""></td>
+</tr>
+<tr>
+<td rowspan="2"><a href="welcome.html"><img src="images/os1.jpg" width="115" height="87" alt="Optimization Services" border="0"></a></td>
+<td><div align="right">
+  <p align="center" class="nava style2">&nbsp;</p>
+  <table width="600" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="1"><div align="center"></div></td>
+      <td width="80"><div align="center"><a href="http://projects.coin-or.org/OS/register"><strong>Register</strong></a></div></td>
+      <td width="61"><div align="center"><a href="http://projects.coin-or.org/OS/login"><strong>Login</strong></a></div></td>
+      <td width="90"><div align="center"><a href="os_download.html"><strong>Download</strong></a></div></td>
+      <td width="68"><div align="center"><a href="os_license.html"><strong>License</strong></a></div></td>
+      <td width="150"><div align="center"><a href="http://groups.google.com/group/optimizationservices"><strong>OS Newsgroup  (hosted @ Google) </strong></a></div></td>
+      <!--td width="73"><div align="center"><a href="../login.html"><strong>Login</strong></a></div></td-->
+      <td width="150"><div align="center" class="style3"><a href="http://projects.coin-or.org/OS">OS  Developer Site (hosted @ COIN-OR)</a></div></td>
+    </tr>
+  </table>
+  </div></td>
+</tr>
+<tr>
+
+<td class="nav" valign="middle">
+    <!-- begin main menu bar -->
+    <ul class="ddmenu">
+	  <li><a href="os_overview.html">OVERVIEW</a> 
+        <ul>
+        	<li><a href="optimizationservices.html">Optimization Services (OS)</a></li>
+			<li><a href="optimizationservicesprotocol.html">Optimization Services Protocol (OSP)</a></li>
+			<li><a href="os_motivation.html">The OS Motivation</a></li>
+			<li><a href="os_components.html">The OS Components</a></li>
+			<li><a href="os_process.html">The OS Process</a></li>
+			<li><a href="os_customers.html">The OS Customers</a></li>
+			<li><a href="distributedComputingBackground.html">Distributed Computing Background</a></li>
+            <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+	  <li><a href="standard_overview.html">STANDARDS</a> 
+        <ul>
+        	<li><a href="standard_overview.html">Overview</a></li>
+        	<li><a href="OSiL.html">OSiL (instance)</a></li>
+        	<li><a href="OSiL_SE.html">--OSiL/SE (Stochastic Ext.)</a></li>
+        	<li><a href="OSrL.html">OSrL (result)</a></li>
+        	<li><a href="OSoL.html">OSoL (option)</a></li>
+        	<li><a href="OSaL.html">OSaL (analysis)</a></li>
+        	<li><a href="OSeL.html">OSeL (entity)</a></li>
+        	<li><a href="OSpL.html">OSpL (process)</a></li>
+        	<li><a href="OSbL.html">OSbL (benchmark)</a></li>
+        	<li><a href="OSqL.html">OSqL (query)</a></li>
+        	<li><a href="OSuL.html">OSuL (uri/url)</a></li>
+        	<li><a href="OSsL.html">OSsL (simulation)</a></li>
+        	<li><a href="OShL.html">OShL (hook up)</a></li>
+        	<li><a href="OSdL.html">OSdL (discover)</a></li>
+        	<li><a href="OScL.html">OScL (call simulation)</a></li>
+        	<li><a href="OSgL.html">OSgL (general)</a></li>
+        	<li><a href="OSnL.html">OSnL (nonlinear)</a></li>
+        	<li><a href="OSlL.html">OSlL (linear) == LPFML</a></li>
+        	<li><a href="OSRepository.html">OSRepository.xsd</a></li>
+        	<li><a href="OSRegistry.html">OSRegistry.xsd</a></li>
+
+        </ul>
+      </li>
+	  <li>|</li>
+      <li><a href="projects_overview.html">PROJECTS</a>
+        <ul>
+          <li><a href="projects_overview.html">Overview</a></li>
+        	<li><a href="projects_impact.html">IMPACT Solver/Service</a></li>
+        	<li><a href="projects_osml.html">OSmL - OS Modeling</a></li>
+        	<li><a href="projects_osrepository.html">OS Repository</a></li>
+        	<li><a href="projects_gui.html">OS GUI</a></li>
+        	<li><a href="projects_binary.html">OS Binary</a></li>
+        	<li><a href="projects_interface.html">OS Interface & OSI2</a></li>
+        	<li><a href="os_neos.html">OS and NEOS</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+      <li><a href="services_overview.html">SERVICES</a>
+        <ul>
+          <li><a href="services_overview.html">Overview</a></li>
+          <li><a href="services_osregistry.html">OS Registry Service</a></li>
+          <li><a href="services_hosting.html">Service Hosting</a></li>
+          <li><a href="os_neos.html">OS and NEOS</a></li>
+          <li><a href="services_support.html">Support</a></li>
+          <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+	  <li>|</li>
+      <li><a href="publications_overview.html">PUBLICATIONS</a> 
+        <ul>
+          <li><a href="publications_overview.html">Overview</a></li>
+          <li><a href="publications_research.html">Researches</a></li>
+          <li><a href="publications_conferences.html">Conferences</a></li>
+          <li><a href="publications_papers.html">Papers</a></li>
+          <li><a href="publications_presentations.html">Presentations</a></li>
+          <li><a href="publications_api.html">APIs</a></li>
+          <li><a href="publications_faq.html">FAQs</a></li>
+          <li><a href="os_related.html">Related Sites</a></li>
+          <li><a href="os_related_research.html">Related Research</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+      <li><a href="os_about.html">ABOUT</a> 
+        <ul>
+
+
+
+	      <li><a href="index.html">Home</a></li>
+          <li><a href="os_about.html">About Us</a></li>
+		  <li><a href="os_contact.html">Contact Us</a></li>		  
+          <li><a href="os_related.html">Related Sites</a></li>
+          <li><a href="os_related_research.html">Related Research</a></li>
+          <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+    </ul>
+    <!-- end main menu bar --></td>
+
+
+</tr>
+<tr>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="774" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+</tr>
+</table>
+<!-- end header table -->
+
+<!-- start body table -->
+<table width="837" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td colspan="5" bgcolor="#6F5D51"><img src="images/spacer.gif" width="776" height="10" alt=""></td>
+</tr>
+<tr>
+<td colspan="5" bgcolor="#666666"><img src="images/spacer.gif" width="776" height="1" alt=""></td>
+</tr>
+<tr>
+<!-- start column one -->
+<td width="177" valign="top"><p><!--img src="../images/searstower.jpg" width="194" height="251" alt="" border="0"-->
+    <!-- InstanceBeginEditable name="QuickLinks" -->
+<div class="subnava">
+  <p><strong>REPRESENTATIONS</strong></p>
+</div>
+<div class="subnava">
+  <p> <a href="OSiL.html">OSiL (instance)</a> </p>
+</div>
+<div class="subnava">
+  <p> <a href="OSiL_SE.html" class="style5">-OSiL/SE (Stochastic Ext.)</a> </p>
+</div>
+<div class="subnava">
+      <p><a href="services_deployment.html"> </a> <a href="OSrL.html">OSrL (result)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSoL.html">OSoL (option)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSaL.html">OSaL (analysis)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSeL.html">OSeL (entity)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSpL.html">OSpL (process)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSbL.html">OSbL (benchmark)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSqL.html">OSqL (query)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSuL.html">OSuL (uri/url)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSsL.html">OSsL (simulation)</a> </p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnav">
+      <p><strong> COMMUNICATIONS</strong></p>
+      </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OShL.html">OShL (hook up)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSdL.html">OSdL (discover)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OScL.html">OScL (call simulation)</a> </p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnav">
+      <p><strong>OTHER/AUXILLARY</strong></p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSgL.html">OSgL (general)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSnL.html">OSnL (nonlinear)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSlL.html">OSlL (linear) == LPFML</a></p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSRepository.html">OSRepository </a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSRegistry.html">OSRegistry</a> </p>
+    </div>
+    <br>
+    <!-- InstanceEndEditable --></p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p></td>
+<!-- end column one -->
+<td width="1" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="23"><img src="images/spacer.gif" width="23" height="400" alt=""></td>
+<!-- start column two -->
+<td width="450" valign="top" class="bodytxt"><!-- InstanceBeginEditable name="MainBody" -->
+  <p><span class="bodyhdr"><b>Optimization Services call Language (OScL)</b></span></p>
+  <p><a href="http://www.optimizationservices.org/wsdl/OScL.wsdl">Click</a> to see or download the OScL WSDL -&gt; <a href="http://www.optimizationservices.org/wsdl/OScL.wsdl" class="style4">OScL.wsdl</a> [stable] </p>
+  <hr>
+  <p>OScL (call) is a Web Service Definition Language for invoking simulation services that are usually invoked via the Optimization Services to obtain function values.</p>
+  <p>Theoretically, any client or user on  the network can call the simulation service just like a regular Web Service.  But under the Optimization Services framework, the main purpose to standardize  simulation services is to provide extension to simulation optimization.  Therefore in the OS practice, the client that calls the simulation is usually a  solver service. </p>
+  <p> From the Optimization Services framework point of  view, if a simulation is to be invoked by an OS-compatible solver, its input  and output first have to follow the standard <a href="OSsL.html">OSsL schema</a>. </p>
+  <p>To  make the communication, both the solver agent and the simulation service have  to follow the rules specified in the OScL.wsdl document, just as the communication  between a modeler and a solver follows the <a href="OShL.html">OShL WSDL document</a>. The following figure shows the interface part of the OScL WSDL document.  The other part (protocol &amp; address part) of the WSDL document, like all  other OSxL WSDL documents, uses the same specifications as in <a href="OShL.html">the OShL WSDL</a>. Briefly the networking protocol has to be &ldquo;SOAP  over HTTP&rdquo; with an RPC style call; the input and output encoding has to be the  standard SOAP encoding; the address is empty and to be dynamically found in the  OS Registry if unknown. </p>
+  <p><a href="images/OScLFigure.jpg"></a><a href="images/OScLFigure.jpg"><img src="images/OScLFigure.jpg" alt="OScLFigure" width="535" height="630" border="0"></a></p>
+  <p>The &lt;wsdl:portType&gt; element in the above figure has only one operation whose name is call. The call operation&rsquo;s input is required to be  of message type &ldquo;callRequest&rdquo; and its output is required to be of message type &ldquo;callResponse.&rdquo; The callRequest message has one part element (i.e. one argument), ossl, which is of string types. Simply put, the WSDL document  in the above figure  specifies the following single operation for each  simulation:</p>
+  <p align="center">String call(String ossl, String osol);</p>
+  <p>that is, every simulation service is required to have a  method called &ldquo;call&rdquo; that takes two input strings and returns one string. The first input specifies the simulation input and the output specifies the simulation output. Both the first input and  the output strings have to follow <a href="OSsL.html">the OSsL schema</a>. The second input string specifies the option and has to follow <a href="OSoL.html">the OSoL schema</a>. No invalid OSsL instances should be transmitted by  the solver onto the network. </p>
+  <p>Given an optimization problem as in the following figure: </p>
+  <p><img src="images/rosenbrockoptimization.gif" alt="rosenbrockOptimization" width="235" height="50"></p>
+  <p>Imagine the entire objective function  of the above optimization problem  is  calculated by a simulation called sampleSimulation shown in the following figure. </p>
+  <p><a href="images/sampleSimulation.jpg"><img src="images/sampleSimulation.jpg" alt="sampleSimulation" width="444" height="131" border="0"></a></p>
+  <p>Note that it is also possible to have part of an  objective or constraint function calculated by a simulation; thus the  simulation becomes one internal tree node in an entire expression tree rather  than the tree root. Three things have to be specified for the  simulation: input, output, and the simulation&rsquo;s address. The simulation  definition is specified in <a href="OSsL.html">OSsL</a>. It is also discussed in detail in <a href="OSnL.html#sim">the &quot;sim&quot; OSnLNode section in  OSnL</a>. </p>
+  <p>Notice the sampleSimulation engine can provide more &ldquo;services&rdquo; than just  calculating the output y from the two inputs a and b. </p>
+  <p>sampleSimulation can be represented using the OSsL &lt;simulation&gt; element (and in turn the &lt;simulation&gt; element can be embedded in OSiL to represent simulation optimization type of problems. </p>
+  <p class="style5">&lt;simulation name=&quot;sampleSimulation&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;uri value=&quot;http://www.ziena.com/os/SampleSimulationService.jws&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;ossl&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;input&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;a&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;b&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/input&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;output&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;y&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/output&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/ossl&gt; <br>
+  &lt;/simulation&gt;</p>
+  <p>With the sampleSimulation definition, we can write down the objective (idx =  -1) and the constraint (idx = 0) of the above optimization problem. In the example below we pass X0 to the simulation input a and X1 &nbsp;to the simulation  input b. </p>
+  <p class="style5">&lt;osil&hellip;&gt; <br>
+&hellip; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;nl idx=&quot;-1&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>sim</strong> name=&quot;sampleSimulation&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simInput inputName=&quot;a&quot;&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;/simInput&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simInput inputName=&quot;b&quot;&gt;&lt;var idx=&quot;1&quot;/&gt;&lt;/simInput&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simOutput outputName=&quot;y&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/<strong>sim</strong>&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/nl&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;nl idx=&quot;0&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>minus</strong>&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;plus&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;var idx=&quot;1&quot;/&gt;&lt;/plus&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;100&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/<strong>minus</strong>&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/nl&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simulation name=&quot;sampleSimulation&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;ossl&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;!--definition--&gt;&nbsp; &hellip; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/ossl&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/simulation&gt;<br>
+&hellip; <br>
+&lt;/osil&gt; </p>
+  <p>When a solver service  gets the OSiL instance, it uses the OS library to parse the input and output  instances with no difference and solve the optimization problem as usual:&nbsp; </p>
+  <p><span class="style5">public class MySolverService {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>public String  solve(String osil, String osol){</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //read OSiL <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSiLReader osilReader = new  OSiLReader();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; osilReader.readString(osil);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSInstance osInstance =  osilReader.getOSInstance();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //read OSoL <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSoLReader osolReader = new  OSoLReader();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; osolReader.readString(osol);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSOption osOption =  osolReader.getOSOption();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //solve <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MySolver mySolver = new  MySolver();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSResult osResult =  mySolver.solve(osInstance, osOption);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //write and return OSrL<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSrLWriter osrlWriter =  new OSrLWriter();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String osrl = osrlWriter.writeString(osResult);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return osrl;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>}</strong>//solve</span></p>
+  <p><span class="style5">}//class MySolverService</span></p>
+  <p>At each iteration, MySolverService uses the OS library  to calculate the function value for the objective (idx = -1) and constraint  (idx = 0) functions. MySolverService does not care how the function values are obtained;  at each iteration, it passes the variable values [X0, X1] to the OS library to get the function values of indexes -1  and 0. So nothing changes for the solver either. What has changed are the  function calculations inside the OS library. Below are some snippet examples of  how the OS library does the function calculations. The OS library adopts the  Objective-oriented philosophy using information hiding, inheritance, and most  importantly polymorphism as described <a href="distributedComputingBackground.html#OOP">here</a>. </p>
+  <p>First the solver calls the following  method in the OSInstance class: </p>
+  <p class="style5">public double <strong>calculateFunction</strong>(int  rowIdx, double x[]){<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; double dResult = calculateLinearFunction(rowIdx, x) +  calculateNonlinearFunction(rowIdx, x);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return dResult;<br>
+}//calculateFunction in <strong>OSInstance</strong></p>
+  <p>The solver  passes in the variable array X[] &nbsp;and the rowIdx, -1 for the objective and 0 for the  constraint. In the calculateFunction method, there are two parts: </p>
+  <p class="style5">calculateLinearFunction and calculateNonlinearFunction. </p>
+  <p>In the above  example, we list both functions using only  nonlinear expressions (&lt;nl&gt;), so calculateLinearFunction returns 0. calculateNonlinearFunction then uses the a expression tree  structure to further calculate the nonlinear function: </p>
+  <p class="style5">public double <strong>calculateNonlinearFunction</strong>(int rowIdx, double x[]){<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getNonlinearExpressions();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSExpressionTree exTree =  (OSExpressionTree)(m_expressionTrees.get(rowIdx+&quot;&quot;));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return exTree.calculateFunction(x);</p>
+  <span class="style5">}//calculateNonlinearFunction in <strong>OSInstance</strong></span>
+  <p>The OSExpressionTree is a tree of operation nodes all of abstract  type OSnLNode, including the root node: m_treeRoot. All concrete nodes that extend the  abstract OSnLNode, implement the method <span class="style5">calculationFunction(double x[])</span>. The  line <span class="style5">exTree.calculateFunction(x)</span> invokes the calculateFunction method  on the m_treeRoot, which is from the class OSExpressionTree:</p>
+  <p class="style5">public  double <strong>calculateFunction</strong>(double  x[]){<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return m_treeRoot.calculateFunction(x);</p>
+  <p class="style5"><span class="style5">}//calculateFunction in <strong>OSExpressionTree</strong></span>  </p>
+  <p>In the constraint function the root  is minus. The concrete OSnLNode that corresponds to minus is OSnLNodeMinus. The m_treeRoot.calculateFunction(x)  function calls the calculationFunction in OSnLNodeMinus: </p>
+  <p class="style5">protected double <strong>calculateFunction</strong>(double[] x){<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m_dFunctionValue =  m_mChildren[0].calculateFunction(x) - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m_mChildren[1].calculateFunction(x);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return m_dFunctionValue;<br>
+    }//calculateFunction in <strong>OSnLNodeMinus</strong></p>
+  <p>OSnLNodeMinus subtracts the value of its second  child (of type OSnLNode) from the value of its first child (again of type OSnLNode). What happens next is basically a  recursive tree invocation using the polymorphism idea from Object-oriented  Programming (OOP). A similar example on polymorphism is also explained in  detail in <a href="distributedComputingBackground.html#OOP">the OOP section</a>. </p>
+  <p>In the objective function the root is  sim. The concrete OSnLNode that corresponds to sim is OSnLNodeSim. The m_treeRoot.calculateFunction(x) function calls  the calculationFunction in OSnLNodeSim, which is more complex than OSnLNodeMinus: </p>
+  <p class="style5">protected double <strong>calculateFunction</strong>(double[] x){<br>
+      <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  //1. get  simulation inputs from each &lt;simInput&gt; child of &lt;sim&gt;</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int i = 0; i &lt; m_mChildren.length - 1; i++){<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSnLNodeSimInput  simInput = (OSnLNodeSimInput)(m_mChildren[i]);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String  sInputName = simInput.getInputName();<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; . . .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //2.  construct the OSsL simulation service input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String sOSsLInput =  XMLUtil.writeXMLElementToString(m_osslReader.getRootElement());<br>
+    . . .<br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //3.  instantiate an OS simulation agent to contact the remote simulation at the URI  address</strong><br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //and get the  result from the simulation service output (in OSsL)</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSSimulationAgent osSimulationAgent = new  OSSimulationAgent();<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; osSimulationAgent.simulationAddress = m_sURI;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sOSsLOutput =  osSimulationAgent.call(sOSsLInput);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>// 4. construct the result according to &lt;simOutput&gt; (last child)  of &lt;sim&gt; from the returned OSsL.</strong><br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //We know the  result has to be in OSsL format as we called an OS simulation service. </strong> <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OSnLNodeSimOutput simOutput =  (OSnLNodeSimOutput)(m_mChildren[m_mChildren.length - 1]);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OSsLReader osslReader = new OSsLReader();<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;osslReader.readString(sOSsLOutput);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;. . . &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_dFunctionValue = simOutput.calculateFunction(x);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;. . . <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //5. return  function value from the constructed simulation result. </strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return m_dFunctionValue;<br>
+    }//calculateFunction in <strong>OSnLNodeSim</strong> </p>
+  <p>Five steps are involved in OSnLNodeSim to get the value from the simulation  services: </p>
+  <p>1. OSnLNodeSim gets simulation inputs from each  &lt;simInput&gt; child of &lt;sim&gt;. The value of the simInput a is X0 and the value of the simInput b &nbsp;is X1: <br>
+    <span class="style5">&lt;simInput inputName=&quot;a&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;0&quot;/&gt; <br>
+&lt;/simInput&gt; <br>
+&lt;simInput inputName=&quot;b&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;1&quot;/&gt; <br>
+&lt;/simInput&gt; </span></p>
+  <p>2. OSnLNodeSim constructs  an OSsL input for the sample simulation service using the OSsLWriter provided in the OS library. Suppose the  Solver passes in X0=1.2 &nbsp;and X1=3.4, the OSsL would look like: <br>
+    <span class="style5">&lt;ossl&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;input&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;a&quot;&gt;1.2&lt;/el&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;b&quot;&gt;3.4&lt;/el&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/input&gt; <br>
+&lt;/ossl&gt; </span></p>
+  <p>3. OSnLNodeSim instantiates an OS simulation  agent to contact the remote sample simulation service at the URI address. The  simulation service output is in OSsL. <br>
+    This step  is the only step that involves communication. The communication should be  carried out according to the OScL WSDL documents. OSnLNodeSim delegates  an OS simulation agent to make the contact to the remote simulation service.  The agent hides all the networking complexities. When OSnLNodeSim calls the method:&nbsp; </p>
+  <p><span class="style5">String  OSsLOutput_String = osSimulationAgent.call(OSsLInput_String, OSoL_String); </span></p>
+  <p>four communication steps are  involved, which is similar to the 4 solver agent steps described in <a href="OShL.html#OShLProcess">the   OShL section</a>. Briefly <strong>simulation agent step 1 </strong>is encoding of the above constructed  OSsL input; <strong>simulation agent  step 2 </strong>is packing the encoded input and the call operation specified in OShL into a  SOAP envelope;<strong> simulation agent step 3</strong> is<strong> </strong>sending the SOAP envelope over  HTTP to the remote simulation service and wait for a response; and <strong>simulation agent step 4 </strong>is decoding the  result from the simulation service into a plain OSsL format. </p>
+  <p>4. OSnLNodeSim retrieves the result according to  &lt;simOutput&gt; (last child) of &lt;sim&gt; from the decoded OSsL using the OSsLReader provided in the OS library: </p>
+  <p class="style5">&lt;simOutput outputName=&quot;y&quot;/&gt; </p>
+  <p>5. OSnLNodeSim returns function value from the  constructed simulation result. <br>
+      <strong>At the simulation side</strong>, the simulation service also has to follow the OScL WSDL  document. The sample simulation service code looks like:</p>
+  <p class="style5">public class SampleSimulationService {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>public String  call(String ossl, String osol){</strong><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //read ossl <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSsLReader osslReader = new  OSsLReader();<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; double a =  Double.parseDouble(osslReader.getInputByName(&quot;a&quot;))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; double b =  Double.parseDouble(osslReader.getInputByName(&quot;b&quot;))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //read osol (skipped)</p>
+  <p class="style5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //run simulation <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; double y = Math.pow((1-b), 2) + 100 *  Math.pow(a &ndash; b * b); </p>
+  <p class="style5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //write and return OSsL<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  OSsLWriter osslWriter = new OSsLWriter();<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String[ ] outputNames = {&ldquo;y&rdquo;};<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String[ ] outputValues =  {y+&quot;&quot;};<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ossl = osslWriter.setOutput({outputNames,  outputValues);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return ossl;<br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }//call</strong><br>
+    }//class SampleSimulationService</p>
+  <p>As we can see, the sample simulation service implements the &quot;call&quot;  operation required in the OScL WSDL document. There are mainly 3 steps in this operation: </p>
+  <p>1. Reading </p>
+  <p><span class="style5">OSsLReader osslReader = new OSsLReader();<br>
+      double a =  Double.parseDouble(osslReader.getInputByName(&quot;a&quot;))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+      double b =  Double.parseDouble(osslReader.getInputByName(&quot;b&quot;))&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    The sample simulation service gets the OSsL string and use  the OSsLReader class provided in the OS library to  parse the OSsL instance into a set of input values (double a, b). </p>
+  <p>2. running simulation</p>
+  <p class="style5">    double y = Math.pow((1-b), 2) + 100 * Math.pow(a &ndash; b * b); </p>
+  <p>The sample simulation basically calculates the function<a href="images/1minusbsquaredplus100aminusbsquaredsquared.gif"><img src="images/1minusbsquaredplus100aminusbsquaredsquared.gif" alt="1minusbsquaredplus100aminusbsquaredsquared" width="151" height="24" border="0"></a>. <strong></strong></p>
+  <p>3. Writing and returning</p>
+  <p><span class="style5">OSsLWriter osslWriter = new  OSsLWriter();<br>
+      String[ ] outputNames =  {&ldquo;y&rdquo;};<br>
+      String[ ] outputValues =  {y+&quot;&quot;};<br>
+      String ossl =  osslWriter.setOutput({outputNames, outputValues);<br>
+      return ossl;</span></p>
+  <p>The sample simulation service uses the OSsLWriter class provided in the OS library to  write the OSsL result instance from an array of output names and output values.  In our example the array sizes are 1, as there is only one output name &ldquo;y&rdquo; and one output value y+&rdquo;&rdquo;. The sample simulation service then  returns the OSsL result instance. Of course the sample simulation service has  to make sure the OSsL result instance is valid. By using the OS library to  construct the OSsL instance, the result should be atomically validated. </p>
+  <p> In the above  3 steps, we see that the sample simulation service does not need to worry about  how the input OSsL instance received from the internet should be decoded.  Neither does it need to worry about how to encode and send back the OSsL output  to the client. This is because the sample simulation service is hosted by an OS  Server in the same way that all other OS services are hosted. The OS Server  hides all the networking complexities from the solver service. We simply put  the above sample simulation service code in a file called <strong>SampleSimulationService.jws</strong> and put the file in the <strong>os</strong> sub-directory relative to the OS Server&rsquo;s public root  directory. Since in our example, we host the sample simulation service at <a href="http://www.ziena.com/" class="style5">http://www.optimizationservices.org</a>, thus the service address  is <span class="style5"><a href="http://www.optimizationservices.org/os/SampleSimulationService.jws">http://www.</a><a href="http://www.ziena.com/">optimizationservices.org</a><a href="http://www.optimizationservices.org/os/SampleSimulationService.jws">/<strong>os/SampleSimulationService.jws</strong></a></span>).  What the OS Server does is similar to the four solver server steps  described in the <a href="OShL.html#solverserverstep">OShL section</a>. Briefly <strong>Simulation server step 1 </strong>is decoding the &ldquo;SOAP over HTTP  request&rdquo; from the solver client that contains the call operation and the OSsL input; <strong>Simulation server step 2 </strong>is invoking  the sample simulation service on the call operation with the decoded OSsL input;<strong> Simulation server step 3 </strong>is encoding  the OSsL output returned by the sample simulation service into a SOAP envelope;  and <strong>Simulation server step 4 </strong>is  returning the SOAP envelope over the HTTP transport to the client solver. </p>
+  <p>This completes the entire simulation  &ldquo;call&rdquo; process according the Optimization Services call Language. All the  networking complexities are hidden and taken care by the OS library. The OS  library also provides parsers to read and write standard instances. All that a  solver does is to use the OS parser library for reading and writing OSsL  instances, delegate the simulation agent to call the simulation and get the  function value. All that a simulation service does is to expose the standard  interface, implement all the required operations in the interface listed in  OScL, let the OS Server take care of the underneath networking, and use the OS  parser library to read and write OSsL instances. </p>
+  <hr>
+  <p><strong>Links: </strong></p>
+  <p><a href="http://www.optimizationservices.org/wsdl/OScL.wsdl">Click</a> to see or download the OScL WSDL -&gt; <a href="http://www.optimizationservices.org/wsdl/OScL.wsdl" class="style4">OScL.wsdl</a> </p>
+<!-- InstanceEndEditable -->
+  <p><br>
+  </p></td>
+<!-- end column two --> 
+<!-- start column three -->
+<td width="186" align="right" valign="top"><p/>
+  <p><!-- InstanceBeginEditable name="Blurb1" --><!-- InstanceEndEditable --></p>
+  <p><!-- InstanceBeginEditable name="Blurb2" --><!-- InstanceEndEditable --></p>
+  <p><!-- InstanceBeginEditable name="Blurb3" --><!-- InstanceEndEditable --></p></td>
+<!-- end column three -->
+</tr>
+<tr>
+<td><img src="images/spacer.gif" width="152" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="23" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="450" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="150" height="1" alt=""></td>
+</tr>
+</table>
+<!-- end body table -->
+
+<!-- start footer table -->
+<table width="836" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="400"><img src="images/spacer.gif" width="400" height="10" alt=""></td>
+<td width="436"><img src="images/spacer.gif" width="376" height="10" alt=""></td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="776" height="1" alt=""></td>
+</tr>
+<tr>
+<td colspan="2"><img src="images/spacer.gif" width="1" height="5" alt=""></td>
+</tr>
+<tr>
+<td class="footer">&nbsp;</td>
+<td align="right" class="footer">&#169; Optimization Services (OS) 2006 | All rights reserved.</td>
+</tr>
+</table>
+<!-- end footer table -->
+<!--script type="text/javascript">
+google_ad_client = "pub-9660334810015606";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text_image";
+google_ad_channel = "";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "000066";
+google_color_text = "333333";
+google_color_url = "666666";
+
+</script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script-->
+</body>
+<!-- InstanceEnd --></html>

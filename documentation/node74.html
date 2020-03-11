@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>File Upload: Using a File Upload Package</TITLE>
+<META NAME="description" CONTENT="File Upload: Using a File Upload Package">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="previous" HREF="node73.html">
+<LINK REL="up" HREF="node72.html">
+<LINK REL="next" HREF="node75.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1174"
+  HREF="node75.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1170"
+  HREF="node72.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1166"
+  HREF="node73.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1172"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1175"
+  HREF="node75.html">Examples</A>
+<B> Up:</B> <A NAME="tex2html1171"
+  HREF="node72.html">Applications</A>
+<B> Previous:</B> <A NAME="tex2html1167"
+  HREF="node73.html">AMPL Client: Hooking AMPL</A>
+ &nbsp; <B>  <A NAME="tex2html1173"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000152000000000000000"></A><A NAME="section:fileupload"></A>
+<BR>
+File Upload:  Using a File Upload Package
+</H2>
+
+<P>
+When the <TT>OSAgent</TT>  class methods <TT>solve</TT> and <TT>send</TT> are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each <TT><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img153.png"
+ ALT="$ &lt;$"></TT> is replaced with <TT>&amp;lt;</TT>  and each <TT><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img154.png"
+ ALT="$ &gt;$"></TT> is replaced with <TT>&amp;gt;</TT>). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the <TT>fileUpload</TT> executable on the client end  and the Java servlet <TT>OSFileUpload</TT> on the server end.  The <TT>fileUpload</TT> client executable is contained in the <TT>fileUpload</TT>  directory inside the <TT>examples directory</TT>.
+
+<P>
+This servlet is based upon the Apache Commons FileUpload. See <TT><A NAME="tex2html86"
+  HREF="http://jakarta.apache.org/commons/fileupload/">http://jakarta.apache.org/commons/fileupload/</A></TT>. The <TT>OSFileUpload</TT> Java class , <TT>OSFileUpload.class</TT> is in the directory
+<PRE>
+webapps\os\WEB-INF\classes\org\optimizationservices\oscommon\util
+</PRE>
+relative to the Web server root.  The source code <TT>OSFileUpload.class</TT> is in the directory
+<PRE>
+ COIN-OS/OS/applications/fileUpload
+</PRE>
+
+<P>
+The <TT>fileUpload</TT> client executable (see <TT>OS/applications/fileUpload</TT>) takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
+<PRE>
+fileUpload ../../data/osilFiles/parincQuadratic.osil
+</PRE>
+The <TT>fileUpload</TT> executable first creates an <TT>OSAgent</TT> object.
+<PRE>
+OSSolverAgent* osagent = NULL;
+osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/fileupload/servlet/OSFileUpload");
+</PRE>
+The <TT>OSAgent</TT>  has a method <TT>fileUpload</TT> with the signature
+<PRE>
+std::string fileUpload(std::string osilFileName, std::string osil);
+</PRE>
+where <TT>osilFileName</TT> is  the name of the OSiL problem instance to be written on the server and <TT>osil</TT> is the string with the actual instance. Then
+<PRE>
+osagent-&gt;fileUpload(osilFileName, osil);
+</PRE>
+will place a call to the server, upload the problem instance in the <TT>osil</TT> string, and cause the server to write a file on its hard drive named <TT>osilFileName</TT>. In our implementation, the uploaded file (<TT>parincQuadratic.osil</TT>) is saved to the <TT>/home/kmartin/temp/parincQuadratic.osil</TT> on the server hard drive. This location is used in the <TT>osol</TT> file as shown below.
+
+<P>
+Once the file is on the server, invoke the local <TT>OSSolverService</TT> by
+<PRE>
+./OSSolverService -config ../data/configFiles/testremote.config
+</PRE>
+where the <TT>config</TT> file is as follows. Notice there is no <TT>-osil</TT>  option as the osil file has already been uploaded and its instance location ("local" to the server) is specified in the <TT>osol</TT> file.
+<PRE>
+-osol ../data/osolFiles/remoteSolve2.osol
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+-serviceMethod solve
+</PRE>
+and the <TT>osol</TT> file is
+<BR>
+<IMG
+ WIDTH="446" HEIGHT="207" ALIGN="BOTTOM" BORDER="0"
+ SRC="img155.png"
+ ALT="\begin{verbatimtab}[5]
+&lt;osol&gt;
+&lt;general&gt;
+&lt;instanceLocation locationType=''local...
+...ther name=''os_solver''&gt;ipopt&lt;/other&gt;
+&lt;/optimization&gt;
+&lt;/osol&gt;
+\end{verbatimtab}">
+<BR>
+
+<P>
+As an alternative to using the command line executable <TT>fileUpload</TT>, there is also an html form <TT>fileupload.html</TT> that can be used to upload files. For example, the URL
+<PRE>
+http://gsbkip.chicagogsb.edu/os/fileupload.html
+</PRE>
+will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that the <TT>OSJava</TT> classes were deployed as described in Section <A HREF="node71.html#section:tomcat">11</A>. The file <TT>fileupload.html</TT> is in the directory <TT>WebApps/os</TT>. In our html form implementation, after you upload the OSiL file, it shows you the path of the uploaded file that is saved on the server, so that you can put it in the corresponding <TT>osol</TT> file.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1174"
+  HREF="node75.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1170"
+  HREF="node72.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1166"
+  HREF="node73.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1172"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1175"
+  HREF="node75.html">Examples</A>
+<B> Up:</B> <A NAME="tex2html1171"
+  HREF="node72.html">Applications</A>
+<B> Previous:</B> <A NAME="tex2html1167"
+  HREF="node73.html">AMPL Client: Hooking AMPL</A>
+ &nbsp; <B>  <A NAME="tex2html1173"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

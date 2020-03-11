@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Building the OS Project on Unix/Linux Systems</TITLE>
+<META NAME="description" CONTENT="Building the OS Project on Unix/Linux Systems">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node12.html">
+<LINK REL="previous" HREF="node10.html">
+<LINK REL="up" HREF="node10.html">
+<LINK REL="next" HREF="node12.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html376"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html372"
+  HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html366"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html374"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html377"
+  HREF="node12.html">Building the OS Project</A>
+<B> Up:</B> <A NAME="tex2html373"
+  HREF="node10.html">Building and Testing the</A>
+<B> Previous:</B> <A NAME="tex2html367"
+  HREF="node10.html">Building and Testing the</A>
+ &nbsp; <B>  <A NAME="tex2html375"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00071000000000000000"></A><A NAME="section:unixbuilds"></A>
+<BR>
+Building the OS Project on Unix/Linux Systems
+</H2>
+
+<P>
+In order to build the OS project on Unix/Linux systems do the following.
+
+<P>
+<P>
+<B>Step 1:</B>  Make and connect to the distribution root directory.
+
+<P>
+<PRE>
+mkdir COIN-OS
+cd COIN-OS
+</PRE>
+
+<P>
+<B>Step 2:</B> Run the configure script that will generate the makefiles.  If you are running on a machine with a FORTRAN 95 compiler present (e.g. <TT>gfortran</TT>) run the command
+
+<P>
+<PRE>
+./configure
+</PRE>
+
+<P>
+otherwise for now use
+
+<P>
+<PRE>
+./configure  COIN_SKIP_PROJECTS=Ipopt
+</PRE>
+as COIN-OR's Ipopt project currently uses Fortran to compile some of its dependent libraries.
+
+<P>
+<B>Note:</B>
+
+<P>
+
+<UL>
+<LI>If <TT>gfortran</TT> is not present and you  wish to build the nonlinear solver <TT>Ipopt</TT> see the instructions in Section <A HREF="node18.html#section:ipopt">4.4</A>.
+
+<P>
+</LI>
+<LI>When using <TT>configure</TT> you may wish to use the <TT>-C</TT> option. This   instructs configure to use a cache file, <TT>config.cache</TT>, to speed up configuration by remembering and reusing the results of tests already performed.
+
+<P>
+</LI>
+<LI>For more information and options on the <TT>./configure</TT> script see
+
+<P>
+<TT><A NAME="tex2html13"
+  HREF="https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation">https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation</A></TT>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<B>Step 3:</B>  Run the make files.
+
+<P>
+<PRE>
+make
+</PRE>
+
+<P>
+<B>Step 4:</B> Run the <TT>unitTest</TT>.
+
+<P>
+<PRE>
+make test
+</PRE>
+
+<P>
+Depending upon which third party software you have installed, the result of running the <TT>unitTest</TT> should look something like (we have included the third-party solvers LINDO and Knitro in the  test results below; they are not part of the default build):
+
+<P>
+<PRE>
+HERE ARE THE UNIT TEST RESULTS:
+
+Solved problem avion2.osil with Ipopt
+Solved problem HS071.osil with Ipopt
+Solved problem rosenbrockmod.osil with Ipopt
+Solved problem parincQuadratic.osil with Ipopt
+Solved problem parincLinear.osil with Ipopt
+Solved problem callBack.osil with Ipopt
+Solved problem callBackRowMajor.osil with Ipopt
+Solved problem parincLinear.osil with Clp
+Solved problem p0033.osil with Cbc
+Solved problem rosenbrockmod.osil with Knitro
+Solved problem callBackTest.osil with Knitro
+Solved problem parincQuadratic.osil with Knitro
+Solved problem HS071_NLP.osil with Knitro
+Solved problem p0033.osil with SYMPHONY
+Solved problem parincLinear.osil with DyLP
+Solved problem volumeTest.osil with Vol
+Solved problem p0033.osil with GLPK
+Solved problem lindoapiaddins.osil with Lindo
+Solved problem rosenbrockmod.osil with Lindo
+Solved problem parincQuadratic.osil with Lindo
+Solved problem wayneQuadratic.osil with Lindo
+Test the MPS -&gt; OSiL converter on parinc.mps using Cbc
+Test the AMPL nl -&gt; OSiL converter on hs71.nl using LINDO
+Test a problem written in b64 and then converted to OSInstance
+Successful test of OSiL parser on problem parincLinear.osil
+Successful test of OSrL parser on problem parincLinear.osrl
+Successful test of prefix and postfix conversion routines on problem rosenbrockmod.osil
+Successful test of all of the nonlinear operators on file testOperators.osil
+Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil
+
+
+All tests completed successfully
+</PRE>
+
+<P>
+If you do not see
+<PRE>
+All tests completed successfully
+</PRE>
+then you have not passed the unitTest and hopefully some semi-intelligible error message was given.
+
+<P>
+<P>
+<B>Step 5:</B>  Install the libraries and executables.
+
+<P>
+<PRE>
+make install
+</PRE>
+
+<P>
+This will install all of the libraries in the  <TT>lib</TT> directory.  In particular, the main OS library <TT>libOS</TT> along with the libraries of the other COIN-OR projects  that download with the OS project will get installed in the <TT>lib</TT> directory.  In addition the <TT>make install</TT> command will install four executable programs in the <TT>bin</TT> directory.  One of these binaries is <TT>OSSolverService</TT> which is the main OS project executable. This is described in Section <A HREF="node60.html#section:ossolverservice">10</A>. In addition <TT>clp</TT>, <TT>cbc</TT>, <TT>ipopt</TT>, and <TT>symphony</TT> get installed  in the <TT>bin</TT> directory.  Necessary header files are installed in the <TT>include</TT> directory.   In this case, <TT>bin</TT>, <TT>lib</TT>, and <TT>include</TT> are all subdirectories of where <TT>./configure</TT> is run.   If the user wants these files installed elsewhere, then configure should specify the <TT>prefix</TT> of these directories.  That is,
+
+<P>
+<PRE>
+./configure  --prefix=prefixDirctory  COIN_SKIP_PROJECTS=Ipopt
+</PRE>
+
+<P>
+For example, running
+
+<P>
+<PRE>
+./configure  --prefix=/usr/local  COIN_SKIP_PROJECTS=Ipopt
+</PRE>
+
+<P>
+and then running <TT>make</TT> and <TT>make install</TT> will put the relevant files in
+
+<P>
+<PRE>
+/usr/local/bin
+/usr/local/include
+/usr/local/lilb
+</PRE>
+
+<P>
+<P>
+<B>Run an Example!</B>  If <TT>make test</TT> works, proceed to Section <A HREF="node60.html#section:ossolverservice">10</A> to run the key executable, <TT>OSSolverService</TT>.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html376"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html372"
+  HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html366"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html374"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html377"
+  HREF="node12.html">Building the OS Project</A>
+<B> Up:</B> <A NAME="tex2html373"
+  HREF="node10.html">Building and Testing the</A>
+<B> Previous:</B> <A NAME="tex2html367"
+  HREF="node10.html">Building and Testing the</A>
+ &nbsp; <B>  <A NAME="tex2html375"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

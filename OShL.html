@@ -1,0 +1,581 @@
+<html><!-- InstanceBegin template="/Templates/OS.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>OShL (hook up)</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  <link rel="icon" href="images/os1.ico">
+  <link rel="SHORTCUT ICON" href="images/os1.ico">
+  <link rel="stylesheet" href="css/os_styles.css" type="text/css">
+  <link rel="stylesheet" href="css/ddmenu.css" type="text/css">
+
+  <script type="text/javascript" src="js/ddmenu.js"></script>
+  <!-- InstanceBeginEditable name="head" -->
+  <style type="text/css">
+<!--
+.style4 {color: #000066; font-weight: bold; }
+.style5 {
+	font-size: x-small;
+	font-weight: bold;
+}
+.style6 {font-size: x-small}
+.style7 {
+	font-size: medium;
+	font-weight: bold;
+}
+-->
+  </style>
+  <!-- InstanceEndEditable -->
+  <style type="text/css">
+<!--
+.style2 {font-size: larger}
+.style3 {
+	color: #666666;
+	font-weight: bold;
+}
+-->
+  </style>
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- start header table -->
+<table width="847" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="1"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="201"><img src="images/spacer.gif" width="175" height="1" alt=""></td>
+<td width="634"><img src="images/spacer.gif" width="599" height="1" alt=""></td>
+<td width="1"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="10"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+</tr>
+<tr>
+<td rowspan="4" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="56" alt=""></td>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="774" height="2" alt=""></td>
+<td rowspan="4" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="56" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="2" alt=""></td>
+</tr>
+<tr>
+<td rowspan="2"><a href="welcome.html"><img src="images/os1.jpg" width="115" height="87" alt="Optimization Services" border="0"></a></td>
+<td><div align="right">
+  <p align="center" class="nava style2">&nbsp;</p>
+  <table width="600" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="1"><div align="center"></div></td>
+      <td width="80"><div align="center"><a href="http://projects.coin-or.org/OS/register"><strong>Register</strong></a></div></td>
+      <td width="61"><div align="center"><a href="http://projects.coin-or.org/OS/login"><strong>Login</strong></a></div></td>
+      <td width="90"><div align="center"><a href="os_download.html"><strong>Download</strong></a></div></td>
+      <td width="68"><div align="center"><a href="os_license.html"><strong>License</strong></a></div></td>
+      <td width="150"><div align="center"><a href="http://groups.google.com/group/optimizationservices"><strong>OS Newsgroup  (hosted @ Google) </strong></a></div></td>
+      <!--td width="73"><div align="center"><a href="../login.html"><strong>Login</strong></a></div></td-->
+      <td width="150"><div align="center" class="style3"><a href="http://projects.coin-or.org/OS">OS  Developer Site (hosted @ COIN-OR)</a></div></td>
+    </tr>
+  </table>
+  </div></td>
+</tr>
+<tr>
+
+<td class="nav" valign="middle">
+    <!-- begin main menu bar -->
+    <ul class="ddmenu">
+	  <li><a href="os_overview.html">OVERVIEW</a> 
+        <ul>
+        	<li><a href="optimizationservices.html">Optimization Services (OS)</a></li>
+			<li><a href="optimizationservicesprotocol.html">Optimization Services Protocol (OSP)</a></li>
+			<li><a href="os_motivation.html">The OS Motivation</a></li>
+			<li><a href="os_components.html">The OS Components</a></li>
+			<li><a href="os_process.html">The OS Process</a></li>
+			<li><a href="os_customers.html">The OS Customers</a></li>
+			<li><a href="distributedComputingBackground.html">Distributed Computing Background</a></li>
+            <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+	  <li><a href="standard_overview.html">STANDARDS</a> 
+        <ul>
+        	<li><a href="standard_overview.html">Overview</a></li>
+        	<li><a href="OSiL.html">OSiL (instance)</a></li>
+        	<li><a href="OSiL_SE.html">--OSiL/SE (Stochastic Ext.)</a></li>
+        	<li><a href="OSrL.html">OSrL (result)</a></li>
+        	<li><a href="OSoL.html">OSoL (option)</a></li>
+        	<li><a href="OSaL.html">OSaL (analysis)</a></li>
+        	<li><a href="OSeL.html">OSeL (entity)</a></li>
+        	<li><a href="OSpL.html">OSpL (process)</a></li>
+        	<li><a href="OSbL.html">OSbL (benchmark)</a></li>
+        	<li><a href="OSqL.html">OSqL (query)</a></li>
+        	<li><a href="OSuL.html">OSuL (uri/url)</a></li>
+        	<li><a href="OSsL.html">OSsL (simulation)</a></li>
+        	<li><a href="OShL.html">OShL (hook up)</a></li>
+        	<li><a href="OSdL.html">OSdL (discover)</a></li>
+        	<li><a href="OScL.html">OScL (call simulation)</a></li>
+        	<li><a href="OSgL.html">OSgL (general)</a></li>
+        	<li><a href="OSnL.html">OSnL (nonlinear)</a></li>
+        	<li><a href="OSlL.html">OSlL (linear) == LPFML</a></li>
+        	<li><a href="OSRepository.html">OSRepository.xsd</a></li>
+        	<li><a href="OSRegistry.html">OSRegistry.xsd</a></li>
+
+        </ul>
+      </li>
+	  <li>|</li>
+      <li><a href="projects_overview.html">PROJECTS</a>
+        <ul>
+          <li><a href="projects_overview.html">Overview</a></li>
+        	<li><a href="projects_impact.html">IMPACT Solver/Service</a></li>
+        	<li><a href="projects_osml.html">OSmL - OS Modeling</a></li>
+        	<li><a href="projects_osrepository.html">OS Repository</a></li>
+        	<li><a href="projects_gui.html">OS GUI</a></li>
+        	<li><a href="projects_binary.html">OS Binary</a></li>
+        	<li><a href="projects_interface.html">OS Interface & OSI2</a></li>
+        	<li><a href="os_neos.html">OS and NEOS</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+      <li><a href="services_overview.html">SERVICES</a>
+        <ul>
+          <li><a href="services_overview.html">Overview</a></li>
+          <li><a href="services_osregistry.html">OS Registry Service</a></li>
+          <li><a href="services_hosting.html">Service Hosting</a></li>
+          <li><a href="os_neos.html">OS and NEOS</a></li>
+          <li><a href="services_support.html">Support</a></li>
+          <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+	  <li>|</li>
+      <li><a href="publications_overview.html">PUBLICATIONS</a> 
+        <ul>
+          <li><a href="publications_overview.html">Overview</a></li>
+          <li><a href="publications_research.html">Researches</a></li>
+          <li><a href="publications_conferences.html">Conferences</a></li>
+          <li><a href="publications_papers.html">Papers</a></li>
+          <li><a href="publications_presentations.html">Presentations</a></li>
+          <li><a href="publications_api.html">APIs</a></li>
+          <li><a href="publications_faq.html">FAQs</a></li>
+          <li><a href="os_related.html">Related Sites</a></li>
+          <li><a href="os_related_research.html">Related Research</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+      <li><a href="os_about.html">ABOUT</a> 
+        <ul>
+
+
+
+	      <li><a href="index.html">Home</a></li>
+          <li><a href="os_about.html">About Us</a></li>
+		  <li><a href="os_contact.html">Contact Us</a></li>		  
+          <li><a href="os_related.html">Related Sites</a></li>
+          <li><a href="os_related_research.html">Related Research</a></li>
+          <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+    </ul>
+    <!-- end main menu bar --></td>
+
+
+</tr>
+<tr>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="774" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+</tr>
+</table>
+<!-- end header table -->
+
+<!-- start body table -->
+<table width="837" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td colspan="5" bgcolor="#6F5D51"><img src="images/spacer.gif" width="776" height="10" alt=""></td>
+</tr>
+<tr>
+<td colspan="5" bgcolor="#666666"><img src="images/spacer.gif" width="776" height="1" alt=""></td>
+</tr>
+<tr>
+<!-- start column one -->
+<td width="177" valign="top"><p><!--img src="../images/searstower.jpg" width="194" height="251" alt="" border="0"-->
+    <!-- InstanceBeginEditable name="QuickLinks" -->
+<div class="subnava">
+  <p><strong>REPRESENTATIONS</strong></p>
+</div>
+<div class="subnava">
+  <p> <a href="OSiL.html">OSiL (instance)</a> </p>
+</div>
+<div class="subnava">
+  <p> <a href="OSiL_SE.html" class="style6">-OSiL/SE (Stochastic Ext.)</a> </p>
+</div>
+<div class="subnava">
+      <p><a href="services_deployment.html"> </a> <a href="OSrL.html">OSrL (result)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSoL.html">OSoL (option)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSaL.html">OSaL (analysis)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSeL.html">OSeL (entity)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSpL.html">OSpL (process)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSbL.html">OSbL (benchmark)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSqL.html">OSqL (query)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSuL.html">OSuL (uri/url)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSsL.html">OSsL (simulation)</a> </p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnav">
+      <p><strong> COMMUNICATIONS</strong></p>
+      </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OShL.html">OShL (hook up)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSdL.html">OSdL (discover)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OScL.html">OScL (call simulation)</a> </p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnav">
+      <p><strong>OTHER/AUXILLARY</strong></p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSgL.html">OSgL (general)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSnL.html">OSnL (nonlinear)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSlL.html">OSlL (linear) == LPFML</a></p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSRepository.html">OSRepository </a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSRegistry.html">OSRegistry</a> </p>
+    </div>
+    <br>
+    <!-- InstanceEndEditable --></p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p></td>
+<!-- end column one -->
+<td width="1" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="23"><img src="images/spacer.gif" width="23" height="400" alt=""></td>
+<!-- start column two -->
+<td width="450" valign="top" class="bodytxt"><!-- InstanceBeginEditable name="MainBody" -->
+  <p><span class="bodyhdr"><b>Optimization Services hookup Language (OShL)</b></span></p>
+  <p><a href="http://www.optimizationservices.org/wsdl/OShL.wsdl">Click</a> to see or download the OShL WSDL -&gt; <a href="http://www.optimizationservices.org/wsdl/OShL.wsdl" class="style4">OShL.wsdl</a> [stable] </p>
+  <p><a href="publications_presentations.html#OShL_Pittsburgh_112006">click here </a>to see a description on OShL. </p>
+  <hr>
+  <p>OShL (hook) is a Web Service Definition Language for invoking solver/analyzer services. </p>
+  <p><a name="OShLWSDL"></a>Communication  is always between two components; therefore both the agent and the service have  to follow certain rules. The rules are specified in the OShL.wsdl document. The following figure shows the first half (interface part) of a simplified  version of the WSDL document. This part varies between different <em>types</em> of services. All the solver  services and analyzer services are required to follow the interface  specification of OShL. </p>
+  <hr>
+  <p><a href="images/OShL1Figure.jpg"><img src="images/OShL1Figure.jpg" alt="OShL1Figure" width="588" height="372" border="0"></a></p>
+  <hr>
+  <p><a href="images/OShL2Figure.jpg"><img src="images/OShL2Figure.jpg" alt="OShL2Figure" width="588" height="491" border="0"></a></p>
+  <hr>
+  <p> The most important part of the first above figure is the &lt;wsdl:portType&gt; element. The portType element can have one or more &lt;operation&gt;  elements. In this  simplified example, we only list one operation whose name is solve. Each operation corresponds to a method or function  in a programming language. So there are usually two parts to an operation: the input element and the output element. The format of both elements  is controlled by the message attribute. In the solve operation, we require its input to be of message type  &ldquo;solveRequest&rdquo; and its output to be of message  type &ldquo;solveResponse.&rdquo; The solveRequest message has two part elements, osil and osol, both of string types. A part  corresponds to an argument of a function or method. So we can regard a message  as a sequence of arguments to be passed to the function or method. </p>
+  <p>Simply put, the WSDL document in the above figure specifies the following operation for each solver:</p>
+  <p align="center">String solve(String osil, String osol);</p>
+  <p>that is, every solver service is required to have a method  called &ldquo;solve&rdquo; that takes two input strings and  returns one string. The first input string should be an OSiL optimization  instance, the second input string should be an OSoL option instance, and the  returned string should be an OSrL result instance. OShL, as well as other OS  communication protocols, does not specify how the strings should look inside.  This is the responsibility of <a href="osp_representation.html">OS representation protocols</a>. So without the OS representation protocols, a client  can still transmit any junk strings to a solver service successfully. Of  course, all the OS-compatible components are required to validate input and  output instances, so no invalid instances will be ever transmitted onto the  network. WSDL documents and XML schemas are two key technologies to ensure the  high quality of an entire OS network. In the following table, we list the operations  specified in the  OShL WSDL document. </p>
+  <a name="OShLOperations"></a>
+  <table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="197" valign="top"><p align="center" class="style5">Operation</p></td>
+      <td width="282" valign="top"><p align="center" class="style5">Description</p></td>
+    </tr>
+    <tr>
+      <td width="197" valign="top"><p class="style5">String getJobID(String OSoL)</p></td>
+      <td width="282" valign="top"><p class="style6">get a job ID</p>
+        <p class="style6">1st input is an    OSoL  option.<br>
+          Output string is a unique    job id. </p></td>
+    </tr>
+    <tr>
+      <td width="197" valign="top"><p class="style6"><strong>String solve (String osil, String osol) </strong></p></td>
+      <td width="282" valign="top"><p class="style6">solve an optimization problem (synchronous) </p>
+        <p class="style6">1st input is an    OSiL instance for optimization problem.<br>
+          2nd input is an    OSoL option for solver options. Solver options are assumed    to be default if empty (&quot;&quot;). <br>
+          Output is an OSrL instance    for an optimization.</p></td>
+    </tr>
+    <tr>
+      <td width="197" valign="top"><p class="style6"><strong>boolean send (String osil, String osol)</strong></p></td>
+      <td width="282" valign="top"><p class="style6">send an optimization problem (asynchronous) </p>
+        <p class="style6">1st input is an    OSiL instance for optimization problem.<br>
+2nd input is an    OSoL option for solver options. 
+          Solver options are assumed    to be default if empty (&quot;&quot;). <br>
+          Output is true if the inputs are sent successfully; otherwise false.</p>        </td>
+    </tr>
+    <tr>
+      <td width="197" valign="top"><p class="style6"><strong>String retrieve (String osol)</strong></p></td>
+      <td width="282" valign="top"><p class="style6">retrieve an optimization result for an optimization problem that was sent or solved previously. </p>
+        <p class="style6">1st input is an    OSoL  option that should contain a jobID of the previous job.<br>
+          Output is an OSrL result    for the requested optimization problem.</p></td>
+    </tr>
+    <tr>
+      <td width="197" valign="top"><p class="style6"><strong>String kill (String osol)</strong></p></td>
+      <td width="282" valign="top"><p class="style6">kill the job process for an optimization problem that was sent or solved previously. </p>
+        <p class="style6">1st input is an    OSoL  option that should contain a jobID of the previous job.<br>
+Output is an OSrL result   that indicates whether the kill process is successful or not.</p></td>
+    </tr>
+    <tr>
+      <td width="197" valign="top"><p class="style6"><strong>String knock (String OSpL, String osol)</strong></p></td>
+      <td width="282" valign="top"><p class="style6">knock at the optimization service to get or set process information related with the service or jobs on that service.  </p>
+        <p class="style6">1st input is an    OSpL process input that indicates the request action and other related information.<br>
+          2nd input is an    OSoL option for knock options. <br>
+          Output is an OSpL process    result that contains response status and/or requested process information. </p></td>
+    </tr>
+  </table>
+  <p>The second above figure  shows the other half (protocol &amp; address part) of  the OShL WSDL document. The hard-coded service address part should be empty and  is only shown for the purpose of a complete illustration. The <em>generic</em> OShL WSDL document does not  specify where the service is. In reality, the service location is dynamically  discovered in the <a href="osp_registry.html">OS registry</a>. Each individual solver or analyzer service has  exactly the same OShL WSDL document following the OShL protocol except that it  has an extra location specified in the &lt;wsdlsoap:address&gt; element under &lt;wsdl:service&gt;. In the second above figure, this is illustrated with an example address as: </p>
+  <p>http://www<a href="http://www.optimizationservices.org/os/SampleSolverService.jws">.</a>optimizationservices.org/os/SampleSolverService.jws. </p>
+  <p>The most important part of the second above figure is the protocol part represented by the &lt;wsd:binding&gt; element. The protocol part of any  other OSxL WSDL document is exactly the same as the OShL WSDL document here.  Currently we require all the services on an OS network use exactly the same  communication binding and message encoding mechanisms. So in this thesis this  is the only section that we illustrate the protocol part of all OSxL WSDL  documents. </p>
+  <p>The binding element contains one or more  operation elements for each operation specified in the first above figure. Each operation can potentially be called using a  different protocol binding. All the operations in Optimization Services,  however, use the same protocol binding. In this simplified example, we only  have the String solve(String, String)operation. As for any other operation, the solve operation is required to be of rpc style (remote procedure call), which is the most typical request and response  calling style, or a blocking call. So the request client that invokes the solve operation from a solver service has  to wait for the response. Of course, the client application can launch a  separate process or thread to issue this solve operation and let the thread wait there for the  response, so that the user of the application can go on with other tasks.  Depending on the application settings, the solve operation and its argument instances can either be  directly sent to the solver service or first submitted to a queue server. On  the solver service side, when the solve operation is received, it can either solve it  directly, or launch a separate process or thread to solve the instances, or it  can put the instances in its own queue. Thus the request and response rpc style specified in all the OSxL WSDL  documents is general enough for all the current needs, while developers can  have their own innovative implementations that fit their users the best. </p>
+  <p>As for any other operation, the solve operation and its arguments are  required to be packaged in a SOAP envelope which is transported over the HTTP  protocol. This is specified by the transport=<a href="http://schemas.xmlsoap.org/soap/http">http://schemas.xmlsoap.org/soap/http</a> attribute  of the &lt;wsdl:binding&gt; element. &nbsp;Like the &ldquo;RPC&rdquo; style, the &ldquo;SOAP over HTTP&rdquo;  transport binding is general enough for all the current needs. As Optimization  Services evolves, more transport binding (SOAP over other protocols) may be  added. </p>
+  <p>Each &lt;operation&gt; element has a &lt;wsdl:input&gt; element and a &lt;wsdl:output&gt; element in which we specify the  encoding styles. In Optimization Services, we use leverage on the standard soap  encoding: &ldquo;http://schemas.xmlsoap.org/soap/encoding.&rdquo; This makes the input and  output arguments platform and programming language independent. </p>
+  <p>The protocol  part of an OSxL WSDL document is technically complex to implement. These are  all taken care of by the libraries provided. On the modeler (client) side, the  agent hides all the networking details, such as encoding the operation  arguments, packing the operations in a SOAP envelope, transmitting the SOAP  envelope over the HTTP protocol and handling the HTTP response. On the service  (server) side, the OS Server that hosts the service takes care of reading the  HTTP request, extracting the SOAP envelope, decoding the operation arguments  invoking the service interface, and sending back the result. So as long as the  service interface follows the OS communication standards (e.g. the first above figure), the entire call should be completed successfully.</p>
+  <hr>
+  <p class="style7"><a name="OShLProcess" id="OShLProcess"></a>The OShL communication process </p>
+  <p><strong><u>At the client side</u></strong></p>
+  <p>We assume the user formulates an optimization problem in a modeling language system and invokes a &quot;solve&quot; command. </p>
+  <p><strong>1. conversion (model -&gt; OSiL, option -&gt; OSoL) </strong></p>
+  <p>Underneath, the modeling system first translates the model and option into an  OSiL instance and OSoL option respectively. </p>
+  <p><strong>2. communication </strong></p>
+  <p>The modeling system instantiates a communication agent, for example: </p>
+  <p class="style6">OSSolverAgent  osSolverAgent = new OSSolverAgent(); </p>
+  <p>Suppose we already found the solver address and the address  is stored in a String variable:&nbsp; </p>
+  <p class="style6">sSolverAddress (=http://www.ziena.com/os/KnitroSolverService.jws)</p>
+  <p>The modeling system  then tells the address to osSolverAgent and delegates osSolverAgent to send and solve the problem, for example: </p>
+  <p class="style6">osSolverAgent.solverAddress  = sSolverAddress;<br>
+    String  osrl_string = osSolverAgent.solve(osil_string, osol_string); </p>
+  <p>In the solve operation, the agent contacts the solver service at the  given solverAddress and gets back an OSrL result  instance stored in the String variable. </p>
+  <p><strong>3. conversion (OSrL -&gt; result)</strong></p>
+  <p>On receiving the OSrL result string, the modeling system parses the result and  presents it to its user. Notice that on the client side, we do not worry what  language the solver service is implemented in and what platform the solver  service is installed on. </p>
+  <p><strong><u>On the network </u></strong></p>
+  <p>When sending the OSiL and OSoL (2nd step above), the modeling system  itself does not need to know how the solve operation is implemented; the OSSolverAgent class from the OS library hides all  the networking complexities from the modeling language environment. In OSSolverAgent&rsquo;s solve operation, four steps are taken:</p>
+  <p><strong>1. encoding </strong></p>
+  <p>OSSolverAgent encodes the OSiL and OSoL  input strings according to the Web Services SOAP encoding style; for example all the &ldquo;&lt;&rdquo; and &ldquo;&gt;&rdquo; signs are repectively encoded as &ldquo;&amp;lt;&rdquo; and &ldquo;&amp;gt;&rdquo;. </p>
+  <p><strong>2. constructing SOAP envelope </strong></p>
+  <p>According to the OShL WSDL document,  we  use the &ldquo;SOAP over &ldquo;HTTP&rdquo; transport, so OSSolverAgent packs the operation&nbsp; &quot;String solve(String osil, String osol)&quot; and the above encoded OSiL input string argument into a SOAP  envelope, which looks something like this:</p>
+  <p class="style6"><strong>&lt;soapenv:Envelope</strong> xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; <br>
+xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;<br>
+&lt;soapenv:Body&gt;<br>
+&lt;ns1:<strong>solve</strong> soapenv:encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; <br>
+xmlns:ns1=&quot;http://www.optimizationservices.org/os/ossolver/KnitroSolverService.jws&quot;&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>lt;osil</strong> xmlns=&quot;os.optimizationservices.org&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&amp;lt;/osil&amp;gt;</strong> </p>
+  <p class="style6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>lt;osol</strong> xmlns=&quot;os.optimizationservices.org&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... <br>
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&amp;lt;/osol&amp;gt;</strong><br>
+&lt;/ns1:<strong>solve</strong>&gt;<br>
+&lt;/soapenv:Body&gt;<br>
+    <strong>&lt;/soapenv:Envelope&gt;</strong></p>
+  <p><strong>3. sending and receiving</strong></p>
+  <p>Acording to  the OShL WSDL document, we should send the above constructed SOAP envelope over  the HTTP networking protocol using RPC style, so OSSolverAgent constructs the following HTTP POST  header. Since this is an HTTP POST, we attach the POST data &ndash; the SOAP envelope  &ndash; at the end of the HTTP header with a line separation (i.e. two new line  characters): </p>
+  <p><span class="style6"><strong>POST</strong> /os/ossolver/KnitroSolverService.jws HTTP/1.0<br>
+Content-Type: text/xml;  charset=utf-8<br>
+Accept: application/soap+xml,  application/dime, multipart/related, text/*<br>
+User-Agent: Axis/1.2beta3<br>
+Host: http://www.ziena.com<br>
+Cache-Control: no-cache<br>
+Pragma: no-cache<br>
+Content-Length: 2488 </span></p>
+  <p class="style6"><strong>&lt;soapenv:Envelope &hellip;&gt;</strong> <br>
+  &hellip;<br>
+  &hellip; <br>
+  <strong>&lt;/soapenv:Envelope&gt;</strong> </p>
+  <p>The HTTP POST method is itself of RPC style and waits until  it receives the result from the remote server. When the Knitro solver service  sends back the result, it should be a string and the string should be of the  OSrL format. The returned result is a SOAP envelope encoded under an HTTP  response header: </p>
+  <p class="style6"><strong>HTTP/1.1 200 OK &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong><br>
+    Set-Cookie: JSESSIONID=A8AF406536A271018100F64CFA462FA0;  Path=/os <br>
+    Content-Type: text/xml;charset=utf-8 <br>
+    Date: Sun, 20 Mar 2005 21:28:40 GMT <br>
+    Server: Apache-Coyote/1.1 <br>
+    Connection: close&nbsp; </p>
+  <p class="style6"><strong>&lt;</strong>soapenv<strong>:Envelope</strong> xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; <br>
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;soapenv:Body&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;ns1:<strong>solveResponse</strong> soapenv:encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xmlns:ns1=&quot;http://www.optimizationservices.org/os/ossolver/LindoSolverService.jws&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>solveReturn</strong> xsi:type=&quot;xsd:string&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&amp;lt;osrl</strong> xmlns=&quot;os.optimizationservices.org&quot; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xsi:schemaLocation=&quot;os.optimizationservices.org&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; http://www.optimizationservices/schemas/OSrL.xsd&quot;&amp;gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&amp;lt;/OSrL&amp;gt;</strong> <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/<strong>solveReturn</strong>&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/ns1:<strong>solveResponse</strong>&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/soapenv:Body&gt; <br>
+  &lt;/soapenv:<strong>Envelope</strong>&gt;</p>
+  <p><strong>4. decoding </strong></p>
+  <p>On getting the encoded result,  OSSolverAgent then  extracts out the SOAP envelope attached at the end of the HTTP response header  and decodes the result into OSrL: </p>
+  <p class="style6">&lt;OSrL xmlns=&quot;os.optimizationservices.org&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;os.optimizationservices.org  http://www.optimizationservices/schemas/OSrL.xsd&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+&lt;/OSrL&gt; </p>
+  <p><strong><u>At the remote solver service side </u></strong></p>
+  <p>To solve the problem, the solver  service also has to follow the OShL WSDL document as communication always involves  two parties. The simplified  solver service code looks like:</p>
+  <p class="style6">public class MySolverService {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>public String  solve(String osil, String osol){</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //read OSiL <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSiLReader osilReader = new  OSiLReader();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; osilReader.readString(osil);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSInstance osInstance =  osilReader.getOSInstance();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //read OSoL <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSoLReader osolReader = new  OSoLReader();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; osolReader.readString(osol);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSOption osOption =  osolReader.getOSOption();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //solve <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MySolver mySolver = new  MySolver();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSResult osResult =  mySolver.solve(osInstance, osOption);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //write and return OSrL<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OSrLWriter osrlWriter =  new OSrLWriter();<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String osrl = osrlWriter.writeString(osResult);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return osrl;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>}</strong>//solve</p>
+  <p class="style6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>public String  getJobID( ){</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return jobID;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }//getJobID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
+  <p class="style6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>public boolean  send(String osil, String osrl){</strong><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return true/false;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }//send</p>
+  <p class="style6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>public String  retrieve(String osol){</strong><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return osrl;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }//retrieve</p>
+  <p class="style6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>public String  kill(String osol){</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return osplOutput;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }//kill</p>
+  <p class="style6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>public String  knock(String ospl, String osol){</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return osplOutput;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }//knock</p>
+  <p class="style6">}//class MySolverService</p>
+  <p>As we can see, my solver service implements all the  operations required in the OShL WSDL document (listed in <a href="#OShLOperations">OShL operations table</a>). We only briefly show the implementation of the String  solve(String). There are  mainly 3 steps in this operation: </p>
+  <p><strong>solver service step 1: reading</strong></p>
+  <p><span class="style6"> //read OSiL <br>
+ OSiLReader osilReader = new  OSiLReader();<br>
+osilReader.readString(osil);<br>
+OSInstance osInstance =  osilReader.getOSInstance();<br>
+//read OSoL <br>
+OSoLReader osolReader = new  OSoLReader();<br>
+osolReader.readString(osol);<br>
+OSOption osOption =  osolReader.getOSOption();</span></p>
+  <p>My  solver service gets the  OSiL and OSoL strings and use the OSiLReader and OSoLReader classes provided in the OS library to parse the OSiL and OSoL instances  into a set of in-memory data structures that are held in a standard input  interfaces (OSInstance, OSOption). </p>
+  <p><strong>solver service step 2: solving </strong></p>
+  <p><span class="style6">//solve <br>
+MySolver mySolver = new  MySolver();<br>
+OSResult osResult =  mySolver.solve(osInstance, osOption);</span></p>
+  <p>My solver  is instantiated. The solver takes  the optimization problem input interface (OSInstance), solves the problem and outputs the result into a  standard optimization output interface (OSResult). <strong></strong></p>
+  <p><strong>solver service step 3: writing and returning </strong></p>
+  <p><span class="style6"> //write and return OSrL<br>
+OSrLWriter osrlWriter =  new OSrLWriter();<br>
+&nbsp;String osrl = osrlWriter.writeString(osResult);<br>
+return osrl;</span></p>
+  <p>My solver service uses the OSrLWriter class provided in the OS library to  write the OSrL instance from the in-memory result data structures held in the OSResult output interface. My solver  service then simply returns the OSrL result. Of course my  solver service has to make sure the OSrL instance is valid. By using the OS  library to construct the OSrL instance, the result should be automatically  validated. </p>
+  <p>In the above  3 steps, we see that my solver service does not need to worry about how  the input OSiL instance received from the internet (using SOAP over HTTP)  should be decoded. Neither does it need to worry about how to encode and send  back the OSrL output instance (again using SOAP over HTTP) to the client. This  is because my solver service is hosted by instance our OS Server  software. The OS Server hides all the networking complexities from the solver  service. For example, we can simply put the my solver service code in a file called <strong>MySolverService.jws</strong> and put the file in the <strong>os</strong> sub-directory relative to the OS Server&rsquo;s public root  directory. Since in our example, we host the my solver service at <a href="http://www.ziena.com/">http://www.optimizationservices.org</a>, thus the service address  is at&nbsp;&nbsp; <a href="http://www.ziena.com/os/KnitroSolverService.jws">http://www.</a><a href="http://www.ziena.com/">optimizationservice.org</a><a href="http://www.ziena.com/os/KnitroSolverService.jws">/<strong>os/MySolverService.jws</strong></a> (i.e.  http://domain name + directory + service, just like a regular Web page  address). What the OS Server does is more or less the opposite of what the  client&rsquo;s communication agent does, again in 4 steps: </p>
+  <p><strong><a name="solverserverstep"></a>solver server step 1: decoding </strong></p>
+  <p>On getting the &ldquo;SOAP over HTTP&rdquo;  request<strong> </strong>from the client, the OS Server extracts out the SOAP envelope  attached at the end of the HTTP request header, gets the operation name and  decodes the operation input into the regular OSiL and OSoL instances. This is similar to  any Web server in handling a regular HTTP request with POST message (e.g. HTML  form data). </p>
+  <p><strong>solver server step 2: invoking</strong></p>
+  <p>The OS Server loads the MySolverService.jws file and compiles the class only if  it is the first time the service is called and loaded. The OS Server then  invokes the operation with the decoded input according to what is specified in  the SOAP envelope; in our example it is String solve(String osil, String osol). Upon invocation, my solver  service starts the optimization process. This is similar to any Web server in  locating and loading an html page from its file system. </p>
+  <p><strong>solver server step 3: encoding</strong></p>
+  <p>The OS Server then waits for the  Knitro solver service to return the optimization result, which is in plain OSrL  format. Upon getting the OSrL instance, the OS Server encodes the OSrL instance  and packs the encoded result instance into a SOAP envelope. This step has no  equivalent in a usual Web server, as a Web server does not need to encode an  html file. </p>
+  <p><strong>solver server step 4: returning</strong></p>
+  <p>The OS Server prepares an HTTP  response header, attaches the constructed SOAP envelope at the end with a line  separation (i.e. two new line characters), and sends the HTTP response header  with SOAP attachment back to the client. This is what the client agent sees  when the the client receives the response from the OS Server.  This step is similar to any Web server preparing an HTTP response and return a  plain HTML page back to the calling browser. </p>
+  <p>This completes the entire solver  &ldquo;hook up&rdquo; process according the Optimization Services hookup Language. All the  networking complexities are hidden and taken care by the OS library. The OS  library also provides parsers to read and write standard instances. All that a  modeling language environment does is to use the OS parser library to write  standard OSiL instances and read standard OSrL instances after delegating an OS  communication agent to contact the solver service. All that a solver service  does is to expose the standard interface, implement all the required operations  in the interface listed in OShL, let the OS Server take care of the underneath  networking, and use the OS parser library to read OSiL and OSoL instances and write OSrL  instances. </p>
+  <hr>
+  <p><strong>Links:</strong></p>
+  <p><a href="http://www.optimizationservices.org/wsdl/OShL.wsdl">Click</a> to see or download the OShL WSDL -&gt; <a href="http://www.optimizationservices.org/wsdl/OShL.wsdl" class="style4">OShL.wsdl</a> </p>
+  <p><a href="publications_presentations.html#OShL_Pittsburgh_112006">click here </a>to see a description on OShL. </p>
+<!-- InstanceEndEditable -->
+  <p><br>
+  </p></td>
+<!-- end column two --> 
+<!-- start column three -->
+<td width="186" align="right" valign="top"><p/>
+  <p><!-- InstanceBeginEditable name="Blurb1" -->  
+  <table width="136" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <td class="spiffhdr">OShL Description </td>
+</tr>
+<tr>
+  <td class="spifftxt"><ul>
+    <li><a href="#OShLWSDL">OShL WSDL Figure </a></li>
+    </ul>
+    <p>&nbsp;</p>
+    <ul>
+      <li><a href="#OShLOperations">OShL Operations</a></li>
+      </ul>
+    <p>&nbsp;</p>
+    <ul>
+      <li><a href="#OShLProcess">OShL Communication Process</a></li>
+    </ul></td>
+</tr>
+</table><!-- InstanceEndEditable --></p>
+  <p><!-- InstanceBeginEditable name="Blurb2" --><!-- InstanceEndEditable --></p>
+  <p><!-- InstanceBeginEditable name="Blurb3" --><!-- InstanceEndEditable --></p></td>
+<!-- end column three -->
+</tr>
+<tr>
+<td><img src="images/spacer.gif" width="152" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="23" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="450" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="150" height="1" alt=""></td>
+</tr>
+</table>
+<!-- end body table -->
+
+<!-- start footer table -->
+<table width="836" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="400"><img src="images/spacer.gif" width="400" height="10" alt=""></td>
+<td width="436"><img src="images/spacer.gif" width="376" height="10" alt=""></td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="776" height="1" alt=""></td>
+</tr>
+<tr>
+<td colspan="2"><img src="images/spacer.gif" width="1" height="5" alt=""></td>
+</tr>
+<tr>
+<td class="footer">&nbsp;</td>
+<td align="right" class="footer">&#169; Optimization Services (OS) 2006 | All rights reserved.</td>
+</tr>
+</table>
+<!-- end footer table -->
+<!--script type="text/javascript">
+google_ad_client = "pub-9660334810015606";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text_image";
+google_ad_channel = "";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "000066";
+google_color_text = "333333";
+google_color_url = "666666";
+
+</script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script-->
+</body>
+<!-- InstanceEnd --></html>

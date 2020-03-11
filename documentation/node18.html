@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Using Ipopt</TITLE>
+<META NAME="description" CONTENT="Using Ipopt">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node19.html">
+<LINK REL="previous" HREF="node17.html">
+<LINK REL="up" HREF="node10.html">
+<LINK REL="next" HREF="node19.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html462"
+  HREF="node19.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html458"
+  HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html452"
+  HREF="node17.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html460"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html463"
+  HREF="node19.html">Other third-Party Software</A>
+<B> Up:</B> <A NAME="tex2html459"
+  HREF="node10.html">Building and Testing the</A>
+<B> Previous:</B> <A NAME="tex2html453"
+  HREF="node17.html">VPATH Installations</A>
+ &nbsp; <B>  <A NAME="tex2html461"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00074000000000000000"></A><A NAME="section:ipopt"></A>
+<BR>
+Using Ipopt
+</H2>
+
+<P>
+Ipopt is a COIN-OR project (<TT><A NAME="tex2html32"
+  HREF="projects.coin-or.org/Ipopt">projects.coin-or.org/Ipopt</A></TT>) and is included in the download with the OS project. However, unlike the other COIN-OR projects that download with OS, the Ipopt project requires third-party software that is based on FORTRAN and care must be taken if you wish to build OS with the  Ipopt solver.  You can  exclude Ipopt from the OS  build by adding the option
+
+<P>
+<PRE>
+COIN_SKIP_PROJECTS=Ipopt
+</PRE>
+to the <TT>configure</TT> script.
+
+<P>
+If you do choose to build Ipopt, first get the necessary third-party software.  First connect into the <TT>ThirdParty</TT> directory. Then execute the following commands:
+
+<P>
+<PRE>
+$ cd /Blas
+$ ./get.Blas
+$ cd ../Lapack
+$ ./get.Lapack
+$ cd ../Mumps
+$ ./get.Mumps
+</PRE>
+
+<P>
+Alternatively, you can connect into the project root <TT>COIN-OS</TT> and execute the script <TT>get.AllThirdParty</TT>.  This will also get the AMPL <TT>ASL</TT> libraries.
+
+<P>
+What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  There are three options.
+
+<P>
+<DL COMPACT>
+<DT>Option 1.</DT>
+<DD>If you are building in Unix-like environment and have a Fortran 95 compiler available, you can simply run the <TT>configure</TT> script and the FORTRAN compiler will be detected and the <TT>Ipopt</TT> project will be built.
+
+<P>
+</DD>
+<DT>Option 2.</DT>
+<DD>If you have a FORTRAN 77 compiler, you  must first obtain one of the   Harwell Subroutine Library (HSL) routines <TT>ma27ad.f</TT> or <TT>MA57ad.f</TT>.  See <TT><A NAME="tex2html33"
+  HREF="http://www.cse.scitech.ac.uk/nag/hsl/">http://www.cse.scitech.ac.uk/nag/hsl/</A></TT>.  Put the Harwell code in the directory <TT>./data/ThirdParty/HSL</TT>.  Now run the <TT>configure</TT> script as described in <A HREF="node7.html#section:svn">3.1</A>.  See
+
+<P>
+<PRE>
+ http://www.coin-or.org/Ipopt/documentation/node15.html
+</PRE>
+
+<P>
+</DD>
+<DT>Option 3.</DT>
+<DD>If you do not have a FORTRAN compiler and do not wish to obtain one, you can use the <TT>f2c</TT> compiler from Netlib.  The installation instructions for this are in the <TT>INSTALL</TT> file in
+<PRE>
+../data/BuildTools/compile_f2c
+</PRE>
+
+<P>
+</DD>
+</DL>
+
+<P>
+Two important points:
+
+<P>
+
+<UL>
+<LI>Option 3 also requires that  one of the  Harwell Subroutine Library (HSL) routines <TT>ma27ad.f</TT> or  <TT>MA57ad.f</TT> be present in the HSL directory.
+
+<P>
+</LI>
+<LI>If you run configure with the <TT>-enable-debug</TT> option on Windows, then when building the <TT>vcf2c.lib</TT>, use the command line
+
+<P>
+<PRE>
+CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
+</PRE>
+
+<P>
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html462"
+  HREF="node19.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html458"
+  HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html452"
+  HREF="node17.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html460"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html463"
+  HREF="node19.html">Other third-Party Software</A>
+<B> Up:</B> <A NAME="tex2html459"
+  HREF="node10.html">Building and Testing the</A>
+<B> Previous:</B> <A NAME="tex2html453"
+  HREF="node17.html">VPATH Installations</A>
+ &nbsp; <B>  <A NAME="tex2html461"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

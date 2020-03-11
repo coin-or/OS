@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>OSSolverService Input Parameters</TITLE>
+<META NAME="description" CONTENT="OSSolverService Input Parameters">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node62.html">
+<LINK REL="previous" HREF="node60.html">
+<LINK REL="up" HREF="node60.html">
+<LINK REL="next" HREF="node62.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1015"
+  HREF="node62.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1011"
+  HREF="node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1005"
+  HREF="node60.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1013"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1016"
+  HREF="node62.html">Solving Problems Locally</A>
+<B> Up:</B> <A NAME="tex2html1012"
+  HREF="node60.html">The OSSolverService</A>
+<B> Previous:</B> <A NAME="tex2html1006"
+  HREF="node60.html">The OSSolverService</A>
+ &nbsp; <B>  <A NAME="tex2html1014"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000131000000000000000">
+OSSolverService Input Parameters</A>
+</H2>
+
+<P>
+At present, the <TT>OSSolverService</TT> takes the following parameters. The order of the parameters is irrelevant.  Not all the parameters are required. However, if the <TT>solve</TT> or <TT>send</TT> service    methods  (see Section <A HREF="node63.html#section:servicemethods">10.3</A> ) are invoked a problem instance location must be specified.
+
+<P>
+<DL COMPACT>
+<DT></DT>
+<DD><B>-osil xxx.osil</B>  this is the name of the file that contains the optimization instance in OSiL format. It is assumed that this file is available in a directory on the machine that is running <TT>OSSolverService</TT>. If this option is not specified then the instance location must be specified in the OSoL solver options file.
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-osol xxx.osol</B>  this is the name of the file that contains the solver options. It is assumed that this file is available in a directory on the machine that is running <TT>OSSolverService</TT>. It is not necessary to specify this option.
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-osrl xxx.osrl</B>  this is the name of the file that contains the solver solution. A valid file path must be given on the machine that is running <TT>OSSolverService</TT>. It is not necessary to specify this option.
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-serviceLocation url</B>  is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally.
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-serviceMethod  methodName</B>  this is  the method on the solver service to be invoked. The options are <TT>solve</TT>, <TT>send</TT>, <TT>kill</TT>, <TT>knock</TT>, <TT>getJobID</TT>, and <TT>retrieve</TT>. The use of these options is illustrated in the examples below. This option is not required, and the default value is <TT>solve.</TT>
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-mps  xxx.mps</B>  this is the name of the mps file if the problem instance is in mps format. It is assumed that this file is available in a directory on the machine that is running <TT>OSSolverService</TT>. The default file format is OSiL so this option is not required.
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-nl  xxx.nl</B>  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running <TT>OSSolverService</TT>. The default file format is OSiL so this option is not required.
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-solver  solverName</B>  Possible values for default OS installation are <TT>clp</TT> (COIN-OR Clp), <TT>cbc</TT> (COIN-OR Cbc), <TT>dylp</TT> (COIN-OR DyLP), and <TT>symphony</TT> (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are <TT>cplex</TT> (Cplex through COIN-OR Osi), <TT>glpk</TT> (glpk through COIN-OR Osi), <TT>ipopt</TT> (COIN-OR Ipopt),  <TT>knitro</TT> (Knitro), and <TT>lindo</TT> (LINDO). If no value is specified for this parameter, then <TT>cbc</TT> is the default value of this parameter if the the <TT>solve</TT> or <TT>send</TT> service methods are used.
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-browser  browserName</B> this paramater is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser.
+
+<P>
+</DD>
+<DT></DT>
+<DD><B>-config pathToConfigureFile</B> this parameter specifies a path on the local machine to a text file containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter values.
+
+<P>
+</DD>
+</DL>
+
+<P>
+The input parameters to the <TT>OSSolverService</TT> may be given entirely in the command line or in a configuration file.  We first illustrate giving all the  parameters in the command line. The following command will invoke the <TT>Clp</TT> solver on the local machine to solve the problem instance <TT>parincLinear.osil</TT>.  When invoking the commands below involving <TT>OSSolverService</TT> we assume that 1) the user is connected to the directory where the <TT>OSSolverService</TT> executable is located, and 2) that <TT>../data/osilFiles</TT> is a valid path to <TT>COIN-OS/data/osilFiles</TT>.  If the OS project was built successfully, then there is a copy of  <TT>OSSolverService</TT> in <TT>COIN-OS/OS/src</TT>. The user may wish to execute <TT>OSSolverService</TT> from this <TT>src</TT> directory so that all that follows is correct in terms of path definitions.
+
+<P>
+<PRE>
+./OSSolverService -solver clp -osil ../data/osilFiles/parincLinear.osil
+</PRE>
+
+<P>
+Alternatively, these parameters can be put into a configuration file. Assume that the configuration file of interest is <TT>testlocalclp.config</TT>. It would contain the two lines of information
+<PRE>
+-osil ../data/osilFiles/parincLinear.osil
+-solver clp
+</PRE>
+Then the command line is
+<PRE>
+./OSSolverService -config ../data/configFiles/testlocalclp.config
+</PRE>
+
+<P>
+<B>Some Rules:</B>
+
+<P>
+<DL COMPACT>
+<DT>1.</DT>
+<DD>When using the <TT>send()</TT> or  <TT>solve()</TT> methods a problem instance file location <I>must</I> be specified either at  the command line, in the configuration file, or in the <TT>&lt;instanceLocation&gt;</TT> element in the OSoL options file file.
+
+<P>
+</DD>
+<DT>2.</DT>
+<DD>The default <TT>serviceMethod</TT> is <TT>solve</TT> if another service method is not specified.   The service method cannot be specified in the OSoL options file.
+
+<P>
+</DD>
+<DT>3.</DT>
+<DD>If the <TT>solver</TT> option is not specified, the COIN-OR solver <TT>Cbc</TT> is the default solver used. In this case an error is thrown if the problem instance has quadratic or other nonlinear terms.
+
+<P>
+</DD>
+<DT>4.</DT>
+<DD>If the options <TT>send</TT>, <TT>kill</TT>, <TT>knock</TT>,  <TT>getJobID</TT>,  or <TT>retrieve</TT> are specified, a  <TT>serviceLocation</TT> must be specified.
+
+<P>
+</DD>
+</DL>
+
+<P>
+Parameters specified in the configure file are overridden by parameters specified at the command line. This is convenient if a user has a base configure file and wishes to override only a few options. For example,
+<PRE>
+./OSSolverService -config ../data/configFiles/testlocalclp.config -solver lindo
+</PRE>
+or
+<PRE>
+./OSSolverService -solver lindo -config ../data/configFiles/testlocalclp.config
+</PRE>
+will result in the LINDO solver being used even though Clp is specified in the <TT>testlocalclp</TT> configure file.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1015"
+  HREF="node62.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1011"
+  HREF="node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1005"
+  HREF="node60.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1013"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1016"
+  HREF="node62.html">Solving Problems Locally</A>
+<B> Up:</B> <A NAME="tex2html1012"
+  HREF="node60.html">The OSSolverService</A>
+<B> Previous:</B> <A NAME="tex2html1006"
+  HREF="node60.html">The OSSolverService</A>
+ &nbsp; <B>  <A NAME="tex2html1014"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

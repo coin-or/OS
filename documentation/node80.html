@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Building a Model in MATLAB</TITLE>
+<META NAME="description" CONTENT="Building a Model in MATLAB">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node81.html">
+<LINK REL="previous" HREF="node79.html">
+<LINK REL="up" HREF="node79.html">
+<LINK REL="next" HREF="node81.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1250"
+  HREF="node81.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1246"
+  HREF="node79.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1240"
+  HREF="node79.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1248"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1251"
+  HREF="node81.html">OSiL representation for problem</A>
+<B> Up:</B> <A NAME="tex2html1247"
+  HREF="node79.html">Appendix</A>
+<B> Previous:</B> <A NAME="tex2html1241"
+  HREF="node79.html">Appendix</A>
+ &nbsp; <B>  <A NAME="tex2html1249"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000171000000000000000">
+Building a Model in MATLAB</A>
+</H2>
+
+<P>
+We illustrate how to build a simple Markowitz portfolio optimization problem (a quadratic programming problem) from <B>template.m</B>. First copy <B>template.m</B> to <B>markowitz.m</B>.
+
+<P>
+The problem consists in investing  in a number of stocks. The expected returns and risks
+(covariances) of the stocks are known. Assume that the decision variables <IMG
+ WIDTH="20" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img159.png"
+ ALT="$ x_i$">
+represent the fraction of wealth invested in stock&nbsp;<IMG
+ WIDTH="10" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+ SRC="img160.png"
+ ALT="$ i$"> and that no stock can have
+more than 75% of the total wealth. The problem then is to minimize the total risk
+subject to a budget constraint and a lower bound on the expected portfolio return.
+
+<P>
+Assume that there are three stocks (variables) and two constraints (do not count the upper limit investment of .75 on the variables.).
+
+<P>
+<PRE>
+% the number of constraints
+numCon = 2;
+% the number of variables
+numVar = 3;
+</PRE>
+
+<P>
+All the variables are continuous
+
+<P>
+<PRE>
+VarType='CCC';
+</PRE>
+
+<P>
+Next define the constraint upper and lower bounds. There are two constraints. A equality  constraint (an <IMG
+ WIDTH="18" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="img161.png"
+ ALT="$ =$">) and a lower bound on portfolio return of .15 (a <IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img162.png"
+ ALT="$ \ge$">). These two constraints are expressed as
+
+<P>
+<PRE>
+BU = [1  inf];
+BL = [1   .15];
+</PRE>
+
+<P>
+The variables are nonnegative and have upper limits of .75 (no stock can comprise more than 75% of the portfolio).  This is written as
+
+<P>
+<PRE>
+VL = [];
+VU = [.75 .75 .75];
+</PRE>
+
+<P>
+There are no nonzero linear coefficients in the objective function, but the objective function vector must always be defined and the number of components of this vector is the number of variables.
+
+<P>
+<PRE>
+OBJ = [0 0 0 ]
+</PRE>
+
+<P>
+Now the linear constraints.   In the model the two linear constraints are
+ <BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+x_{1} + x_{2} + x_{3} &=& 1 \\
+ 0.3221 x_{1} +   0.0963x_{2} +    0.1187x_{3}  &\ge& .15
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="99" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img163.png"
+ ALT="$\displaystyle x_{1} + x_{2} + x_{3}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="13" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img164.png"
+ ALT="$\displaystyle 1$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="245" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img165.png"
+ ALT="$\displaystyle 0.3221 x_{1} + 0.0963x_{2} + 0.1187x_{3}$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img166.png"
+ ALT="$\displaystyle \ge$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="27" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img167.png"
+ ALT="$\displaystyle .15$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+These are expressed as
+
+<P>
+<PRE>
+ A = [ 1 1 1  ;
+  0.3221   0.0963   0.1187 ];
+</PRE>
+
+<P>
+Now for the quadratic terms. The only quadratic terms are in the objective function. The objective function is
+
+<P>
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+\min  0.4253 x_{1}^{2} +  0.4458 x_{2}^{2} + 0.2314 x_{3}^{2} + 2 \times 0.1852 x_{1} x_{2} \\+ 2 \times 0.1393 x_{1} x_{3} + 2 \times
+ 0.1388 x_{2} x_{3}
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="411" HEIGHT="39" ALIGN="MIDDLE" BORDER="0"
+ SRC="img168.png"
+ ALT="$\displaystyle \min 0.4253 x_{1}^{2} + 0.4458 x_{2}^{2} + 0.2314 x_{3}^{2} + 2 \times 0.1852 x_{1} x_{2}$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="266" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img169.png"
+ ALT="$\displaystyle + 2 \times 0.1393 x_{1} x_{3} + 2 \times
+0.1388 x_{2} x_{3}$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+The quadratic matrix <IMG
+ WIDTH="18" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img170.png"
+ ALT="$ Q$"> has 4 rows and a column for each quadratic term. In this example there are six quadratic terms.  The first row of <IMG
+ WIDTH="18" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img170.png"
+ ALT="$ Q$"> is the row index where the terms appear. By convention, the objective function has index -1 and we count constraints starting at 0.  The first row of <IMG
+ WIDTH="18" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img170.png"
+ ALT="$ Q$"> is
+
+<P>
+<PRE>
+ -1 -1 -1 -1 -1 -1
+</PRE>
+
+<P>
+The second row of <IMG
+ WIDTH="18" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img170.png"
+ ALT="$ Q$"> is the index of the first variable in the quadratic term. We use zero based counting.  Variable <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$ x_{1}$"> has index 0, variable  <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img84.png"
+ ALT="$ x_{2}$"> has index 1, and variable <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img107.png"
+ ALT="$ x_{3}$"> has index 2.  Therefore, the second row of <IMG
+ WIDTH="18" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img170.png"
+ ALT="$ Q$"> is
+
+<P>
+<PRE>
+0 1 2 0 0 1
+</PRE>
+
+<P>
+The third row of <IMG
+ WIDTH="18" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img170.png"
+ ALT="$ Q$"> is the index of the second variable in the quadratic term.   Therefore, the third row of <IMG
+ WIDTH="18" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img170.png"
+ ALT="$ Q$"> is
+
+<P>
+<PRE>
+0 1 2  1 2 2
+</PRE>
+
+<P>
+The last (fourth) row is the coefficient. Therefore, the fourth row is
+
+<P>
+<PRE>
+ .425349654  .445784443   0.231430983
+ .370437388  .27862509 .27763384
+</PRE>
+
+<P>
+The quadratic matrix is
+
+<P>
+<PRE>
+Q = [ -1 -1 -1 -1 -1 -1;
+0 1 2 0 0 1 ;
+0 1 2 1 2 2;
+.425349654  .445784443   0.231430983   ...
+.370437388  .27862509 .27763384];
+</PRE>
+
+<P>
+Finally, name the problem, specify the solver (in this case <TT>ipopt</TT>), the service address (and password if required by the service), and call the solver.
+
+<P>
+<PRE>
+prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin'
+password = 'chicagoesmuyFRIO';
+%
+%the solver
+solverName = 'ipopt';
+%the remote service service address
+%if left empty we solve locally
+serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
+% now solve
+callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
+     Q, prob_name, password, solverName, serviceAddress)
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1250"
+  HREF="node81.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1246"
+  HREF="node79.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1240"
+  HREF="node79.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1248"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1251"
+  HREF="node81.html">OSiL representation for problem</A>
+<B> Up:</B> <A NAME="tex2html1247"
+  HREF="node79.html">Appendix</A>
+<B> Previous:</B> <A NAME="tex2html1241"
+  HREF="node79.html">Appendix</A>
+ &nbsp; <B>  <A NAME="tex2html1249"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

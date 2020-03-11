@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Optimization Services 1.0 User's Manual </TITLE>
+<META NAME="description" CONTENT="Optimization Services 1.0 User's Manual ">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node1.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html91"
+  HREF="node1.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png"> 
+<A NAME="tex2html89"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html92"
+  HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A NAME="tex2html90"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<P>
+
+<H1 ALIGN=CENTER>Optimization Services 1.0 User's Manual </H1>
+<P ALIGN=CENTER><STRONG>Robert Fourer, Jun Ma,  Horand Gassmann, Kipp Martin, Wayne Sheng</STRONG></P>
+<P ALIGN=LEFT></P>
+
+<P>
+
+<H3>Abstract:</H3>
+<DIV>
+This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a general framework consisting of a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides C++ and Java source code for libraries and executable programs that implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear, nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line executable <TT>OSSolverService</TT>  for reading problem instances (OSiL format, nl format, MPS format) and calling a solver either locally or on a remote server.  Finally,  both Java source code and a Java war, are provided for users who wish to set up a solver service on a server running Apache Tomcat.   See the Optimization Services (OS) home page <TT><A NAME="tex2html1"
+  HREF="www.optimizationservices.org">www.optimizationservices.org</A></TT> and the COIN-OR Trac page <TT><A NAME="tex2html2"
+  HREF="projects.coin-or.org/OS">projects.coin-or.org/OS</A></TT> for more information.
+</DIV>
+<P>
+
+<P>
+
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"></A>
+
+<UL>
+<LI><A NAME="tex2html93"
+  HREF="node1.html">Contents</A>
+<LI><A NAME="tex2html94"
+  HREF="node2.html">List of Figures</A>
+<LI><A NAME="tex2html95"
+  HREF="node3.html">List of Tables</A>
+<LI><A NAME="tex2html96"
+  HREF="node4.html">The Optimization Services (OS) Project</A>
+<LI><A NAME="tex2html97"
+  HREF="node5.html">Quick Roadmap</A>
+<LI><A NAME="tex2html98"
+  HREF="node6.html">Downloading the OS Project</A>
+<UL>
+<LI><A NAME="tex2html99"
+  HREF="node7.html">Obtaining OS Source Code Using Subversion (SVN)</A>
+<LI><A NAME="tex2html100"
+  HREF="node8.html">Obtaining the OS Source Code From a Tarball or Zip File</A>
+<LI><A NAME="tex2html101"
+  HREF="node9.html">Obtaining the Binaries</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html102"
+  HREF="node10.html">Building and Testing the OS Project</A>
+<UL>
+<LI><A NAME="tex2html103"
+  HREF="node11.html">Building the OS Project on Unix/Linux Systems</A>
+<LI><A NAME="tex2html104"
+  HREF="node12.html">Building the OS Project on Windows</A>
+<UL>
+<LI><A NAME="tex2html105"
+  HREF="node13.html">Microsoft Visual Studio (MSVS)</A>
+<LI><A NAME="tex2html106"
+  HREF="node14.html">Cygwin</A>
+<LI><A NAME="tex2html107"
+  HREF="node15.html">MinGW</A>
+<LI><A NAME="tex2html108"
+  HREF="node16.html">MSYS</A>
+</UL>
+<LI><A NAME="tex2html109"
+  HREF="node17.html">VPATH Installations</A>
+<LI><A NAME="tex2html110"
+  HREF="node18.html">Using Ipopt</A>
+<LI><A NAME="tex2html111"
+  HREF="node19.html">Other third-Party Software</A>
+<UL>
+<LI><A NAME="tex2html112"
+  HREF="node20.html">AMPL</A>
+<LI><A NAME="tex2html113"
+  HREF="node21.html">Cplex</A>
+<LI><A NAME="tex2html114"
+  HREF="node22.html">GLPK</A>
+<LI><A NAME="tex2html115"
+  HREF="node23.html">Knitro</A>
+<LI><A NAME="tex2html116"
+  HREF="node24.html">LINDO</A>
+<LI><A NAME="tex2html117"
+  HREF="node25.html">MATLAB</A>
+<LI><A NAME="tex2html118"
+  HREF="node26.html">Library Paths</A>
+</UL>
+<LI><A NAME="tex2html119"
+  HREF="node27.html">Bug Reporting</A>
+<LI><A NAME="tex2html120"
+  HREF="node28.html">Documentation</A>
+<LI><A NAME="tex2html121"
+  HREF="node29.html">Platforms</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html122"
+  HREF="node30.html">The OS Project Components</A>
+<LI><A NAME="tex2html123"
+  HREF="node31.html">OS Protocols</A>
+<LI><A NAME="tex2html124"
+  HREF="node32.html">The OS Library Components</A>
+<UL>
+<LI><A NAME="tex2html125"
+  HREF="node33.html">OSAgent</A>
+<LI><A NAME="tex2html126"
+  HREF="node34.html">OSCommonInterfaces</A>
+<UL>
+<LI><A NAME="tex2html127"
+  HREF="node35.html">The OSInstance Class</A>
+<LI><A NAME="tex2html128"
+  HREF="node36.html">Creating an <TT>OSInstance</TT> Object</A>
+<LI><A NAME="tex2html129"
+  HREF="node37.html">Mapping Rules</A>
+<LI><A NAME="tex2html130"
+  HREF="node38.html">The OSExpressionTree OSnLNode Classes</A>
+</UL>
+<LI><A NAME="tex2html131"
+  HREF="node39.html">OSModelInterfaces</A>
+<UL>
+<LI><A NAME="tex2html132"
+  HREF="node40.html">Converting MPS Files</A>
+<LI><A NAME="tex2html133"
+  HREF="node41.html">Converting AMPL nl Files</A>
+<LI><A NAME="tex2html134"
+  HREF="node42.html">Using MATLAB</A>
+</UL>
+<LI><A NAME="tex2html135"
+  HREF="node43.html">OSParsers</A>
+<LI><A NAME="tex2html136"
+  HREF="node44.html">OSSolverInterfaces</A>
+<LI><A NAME="tex2html137"
+  HREF="node45.html">OSUtils</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html138"
+  HREF="node46.html">The  OSInstance API</A>
+<UL>
+<LI><A NAME="tex2html139"
+  HREF="node47.html">Get Methods</A>
+<LI><A NAME="tex2html140"
+  HREF="node48.html">Set Methods</A>
+<LI><A NAME="tex2html141"
+  HREF="node49.html">Calculate Methods</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html142"
+  HREF="node50.html">The OS Algorithmic Differentiation Implementation</A>
+<UL>
+<LI><A NAME="tex2html143"
+  HREF="node51.html">Algorithmic Differentiation:  Brief Review</A>
+<LI><A NAME="tex2html144"
+  HREF="node52.html">Using OSInstance Methods: Low Level Calls</A>
+<UL>
+<LI><A NAME="tex2html145"
+  HREF="node53.html">First Derivative Reverse Sweep Calculations</A>
+<LI><A NAME="tex2html146"
+  HREF="node54.html">Second Derivative Reverse Sweep Calculations</A>
+</UL>
+<LI><A NAME="tex2html147"
+  HREF="node55.html">Using OSInstance Methods: High Level Calls</A>
+<UL>
+<LI><A NAME="tex2html148"
+  HREF="node56.html">Sparsity Methods</A>
+<LI><A NAME="tex2html149"
+  HREF="node57.html">Function Evaluation Methods</A>
+<LI><A NAME="tex2html150"
+  HREF="node58.html">Gradient Evaluation Methods</A>
+<LI><A NAME="tex2html151"
+  HREF="node59.html">Hessian Evaluation Methods</A>
+</UL>
+</UL>
+<BR>
+<LI><A NAME="tex2html152"
+  HREF="node60.html">The OSSolverService</A>
+<UL>
+<LI><A NAME="tex2html153"
+  HREF="node61.html">OSSolverService Input Parameters</A>
+<LI><A NAME="tex2html154"
+  HREF="node62.html">Solving Problems Locally</A>
+<LI><A NAME="tex2html155"
+  HREF="node63.html">Solving Problems Remotely with Web Services</A>
+<UL>
+<LI><A NAME="tex2html156"
+  HREF="node64.html">The  <TT>solve</TT> Service Method</A>
+<LI><A NAME="tex2html157"
+  HREF="node65.html">The  <TT>send</TT> Service Method</A>
+<LI><A NAME="tex2html158"
+  HREF="node66.html">The  <TT>retrieve</TT> Service Method</A>
+<LI><A NAME="tex2html159"
+  HREF="node67.html">The  <TT>getJobID</TT> Service Method</A>
+<LI><A NAME="tex2html160"
+  HREF="node68.html">The  <TT>knock</TT> Service Method</A>
+<LI><A NAME="tex2html161"
+  HREF="node69.html">The  <TT>kill</TT>   Service Method</A>
+<LI><A NAME="tex2html162"
+  HREF="node70.html">Summary</A>
+</UL>
+</UL>
+<BR>
+<LI><A NAME="tex2html163"
+  HREF="node71.html">Setting up a Solver Service with Tomcat</A>
+<LI><A NAME="tex2html164"
+  HREF="node72.html">Applications</A>
+<UL>
+<LI><A NAME="tex2html165"
+  HREF="node73.html">AMPL Client:  Hooking AMPL to Solvers</A>
+<LI><A NAME="tex2html166"
+  HREF="node74.html">File Upload:  Using a File Upload Package</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html167"
+  HREF="node75.html">Examples</A>
+<UL>
+<LI><A NAME="tex2html168"
+  HREF="node76.html">Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods</A>
+<LI><A NAME="tex2html169"
+  HREF="node77.html">Instance Generator: Using the OSInstance API to Generate Instances</A>
+<LI><A NAME="tex2html170"
+  HREF="node78.html">osTestCode</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html171"
+  HREF="node79.html">Appendix</A>
+<UL>
+<LI><A NAME="tex2html172"
+  HREF="node80.html">Building a Model in MATLAB</A>
+<LI><A NAME="tex2html173"
+  HREF="node81.html">OSiL representation for problem given in (1)-(4) (p.<IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png">)</A>
+<LI><A NAME="tex2html174"
+  HREF="node82.html">OSiL representation for problem given in (20)-(23) (p.<IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png">)
+</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html175"
+  HREF="node83.html">Bibliography</A>
+<LI><A NAME="tex2html176"
+  HREF="node84.html">About this document ...</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html91"
+  HREF="node1.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png"> 
+<A NAME="tex2html89"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html92"
+  HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A NAME="tex2html90"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>AMPL Client: Hooking AMPL to Solvers</TITLE>
+<META NAME="description" CONTENT="AMPL Client: Hooking AMPL to Solvers">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node74.html">
+<LINK REL="previous" HREF="node72.html">
+<LINK REL="up" HREF="node72.html">
+<LINK REL="next" HREF="node74.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1164"
+  HREF="node74.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1160"
+  HREF="node72.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1154"
+  HREF="node72.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1162"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1165"
+  HREF="node74.html">File Upload: Using a</A>
+<B> Up:</B> <A NAME="tex2html1161"
+  HREF="node72.html">Applications</A>
+<B> Previous:</B> <A NAME="tex2html1155"
+  HREF="node72.html">Applications</A>
+ &nbsp; <B>  <A NAME="tex2html1163"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000151000000000000000"></A><A NAME="section:amplclient"></A>
+<BR>
+AMPL Client:  Hooking AMPL to Solvers
+</H2>
+
+<P>
+The <TT>OSAmplClient</TT> executable (in <TT>COIN-OS/OS/applications/amplClient</TT>) is designed to work with the AMPL program (see <TT><A NAME="tex2html85"
+  HREF="www.ampl.com">www.ampl.com</A></TT>). The <TT>OSAmplClient</TT> acts like an AMPL ``solver.'' The <TT>OSAmplClient</TT> is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the <TT>OSAmplClient</TT> uses the <TT>OSnl2osil</TT> class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
+
+<P>
+In the following discussion we assume that the AMPL executable <TT>ampl</TT>  (or <TT>ampl.exe</TT> on Windows) obtained from <TT>www.ampl.com</TT>, the OS <TT>OSAmplClient</TT>, and the test problem <TT>hs71.mod</TT> are all in the same directory. At first, the user may wish to run everything in the directory
+
+<P>
+<PRE>
+COIN-OS/OS/applications/amplClient
+</PRE>
+which is where <TT>OSAmplClient</TT> is located when the OS project is built. The user must obtain <TT>ampl</TT> and put it in this directory.  The test problem <TT>hs71.mod</TT> can be copied from
+
+<P>
+<PRE>
+COIN-OS/OS/data/amplFiles
+</PRE>
+It is also assumed that <TT>.</TT> (the current directory) is in the search path.
+
+<P>
+The  problem instance, <TT>hs71.mod</TT> is an AMPL model file included in the <TT>amplClient</TT> directory. To solve this problem locally by calling the <TT>OSAmplClient</TT> from AMPL first start AMPL and then execute the following commands. In this case we testing  <TT>Ipopt</TT> as the local server and therefore it is necessary that <TT>Ipopt</TT> be part of the local OS build. If it is not then another solver must be selected and a test problem used that is a linear or integer program.
+
+<P>
+<PRE>
+# take in problem 71 in Hock and Schittkowski
+# assume the problem is in the AMPL directory
+model hs71.mod;
+# tell AMPL that the solver is OSAmplClient
+option solver OSAmplClient;
+# now tell OSAmplClient to use Ipopt
+option OSAmplClient_options "solver ipopt";
+# the name of the nl file (this is optional)
+write gtestfile;
+# now solve the problem
+solve;
+</PRE>
+
+<P>
+This will invoke <TT>Ipopt</TT> locally and the result in OSrL format will be displayed on the screen. In order to call a remote solver service, after the command
+<PRE>
+option OSAmplClient_options "solver ipopt";
+</PRE>
+set the solver <TT>service</TT> option to  the address of the remote solver service.
+<PRE>
+option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
+</PRE>
+In this case it is necessary that the <TT>Ipopt</TT> solver be part of the OS build on the server.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1164"
+  HREF="node74.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1160"
+  HREF="node72.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1154"
+  HREF="node72.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1162"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1165"
+  HREF="node74.html">File Upload: Using a</A>
+<B> Up:</B> <A NAME="tex2html1161"
+  HREF="node72.html">Applications</A>
+<B> Previous:</B> <A NAME="tex2html1155"
+  HREF="node72.html">Applications</A>
+ &nbsp; <B>  <A NAME="tex2html1163"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>
