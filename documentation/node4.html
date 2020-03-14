@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The Optimization Services (OS) Project</TITLE>
+<META NAME="description" CONTENT="The Optimization Services (OS) Project">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node5.html">
+<LINK REL="previous" HREF="node3.html">
+<LINK REL="up" HREF="osUsersManual_1.html">
+<LINK REL="next" HREF="node5.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html272"
+  HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html268"
+  HREF="osUsersManual_1.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html262"
+  HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html270"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html273"
+  HREF="node5.html">Quick Roadmap</A>
+<B> Up:</B> <A NAME="tex2html269"
+  HREF="osUsersManual_1.html">Optimization Services 1.0 User's</A>
+<B> Previous:</B> <A NAME="tex2html263"
+  HREF="node3.html">List of Tables</A>
+ &nbsp; <B>  <A NAME="tex2html271"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00040000000000000000">
+The Optimization Services (OS) Project</A>
+</H1>
+
+<P>
+The objective of Optimization Services (OS) is to provide a general framework consisting of a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards.  See the COIN-OR Trac page <TT><A NAME="tex2html3"
+  HREF="projects.coin-or.org/OS">projects.coin-or.org/OS</A></TT> or the Optimization Services (OS) Home Site <TT><A NAME="tex2html4"
+  HREF="www.optimizationservices.org">www.optimizationservices.org</A></TT>   for more information. The OS project provides the following:
+
+<P>
+<DL COMPACT>
+<DT>1.</DT>
+<DD>A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section   <A HREF="node31.html#section:schemadescriptions">6</A>.
+
+<P>
+</DD>
+<DT>2.</DT>
+<DD>Open source libraries  that support and implement many of the standards.
+
+<P>
+</DD>
+<DT>3.</DT>
+<DD>A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  <TT>OSInstance</TT>, along with a set of  <TT>get()</TT>,   <TT>set()</TT>, and <TT>calculate()</TT> methods for accessing and creating problem instances.
+This is a very general API for linear, integer, and nonlinear programs. Extensions for other major types of optimization problems are also in the works. Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The <TT>OSInstance</TT> object is described in more detail in Section <A HREF="node46.html#section:osinstanceAPI">8</A>. The nonlinear part of the API is based on the COIN-OR project <TT><A NAME="tex2html5"
+  HREF="projects.coin-or.org/CppAD">projects.coin-or.org/CppAD</A></TT> by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section <A HREF="node50.html#section:ad">9</A>.
+
+<P>
+</DD>
+<DT>4.</DT>
+<DD>A  command line executable <TT>OSSolverService</TT>  for reading problem instances (OSiL format, AMPL  nl format,  MPS format) and calling a solver either locally or on a remote server.  This is described in Section <A HREF="node60.html#section:ossolverservice">10</A>.
+
+<P>
+</DD>
+<DT>5.</DT>
+<DD>Utilities that convert AMPL nl files  and MPS files into the OSiL XML format.  This is described in Section <A HREF="node39.html#section:osmodelinterfaces">7.3</A>.
+
+<P>
+</DD>
+<DT>6.</DT>
+<DD>Standards that facilitate the communication between clients and optimization solvers using Web Services.  In  Section <A HREF="node33.html#section:osagent">7.1</A> we describe the <TT>OSAgent</TT> part of the OS library that is used to create Web Services
+ SOAP packages with OSiL instances and contact a server for solution.
+
+<P>
+</DD>
+<DT>7.</DT>
+<DD>An executable program <TT>OSAmplClient</TT> that is designed to work with the AMPL modeling language. The <TT>OSAmplClient</TT> appears as a ``solver'' to AMPL and, based on options given in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in Section <A HREF="node73.html#section:amplclient">12.1</A>.
+
+<P>
+</DD>
+<DT>8.</DT>
+<DD>Server software that works with Apache Tomcat and Apache Axis.
+This software uses Web Services technology and acts as middleware between the client that creates the instance and the  solver on the server that optimizes the instance and returns the result. This is illustrated in Section  <A HREF="node71.html#section:tomcat">11</A>.
+
+<P>
+</DD>
+<DT>9.</DT>
+<DD>A lightweight version of the project, <TT>OSCommon</TT> for modeling language and solver developers that want to use OS API, readers, and writers, without the overhead of other COIN-OR projects or any third party software.
+</DD>
+</DL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html272"
+  HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html268"
+  HREF="osUsersManual_1.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html262"
+  HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html270"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html273"
+  HREF="node5.html">Quick Roadmap</A>
+<B> Up:</B> <A NAME="tex2html269"
+  HREF="osUsersManual_1.html">Optimization Services 1.0 User's</A>
+<B> Previous:</B> <A NAME="tex2html263"
+  HREF="node3.html">List of Tables</A>
+ &nbsp; <B>  <A NAME="tex2html271"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

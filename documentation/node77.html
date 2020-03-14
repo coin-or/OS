@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Instance Generator: Using the OSInstance API to Generate Instances</TITLE>
+<META NAME="description" CONTENT="Instance Generator: Using the OSInstance API to Generate Instances">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node78.html">
+<LINK REL="previous" HREF="node76.html">
+<LINK REL="up" HREF="node75.html">
+<LINK REL="next" HREF="node78.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1213"
+  HREF="node78.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1209"
+  HREF="node75.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1203"
+  HREF="node76.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1211"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1214"
+  HREF="node78.html">osTestCode</A>
+<B> Up:</B> <A NAME="tex2html1210"
+  HREF="node75.html">Examples</A>
+<B> Previous:</B> <A NAME="tex2html1204"
+  HREF="node76.html">Algorithmic Differentiation: Using the</A>
+ &nbsp; <B>  <A NAME="tex2html1212"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000162000000000000000"></A><A NAME="subsection:exampleOSInstanceGeneration"></A>
+<BR>
+Instance Generator: Using the OSInstance API to Generate Instances
+</H2>
+
+<P>
+This example is found in the <TT>instanceGenerator</TT> folder in the <TT>examples</TT> folder.  This example illustrates how to build a complete in-memory model instance using the <TT>OSInstance</TT> API.   See the code <TT>instanceGenerator.cpp</TT> for the complete example. Here we provide a few highlights to illustrate the power of the API.
+
+<P>
+The first step is to create an <TT>OSInstance</TT> object.
+<PRE>
+OSInstance *osinstance;
+osinstance = new OSInstance();
+</PRE>
+
+<P>
+Assume that the instance has two variables, <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$ x_{0}$"> and <IMG
+ WIDTH="27" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img79.png"
+ ALT="$ x_{1}.$"> Variable <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$ x_{0}$"> is a continuous variable with lower bound of <IMG
+ WIDTH="44" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img156.png"
+ ALT="$ -100$"> and upper bound of <IMG
+ WIDTH="30" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img157.png"
+ ALT="$ 100$">. Variable <IMG
+ WIDTH="22" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$ x_{1}$"> is a binary variable. First declare the instance to have two variables.
+<PRE>
+osinstance-&gt;setVariableNumber( 2);
+</PRE>
+Next, add each variable. There is an <TT>addVariable</TT> method with the signature
+<PRE>
+addVariable(int index, string name, double lowerBound, double upperBound,
+char type, double init, string initString);
+</PRE>
+Then the calls for these two variables are
+<PRE>
+osinstance-&gt;addVariable(0, "x0", -100, 100, 'C', OSNAN, "");
+osinstance-&gt;addVariable(1, "x1", 0, 1, 'B', OSNAN, "");
+</PRE>
+There is also a method <TT>setVariables</TT> for adding more than one variable simultaneously.  The objective function(s) and constraints are added through similar calls.
+
+<P>
+Nonlinear terms are also easily added.  The following code illustrates how to add a nonlinear term <!-- MATH
+ $x_{0}*x_{1}$
+ -->
+<IMG
+ WIDTH="56" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img158.png"
+ ALT="$ x_{0}*x_{1}$"> in the <TT>&lt;nonlinearExpressions&gt;</TT> section of  OSiL.
+<PRE>
+osinstance-&gt;instanceData-&gt;nonlinearExpressions-&gt;nl[ 1] = new Nl();
+osinstance-&gt;instanceData-&gt;nonlinearExpressions-&gt;nl[ 1]-&gt;idx = 1;
+osinstance-&gt;instanceData-&gt;nonlinearExpressions-&gt;nl[ 1]-&gt;osExpressionTree =
+new OSExpressionTree();
+// create a variable nl node for x0
+nlNodeVariablePoint = new OSnLNodeVariable();
+nlNodeVariablePoint-&gt;idx=0;
+nlNodeVec.push_back( nlNodeVariablePoint);
+// create the nl node for x1
+nlNodeVariablePoint = new OSnLNodeVariable();
+nlNodeVariablePoint-&gt;idx=1;
+nlNodeVec.push_back( nlNodeVariablePoint);
+// create the nl node for *
+nlNodePoint = new OSnLNodeTimes();
+nlNodeVec.push_back( nlNodePoint);
+// the vectors are in postfix format
+// now the expression tree
+osinstance-&gt;instanceData-&gt;nonlinearExpressions-&gt;nl[ 1]-&gt;osExpressionTree-&gt;m_treeRoot =
+nlNodeVec[ 0]-&gt;createExpressionTreeFromPostfix( nlNodeVec);
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1213"
+  HREF="node78.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1209"
+  HREF="node75.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1203"
+  HREF="node76.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1211"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1214"
+  HREF="node78.html">osTestCode</A>
+<B> Up:</B> <A NAME="tex2html1210"
+  HREF="node75.html">Examples</A>
+<B> Previous:</B> <A NAME="tex2html1204"
+  HREF="node76.html">Algorithmic Differentiation: Using the</A>
+ &nbsp; <B>  <A NAME="tex2html1212"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

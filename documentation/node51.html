@@ -1,0 +1,465 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Algorithmic Differentiation: Brief Review</TITLE>
+<META NAME="description" CONTENT="Algorithmic Differentiation: Brief Review">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node52.html">
+<LINK REL="previous" HREF="node50.html">
+<LINK REL="up" HREF="node50.html">
+<LINK REL="next" HREF="node52.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html885"
+  HREF="node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html881"
+  HREF="node50.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html875"
+  HREF="node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html883"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html886"
+  HREF="node52.html">Using OSInstance Methods: Low</A>
+<B> Up:</B> <A NAME="tex2html882"
+  HREF="node50.html">The OS Algorithmic Differentiation</A>
+<B> Previous:</B> <A NAME="tex2html876"
+  HREF="node50.html">The OS Algorithmic Differentiation</A>
+ &nbsp; <B>  <A NAME="tex2html884"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000121000000000000000"></A><A NAME="section:adtheory"></A>
+<BR>
+Algorithmic Differentiation:  Brief Review
+</H2>
+
+<P>
+First and second derivative calculations are made using <I>algorithmic differentiation</I>.  Here we provide a brief review of algorithmic differentiation.  For an excellent reference on algorithmic differentiation see Griewank [<A
+ HREF="node83.html#griewank2000">3</A>].  The OS package uses the COIN-OR package CppAD which  is also an excellent resource with extensive  documentation and information about algorithmic differentiation. See the documentation written by  Brad Bell [<A
+ HREF="node83.html#bell2007">1</A>].    The development here is from the CppAD documentation.  Consider the function <!-- MATH
+ $f:X \rightarrow Y$
+ -->
+<IMG
+ WIDTH="86" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img33.png"
+ ALT="$ f:X \rightarrow Y$"> from <!-- MATH
+ $\mathbb{R}^{n}$
+ -->
+<IMG
+ WIDTH="26" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img34.png"
+ ALT="$ \mathbb{R}^{n}$"> to <!-- MATH
+ $\mathbb{R}^{m}.$
+ -->
+<IMG
+ WIDTH="34" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$ \mathbb{R}^{m}.$"> (That is, <IMG
+ WIDTH="86" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img36.png"
+ ALT="$ Y = f(X).$">)
+
+<P>
+Express the input vector as a scalar function of <IMG
+ WIDTH="11" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img37.png"
+ ALT="$ t$"> by
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray}
+X(t) = x^{(0)} +  x^{(1)} t +  x^{(2)} t^{2}
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="210" HEIGHT="42" ALIGN="MIDDLE" BORDER="0"
+ SRC="img38.png"
+ ALT="$\displaystyle X(t) = x^{(0)} + x^{(1)} t + x^{(2)} t^{2}$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(11)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+where <IMG
+ WIDTH="37" HEIGHT="40" ALIGN="MIDDLE" BORDER="0"
+ SRC="img39.png"
+ ALT="$ x^{(0)},$"> <IMG
+ WIDTH="37" HEIGHT="40" ALIGN="MIDDLE" BORDER="0"
+ SRC="img40.png"
+ ALT="$ x^{(1)},$"> and <IMG
+ WIDTH="32" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img41.png"
+ ALT="$ x^{(2)}$"> are vectors in <!-- MATH
+ $\mathbb{R}^{n}$
+ -->
+<IMG
+ WIDTH="26" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img34.png"
+ ALT="$ \mathbb{R}^{n}$"> and <IMG
+ WIDTH="11" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img37.png"
+ ALT="$ t$"> is a scalar.  By judiciously choosing <!-- MATH
+ $x^{(0)}, x^{(1)},$
+ -->
+<IMG
+ WIDTH="73" HEIGHT="40" ALIGN="MIDDLE" BORDER="0"
+ SRC="img42.png"
+ ALT="$ x^{(0)}, x^{(1)},$"> and <IMG
+ WIDTH="32" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img41.png"
+ ALT="$ x^{(2)}$"> we will be able to derive many different expressions of interest.  Note first that
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+X(0) &=& x^{(0)} \\
+X^{\prime}(0) &=& x^{(1)} \\
+X^{\prime \prime }(0) &=& 2 x^{(2)}
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="42" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img43.png"
+ ALT="$\displaystyle X(0)$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="32" HEIGHT="42" ALIGN="MIDDLE" BORDER="0"
+ SRC="img45.png"
+ ALT="$\displaystyle x^{(0)}$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="47" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="img46.png"
+ ALT="$\displaystyle X^{\prime}(0)$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="32" HEIGHT="42" ALIGN="MIDDLE" BORDER="0"
+ SRC="img47.png"
+ ALT="$\displaystyle x^{(1)}$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="50" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="img48.png"
+ ALT="$\displaystyle X^{\prime \prime }(0)$"></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img44.png"
+ ALT="$\displaystyle =$"></TD>
+<TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="41" HEIGHT="42" ALIGN="MIDDLE" BORDER="0"
+ SRC="img49.png"
+ ALT="$\displaystyle 2 x^{(2)}$"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+In general,  <IMG
+ WIDTH="33" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img50.png"
+ ALT="$ x^{(k)}$"> corresponds to the <IMG
+ WIDTH="30" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img51.png"
+ ALT="$ kth$"> order Taylor coefficient, i.e.
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:xTaylorCoeff"></A><!-- MATH
+ \begin{eqnarray}
+x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="231" HEIGHT="56" ALIGN="MIDDLE" BORDER="0"
+ SRC="img52.png"
+ ALT="$\displaystyle x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(12)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+Then <!-- MATH
+ $Y(t) = f(X(t))$
+ -->
+<IMG
+ WIDTH="121" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img53.png"
+ ALT="$ Y(t) = f(X(t))$"> is a function from <!-- MATH
+ $\mathbb{R}^{1}$
+ -->
+<IMG
+ WIDTH="24" HEIGHT="21" ALIGN="BOTTOM" BORDER="0"
+ SRC="img54.png"
+ ALT="$ \mathbb{R}^{1}$"> to <!-- MATH
+ $\mathbb{R}^{m}$
+ -->
+<IMG
+ WIDTH="30" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img55.png"
+ ALT="$ \mathbb{R}^{m}$"> and it is expressed in terms of its Taylor series expansion as
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray}
+Y(t)  = y^{(0)} +  y^{(1)} t +  y^{(2)} t^{2} + o(t^{3})
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="263" HEIGHT="42" ALIGN="MIDDLE" BORDER="0"
+ SRC="img56.png"
+ ALT="$\displaystyle Y(t) = y^{(0)} + y^{(1)} t + y^{(2)} t^{2} + o(t^{3})$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(13)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+where
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:yTaylorCoeff"></A><!-- MATH
+ \begin{eqnarray}
+y^{(k)} = \frac{1}{k!} Y^{(k)}(0), \quad k = 0, 1, 2
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="228" HEIGHT="56" ALIGN="MIDDLE" BORDER="0"
+ SRC="img57.png"
+ ALT="$\displaystyle y^{(k)} = \frac{1}{k!} Y^{(k)}(0), \quad k = 0, 1, 2$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(14)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+The following are shown in Bell  (<TT><A NAME="tex2html75"
+  HREF="http://www.coin-or.org/CppAD/">http://www.coin-or.org/CppAD/</A></TT>).
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:forward0Result"></A><!-- MATH
+ \begin{eqnarray}
+y^{(0)} = f(x^{(0)})
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="107" HEIGHT="42" ALIGN="MIDDLE" BORDER="0"
+ SRC="img58.png"
+ ALT="$\displaystyle y^{(0)} = f(x^{(0)})$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(15)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+Let <IMG
+ WIDTH="28" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img59.png"
+ ALT="$ e^{(i)}$"> denote the <IMG
+ WIDTH="27" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img60.png"
+ ALT="$ ith$"> unit vector.  If <!-- MATH
+ $x^{(1)} = e^{(i)}$
+ -->
+<IMG
+ WIDTH="80" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img61.png"
+ ALT="$ x^{(1)} = e^{(i)}$"> then <IMG
+ WIDTH="31" HEIGHT="40" ALIGN="MIDDLE" BORDER="0"
+ SRC="img62.png"
+ ALT="$ y^{(1)}$"> is equal to the <IMG
+ WIDTH="27" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img60.png"
+ ALT="$ ith$"> column of the Jacobian matrix of <IMG
+ WIDTH="38" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img63.png"
+ ALT="$ f(x)$"> evaluated at <IMG
+ WIDTH="37" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img64.png"
+ ALT="$ x^{(0)}.$"> That is
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:forward1Result"></A><!-- MATH
+ \begin{eqnarray}
+y^{(1)} =  \frac{\partial f}{\partial x_{i}} (x^{(0)}).
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="131" HEIGHT="56" ALIGN="MIDDLE" BORDER="0"
+ SRC="img65.png"
+ ALT="$\displaystyle y^{(1)} = \frac{\partial f}{\partial x_{i}} (x^{(0)}).$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(16)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+In addition, if <!-- MATH
+ $x^{(1)} = e^{(i)}$
+ -->
+<IMG
+ WIDTH="80" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img61.png"
+ ALT="$ x^{(1)} = e^{(i)}$"> and <!-- MATH
+ $x^{(2)} = 0$
+ -->
+<IMG
+ WIDTH="64" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img66.png"
+ ALT="$ x^{(2)} = 0$"> then for function <IMG
+ WIDTH="49" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img67.png"
+ ALT="$ f_{k}(x),$"> (the <IMG
+ WIDTH="30" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img51.png"
+ ALT="$ kth$"> component of <IMG
+ WIDTH="15" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img68.png"
+ ALT="$ f$">)
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:forward2Resulta"></A><!-- MATH
+ \begin{eqnarray}
+y^{(2)}_{k} =  \frac{1}{2}  \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{i} \partial x_{i}}
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="147" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img69.png"
+ ALT="$\displaystyle y^{(2)}_{k} = \frac{1}{2} \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{i} \partial x_{i}}$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(17)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+In order to evaluate the mixed partial derivatives, one can instead set <!-- MATH
+ $x^{(1)} = e^{(i)} + e^{(j)}$
+ -->
+<IMG
+ WIDTH="126" HEIGHT="40" ALIGN="MIDDLE" BORDER="0"
+ SRC="img70.png"
+ ALT="$ x^{(1)} = e^{(i)} + e^{(j)}$"> and <!-- MATH
+ $x^{(2)} = 0.$
+ -->
+<IMG
+ WIDTH="69" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img71.png"
+ ALT="$ x^{(2)} = 0.$"> This gives for function <IMG
+ WIDTH="49" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img67.png"
+ ALT="$ f_{k}(x),$">
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:forward2Resultb"></A><!-- MATH
+ \begin{eqnarray}
+y^{(2)}_{k} =  \frac{1}{2} \left(  \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{i} \partial x_{i}}   +    \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{i} \partial x_{j}}  +   \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{j} \partial x_{i}}  +   \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{j} \partial x_{j}}   \right)
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="481" HEIGHT="71" ALIGN="MIDDLE" BORDER="0"
+ SRC="img72.png"
+ ALT="$\displaystyle y^{(2)}_{k} = \frac{1}{2} \left( \frac{\partial^2 f_{k}(x^{(0)})}...
+..._{i}} + \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{j} \partial x_{j}} \right)$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(18)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+or, expressed in terms of the mixed partials,
+<BR>
+<DIV ALIGN="CENTER"><A NAME="eq:forward2Resultc"></A><!-- MATH
+ \begin{eqnarray}
+\frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{i} \partial x_{j}}   = y_{k}^{(2)}  -  \frac{1}{2} \left(  \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{i} \partial x_{i}}   +   \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{j} \partial x_{j}}   \right)
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="380" HEIGHT="71" ALIGN="MIDDLE" BORDER="0"
+ SRC="img73.png"
+ ALT="$\displaystyle \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{i} \partial x_{j}} =...
+..._{i}} + \frac{\partial^2 f_{k}(x^{(0)})}{\partial x_{j} \partial x_{j}} \right)$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(19)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html885"
+  HREF="node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html881"
+  HREF="node50.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html875"
+  HREF="node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html883"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html886"
+  HREF="node52.html">Using OSInstance Methods: Low</A>
+<B> Up:</B> <A NAME="tex2html882"
+  HREF="node50.html">The OS Algorithmic Differentiation</A>
+<B> Previous:</B> <A NAME="tex2html876"
+  HREF="node50.html">The OS Algorithmic Differentiation</A>
+ &nbsp; <B>  <A NAME="tex2html884"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

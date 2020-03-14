@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The getJobID Service Method</TITLE>
+<META NAME="description" CONTENT="The getJobID Service Method">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node68.html">
+<LINK REL="previous" HREF="node66.html">
+<LINK REL="up" HREF="node63.html">
+<LINK REL="next" HREF="node68.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1092"
+  HREF="node68.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1088"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1082"
+  HREF="node66.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1090"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1093"
+  HREF="node68.html">The knock Service Method</A>
+<B> Up:</B> <A NAME="tex2html1089"
+  HREF="node63.html">Solving Problems Remotely with</A>
+<B> Previous:</B> <A NAME="tex2html1083"
+  HREF="node66.html">The retrieve Service Method</A>
+ &nbsp; <B>  <A NAME="tex2html1091"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000133400000000000000"></A><A NAME="section:getjobid"></A>
+<BR>
+The  <TT>getJobID</TT> Service Method
+</H3>
+
+<P>
+Before  submitting a job with the <TT>send</TT> method a <TT>JobID</TT> is required. The <TT>OSSolverService</TT> can get a <TT>JobID</TT> with
+the following options.
+<PRE>
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+-serviceMethod getJobID
+</PRE>
+Note that no OSoL input file is specified. In this case, the <TT>OSSolverService</TT> sends an empty string. A string is returned with the <TT>JobID</TT>. This <TT>JobID</TT> is then put into a <TT>&lt;jobID&gt;</TT> element in an OSoL string that would be used by the <TT>send</TT> method.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

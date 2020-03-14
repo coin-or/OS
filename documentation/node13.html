@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Microsoft Visual Studio (MSVS)</TITLE>
+<META NAME="description" CONTENT="Microsoft Visual Studio (MSVS)">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node14.html">
+<LINK REL="previous" HREF="node12.html">
+<LINK REL="up" HREF="node12.html">
+<LINK REL="next" HREF="node14.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html404"
+  HREF="node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html400"
+  HREF="node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html394"
+  HREF="node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html402"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html405"
+  HREF="node14.html">Cygwin</A>
+<B> Up:</B> <A NAME="tex2html401"
+  HREF="node12.html">Building the OS Project</A>
+<B> Previous:</B> <A NAME="tex2html395"
+  HREF="node12.html">Building the OS Project</A>
+ &nbsp; <B>  <A NAME="tex2html403"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00072100000000000000">
+Microsoft Visual Studio (MSVS)</A>
+</H3>
+
+<P>
+Microsoft Visual Studio solution and project files are provided for users of Windows and the Microsoft Visual Studio IDE.   Care must be taken to distinguish different versions of MSVS.   Even though Microsoft  released Version 9 (as of 15 November 2007), we currently support only  Versions 7 and 8. To add to the confusion, these versions are also sometimes referred to by their (approximate) release date, which is 2008 for Version 9, 2005 for Version 8 and 2003 for Version 7.   In addition there is a free version of the Visual Studio IDE C++ compiler,  called Visual C++ Express Edition.    The following steps are necessary to build the OS project using the  Microsoft Visual Studio IDE.
+
+<P>
+<DL COMPACT>
+<DT>Step 0</DT>
+<DD>If MSVS  Version 7 or 8 of  the C++ compiler cl is already installed,  go to  to Step 2.
+
+<P>
+</DD>
+<DT>Step 1</DT>
+<DD>Download and install the Visual C++ Express Edition, which is available for free at Microsoft's web site. This download contains the Microsoft cl C++ compiler along with necessary libraries.
+
+<P>
+Version 7 is no longer available for download from Microsoft.  Version 8 is at <TT><A NAME="tex2html15"
+  HREF="http://msdn2.microsoft.com/en-ca/vstudio/aa700736.aspx">http://msdn2.microsoft.com/en-ca/vstudio/aa700736.aspx</A></TT>  If you are adventurous, you may wish to download Version 9, which is at
+<TT><A NAME="tex2html16"
+  HREF="http://msdn2.microsoft.com/en-us/express/future/bb421472.aspx">http://msdn2.microsoft.com/en-us/express/future/bb421472.aspx</A></TT>.
+
+<P>
+</DD>
+<DT>Step 2</DT>
+<DD>The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. These files are part of the commercial for-pay version, but are not included in the Visual C++ Express download. If  have the Express Edition, it is necessary to also download and install the Windows Platform SDK. This software is version independent and is at  <TT><A NAME="tex2html17"
+  HREF="http://msdn2.microsoft.com/en-us/express/aa700755.aspx">http://msdn2.microsoft.com/en-us/express/aa700755.aspx</A></TT>.
+
+<P>
+</DD>
+<DT>Step 3</DT>
+<DD>In the COIN-OR/OS directory you will find the folder MSVisualStudio, which contains root directories organized by the version of Visual Studio. We currently provide solution files for Version 7 and Version 8. Each contains project files for building the unitTest (OSTest.vcproj), the OSSolverService (OSSolverService,vcproj),   and the OS library libOS.vcproj. The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs (see Section <A HREF="node8.html#section:getTarBalls">3.2</A>).
+
+<P>
+Open the project files (for instance by double clicking on them in Windows Explorer)  and select Build from the menu bar.
+
+<P>
+</DD>
+<DT>Step 4</DT>
+<DD>Run the  <TT>unitTest</TT>.  Connect  to the directory <TT>COIN-OR/OS/test</TT> directory and run either the release or debug version of the  <TT>unitTest</TT> executable.
+</DD>
+</DL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html404"
+  HREF="node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html400"
+  HREF="node12.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html394"
+  HREF="node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html402"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html405"
+  HREF="node14.html">Cygwin</A>
+<B> Up:</B> <A NAME="tex2html401"
+  HREF="node12.html">Building the OS Project</A>
+<B> Previous:</B> <A NAME="tex2html395"
+  HREF="node12.html">Building the OS Project</A>
+ &nbsp; <B>  <A NAME="tex2html403"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

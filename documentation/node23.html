@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Knitro</TITLE>
+<META NAME="description" CONTENT="Knitro">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node24.html">
+<LINK REL="previous" HREF="node22.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node24.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html529"
+  HREF="node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html525"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html519"
+  HREF="node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html527"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html530"
+  HREF="node24.html">LINDO</A>
+<B> Up:</B> <A NAME="tex2html526"
+  HREF="node19.html">Other third-Party Software</A>
+<B> Previous:</B> <A NAME="tex2html520"
+  HREF="node22.html">GLPK</A>
+ &nbsp; <B>  <A NAME="tex2html528"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00075400000000000000">
+Knitro</A>
+</H3>
+
+<P>
+Knitro is a nonlinear solver. See <TT><A NAME="tex2html39"
+  HREF="http://www.ziena.com/">http://www.ziena.com/</A></TT>.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project, perform the following steps.
+
+<P>
+<DL COMPACT>
+<DT>Step 1:</DT>
+<DD>Download <TT>knitro</TT> to the desired directory.
+
+<P>
+</DD>
+<DT>Step 2:</DT>
+<DD>Copy the file <TT>nlpProblemDef.h</TT> from the <TT>examples/C++</TT> directory to the <TT>include</TT> directory.
+
+<P>
+</DD>
+<DT>Step 3:</DT>
+<DD>Edit the file <TT>nlpProblemDef.h</TT> and delete the following lines:
+
+<P>
+<PRE>
+NlpProblemDef::~NlpProblemDef (void)
+{
+    //---- DO NOTHING.
+    return;
+}
+</PRE>
+
+<P>
+</DD>
+<DT>Step 4</DT>
+<DD>Run configure with appropriate values for  <TT>-with-knitro-lib</TT> and <TT>-with-knitro-incdir</TT>. For example:
+
+<P>
+<PRE>
+./configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitro "
+--with-knitro-incdir=/home/kmartin/files/code/knitro/linux/include
+</PRE>
+
+<P>
+</DD>
+</DL>
+
+<P>
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,1747 @@
+<html><!-- InstanceBegin template="/Templates/OS.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>OSnL (nonlinear)</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  <link rel="icon" href="images/os1.ico">
+  <link rel="SHORTCUT ICON" href="images/os1.ico">
+  <link rel="stylesheet" href="css/os_styles.css" type="text/css">
+  <link rel="stylesheet" href="css/ddmenu.css" type="text/css">
+
+  <script type="text/javascript" src="js/ddmenu.js"></script>
+  <!-- InstanceBeginEditable name="head" -->
+  <style type="text/css">
+<!--
+.style4 {color: #000066; font-weight: bold; }
+.style5 {font-size: x-small}
+.style8 {font-size: x-small; font-weight: bold; }
+-->
+  </style>
+  <!-- InstanceEndEditable -->
+  <style type="text/css">
+<!--
+.style2 {font-size: larger}
+.style3 {
+	color: #666666;
+	font-weight: bold;
+}
+-->
+  </style>
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- start header table -->
+<table width="847" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="1"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="201"><img src="images/spacer.gif" width="175" height="1" alt=""></td>
+<td width="634"><img src="images/spacer.gif" width="599" height="1" alt=""></td>
+<td width="1"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="10"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+</tr>
+<tr>
+<td rowspan="4" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="56" alt=""></td>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="774" height="2" alt=""></td>
+<td rowspan="4" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="56" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="2" alt=""></td>
+</tr>
+<tr>
+<td rowspan="2"><a href="welcome.html"><img src="images/os1.jpg" width="115" height="87" alt="Optimization Services" border="0"></a></td>
+<td><div align="right">
+  <p align="center" class="nava style2">&nbsp;</p>
+  <table width="600" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="1"><div align="center"></div></td>
+      <td width="80"><div align="center"><a href="http://projects.coin-or.org/OS/register"><strong>Register</strong></a></div></td>
+      <td width="61"><div align="center"><a href="http://projects.coin-or.org/OS/login"><strong>Login</strong></a></div></td>
+      <td width="90"><div align="center"><a href="os_download.html"><strong>Download</strong></a></div></td>
+      <td width="68"><div align="center"><a href="os_license.html"><strong>License</strong></a></div></td>
+      <td width="150"><div align="center"><a href="http://groups.google.com/group/optimizationservices"><strong>OS Newsgroup  (hosted @ Google) </strong></a></div></td>
+      <!--td width="73"><div align="center"><a href="../login.html"><strong>Login</strong></a></div></td-->
+      <td width="150"><div align="center" class="style3"><a href="http://projects.coin-or.org/OS">OS  Developer Site (hosted @ COIN-OR)</a></div></td>
+    </tr>
+  </table>
+  </div></td>
+</tr>
+<tr>
+
+<td class="nav" valign="middle">
+    <!-- begin main menu bar -->
+    <ul class="ddmenu">
+	  <li><a href="os_overview.html">OVERVIEW</a> 
+        <ul>
+        	<li><a href="optimizationservices.html">Optimization Services (OS)</a></li>
+			<li><a href="optimizationservicesprotocol.html">Optimization Services Protocol (OSP)</a></li>
+			<li><a href="os_motivation.html">The OS Motivation</a></li>
+			<li><a href="os_components.html">The OS Components</a></li>
+			<li><a href="os_process.html">The OS Process</a></li>
+			<li><a href="os_customers.html">The OS Customers</a></li>
+			<li><a href="distributedComputingBackground.html">Distributed Computing Background</a></li>
+            <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+	  <li><a href="standard_overview.html">STANDARDS</a> 
+        <ul>
+        	<li><a href="standard_overview.html">Overview</a></li>
+        	<li><a href="OSiL.html">OSiL (instance)</a></li>
+        	<li><a href="OSiL_SE.html">--OSiL/SE (Stochastic Ext.)</a></li>
+        	<li><a href="OSrL.html">OSrL (result)</a></li>
+        	<li><a href="OSoL.html">OSoL (option)</a></li>
+        	<li><a href="OSaL.html">OSaL (analysis)</a></li>
+        	<li><a href="OSeL.html">OSeL (entity)</a></li>
+        	<li><a href="OSpL.html">OSpL (process)</a></li>
+        	<li><a href="OSbL.html">OSbL (benchmark)</a></li>
+        	<li><a href="OSqL.html">OSqL (query)</a></li>
+        	<li><a href="OSuL.html">OSuL (uri/url)</a></li>
+        	<li><a href="OSsL.html">OSsL (simulation)</a></li>
+        	<li><a href="OShL.html">OShL (hook up)</a></li>
+        	<li><a href="OSdL.html">OSdL (discover)</a></li>
+        	<li><a href="OScL.html">OScL (call simulation)</a></li>
+        	<li><a href="OSgL.html">OSgL (general)</a></li>
+        	<li><a href="OSnL.html">OSnL (nonlinear)</a></li>
+        	<li><a href="OSlL.html">OSlL (linear) == LPFML</a></li>
+        	<li><a href="OSRepository.html">OSRepository.xsd</a></li>
+        	<li><a href="OSRegistry.html">OSRegistry.xsd</a></li>
+
+        </ul>
+      </li>
+	  <li>|</li>
+      <li><a href="projects_overview.html">PROJECTS</a>
+        <ul>
+          <li><a href="projects_overview.html">Overview</a></li>
+        	<li><a href="projects_impact.html">IMPACT Solver/Service</a></li>
+        	<li><a href="projects_osml.html">OSmL - OS Modeling</a></li>
+        	<li><a href="projects_osrepository.html">OS Repository</a></li>
+        	<li><a href="projects_gui.html">OS GUI</a></li>
+        	<li><a href="projects_binary.html">OS Binary</a></li>
+        	<li><a href="projects_interface.html">OS Interface & OSI2</a></li>
+        	<li><a href="os_neos.html">OS and NEOS</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+      <li><a href="services_overview.html">SERVICES</a>
+        <ul>
+          <li><a href="services_overview.html">Overview</a></li>
+          <li><a href="services_osregistry.html">OS Registry Service</a></li>
+          <li><a href="services_hosting.html">Service Hosting</a></li>
+          <li><a href="os_neos.html">OS and NEOS</a></li>
+          <li><a href="services_support.html">Support</a></li>
+          <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+	  <li>|</li>
+      <li><a href="publications_overview.html">PUBLICATIONS</a> 
+        <ul>
+          <li><a href="publications_overview.html">Overview</a></li>
+          <li><a href="publications_research.html">Researches</a></li>
+          <li><a href="publications_conferences.html">Conferences</a></li>
+          <li><a href="publications_papers.html">Papers</a></li>
+          <li><a href="publications_presentations.html">Presentations</a></li>
+          <li><a href="publications_api.html">APIs</a></li>
+          <li><a href="publications_faq.html">FAQs</a></li>
+          <li><a href="os_related.html">Related Sites</a></li>
+          <li><a href="os_related_research.html">Related Research</a></li>
+        </ul>
+      </li>
+      <li>|</li>
+      <li><a href="os_about.html">ABOUT</a> 
+        <ul>
+
+
+
+	      <li><a href="index.html">Home</a></li>
+          <li><a href="os_about.html">About Us</a></li>
+		  <li><a href="os_contact.html">Contact Us</a></li>		  
+          <li><a href="os_related.html">Related Sites</a></li>
+          <li><a href="os_related_research.html">Related Research</a></li>
+          <li><a href="http://projects.coin-or.org/OS/search">Search @ OS Developer Site</a></li>
+        </ul>
+      </li>
+    </ul>
+    <!-- end main menu bar --></td>
+
+
+</tr>
+<tr>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="774" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+</tr>
+</table>
+<!-- end header table -->
+
+<!-- start body table -->
+<table width="837" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td colspan="5" bgcolor="#6F5D51"><img src="images/spacer.gif" width="776" height="10" alt=""></td>
+</tr>
+<tr>
+<td colspan="5" bgcolor="#666666"><img src="images/spacer.gif" width="776" height="1" alt=""></td>
+</tr>
+<tr>
+<!-- start column one -->
+<td width="177" valign="top"><p><!--img src="../images/searstower.jpg" width="194" height="251" alt="" border="0"-->
+    <!-- InstanceBeginEditable name="QuickLinks" -->
+<div class="subnava">
+  <p><strong>REPRESENTATIONS</strong></p>
+</div>
+<div class="subnava">
+  <p> <a href="OSiL.html">OSiL (instance)</a> </p>
+</div>
+<div class="subnava">
+  <p> <a href="OSiL_SE.html" class="style5">-OSiL/SE (Stochastic Ext.)</a> </p>
+</div>
+<div class="subnava">
+      <p><a href="services_deployment.html"> </a> <a href="OSrL.html">OSrL (result)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSoL.html">OSoL (option)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSaL.html">OSaL (analysis)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSeL.html">OSeL (entity)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSpL.html">OSpL (process)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSbL.html">OSbL (benchmark)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSqL.html">OSqL (query)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSuL.html">OSuL (uri/url)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSsL.html">OSsL (simulation)</a> </p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnav">
+      <p><strong> COMMUNICATIONS</strong></p>
+      </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OShL.html">OShL (hook up)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSdL.html">OSdL (discover)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OScL.html">OScL (call simulation)</a> </p>
+    </div>
+    <div class="subnavsep"></div>
+    <div class="subnav">
+      <p><strong>OTHER/AUXILLARY</strong></p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSgL.html">OSgL (general)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSnL.html">OSnL (nonlinear)</a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSlL.html">OSlL (linear) == LPFML</a></p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSRepository.html">OSRepository </a> </p>
+    </div>
+    <div class="subnava">
+      <p><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a><a href="services_deployment.html"> </a> <a href="OSRegistry.html">OSRegistry</a> </p>
+    </div>
+    <br>
+    <!-- InstanceEndEditable --></p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p></td>
+<!-- end column one -->
+<td width="1" bgcolor="#666666"><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td width="23"><img src="images/spacer.gif" width="23" height="400" alt=""></td>
+<!-- start column two -->
+<td width="450" valign="top" class="bodytxt"><!-- InstanceBeginEditable name="MainBody" -->
+  <p><span class="bodyhdr"><b>Optimization Services nonlinear Language (OSnL)</b></span></p>
+  <p><a href="http://www.optimizationservices.org/schemas/OSnL.xsd">Click</a> to see or download the OSnL XML Schema -&gt; <a href="http://www.optimizationservices.org/schemas/OSnL.xsd" class="style4">OSnL.xsd</a> [stable] </p>
+  <hr>
+  <p>OSnL (nonlinear) contains definitions of all the nonlinear, combinatorial, and other nodes (e.g. operators, operands, etc.) used in other OSxL's, mainly OSiL.</p>
+  <p>In keeping  with the philosophy of separating out the linear and nonlinear parts of an  optimization instance, the nonlinear <em>expressions</em> in an instance are defined using the OSnL schema. OSnL itself is <em>not</em> a nonlinear program instance representation. Remember, all types of optimization instances are described  using OSiL. More appropriately OSnL should be interpreted as Optimization  Services <em>nonlinear node</em> Language.  OSnL defines nonlinear nodes and nodes <em>only</em>.  The nodes can be operators, functions or terminal operands. Operators always  have child nodes. Function may or may not have child nodes. Terminal operands  do not have children. Examples of terminal nodes are the number node and constant nodes such as PI and E.</p>
+  <p>OSnL is then included in the OSiL  schema to support nonlinear instance representation <em>in OSiL</em>. The way OSiL uses OSnL is through the use of a  sequence of 0 or more &lt;nl&gt;; each &lt;nl&gt; element has an only child OSnLNode as an  expression tree root to define a nonlinear function. This is described in  detail in <a href="publications_papers.html#OSiL1">the OSiL  paper</a>. </p>
+  <p>For a nonlinear expression, we use an  expression tree and view every node in the expression tree as a generic node,  which we call &ldquo;OSnLNode.&rdquo; Each OSnLNode can have 0 or more OSnLNode children. A  terminal node is just an OSnLNode without children. To represent a generic  node, at the beginning of the OSnL schema, we create a complex type OSnLNode:&nbsp; </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNode&quot; mixed=&quot;false&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:annotation&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:documentation&gt;This is a generic node from  which we derive operator nodes&lt;/xs:documentation&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:annotation&gt; <br>
+&lt;/xs:complexType&gt; </p>
+  <p>The annotation element is just an XML schema  comment. Next we create a substitution group based on the named <em>element</em> OSnLNode, which is of the above <em>type </em>OSnLNode. </p>
+  <p class="style5">&lt;xs:element name=&quot;OSnLNode&quot; type=&quot;OSnLNode&quot; abstract=&quot;true&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:annotation&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:documentation&gt; Set abstract to true in order  to create a substitution group&lt;/xs:documentation&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:annotation&gt; <br>
+  &lt;/xs:element&gt;</p>
+  <p>So we can think of OSnLNode as a derived class. Note the abstract attribute is set to the value of true in order to create the abstract  class. Now with the substitution group defined, throughout the rest of the OSnL  schema, we create concrete OSnLNode elements that are in the substitution group  for OSnLNode. For example, the first concrete  element we define is an OSnLNode for addition: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;<strong>OSnLNodePlus</strong>&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence <strong>minOccurs=&quot;2&quot; maxOccurs=&quot;2&quot;</strong>&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element <strong>ref=&quot;OSnLNode&quot;</strong>/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; </p>
+  <span class="style5">&lt;xs:element name=&quot;<strong>plus</strong>&quot; type=&quot;OSnLNodePlus&quot; <strong>substitutionGroup=&quot;OSnLNode&quot;</strong>/&gt;  </span>
+  <p>We first define the complex type OSnLNodePlus and we then create the derived  element plus that is in the substitution group OSnLNode. Note that the plus element requires exactly two child  elements (&lt;xs:sequence <strong>minOccurs</strong><strong>=&quot;</strong><strong>2</strong><strong>&quot;</strong><strong> maxOccurs</strong><strong>=&quot;</strong><strong>2</strong><strong>&quot;</strong>&gt;), both of which should be in the OSnLNode substitution group too (&lt;xs:element <strong>ref</strong><strong>=&quot;</strong><strong>OSnLNode</strong><strong>&quot;</strong>/&gt;). In a similar fashion, we define  all other OSnL nodes such as minus, divide, arcsin, sum, E, var, leq, if, complements, xPath, userF, quadratic. For nodes such as sum, as the sum operator is an indefinite type, the corresponding OSnLNodeSum requires one or more child elements: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;<strong>OSnLNodeSum</strong>&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence <strong>minOccurs=&quot;1&quot; maxOccurs=&quot;unbounded&quot;</strong>&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;<strong>sum</strong>&quot; type=&quot;OSnLNodeSum&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p>For nodes such as E, as E is a constant, the corresponding OSnLNodeE has no children:</p>
+  <p class="style5">&lt;xs:complexType name=&quot;<strong>OSnLNodeE</strong>&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;<strong>E</strong>&quot; type=&quot;OSnLNodeE&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p> The recursive design provides a significantly  simple and powerful way to construct a nonlinear expression. </p>
+  <p>When a concrete expression tree is finally  constructed, it may look like:&nbsp; </p>
+  <p class="style5">&lt;sum&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;0&quot; coef=&quot;3&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;1&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;power&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;0&quot; coef=&quot;4&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;2&quot;/&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/power&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;divide&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/PI&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;0&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/divide&gt;<br>
+  &lt;/sum&gt; </p>
+  <p>for the nonlinear expression<a href="images/3x0x1plus4x0squaredpluspioverx0.gif"><img src="images/3x0x1plus4x0squaredpluspioverx0.gif" alt="3x0x1plus4x0squaredpluspioverx0" width="144" height="25" border="0"></a>.</p>
+  <p>The OSnL  schema is very compressive; over 200 elements are supported. They fall broadly  into the following 8 categories: </p>
+  <ul>
+    <li> Arithmetic operators</li>
+    <li>      Elementary functions</li>
+    <li>      Trigonometric functions</li>
+    <li>      Statistical and probability functions</li>
+    <li>      Terminals and constants</li>
+    <li>      Optimization related elements</li>
+    <li>      Logic and relational operators</li>
+    <li>      Special elements</li>
+  </ul>
+  <p><strong><a name="arithmetic"></a>1. Arithmetic  operators</strong></p>
+  <p>In the following table, we list the arithmetic operator elements. </p>
+  <table border="1" cellspacing="0" cellpadding="0" width="593">
+    <tr>
+      <td width="49" valign="top"><p align="center" class="style8">Name</p></td>
+      <td width="87" valign="top"><p align="center" class="style8">Child #</p></td>
+      <td width="46" valign="top"><p align="center" class="style8">Note</p></td>
+      <td width="16" rowspan="6" valign="top"><p align="center" class="style8">&nbsp;</p></td>
+      <td width="58" valign="top"><p align="center" class="style8">Name</p></td>
+      <td width="87" valign="top"><p align="center" class="style8">Child #</p></td>
+      <td width="250" valign="top"><p align="center" class="style8">Note</p></td>
+    </tr>
+    <tr>
+      <td width="49" valign="top"><p class="style5">plus</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="46" valign="top"><p class="style5">+</p></td>
+      <td width="58" valign="top"><p class="style5">divide</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="250" valign="top"><p class="style5">/</p></td>
+    </tr>
+    <tr>
+      <td width="49" valign="top"><p class="style5">sum</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">1 or more</p></td>
+      <td width="46" valign="top"><p class="style5"><img src="images/sigma.gif" alt="sigma" width="15" height="13"> </p></td>
+      <td width="58" valign="top"><p class="style5">quotient</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="250" valign="top"><p class="style5">\; e.g. 11 quotient 4 = 2</p></td>
+    </tr>
+    <tr>
+      <td width="49" valign="top"><p class="style5">minus</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="46" valign="top"><p class="style5">-</p></td>
+      <td width="58" valign="top"><p class="style5">rem</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="250" valign="top"><p class="style5">remainder, e.g. 11 rem 4 = 3</p></td>
+    </tr>
+    <tr>
+      <td width="49" valign="top"><p class="style5">negate</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="46" valign="top"><p class="style5">(-)</p></td>
+      <td width="58" valign="top"><p class="style5">power</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="250" valign="top"><p class="style5">^ ; base is the 1st child; exponent is the    2nd child</p></td>
+    </tr>
+    <tr>
+      <td width="49" valign="top"><p class="style5">times</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="46" valign="top"><p class="style5">* </p></td>
+      <td width="58" valign="top"><p class="style5">product</p></td>
+      <td width="87" valign="top"><p align="center" class="style5">1 or more</p></td>
+      <td width="250" valign="top"><p class="style5"><img src="images/pi.gif" alt="pi" width="15" height="12"> </p></td>
+    </tr>
+  </table>
+  <p>&ldquo;Child #&rdquo; indicates the number of OSnLNode children that an element  can take as operands. Elements with 1 operand are of <em>unary </em>type. Elements with 2 operands are of <em>binary</em> type. Elments with <em>n</em> (<em>n</em>&gt;2) operands are of <em>n</em>-nary type. Some of the subsequent  element types have n-nary functions.&nbsp;  Elements such as sum and product  are of indefinite types. As useful as the validation concept is, validation is  about syntax not semantics. For example, the OSnL schema can make sure there  are exactly 2 child elements for the &lt;divide&gt; element, but the schema cannot make  sure the second child evaluates to a non-zero. Similarly the schema does not  check whether the child elements of the integer-based quotient and rem operators evaluate to integers.  These require additional checking and interpretation on the part of a parser.<strong> </strong></p>
+  <p><strong><a name="elementary"></a>2. Elementary  functions</strong></p>
+  <p>In the following table, we list the elementary function elements. </p>
+  <table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="79" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="55" valign="top"><p align="center" class="style5"><strong>Child #</strong></p></td>
+      <td width="53" valign="top"><p align="center" class="style5"><strong>Note</strong></p></td>
+      <td width="16" rowspan="8" valign="top"><p align="center" class="style5"><strong>&nbsp;</strong></p></td>
+      <td width="75" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="53" valign="top"><p align="center" class="style5"><strong>Child #</strong></p></td>
+      <td width="184" valign="top"><p align="center" class="style5"><strong>Note</strong></p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">abs</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5">&nbsp;<img src="images/absa.gif" alt="absa" width="19" height="17"></p></td>
+      <td width="75" valign="top"><p class="style5">ln</p></td>
+      <td width="53" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="184" valign="top"><p class="style5">natural log of a </p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">squareRoot</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5"><img src="images/sqroota.gif" alt="sqroota" width="19" height="19"> </p></td>
+      <td width="75" valign="top"><p class="style5">log</p></td>
+      <td width="53" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="184" valign="top"><p class="style5">log (a, b) = <img width="30" height="12" src="images/logab.gif"></p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">square</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5"><img src="images/asquared.gif" alt="asquared" width="14" height="17"> </p></td>
+      <td width="75" valign="top"><p class="style5">log10</p></td>
+      <td width="53" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="184" valign="top"><p class="style5">log10(a) = <img src="images/log10b.gif" alt="log10b" width="34" height="19"></p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">floor</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5"><img src="images/afloor.gif" alt="afloor" width="19" height="19"></p></td>
+      <td width="75" valign="top"><p class="style5">round*</p></td>
+      <td width="53" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="184" valign="top"><p class="style5">see blow</p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">ceiling</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5"><img src="images/aceiling.gif" alt="aceiling" width="16" height="15"> </p></td>
+      <td width="75" valign="top"><p class="style5">roundToInt</p></td>
+      <td width="53" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="184" valign="top"><p class="style5">round to integer</p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">factorial</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5">&nbsp;<img width="10" height="11" src="images/nfactorial.gif"></p></td>
+      <td width="75" valign="top"><p class="style5">gcd</p></td>
+      <td width="53" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="184" valign="top"><p class="style5">greatest    common divisor</p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">exp</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5"><img width="14" height="12" src="images/etoa.gif"> </p></td>
+      <td width="75" valign="top"><p class="style5">lcm</p></td>
+      <td width="53" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="184" valign="top"><p class="style5">least    common multiple</p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">combination</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="53" valign="top"><p class="style5"><img width="22" height="13" src="images/cnk.gif"> </p></td>
+      <td width="16" valign="top"><p><span class="style5"><span class="style5"></span></span></p></td>
+      <td width="75" valign="top"><p class="style5">truncate* </p></td>
+      <td width="53" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="184" valign="top"><p class="style5">see below</p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">permutation</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="53" valign="top"><p class="style5"><img width="20" height="13" src="images/pnk.gif"> </p></td>
+      <td width="16" valign="top"><p><span class="style5"><span class="style5"></span></span></p></td>
+      <td width="75" valign="top"><p class="style5">rand*</p></td>
+      <td width="53" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="184" valign="top"><p class="style5">see below</p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">percent</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5"><img width="21" height="11" src="images/apercent.gif"> </p></td>
+      <td width="16" valign="top"><p><span class="style5"><span class="style5"></span></span></p></td>
+      <td width="75" valign="top"><p class="style5">gammaFn </p></td>
+      <td width="53" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="184" valign="top"><p class="style5">gamma    function</p></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><p class="style5">sign</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="53" valign="top"><p class="style5">1 or -1</p></td>
+      <td width="16" valign="top"><p><span class="style5"><span class="style5"></span></span></p></td>
+      <td width="75" valign="top"><p class="style5">gammaLn </p></td>
+      <td width="53" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="184" valign="top"><p class="style5">natural    log of the gamma function</p></td>
+    </tr>
+  </table>
+  <p>Most of the elementary functions are  self-explanatory. </p>
+  <p>The round function takes 2 children. The first  child is the number to be rounded. The second child is the number of digits to  round; a negative number rounds to the left of the decimal point; zero to the  nearest integer. </p>
+  <p>The truncate function truncates a number to an  integer by removing the fractional part of the number. It takes 2 children. The  first child is the number to be truncated. The second child indicates  truncation precision; negative number truncates to the left of the decimal  point; zero to the nearest integer. </p>
+  <p>The rand function takes 1 child as a seed. It  returns a random number from a continuous uniform distribution <img src="images/geq0.gif" alt="geq0" width="25" height="19">and <img src="images/lt1.gif" alt="lt1" width="23" height="17">.</p>
+  <p><strong><a name="trigonometric"></a>3. Trigonometric functions </strong></p>
+  <p>All the 24 standard trigonometric  functions are defined in OSnL. </p>
+  <table border="1" cellspacing="0" cellpadding="0" width="403">
+    <tr>
+      <td width="53" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="16" rowspan="5" valign="top"><p align="center" class="style5"><strong>&nbsp;</strong></p></td>
+      <td width="55" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="16" rowspan="5" valign="top"><p align="center" class="style5"><strong>&nbsp;</strong></p></td>
+      <td width="54" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="16" rowspan="5" valign="top"><p align="center" class="style5"><strong>&nbsp;</strong></p></td>
+      <td width="54" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="16" rowspan="5" valign="top"><p align="center" class="style5"><strong>&nbsp;</strong></p></td>
+      <td width="54" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="16" rowspan="5" valign="top"><p align="center" class="style5"><strong>&nbsp;</strong></p></td>
+      <td width="54" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">sin</p></td>
+      <td width="55" valign="top"><p class="style5">cos</p></td>
+      <td width="54" valign="top"><p class="style5">tan</p></td>
+      <td width="54" valign="top"><p class="style5">cot</p></td>
+      <td width="54" valign="top"><p class="style5">sec</p></td>
+      <td width="54" valign="top"><p class="style5">csc</p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">sinh</p></td>
+      <td width="55" valign="top"><p class="style5">cosh</p></td>
+      <td width="54" valign="top"><p class="style5">tanh</p></td>
+      <td width="54" valign="top"><p class="style5">coth</p></td>
+      <td width="54" valign="top"><p class="style5">sech</p></td>
+      <td width="54" valign="top"><p class="style5">csch</p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">arcsin</p></td>
+      <td width="55" valign="top"><p class="style5">arccos</p></td>
+      <td width="54" valign="top"><p class="style5">arctan</p></td>
+      <td width="54" valign="top"><p class="style5">arccot</p></td>
+      <td width="54" valign="top"><p class="style5">arcsec</p></td>
+      <td width="54" valign="top"><p class="style5">arccsc</p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">arcsinh</p></td>
+      <td width="55" valign="top"><p class="style5">arccosh</p></td>
+      <td width="54" valign="top"><p class="style5">arctanh</p></td>
+      <td width="54" valign="top"><p class="style5">arccoth</p></td>
+      <td width="54" valign="top"><p class="style5">arcsech</p></td>
+      <td width="54" valign="top"><p class="style5">arccsch</p></td>
+    </tr>
+  </table>
+  <p>A trigonometric function takes one and only one child. </p>
+  <p><strong><a name="statistical"></a>4. Statistical  and probability functions</strong></p>
+  <p>&nbsp;In the following table, we list the statistical function elements that take  one list of data, and hence are of indefinite types.</p>
+  <table border="1" cellspacing="0" cellpadding="0" width="553">
+    <tr>
+      <td width="109" valign="top"><p align="center" class="style5"><strong>Name </strong>(<em>no notes</em>)</p></td>
+      <td width="16" rowspan="14" valign="top"><p align="center" class="style5"><strong>&nbsp;</strong></p></td>
+      <td width="119" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="309" valign="top"><p align="center" class="style5"><strong>Note</strong></p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">mean</p></td>
+      <td width="119" valign="top"><p class="style5">Absdev</p></td>
+      <td width="309" valign="top"><p class="style5">average of absolution deviations from the mean</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">geometricMean</p></td>
+      <td width="119" valign="top"><p class="style5">Stddev</p></td>
+      <td width="309" valign="top"><p class="style5">standard deviation</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">harmonicMean</p></td>
+      <td width="119" valign="top"><p class="style5">Cv</p></td>
+      <td width="309" valign="top"><p class="style5">coefficient of variance (standard deviation / mean) </p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">count</p></td>
+      <td width="119" valign="top"><p class="style5">Large</p></td>
+      <td width="309" valign="top"><p class="style5">the nth &nbsp;largest number in a data list; n (&gt;0) is    the 1st child</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">median</p></td>
+      <td width="119" valign="top"><p class="style5">Small</p></td>
+      <td width="309" valign="top"><p class="style5">the nth &nbsp;smallest number in a data list; n (&gt;0) is    the 1st child</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">mode</p></td>
+      <td width="119" valign="top"><p class="style5">Percentile</p></td>
+      <td width="309" valign="top"><p class="style5">the nth &nbsp;percentile in a data list; n <img src="images/geq0leq1.gif" alt="geq0leq1" width="60" height="21">&nbsp;is the 1st child</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">min</p></td>
+      <td width="119" valign="top"><p class="style5">interQuantileRange</p></td>
+      <td width="309" valign="top"><p class="style5">thirdQuartile -&nbsp;    firstQuartile</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">max</p></td>
+      <td width="119" valign="top"><p class="style5">Range</p></td>
+      <td width="309" valign="top"><p class="style5">max - min</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">skewness</p></td>
+      <td width="119" valign="top"><p class="style5">trimMean*</p></td>
+      <td width="309" valign="top"><p class="style5">see below; fractional value is the 1st    child </p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">kurtosis</p></td>
+      <td width="119" valign="top"><p class="style5">Npv</p></td>
+      <td width="309" valign="top"><p class="style5">net present value; discount rate r is the 1st child</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">firstQuartile</p></td>
+      <td width="119" valign="top"><p class="style5">Irr</p></td>
+      <td width="309" valign="top"><p class="style5">internal rate of return</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">thirdQuartile</p></td>
+      <td width="119" valign="top"><p class="style5">autocorrelation1</p></td>
+      <td width="309" valign="top"><p class="style5">regular autocorrelation with lag = 1</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">variance</p></td>
+      <td width="119" valign="top"><p class="style5">autocorrelation</p></td>
+      <td width="309" valign="top"><p class="style5">general correlation with lag = n<img width="33" height="21" src="images/geq1.gif">;&nbsp;    n&nbsp; is the 1st child</p></td>
+    </tr>
+  </table>
+  <p>Each entry in the data list corresponds to a child node. The  parameters (if any) of a statistical function go before the data list  children.&nbsp; For example the large function takes a number n as its first child to indicate the nth  largest number in the rest of the children. Most of the statistical  functions are self-explanatory. </p>
+  <p>The trimMean function takes 2 or more children.  The first child is a number (<img src="images/in01.gif" alt="in01" width="43" height="21">) indicating the fraction of data  points to exclude from the top and bottom of the data list. The rest of the  children (from the second on) are the data list. </p>
+  <p>In the following table, we list the statistical function elements that take  two data lists as operands. </p>
+  <table border="1" cellspacing="0" cellpadding="0" width="557">
+    <tr>
+      <td width="112" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="446" valign="top"><p align="center" class="style5"><strong>Note</strong></p></td>
+    </tr>
+    <tr>
+      <td width="112" valign="top"><p class="style5">covariance</p></td>
+      <td width="446" valign="top"><p class="style5">covariance of two data lists; 1st data    list is the 1st half of the children </p></td>
+    </tr>
+    <tr>
+      <td width="112" valign="top"><p class="style5">correlation</p></td>
+      <td width="446" valign="top"><p class="style5">correlation of two data lists; 1st data    list is the 1st half of the children</p></td>
+    </tr>
+    <tr>
+      <td width="112" valign="top"><p class="style5">pearsonCorrelation</p></td>
+      <td width="446" valign="top"><p class="style5">Pearson product moment correlation coefficient; 1st    data list is the 1st half of the children</p></td>
+    </tr>
+    <tr>
+      <td width="112" valign="top"><p class="style5">rankCorrelation</p></td>
+      <td width="446" valign="top"><p class="style5">rank correlation of two data lists; 1st    data list is the 1st half of the children</p></td>
+    </tr>
+  </table>
+  <p>Each entry in the 2 data lists corresponds to a child node.  The parameters (if any) of a statistical function go before the data list  children. After the parameter children, there should be even number of the rest  of the children; the first half of these children corresponds to the first data  list; the second half of these children corresponds to the second data list. </p>
+  <p>In the following table, we list the probability function elements. Almost  all probability functions can have three versions: density, cumulative, and  inverse; child arguments for the three versions are exactly the same. An OSnL  element is created for each version (if there is one). Density type elements  are suffixed with &ldquo;Dist&rdquo;, cumulative type elements are suffixed with &ldquo;Cum&rdquo;, and inverse type elements are  suffixed with &ldquo;Inv.&rdquo; </p>
+  <table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="109" valign="top"><p align="center" class="style5"><strong>Name</strong><br>
+              <strong>(Density)</strong></p></td>
+      <td width="129" valign="top"><p align="center" class="style5"><strong>Name</strong><br>
+              <strong>(Cumulative)</strong></p></td>
+      <td width="122" valign="top"><p align="center" class="style5"><strong>Name</strong> <br>
+              <strong>(Inverse)</strong></p></td>
+      <td width="48" valign="top"><p align="center" class="style5"><strong>Child #</strong></p></td>
+      <td width="197" valign="top"><p align="center" class="style5"><strong>Sequence of Children </strong><br>
+        (param1,    ..., param2, x) </p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">discreteUniformDist</p></td>
+      <td width="129" valign="top"><p class="style5">discreteUniformCum</p></td>
+      <td width="122" valign="top"><p class="style5">discreteUniformInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="197" valign="top"><p class="style5">(N,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">bernoulliDist</p></td>
+      <td width="129" valign="top"><p class="style5">bernoulliCum</p></td>
+      <td width="122" valign="top"><p class="style5">bernoulliInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="197" valign="top"><p class="style5">(p,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">binomialDist</p></td>
+      <td width="129" valign="top"><p class="style5">binomialCum</p></td>
+      <td width="122" valign="top"><p class="style5">binomialInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(N,    p, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">multinomialDist</p></td>
+      <td width="129" valign="top"><p class="style5">multinomialCum</p></td>
+      <td width="122" valign="top"><p class="style5">multinomialInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3 or more</p></td>
+      <td width="197" valign="top"><p class="style5">(N,    p1, p2,..., pn, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">hypergeometricDist</p></td>
+      <td width="129" valign="top"><p class="style5">hypergeometricCum</p></td>
+      <td width="122" valign="top"><p class="style5">hypergeometricInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">4</p></td>
+      <td width="197" valign="top"><p class="style5">(N,    M, n, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">poissonDist</p></td>
+      <td width="129" valign="top"><p class="style5">poissonCum</p></td>
+      <td width="122" valign="top"><p class="style5">poissonInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="197" valign="top"><p class="style5">(lamda,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">geometricDist</p></td>
+      <td width="129" valign="top"><p class="style5">geometricCum</p></td>
+      <td width="122" valign="top"><p class="style5">geometricInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="197" valign="top"><p class="style5">(p,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">negativeBinomialDist</p></td>
+      <td width="129" valign="top"><p class="style5">negativeBinomialCum</p></td>
+      <td width="122" valign="top"><p class="style5">negativeBinomialInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(p,    r, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">uniformDist</p></td>
+      <td width="129" valign="top"><p class="style5">uniformCum</p></td>
+      <td width="122" valign="top"><p class="style5">uniformInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(a,    b, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">normalDist</p></td>
+      <td width="129" valign="top"><p class="style5">normalCum</p></td>
+      <td width="122" valign="top"><p class="style5">normalInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(mu,    sigma, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">stdNormalDist</p></td>
+      <td width="129" valign="top"><p class="style5">stdNormalCum</p></td>
+      <td width="122" valign="top"><p class="style5">stdNormalInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="197" valign="top"><p class="style5">(x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">bivariateNormalDist</p></td>
+      <td width="129" valign="top"><p class="style5">bivariateNormalCum</p></td>
+      <td width="122" valign="top"><p align="center" class="style5">/</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">7</p></td>
+      <td width="197" valign="top"><p class="style5">(mu1,    sigma1, mu2, sigma2, pho, x1, x2)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">exponentialDist</p></td>
+      <td width="129" valign="top"><p class="style5">exponentialCum</p></td>
+      <td width="122" valign="top"><p class="style5">exponentialInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="197" valign="top"><p class="style5">(lamda,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">weibullDist</p></td>
+      <td width="129" valign="top"><p class="style5">weibullCum</p></td>
+      <td width="122" valign="top"><p class="style5">weibullInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">4</p></td>
+      <td width="197" valign="top"><p class="style5">(location,    scale, shape, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">erlangDist</p></td>
+      <td width="129" valign="top"><p class="style5">erlangCum</p></td>
+      <td width="122" valign="top"><p class="style5">erlangInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(lamda,    n, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">gammaDist</p></td>
+      <td width="129" valign="top"><p class="style5">gammaCum</p></td>
+      <td width="122" valign="top"><p class="style5">gammaInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">4</p></td>
+      <td width="197" valign="top"><p class="style5">(location,    scale, shape, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">betaDist</p></td>
+      <td width="129" valign="top"><p class="style5">betaCum</p></td>
+      <td width="122" valign="top"><p class="style5">betaInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(degree1,    degree2,x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">betaGeneralDist</p></td>
+      <td width="129" valign="top"><p class="style5">betaGeneralCum</p></td>
+      <td width="122" valign="top"><p class="style5">betaGeneralInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">5</p></td>
+      <td width="197" valign="top"><p class="style5">(degree1,    degree2, min, max, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">lognormalDist</p></td>
+      <td width="129" valign="top"><p class="style5">lognormalCum</p></td>
+      <td width="122" valign="top"><p class="style5">lognormalInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(mu,    sigma, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">cauchyDist</p></td>
+      <td width="129" valign="top"><p class="style5">cauchyCum</p></td>
+      <td width="122" valign="top"><p class="style5">cauchyInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(location,    scale, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">tDist</p></td>
+      <td width="129" valign="top"><p class="style5">tCum</p></td>
+      <td width="122" valign="top"><p class="style5">tInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="197" valign="top"><p class="style5">(degree,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">chiSquareDist</p></td>
+      <td width="129" valign="top"><p class="style5">chiSquareCum</p></td>
+      <td width="122" valign="top"><p class="style5">chiSquareInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="197" valign="top"><p class="style5">(degree,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">fDist</p></td>
+      <td width="129" valign="top"><p class="style5">fCum</p></td>
+      <td width="122" valign="top"><p class="style5">fInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(degree1,    degree2, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">logisticDist</p></td>
+      <td width="129" valign="top"><p class="style5">logisticCum</p></td>
+      <td width="122" valign="top"><p class="style5">logisticInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(mu,beta,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">logLogisticDist</p></td>
+      <td width="129" valign="top"><p class="style5">logLogisticCum</p></td>
+      <td width="122" valign="top"><p class="style5">logLogisticInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(mu,beta,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">logarithmicDist</p></td>
+      <td width="129" valign="top"><p class="style5">logarithmicCum</p></td>
+      <td width="122" valign="top"><p class="style5">logarithmicInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(a,    b, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">paretoDist</p></td>
+      <td width="129" valign="top"><p class="style5">paretoCum</p></td>
+      <td width="122" valign="top"><p class="style5">paretoDist</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="197" valign="top"><p class="style5">(shape,    scale, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">rayleighDist</p></td>
+      <td width="129" valign="top"><p class="style5">rayleighCum</p></td>
+      <td width="122" valign="top"><p class="style5">rayleighInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="197" valign="top"><p class="style5">(beta,    x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">pertDist</p></td>
+      <td width="129" valign="top"><p class="style5">pertCum</p></td>
+      <td width="122" valign="top"><p class="style5">pertInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">4</p></td>
+      <td width="197" valign="top"><p class="style5">(a,    c, b, x)</p></td>
+    </tr>
+    <tr>
+      <td width="109" valign="top"><p class="style5">triangularDist</p></td>
+      <td width="129" valign="top"><p class="style5">triangularCum</p></td>
+      <td width="122" valign="top"><p class="style5">triangularInv</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">4</p></td>
+      <td width="197" valign="top"><p class="style5">(a,    c, b, x)</p></td>
+    </tr>
+  </table>
+  <p>All the probability functions and related parameters are  quite standard; they are named to be indicative of what are used in common  practice. The last child (or last two in bivariate cases) always evaluates to a  number that corresponds to the distribution function variable (or variables).  The parameters of a probability function (if any) go before the variable child  (or children). <strong></strong></p>
+  <p><strong><a name="terminal"></a>5. Terminals  and constants </strong></p>
+  <p>In the following table, we list the terminal elements, which do not have  children. </p>
+  <table border="1" cellspacing="0" cellpadding="0" width="237">
+    <tr>
+      <td width="119" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="119" valign="top"><p align="center" class="style5"><strong>Attributes</strong></p></td>
+    </tr>
+    <tr>
+      <td width="119" valign="top"><p class="style5">number</p></td>
+      <td width="119" valign="top"><p class="style5">value, type, id </p></td>
+    </tr>
+    <tr>
+      <td width="119" valign="top"><p class="style5">identifier</p></td>
+      <td width="119" valign="top"><p class="style5">Name</p></td>
+    </tr>
+  </table>
+  <p>The number schema is shown below: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeNumber&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;value&quot; type=&quot;xs:string&quot; use=&quot;required&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;type&quot; use=&quot;optional&quot; default=&quot;real&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:simpleType&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:restriction base=&quot;xs:string&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:enumeration value=&quot;real&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:enumeration value=&quot;string&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:enumeration value=&quot;random&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:restriction&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:simpleType&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:attribute&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;id&quot; type=&quot;xs:ID&quot; use=&quot;optional&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+&lt;/xs:complexType&gt; <br>
+&lt;xs:element name=&quot;number&quot; type=&quot;OSnLNodeNumber&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt;</p>
+  <p>The &lt;number&gt; element has three optional  attributes value, type, and id. The value attribute  is required and is of string type. The  type attribute  is optional and can take on a value of either real  (default), string, or random. A &ldquo;string-valued&rdquo; number is often  used in constraint programming. A &ldquo;random&rdquo; number is often  used in stochastic programming and in this case the value attribute of number can  either be treated as an initial value or ignored. The id attribute  is optional. But if there is one, it has to be unique as it of type ID. A number with an id can be  located. For example, in stochastic programming, we may need to change the  number to different values in different scenarios. For example, all the  following are valid number elements: </p>
+  <p class="style5">&lt;number value=&quot;100&quot;/&gt; <br>
+&lt;number value=&quot;100&quot; type=&quot;real&quot;/&gt; <br>
+&lt;number value=&quot;Chicago&quot; type=&quot;string&quot;/&gt; <br>
+&lt;number value=&quot;3.2&quot; type=&quot;random&quot; id=&quot;n4&quot;/&gt; </p>
+  <p> The identifier schema is shown below:&nbsp; </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeIdentifier&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;name&quot; type=&quot;xs:string&quot; use=&quot;required&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;identifier&quot;  type=&quot;OSnLNodeIdentifier&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p>The &lt;identifier&gt; element has one required name attribute. It is seldom used in numerical optimization. It can  potentially be used for symbolic optimization. The following is an example of  an identifier element: </p>
+  <p class="style5">&lt;identifer name=&quot;a&quot;/&gt;</p>
+  <p> A  variable is not always a terminal node, as it may take a child operand as its  index. This is explained later. </p>
+  <p>In the following table, we list the constant elements, which do not have  children. </p>
+  <table border="1" cellspacing="0" cellpadding="0" width="564">
+    <tr>
+      <td width="71" valign="top"><p align="center" class="style5"><strong>Constants</strong></p></td>
+      <td width="493" valign="top"><p class="style5">PI, E, TRUE, FALSE, EULERGAMMA, <br>
+        INF    (infinity), EPS (epsilon),&nbsp; NAN (Not a Number)</p></td>
+    </tr>
+  </table>
+  <p>Most of these constants are well supported in various  programming languages. So parser implementation can leverage on the support  from the programming languages. TRUE and FALSE are not double values, but parsers may for example choose to  use a positive number to represent TRUE and a negative number to represent FALSE. </p>
+  <p><strong><a name="optimization"></a>6. Optimization related elements</strong></p>
+  <p>In the following table, we list the three optimization related elements. </p>
+  <table border="1" cellspacing="0" cellpadding="0" width="309">
+    <tr>
+      <td width="112" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="63" valign="top"><p align="center" class="style5"><strong>Child #</strong></p></td>
+      <td width="134" valign="top"><p align="center" class="style5"><strong>Attributes</strong></p></td>
+    </tr>
+    <tr>
+      <td width="112" valign="top"><p class="style5">var</p></td>
+      <td width="63" valign="top"><p align="center" class="style5">0 or 1</p></td>
+      <td width="134" valign="top"><p class="style5">idx, coef </p></td>
+    </tr>
+    <tr>
+      <td width="112" valign="top"><p class="style5">objective</p></td>
+      <td width="63" valign="top"><p align="center" class="style5">0 or 1</p></td>
+      <td width="134" valign="top"><p class="style5">idx</p></td>
+    </tr>
+    <tr>
+      <td width="112" valign="top"><p class="style5">constraint</p></td>
+      <td width="63" valign="top"><p align="center" class="style5">0 or 1</p></td>
+      <td width="134" valign="top"><p class="style5">idx, valueType</p></td>
+    </tr>
+  </table>
+  <p>The var element schema is shown below: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeVar&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;0&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;idx&quot; type=&quot;xs:nonNegativeInteger&quot; use=&quot;optional&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;coef&quot; type=&quot;xs:double&quot; use=&quot;optional&quot; default=&quot;1&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;var&quot; type=&quot;OSnLNodeVar&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p>&lt;var&gt; has two optional attributes, idx and coef. The idx attribute is nonnegative and if it&rsquo;s not there, an optional child can  be used to evaluate to the variable index. This can be useful in, for example,  constraint programming in which a variable&rsquo;s index can sometimes be an  integer-valued variable or expression. The coef attribute is designed as a shorthand to avoid explicitly expressing a  constant times a variable, which appears frequently in optimization. By  default, coef is 1. For example,  all the following are valid variable elements: </p>
+  <p class="style5">X[0]: &lt;var idx=&quot;0&quot;/&gt; <br>
+ 3X[10]: &lt;var idx=&quot;10&quot; coef=&quot;3&quot;/&gt; <br>
+ 5X[1+X[2]]: &lt;var coef=&quot;5.0&quot;&gt;&lt;plus&gt;&lt;number value=&quot;1&quot;/&gt;&lt;var idx=&quot;2&quot;/&gt;&lt;/plus&gt;&lt;/var&gt; </p>
+  <p>The objective element schema is shown below: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeObjective&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;0&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;idx&quot; type=&quot;xs:int&quot; use=&quot;optional&quot; default=&quot;-1&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;objective&quot; type=&quot;OSnLNodeObjective&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p>&lt;objective&gt; has one optional attribute idx; idx is negative and by default  -1, which corresponds to the first objective. The element evaluates to the  objective value corresponding to the index. Like the var element, an optional child can be used to evaluate to  the objective index. The following is an example of an objective element:</p>
+  <p class="style5">&lt;objective idx=&quot;-1&quot;/&gt;</p>
+  <p>The Constraint element schema is shown below: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeConstraint&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;0&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;idx&quot; type=&quot;xs:int&quot; use=&quot;required&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;valueType&quot; use=&quot;optional&quot; default=&quot;value&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:simpleType&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:restriction base=&quot;xs:string&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:enumeration value=&quot;value&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:enumeration value=&quot;status&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:enumeration value=&quot;surplus&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:enumeration value=&quot;shortage&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:restriction&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:simpleType&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:attribute&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;constraint&quot; type=&quot;OSnLNodeConstraint&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p>The &lt;constraint&gt; element  has two optional attributes idx, and valueType. The idx attribute is nonnegative. Like the var and objective elements, an  optional child can be used to evaluate to the constraint index. The value of  the valueType attribute  can be either of &ldquo;value&rdquo;  (default), &ldquo;status&rdquo; (whether the constraint  is satisfied, a boolean), &ldquo;surplus&rdquo; (<img src="images/value-ub_surplus.gif" alt="value-ub_surplus" width="88" height="24">), or &ldquo;shortage&rdquo; (<img src="images/lb-value_shortage.gif" alt="lb-value_shortage" width="84" height="24">). The following are valid examples of  a constraint element:</p>
+  <p class="style5">&lt;constraint idx=&quot;2&quot;/&gt; <br>
+&lt;constraint idx=&quot;3&quot; valueType=&quot;status&quot;/&gt; <br>
+&lt;constraint idx=&quot;0&quot; valueType=&quot;surplus&quot;/&gt; <br>
+&lt;constraint idx=&quot;11&quot; valueType=&quot;shortage&quot;/&gt;</p>
+  <p><strong><a name="logic"></a>7. Logic and  relational operators</strong></p>
+  <p>In the following table, we list the standard logic and relational operator  elements. </p>
+  <table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="53" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="48" valign="top"><p align="center" class="style5"><strong>Child #</strong></p></td>
+      <td width="48" valign="top"><p align="center" class="style5"><strong>Note</strong></p></td>
+      <td width="19" rowspan="7" valign="top"><p align="center" class="style5"><strong>&nbsp;</strong></p></td>
+      <td width="79" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="55" valign="top"><p align="center" class="style5"><strong>Child #</strong></p></td>
+      <td width="220" valign="top"><p align="center" class="style5"><strong>Note</strong></p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">lt</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="48" valign="top"><p class="style5">&lt; </p></td>
+      <td width="79" valign="top"><p class="style5">and</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="220" valign="top"><p class="style5">&amp;&amp;</p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">leq</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="48" valign="top"><p class="style5">&lt;= </p></td>
+      <td width="79" valign="top"><p class="style5">or</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="220" valign="top"><p class="style5">| |</p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">gt</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="48" valign="top"><p class="style5">&gt; </p></td>
+      <td width="79" valign="top"><p class="style5">not</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="220" valign="top"><p class="style5">! </p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">geq</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="48" valign="top"><p class="style5">&gt;= </p></td>
+      <td width="79" valign="top"><p class="style5">xor</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="220" valign="top"><p class="style5">exclusive or</p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">eq</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="48" valign="top"><p class="style5">&nbsp;=</p></td>
+      <td width="79" valign="top"><p class="style5">implies</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="220" valign="top"><p class="style5">-&gt;: true    if both children are true or false</p></td>
+    </tr>
+    <tr>
+      <td width="53" valign="top"><p class="style5">neq</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2</p></td>
+      <td width="48" valign="top"><p class="style5">!= </p></td>
+      <td width="79" valign="top"><p class="style5">if</p></td>
+      <td width="55" valign="top"><p align="center" class="style5">3</p></td>
+      <td width="220" valign="top"><p class="style5">&nbsp;If(a, b, c): if a is true, then b, else c</p></td>
+    </tr>
+  </table>
+  <p>In the following table  6&#8209;13, we list the extended logic and relational operator  elements. <strong></strong></p>
+  <table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="144" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="48" valign="top"><p align="center" class="style5"><strong>Child #</strong> </p></td>
+      <td width="84" valign="top"><p align="center" class="style5"><strong>Note</strong></p></td>
+      <td width="312" valign="top"><p align="center" class="style5"><strong>Example</strong></p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">forAll</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1 or more</p></td>
+      <td width="84" valign="top"><p class="style5">true if all the child nodes    evaluate to true</p></td>
+      <td width="312" valign="top"><p class="style5">&lt;forAll&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;0&quot; valueType=&quot;status&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot; valueType=&quot;status&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;or&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;3&quot; valueType=&quot;status&quot;/&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;4&quot; valueType=&quot;status&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;or/&gt; <br>
+        &lt;/forAll&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">exists</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1 or more</p></td>
+      <td width="84" valign="top"><p class="style5">true if any of the child    nodes evaluate to true </p></td>
+      <td width="312" valign="top"><p class="style5">&lt;exists&gt; <br>
+        &nbsp;&nbsp; &lt;gt&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;number value=&quot;1.2&quot;/&gt;&lt;/gt&gt; <br>
+        &nbsp;&nbsp; &lt;geq&gt;&lt;constraint idx=&quot;2&quot;/&gt;&lt;number value=&quot;1.2&quot;/&gt;&lt;/geq&gt;<br>
+        &nbsp;&nbsp; &lt;implies&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;3&quot; valueType=&quot;status&quot;/&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;4&quot; valueType=&quot;status&quot;/&gt; <br>
+        &nbsp;&nbsp; &lt;implies/&gt; <br>
+        &lt;/exists&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">logicCount</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1 or more</p></td>
+      <td width="84" valign="top"><p class="style5">number of child nodes that    evaluate to true</p></td>
+      <td width="312" valign="top"><p class="style5">&lt;logicCount&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;neq&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;number value=&quot;3&quot;/&gt;&lt;/neq&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;and&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;0&quot; valueType=&quot;status&quot;/&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot; valueType=&quot;status&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;and/&gt; <br>
+        &lt;/logicCount&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">allDiff </p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1 or more</p></td>
+      <td width="84" valign="top"><p class="style5">true if all the child nodes    evaluate to different values</p></td>
+      <td width="312" valign="top"><p class="style5">&lt;allDiff&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;0&quot; valueType=&quot;value&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;plus&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;var idx=&quot;1&quot;/&gt;&lt;/plus&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;objective idx=&quot;-1&quot;/&gt; <br>
+        &lt;/allDiff&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">atMost</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2 or more</p></td>
+      <td width="84" valign="top"><p class="style5">1st    child evaluates to an integer n; true if at most n of the rest of the child nodes    are true&nbsp; </p></td>
+      <td width="312" valign="top"><p class="style5">&lt;atMost&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;2&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;if&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;eq&gt;&lt;var idx=&quot;1&quot;/&gt;&lt;PI/&gt;&lt;/eq&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;FALSE/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TRUE/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/if&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot; valueType=&quot;status&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;neq&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;number value=&quot;1.2&quot;/&gt;&lt;/neq&gt; <br>
+        &lt;/atMost&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">atLeast</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2 or more</p></td>
+      <td width="84" valign="top"><p class="style5">1st    child evaluates to an integer n; true if at least n of the rest of the child    nodes are true&nbsp; </p></td>
+      <td width="312" valign="top"><p class="style5">&lt;atLeast&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;1&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xor&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot; valueType=&quot;status&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;2&quot; valueType=&quot;status&quot;/&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xor/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;lt&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;number value=&quot;1.2&quot;/&gt;&lt;/lt&gt; <br>
+        &lt;/atLeast&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">exactly </p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2 or more</p></td>
+      <td width="84" valign="top"><p class="style5">1st    child evaluates to an integer n; true if exactly n of the rest of the child nodes    are true&nbsp; </p></td>
+      <td width="312" valign="top"><p class="style5">&lt;exactly&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;2&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;not&gt;&lt;constraint idx=&quot;1&quot; valueType=&quot;status&quot;/&gt;&lt;/not&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;2&quot; valueType=&quot;status&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;leq&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;number value=&quot;1.2&quot;/&gt;&lt;/leq&gt; <br>
+        &lt;/exactly&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">inSet</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">2 or more</p></td>
+      <td width="84" valign="top"><p class="style5">true if 1st    child&rsquo;s value is equal to one of the rest of the child nodes </p></td>
+      <td width="312" valign="top"><p class="style5">&lt;inSet&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;2&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;0&quot; valueType=&quot;value&quot;/&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;plus&gt;&lt;var idx=&quot;0&quot;/&gt;&lt;var idx=&quot;1&quot;/&gt;&lt;/plus&gt; <br>
+        &lt;/inSet&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">inRealSet</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="84" valign="top"><p class="style5">true    if the child is a real number</p></td>
+      <td width="312" valign="top"><p class="style5">&lt;inRealSet&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;2&quot;/&gt; <br>
+        &lt;/inRealSet&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">inPositiveRealSet</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="84" valign="top"><p class="style5">true    if the child is a positive real number </p></td>
+      <td width="312" valign="top"><p class="style5">&lt;inPositiveRealSet&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;6&quot; valueType=&quot;surplus&quot;/&gt; <br>
+        &lt;/    inPositiveRealSet&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">inNonnegativeRealSet</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="84" valign="top"><p class="style5">true    if the child is nonnegative real number</p></td>
+      <td width="312" valign="top"><p class="style5">&lt;inNonnegativeRealSet&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;4&quot; valueType=&quot;shortage&quot;/&gt; <br>
+        &lt;/ inNonnegativeRealSet &gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">inIntegerSet</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="84" valign="top"><p class="style5">true    if the child is an integer number</p></td>
+      <td width="312" valign="top"><p class="style5">&lt;inIntegerSet&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;divide&gt;&lt;var idx=&quot;4&quot;/&gt;&lt;number value=&quot;2&quot;/&gt;&lt;divide/&gt; <br>
+        &lt;/inIntegerSet&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">inPositiveIntegerSet</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="84" valign="top"><p class="style5">true    if the child is a positive integer number</p></td>
+      <td width="312" valign="top"><p class="style5">&lt;inPositiveIntegerSet&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;minus&gt;&lt;var idx=&quot;4&quot;/&gt;&lt;number value=&quot;2&quot;/&gt;&lt;minus/&gt; <br>
+        &lt;/inPositiveIntegerSet&gt; </p></td>
+    </tr>
+    <tr>
+      <td width="144" valign="top"><p class="style5">inNonnegativeIntegerSet</p></td>
+      <td width="48" valign="top"><p align="center" class="style5">1</p></td>
+      <td width="84" valign="top"><p class="style5">true    if the child is a nonnegative integer</p></td>
+      <td width="312" valign="top"><p class="style5">&lt;inNonnegativeIntegerSet&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;ceiling&gt;&lt;objective idx=&quot;-2&quot;/&gt;&lt;ceiling/&gt; <br>
+        &lt;/inNonnegativeIntegerSet &gt; </p></td>
+    </tr>
+  </table>
+  <p>For  instance, the first example (forAll) in the table:&nbsp; </p>
+  <p class="style5">&lt;forAll&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;0&quot; valueType=&quot;status&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot; valueType=&quot;status&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;or&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;3&quot; valueType=&quot;status&quot;/&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;4&quot; valueType=&quot;status&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;or/&gt; <br>
+  &lt;/forAll&gt;</p>
+  <p>means that the forAll operator is true if constanint 0 and  constraint 1 are both true, and one of the constraints, constraint 3 or  constraint 4, is true. </p>
+  <p>All of the extended logic and  relational operators are explained with an example in the above table. Most of  these are used in combinatorial and discrete optimization such as constraint  programming. Potentially more logic and relational operators will be added,  especially the set-valued operators. </p>
+  <p><strong><a name="special"></a>8. Special  elements</strong></p>
+  <p>In the following table, we list the special elements. <strong></strong></p>
+  <table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="72" valign="top"><p align="center" class="style5"><strong>Name</strong></p></td>
+      <td width="336" valign="top"><p align="center" class="style5"><strong>Children</strong></p></td>
+      <td width="180" valign="top"><p align="center" class="style5"><strong>Attributes</strong></p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">quadratic</p></td>
+      <td width="336" valign="top"><p class="style5">1 or more qpTerm elements (only for quadratic programs)</p></td>
+      <td width="180" valign="top"><p class="style5">none</p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">qpTerm</p></td>
+      <td width="336" valign="top"><p class="style5">0 or 1 child; the optional    child evaluates to the coefficient value of the quadratic term which must    evaluate to a constant term (only under the &lt;quadratic&gt; element )</p></td>
+      <td width="180" valign="top"><p class="style5">idxOne (required)<br>
+        idxTwo (required)<br>
+        coef (optional, default = 1)</p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">userF</p></td>
+      <td width="336" valign="top"><p class="style5">0 or more children as the    userF arguments </p></td>
+      <td width="180" valign="top"><p class="style5">name (required)</p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">arg</p></td>
+      <td width="336" valign="top"><p class="style5">no children</p></td>
+      <td width="180" valign="top"><p class="style5">idx (required, nonnegative)</p></td>
+    </tr>
+
+    <tr>
+      <td width="72" valign="top"><p class="style5">sim</p></td>
+      <td width="336" valign="top"><p class="style5">0 or&nbsp; more simInput elements, the last child is    simOutput</p></td>
+      <td width="180" valign="top"><p class="style5">name (required)</p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">simInput</p></td>
+      <td width="336" valign="top"><p class="style5">0 or 1 child; the optional    evaluates to the simInput value</p></td>
+      <td width="180" valign="top"><p class="style5">simName (optional) <br>
+        inputName (required)</p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">simOutput</p></td>
+      <td width="336" valign="top"><p class="style5">0 or 1 child; the optional    evaluates to the simOutput value</p></td>
+      <td width="180" valign="top"><p class="style5">simName (optional) <br>
+        outputName (optional)</p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">xPath</p></td>
+      <td width="336" valign="top"><p class="style5">0 or more xPathIndex elements</p></td>
+      <td width="180" valign="top"><p class="style5">uri (optional, default= &ldquo;.&rdquo;) <br>
+        path (required)</p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">xPathIndex</p></td>
+      <td width="336" valign="top"><p class="style5">0 or 1 child; the optional    child evaluates to the index value</p></td>
+      <td width="180" valign="top"><p class="style5">indexName (required)<br>
+        indexValue (optional)</p></td>
+    </tr>
+    <tr>
+      <td width="72" valign="top"><p class="style5">complements</p></td>
+      <td width="336" valign="top"><p class="style5">2 children</p></td>
+      <td width="180" valign="top"><p class="style5">none</p></td>
+    </tr>
+  </table>
+  <p>Unlike most of the previous elements,  many of these special elements have complex attributes and indefinite number of  children. The special elements are described below.&nbsp; Several elements are explained using the  Markowitz  optimization problem in using a three stock instance where Xi represents the percentage of the  portfolio invested in stock i. Assume the portfolio is  re-balanced&nbsp; when returns and covariances  are updated. </p>
+  <table border="0" cellspacing="0" cellpadding="0" width="583">
+    <tr>
+      <td width="523" valign="top"><p><a href="images/markowitzEx.gif"><img src="images/markowitzEx.gif" alt="markowitzEx" width="445" height="197" border="0"></a></p></td>
+    </tr>
+  </table>
+  <p><u><a name="quadratic"></a>quadratic, qpTerm</u></p>
+  <p>The  &lt;quadratic&gt; and &lt;qpTerm&gt; schemas are shown below: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeQuadratic&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence maxOccurs=&quot;unbounded&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;qpTerm&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;quadratic&quot; type=&quot;OSnLNodeQuadratic&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt;</p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeQpTerm&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;0&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;idxOne&quot; type=&quot;xs:nonNegativeInteger&quot; use=&quot;required&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;idxTwo&quot; type=&quot;xs:nonNegativeInteger&quot; use=&quot;required&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;coef&quot; type=&quot;xs:double&quot; use=&quot;optional&quot; default=&quot;1&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;qpTerm&quot; type=&quot;OSnLNodeQpTerm&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt;</p>
+  <p>Although the instance of any quadratic program  is easily represented as a general nonlinear program using OSnLNode elements, a  more compact representation is provided for quadratic terms. A &lt;qpTerm&gt; element is used to represent each quadratic term. The &lt;quadratic&gt; element sums up all its &lt;qpTerm&gt; child elements. The &lt;qpTerm&gt; element has two required integer attributes (idxOne, indxTwo) that specify the  two variable indices in the quadratic term. The coefficient of the quadratic  term is specified using either a third optional double attribute coef or by a single child element. One advantage of using the &lt;qpTerm&gt; elements is that quadratic programming solvers typically take  coefficient lists rather than nonlinear expressions. An added advantage is that  if an analyzer applied to the problem instance discovers that the only  nonlinear terms are &lt;quadratic&gt; and &lt;qpTerm&gt;&nbsp; terms, it can classify the  problem as a quadratic program. Suppose in the instance representation of the above Markowitz optimization example, the variable index for X[msfg] is 0, for X[pg] is 1, and for X[ge] is 2. The objective function is represented as </p>
+  <p class="style5">&lt;<strong>quadratic</strong>&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>qpTerm</strong> idxOne=&quot;0&quot; idxTwo=&quot;0&quot; coef=&quot;24&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>qpTerm</strong> idxOne=&quot;1&quot; idxTwo=&quot;1&quot; coef=&quot;75&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>qpTerm</strong> idxOne=&quot;2&quot; idxTwo=&quot;2&quot; coef=&quot;19&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>qpTerm</strong> idxOne=&quot;0&quot; idxTwo=&quot;1&quot; coef=&quot;20&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>qpTerm</strong> idxOne=&quot;0&quot; idxTwo=&quot;2&quot; coef=&quot;50&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>qpTerm</strong> idxOne=&quot;1&quot; idxTwo=&quot;2&quot; coef=&quot;74&quot;/&gt; <br>
+&lt;/<strong>quadratic</strong>&gt;</p>
+  <p><u><a name="userF"></a>userF, arg</u></p>
+  <p>Often a  problem instance has an expression that is repeated numerous times. As in  programming, where a method (subroutine) simplifies repeated logic, the &lt;userF&gt; element is used to simplify instance  representation by calling a pre-defined user function. Consider the constraint  set (3)-(5) of the above Markowitz optimization example. These constraints require that if a nonzero  investment is made in stock i, then at least 10% of the portfolio must be invested in  stock i. Rather than repeat the same logic  for each stock, it is much cleaner to first write the logic only once in a user  defined function: [minInv(arg0) = if (arg0 &gt; 0) then arg0 - .1 else 0], where arg0 is to be passed a value of Xi. User functions are defined in OSiL  though the &lt;userFunction&gt; element   in OSiL. The representation for the minInv function looks like: </p>
+  <p class="style5">&lt;userFunction name=&quot;minInv&quot; numArg=&quot;1&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;if&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;gt&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>arg</strong> idx=&quot;0&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;0&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/gt&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;minus&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>arg</strong> idx=&quot;0&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;0.1&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/minus&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;0&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/if&gt; <br>
+&lt;/userFunction&gt; </p>
+  <p>The &lt;userF&gt; and &lt;arg&gt; schemas are shown below: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeUserF&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;name&quot; type=&quot;xs:IDREF&quot; use=&quot;required&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+&lt;/xs:complexType&gt;<br>
+&lt;xs:element name=&quot;userF&quot; type=&quot;OSnLNodeUserF&quot;  substitutionGroup=&quot;OSnLNode&quot;/&gt;</p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeArg&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;idx&quot; type=&quot;xs:nonNegativeInteger&quot; use=&quot;required&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;arg&quot; type=&quot;OSnLNodeArg&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p>The definition of the user function should be  independent of the optimization problem instance represented by the OSiL  instance; thus it is required that the user function definition use the &lt;arg&gt; elements instead of the math program variables &lt;var&gt; elements. The &lt;arg&gt; element has  one required index attribute (idx) which is  a nonnegative number. The numArg attribute  of userFunction is used to check that all the  argument indexes are &gt;=0 &nbsp;and &lt;=numArg-1. </p>
+  <p>Now with  the minInv user function definition, we can  write constraint set (3)-(5) of the above Markowitz  optimization problem using the &lt;userF&gt; element  as: </p>
+  <p class="style5">&lt;nl idx=&quot;2&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>userF</strong> name=&quot;minInv&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;0&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/userF&gt; <br>
+&lt;/nl&gt; <br>
+&lt;nl idx=&quot;3&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>userF</strong> name=&quot;minInv&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;1&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/userF&gt; <br>
+&lt;/nl&gt; <br>
+&lt;nl idx=&quot;4&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>userF</strong> name=&quot;minInv&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;2&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/userF&gt; <br>
+&lt;/nl&gt; </p>
+  <p>In this example, the &lt;userF&gt; element&rsquo;s required attribute name is minInv. &lt;userF&gt; can take 0 or more children as function arguments  to pass. Here, we only have one argument which is &lt;var  idx=&quot;&hellip;&quot;/&gt;. </p>
+  <p><u><a name="sim"></a>sim, simInput, simOutput</u></p>
+  <p>In some  optimization problems there may not be a closed form expression for all  functions &ndash; they may be black boxes. This case is handled by the &lt;sim&gt; element. A simulation is similar to a user function, only that  there is no longer a closed-form that can be expressed; three things have to be  specified for the simulation: input, output, and the simulation&rsquo;s address. The  simulation definition, like the user function definition is specified in OSiL. </p>
+  <p>Suppose the above minInv user function is now calculated by a simulation called stockSimulation shown in the following figure. </p>
+  <p><a href="images/stockSimulation.jpg"><img src="images/stockSimulation.jpg" alt="stockSimulation" width="540" height="143" border="0"></a></p>
+  <p>There are two inputs of the simulation service: ticker for the stock  symbol and amount for the percentage of the stock in the portfolio. Notice the  stockSimulation engine provides more &ldquo;services&rdquo; than just calculating the  minimum investment. It can look up a stock price according to a stock  ticker (a string). It also outputs the day of the week (no input needed for  this function). So it has three outputs: mininv, price and day. </p>
+  <p>The stockSimulation element is then be represented using  the &lt;simulation&gt; element in OSiL as </p>
+  <p class="style5">&lt;simulation name=&quot;stockSimulation&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;uri value=&quot;http://www.optimizationservices.org/os/ossimulation/StockSimulationService.jws&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;OSsL&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;input&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;ticker&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;amount&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/input&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;output&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;minInv&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;price&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;el name=&quot;day&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/output&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/OSsL&gt; <br>
+&lt;/simulation&gt; </p>
+  <p>The format of the OSsL child is described in detail in <a href="OSsL.html">the OSsL page </a>. It contains information about inputs and outputs.  Note that simulations generally refer to inputs and outputs by name rather than  by order. </p>
+  <p>The &lt;sim&gt;, &lt;simInput&gt;, and &lt;simOutput&gt; schemas  are shown below: </p>
+  <p>&lt;xs:complexType name=&quot;OSnLNodeSim&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;simInput&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;simOutput&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;name&quot; type=&quot;xs:IDREF&quot; use=&quot;required&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+&lt;/xs:complexType&gt; <br>
+&lt;xs:element name=&quot;sim&quot; type=&quot;OSnLNodeSim&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeSimInput&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;0&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;simName&quot; type=&quot;xs:IDREF&quot; use=&quot;optional&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;inputName&quot; type=&quot;xs:IDREF&quot; use=&quot;required&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; </p>
+  <p class="style5">&lt;xs:element name=&quot;simInput&quot; type=&quot;OSnLNodeSimInput&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeSimOutput&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;0&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;simName&quot; type=&quot;xs:IDREF&quot; use=&quot;optional&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;outputName&quot; type=&quot;xs:string&quot; use=&quot;optional&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+&lt;/xs:complexType&gt; </p>
+  <p class="style5">&lt;xs:element name=&quot;simOutput&quot; type=&quot;OSnLNodeSimOutput&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt; </p>
+  <p>Now with  the stockSimulation definition, we can write  constraint set (3)-(5) of the above Markowitz problem using the &lt;sim&gt; element  as: </p>
+  <p class="style5">&lt;nl idx=&quot;2&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>sim</strong> name=&quot;stockSimulation&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>simInput</strong> inputName=&quot;amount&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;0&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/simInput&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>simOutput</strong> outputName=&quot;minInv&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/sim&gt; <br>
+  &lt;/nl&gt; <br>
+  &lt;nl idx=&quot;3&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>sim</strong> name=&quot;stockSimulation&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>simInput</strong> inputName=&quot;amount&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;1&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/simInput&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>simOutput</strong> outputName=&quot;minInv&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/sim&gt; <br>
+  &lt;/nl&gt; <br>
+  &lt;nl idx=&quot;4&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>sim</strong> name=&quot;stockSimulation&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>simInput</strong> inputName=&quot;amount&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;2&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/simInput&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>simOutput</strong> outputName=&quot;minInv&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/sim&gt; <br>
+  &lt;/nl&gt; </p>
+  <p>In this example, the &lt;sim&gt; element&rsquo;s required attribute name is stockSimulation. &lt;sim&gt; can take 0 or more &lt;simInput&gt; child  elements, followed by one required &lt;simOutput&gt; child element  because we must have <em>one</em> output value  to further calculate an objective or constraint function value. So &lt;sim&gt;  always has at least one child. Here, we only have one &lt;simInput&gt; element&nbsp;  which is &lt;var idx=&quot;&hellip;&quot;/&gt;. Each &lt;simInput&gt; element  has a required inputName  attribute, which refers to an input defined in the corresponding &lt;simulation&gt; definition. Each &lt;simInput&gt; element  also has an optional simName  attribute. If the attribute is not there, as in the above example, it defaults  to the name of the parent &lt;sim&gt; element.&nbsp;  So in the above example we can also write &lt;simInput  simName=&rdquo;stockSimulation&rdquo; inputName=&quot;amount&quot;&gt; with an  explicit simName attribute.&nbsp; The same rule applies to the &lt;simOutput&gt; element. &lt;simInput&gt; can have  an optional child that evaluates to an input value and &lt;simOutput&gt; can have an optional child that evaluates to an  output value. If the child is not there, &lt;simInput&gt; or &lt;simOutput&gt; <em>takes</em> the value from the OSsL element (&lt;el&gt;) with the  same input or output name. In our example &lt;simOutput&gt; is a <em>taker</em>. If there is a child of &lt;simInput&gt;, it <em>supplies</em> the value to the OSsL element with the same input name. In our example &lt;simInput&gt; is a <em>supplier</em>.  If there is a child of &lt;simOutput&gt;, it <em>constructs</em> a new value from the OSsL  elements. </p>
+  <p>Of  course the example is somewhat simplified. The child element of &lt;simInput&gt; can be more complex than just one single &lt;var&gt; node. In reality, the child can be a more complex  expression tree with many nodes. Also &lt;simOutput&gt; may not  just directly <em>take</em> the minInv output value. For example we can say if the day output from stockSimulation is 1 (Monday), we want to add a fixed  amount (say 0.05) to the minimum investment requirement for the stock ge. This corresponds to constraint (4). So constraint (4) now looks like: </p>
+  <p class="style5">&lt;nl idx=&quot;4&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;sim name=&quot;stockSimulation&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simInput inputName=&quot;amount&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;2&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/simInput&gt; <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simOutput&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;if&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;eq&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simOutput outputName=&quot;day&quot;/&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;1&quot;/&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/eq&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;plus&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simOutput outputName=&quot;minInv&quot;/&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;0.05&quot;/&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/plus&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;simOutput outputName=&quot;minInv&quot;/&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/if&gt;</strong> <br>
+  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/simOutput&gt;</strong> <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/sim&gt; <br>
+  &lt;/nl&gt; </p>
+  <p>Here &lt;simOutput&gt; <em>constructs a  new output</em>. That is why, unlike &lt;simInput&gt; whose inputName attribute is required, the outputName attribute of &lt;simOutput&gt; is  optional. Such a construction can be commonly used in optimization via <em>stochastic</em> simulation, where the  simulation usually outputs a variance value as well as a mean value, and the  optimization uses some combination of both the mean and the variance.&nbsp; </p>
+  <p><u><a name="xPath"></a>xPath, xPathIndex</u></p>
+  <p>In  practice, problem parameters are often dynamic over time. If the value of a  parameter changes, a new instance must be created using the modeling language.  These problems are eliminated using &lt;xPath&gt; and &lt;xPathIndex&gt; elements. By allowing xPath nodes in an OSiL  instance representation it is&nbsp; possible  to reference data in an external XML data file. Thus a modeler, in a  distributed environment, can generate a model, send it to the server, and the  server can operate with current data without the necessity of the modeling  language creating a new instance file.</p>
+  <p> The &lt;xPath&gt; and &lt;xPathIndex&gt; schemas are shown below: </p>
+  <p>&lt;xs:complexType name=&quot;OSnLNodeXPath&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;xPathIndex&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;uri&quot; type=&quot;xs:anyURI&quot; use=&quot;optional&quot; default=&quot;.&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;path&quot; type=&quot;xs:string&quot; use=&quot;required&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;xPath&quot; type=&quot;OSnLNodeXPath&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt;'</p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeXPathIndex&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;0&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;indexName&quot; type=&quot;xs:string&quot; use=&quot;required&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:attribute name=&quot;indexValue&quot; type=&quot;xs:string&quot; use=&quot;optional&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+  &lt;/xs:complexType&gt; <br>
+  &lt;xs:element name=&quot;xPathIndex&quot; type=&quot;OSnLNodeXPathIndex&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt;</p>
+  <p>The &lt;xPath&gt; element has an optional uri attribute which specifies where the XML data file is. It is by default  &ldquo;.&rdquo; which is the current OSiL instance file, that is, the data are included in  the &lt;xmlData&gt; element as explained in the OSiL  section.&nbsp; The &lt;xPath&gt; element also has a required path attribute which is a string of XPath syntax, used to locate values <em>within</em> the XML data. An XPath string may contain one or more &ldquo;XPath  variables&rdquo; indicated by an initial &ldquo;$&rdquo; sign. </p>
+  <p>The &lt;xPath&gt; element can have zero or more &lt;xPathIndex&gt; child elements. Each &lt;xPathIndex&gt; has a required indexName attribute  and an optional indexValue  attribute. An optional child of xPathIndex can be used that evaluates to the index value if indexValue is missing. The indexName attribute  is used to match the xPathIndex with a $variable in the path attribute of &lt;xPath&gt; and indexValue is used to supply the value for the variable. So  the number of xPathIndex child  elements has to be exactly the same as the number of variables in the path attribute of &lt;xPath&gt;. </p>
+  <p>As an  example, consider the Markowitz optimization problem (6&#8209;2). Assume the data on returns and covariances are  located within the file stockdata.xml in same directory as the OSiL instance (uri = &ldquo;./stockdata.xml&rdquo;). The xml data file is shown below:</p>
+  <p class="style5">&lt;?xml version=&quot;1.0&quot;  encoding=&quot;UTF-8&quot;?&gt; <br>
+  &lt;stocks&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>stock</strong> name=&quot;msft&quot; idx=&quot;0&quot; ret=&quot;.07&quot; minInv=&quot;.1&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;msft&quot; idx=&quot;0&quot; val=&quot;24&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;pg&quot; idx=&quot;1&quot; val=&quot;-10&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;ge&quot; idx=&quot;2&quot; val=&quot;25&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/stock&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>stock</strong> name=&quot;pg&quot; idx=&quot;1&quot; ret=&quot;.09&quot; minInv=&quot;.1&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;msft&quot; idx=&quot;0&quot; val=&quot;-10&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;pg&quot; idx=&quot;1&quot; val=&quot;75&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;ge&quot; idx=&quot;2&quot; val=&quot;37&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/stock&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>stock</strong> name=&quot;ge&quot; idx=&quot;2&quot; ret=&quot;.03&quot; minInv=&quot;.1&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;msft&quot; idx=&quot;0&quot; val=&quot;25&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;pg&quot; idx=&quot;1&quot; val=&quot;37&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cov name=&quot;ge&quot; idx=&quot;2&quot; val=&quot;19&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/stock&gt; <br>
+  &lt;/stocks&gt; </p>
+  <p>There are three stocks each  corresponding to a &lt;stock&gt; element. Each &lt;stock&gt; contains  information about its ticker (name), index (idx), return (ret), minimum  investment requirement (minInv) and  covariances with all the stocks (&lt;cov&gt;). The  data within the XML file at the indicated uri are located using the path attribute of XPath syntax. So if we use the &lt;xPath&gt; elements to locate the coefficients (stock return  values) for each variable in constraint (1) of&nbsp;  the above Markowitz example instead of directly specifying the values inside the  instance, we come up with the following representation for constraint (1): </p>
+  <p class="style5">&lt;nl idx=&quot;0&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;sum&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;0&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPath</strong> uri=&quot;./stockdata.xml&quot; path=&quot;/stocks/stock[@name='msft'/@return&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;1&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPath</strong> uri=&quot;./stockdata.xml&quot; path=&quot;/stocks/stock[@name='pg'/@return&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;2&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPath</strong> uri=&quot;./stockdata.xml&quot; path=&quot;/stocks/stock[@name='ge'/@return&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/sum&gt; <br>
+  &lt;/nl&gt; <br>
+    Alternatively  we can use xPathIndex if the  name of the stocks are variables:&nbsp; <br>
+  &lt;nl idx=&quot;0&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;sum&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;0&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPath</strong> uri=&quot;./stockdata.xml&quot; path=&quot;/stocks/stock[@name=<strong>$stockName</strong>/@return&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPathIndex</strong> indexName=<strong>&quot;stockName&quot;</strong> indexValue=&quot;msft&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xPath&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;1&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPath</strong> uri=&quot;./stockdata.xml&quot; path=&quot;/stocks/stock[@name=<strong>$stockName</strong>/@return&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPathIndex</strong> indexName=<strong>&quot;stockName&quot;</strong> indexValue=&quot;pg&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xPath&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;var idx=&quot;2&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPath</strong> uri=&quot;./stockdata.xml&quot; path=&quot;/stocks/stock[@name=<strong>$stockName</strong>/@return&quot;&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;<strong>xPathIndex</strong> indexName=<strong>&quot;stockName&quot;</strong> indexValue=&quot;ge&quot;/&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xPath&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/times&gt; <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/sum&gt; <br>
+  &lt;/nl&gt; </p>
+  <p>The above  two examples are equivalent, but by using the variable $stockName and xPathIndex to supply  the values (&ldquo;msft&rdquo;, &ldquo;pg&rdquo;, &ldquo;ge&rdquo;),&nbsp; the 3 xPath elements become the same and we can potentially simplify the syntax by  designing a user function using an argument to pass the stock names. </p>
+  <p>The  library that reads the OSiL instance can use the xPath element  to locate the stock return data before sending the instance to the solver. It  is also possible to carry the XML data with the instance file. If this is  desired, it is done by putting the data in the xmlData element.</p>
+  <p><u><a name="complements"></a>complements</u></p>
+  <p>The &lt;complements&gt; schema  from OSnL is shown below: </p>
+  <p class="style5">&lt;xs:complexType name=&quot;OSnLNodeComplements&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:complexContent&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:extension base=&quot;OSnLNode&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:sequence minOccurs=&quot;2&quot; maxOccurs=&quot;2&quot;&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;xs:element ref=&quot;OSnLNode&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:sequence&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:extension&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/xs:complexContent&gt; <br>
+&lt;/xs:complexType&gt; <br>
+&lt;xs:element name=&quot;complements&quot; type=&quot;OSnLNodeComplements&quot; substitutionGroup=&quot;OSnLNode&quot;/&gt;</p>
+  <p>The &lt;complements&gt; element allows complementarity problems to be constructed for solvers  to search for a feasible solution. Linear or smooth nonlinear optimization  problems can be viewed as special cases of complementarity problems.  Complementarity more or less means that at least one of a pair of logic  expressions (e.g. two constraints) must hold with equality. </p>
+  <p>The &lt;complements&gt; element is one of the few special elements  that don&rsquo;t have attributes. It also has a definite number of 2 children, which  are often constraints. The sequence of the 2 children does not matter. Both  children can consist from 1 to 3 expressions separated by logic operators =, &gt;=, and &lt;=. Of the two children of &lt;complements&gt;, there must be either exactly two inequality  operators or one equality operator. The &lt;complements&gt; element  evaluates to true if both children are true and at least one inequality is  tight. For example if constraint1 is of the form expression1&gt;=0 and constraint2 is of the form expression2&lt;=5, we can express the complementarity  as </p>
+  <p class="style5">&lt;complements&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;geq&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;0&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/geq&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;leq&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;2&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;number value=&quot;5&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/leq&gt; <br>
+&lt;/complements&gt; <br>
+or more concisely as <br>
+&lt;complements&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot; valueType=&quot;<strong>status</strong>&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;2&quot; valueType=&quot;<strong>status</strong>&quot;/&gt; <br>
+&lt;/complements&gt; </p>
+  <p>&nbsp;because the bound information is already  specified in the &lt;constraints&gt; element  of OSiL. Of course it has to be made sure that in using the concise form, the  constraint is only constrained on one side; otherwise there can be ambiguities.  Notice if the valueType attribute  of constraint is not specified, it defaults to  the constraint value. </p>
+  <p>When one  constraint constraint<em>i</em>, <em>i</em> in {1, 2}, involves two inequalities and is of  the form&nbsp; lb&lt;=expression<em>i</em> &nbsp;or ub&gt;=expression<em>i</em>&gt;=lb (lb and ub are numbers), then the other constraint<em>j</em>, <em>j</em> in {1, 2}, <em>j</em> != <em>i</em> , must be just of the free form expression<em>j</em>. In this case, the &lt;complements&gt; element evaluates to true if constraint<em>i</em> &nbsp;is true and</p>
+  <p>expression<em>j</em> = 0 if lb &lt; expression<em>i</em> &lt; ub <br>
+    expression<em>j</em> &lt;= 0 if expression<em>i</em> = ub <br>
+    expression<em>j</em> &gt;= 0 &nbsp;if expression<em>i</em> = lb</p>
+  <p>For example if constraint1is of the form 2&lt;=expression1&lt;=7 and constraint2 is of the form expression2, we can express the complementarity  as </p>
+  <p class="style5">&lt;complements&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;and&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;leq&gt; &lt;number value=&quot;2&quot;/&gt;&lt;constraint idx=&quot;1&quot; valueType=&quot;value&quot;/&gt; &lt;/leq&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;leq&gt; &lt;constraint idx=&quot;1&quot; valueType=&quot;value&quot;/&gt;&lt;number value=&quot;7&quot;/&gt; &lt;/leq&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/and&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot; valueType=&quot;value&quot;/&gt; <br>
+&lt;/complements&gt; <br>
+or more concisely as <br>
+&lt;complements&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;1&quot; valueType=&quot;<strong>status</strong>&quot;/&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;constraint idx=&quot;2&quot; valueType=&quot;<strong>value</strong>&quot;/&gt; <br>
+&lt;/complements&gt; </p>
+  <p>Of course it has to be made sure  that in using the concise representation, constraint1 &nbsp;is bounded on both sides, that is, both lb (!= -INF) are ub (!= INF) attributes have to be specified on constraint1 &nbsp;in the &lt;constraints&gt; element  of OSiL. </p>
+  <p>Child  elements of &lt;complements&gt; do not  always have to be constraints. For example the following is also valid: </p>
+  <p class="style5">&lt;complements&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;and&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;leq&gt; &lt;number value=&quot;0&quot;/&gt;&lt;var idx=&quot;0&quot;/&gt; &lt;/leq&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;leq&gt; &lt;var idx=&quot;0&quot;/&gt;&lt;number value=&quot;9&quot;/&gt; &lt;/leq&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/and&gt; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;plus&gt; &lt;var idx=&quot;1&quot;/&gt;&lt;var idx=&quot;2&quot;/&gt;  &lt;/plus&gt; <br>
+&lt;/complements&gt;</p>
+  <p>for 0 &lt;= X0 &lt;= 0 complements X1+X2. </p>
+  <hr>
+  <p><strong>Links: </strong></p>
+  <p><a href="http://www.optimizationservices.org/schemas/OSnL.xsd">Click</a> to see or download the OSnL XML Schema -&gt; <a href="http://www.optimizationservices.org/schemas/OSnL.xsd" class="style4">OSnL.xsd</a> </p>
+<!-- InstanceEndEditable -->
+  <p><br>
+  </p></td>
+<!-- end column two --> 
+<!-- start column three -->
+<td width="186" align="right" valign="top"><p/>
+  <p><!-- InstanceBeginEditable name="Blurb1" -->  
+  <table width="136" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <td class="spiffhdr">OSnL Node Types </td>
+</tr>
+<tr>
+  <td class="spifftxt"><p><a href="#arithmetic">1. Arithmetic operators</a></p>
+    <p><a href="#elementary"> 2. Elementary functions</a></p>
+    <p><a href="#trigonometric"> 3. Trigonometric functions</a></p>
+    <p><a href="#statistical"> 4. Statistical and probability functions</a></p>
+    <p><a href="#terminal"> 5. Terminals and constants</a></p>
+    <p><a href="#optimization"> 6. Optimization related elements</a></p>
+    <p><a href="#logic"> 7. Logic and relational operators</a></p>
+    <p><a href="#special"> 8. Special elements</a></p>
+    <ul>
+      <li><a href="#quadratic">quadratic, qpTerm</a></li>
+      <li><a href="#userF">        userF, arg</a></li>
+      <li><a href="#sim">        sim, simInput, simOutput</a></li>
+      <li><a href="#xPath">        xPath, xPathIndex</a></li>
+      <li><a href="#complements">        complements</a></li>
+    </ul></td>
+</tr>
+</table><!-- InstanceEndEditable --></p>
+  <p><!-- InstanceBeginEditable name="Blurb2" --><!-- InstanceEndEditable --></p>
+  <p><!-- InstanceBeginEditable name="Blurb3" --><!-- InstanceEndEditable --></p></td>
+<!-- end column three -->
+</tr>
+<tr>
+<td><img src="images/spacer.gif" width="152" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="1" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="23" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="450" height="1" alt=""></td>
+<td><img src="images/spacer.gif" width="150" height="1" alt=""></td>
+</tr>
+</table>
+<!-- end body table -->
+
+<!-- start footer table -->
+<table width="836" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="400"><img src="images/spacer.gif" width="400" height="10" alt=""></td>
+<td width="436"><img src="images/spacer.gif" width="376" height="10" alt=""></td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#666666"><img src="images/spacer.gif" width="776" height="1" alt=""></td>
+</tr>
+<tr>
+<td colspan="2"><img src="images/spacer.gif" width="1" height="5" alt=""></td>
+</tr>
+<tr>
+<td class="footer">&nbsp;</td>
+<td align="right" class="footer">&#169; Optimization Services (OS) 2006 | All rights reserved.</td>
+</tr>
+</table>
+<!-- end footer table -->
+<!--script type="text/javascript">
+google_ad_client = "pub-9660334810015606";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text_image";
+google_ad_channel = "";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "000066";
+google_color_text = "333333";
+google_color_url = "666666";
+
+</script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script-->
+</body>
+<!-- InstanceEnd --></html>

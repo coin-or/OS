@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The solve Service Method</TITLE>
+<META NAME="description" CONTENT="The solve Service Method">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node65.html">
+<LINK REL="previous" HREF="node63.html">
+<LINK REL="up" HREF="node63.html">
+<LINK REL="next" HREF="node65.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1056"
+  HREF="node65.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1052"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1046"
+  HREF="node63.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1054"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1057"
+  HREF="node65.html">The send Service Method</A>
+<B> Up:</B> <A NAME="tex2html1053"
+  HREF="node63.html">Solving Problems Remotely with</A>
+<B> Previous:</B> <A NAME="tex2html1047"
+  HREF="node63.html">Solving Problems Remotely with</A>
+ &nbsp; <B>  <A NAME="tex2html1055"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000133100000000000000"></A><A NAME="section:solve"></A>
+<BR>
+The  <TT>solve</TT> Service Method
+</H3>
+
+<P>
+First we illustrate a simple call to  the  <TT>OSSolverService.jws</TT>.  The call on the client machine is
+
+<P>
+<PRE>
+./OSSolverService -config ../data/configFiles/testremote.config
+</PRE>
+where the <TT>testremote.config</TT> file is
+<PRE>
+-osil ../data/osilFiles/parincLinear.osil
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+</PRE>
+
+<P>
+No solver is specified and by default the  <TT>Cbc</TT> solver  is used by the <TT>OSSolverService</TT>.   If, for example, the user wished to solve the problem with the <TT>Clp</TT> solver then this is accomplished either by using the  <TT>-solver</TT> option on the command line
+<PRE>
+./OSSolverService -config ../data/configFiles/testremote.config -solver clp
+</PRE>
+or by  adding  the line
+<PRE>
+ -solver clp
+</PRE>
+to the  <TT>testremote.config</TT> file.
+
+<P>
+Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually residing on the remote machine that is hosting the <TT>OSSolverService</TT> and not on the client machine.
+<PRE>
+./OSSolverService -osol ../data/osolFiles/remoteSolve1.osol
+     -serviceLocation  http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+</PRE>
+where the <TT>remoteSolve1.osol</TT> file is
+<BR>
+<IMG
+ WIDTH="794" HEIGHT="207" ALIGN="BOTTOM" BORDER="0"
+ SRC="img148.png"
+ ALT="\begin{verbatimtab}[4]
+&lt;?xml version=''1.0'' encoding=''UTF-8''?&gt;
+&lt;osol xmlns=''...
+...ther name=''os_solver''&gt;ipopt&lt;/other&gt;
+&lt;/optimization&gt;
+&lt;/osol&gt;
+\end{verbatimtab}">
+<BR>
+
+<P>
+If we were to change to the <TT>locationType</TT> attribute in the <TT>&lt;instanceLocation&gt;</TT> element to <TT>http</TT> then we could specify the instance location to on yet another machine. This is illustrated below  for <TT>remoteSolve2.osol</TT>.  The scenario is depicted in Figure <A HREF="#figure:ossolverservice2">18</A>.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element <TT>&lt;instanceLocation&gt;</TT>  has an attribute <TT>locationType</TT> equal to   <TT>http</TT>.  In this case, the text of the <TT>&lt;instanceLoction&gt;</TT> element contains the URL of a third machine which has the problem intance <TT>parincLinear.osil</TT>.  The solver service will contact the machine with URL <TT>http://www.coin-or.org/OS/parincLinear.osil</TT> and download this test problem. So the <TT>OSSolverService</TT> is running on the server <TT>gsbkip.chicagogsb.edu</TT> which contacts the server <TT>www.coin-or.org</TT> for the model instance.
+<BR>
+<IMG
+ WIDTH="794" HEIGHT="207" ALIGN="BOTTOM" BORDER="0"
+ SRC="img148.png"
+ ALT="\begin{verbatimtab}[4]
+&lt;?xml version=''1.0'' encoding=''UTF-8''?&gt;
+&lt;osol xmlns=''...
+...ther name=''os_solver''&gt;ipopt&lt;/other&gt;
+&lt;/optimization&gt;
+&lt;/osol&gt;
+\end{verbatimtab}">
+<BR>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:ossolverservice2"></A><A NAME="2145"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 18:</STRONG>
+Downloading the instance from a remote source.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER"><IMG
+  WIDTH="307" HEIGHT="251" ALIGN="BOTTOM" BORDER="0"
+ SRC="./OSSolverService2.png"
+ ALT="Image OSSolverService2">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1056"
+  HREF="node65.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1052"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1046"
+  HREF="node63.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1054"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1057"
+  HREF="node65.html">The send Service Method</A>
+<B> Up:</B> <A NAME="tex2html1053"
+  HREF="node63.html">Solving Problems Remotely with</A>
+<B> Previous:</B> <A NAME="tex2html1047"
+  HREF="node63.html">Solving Problems Remotely with</A>
+ &nbsp; <B>  <A NAME="tex2html1055"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

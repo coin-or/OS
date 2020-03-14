@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Second Derivative Reverse Sweep Calculations</TITLE>
+<META NAME="description" CONTENT="Second Derivative Reverse Sweep Calculations">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="previous" HREF="node53.html">
+<LINK REL="up" HREF="node52.html">
+<LINK REL="next" HREF="node55.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html921"
+  HREF="node55.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html917"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html913"
+  HREF="node53.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html919"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html922"
+  HREF="node55.html">Using OSInstance Methods: High</A>
+<B> Up:</B> <A NAME="tex2html918"
+  HREF="node52.html">Using OSInstance Methods: Low</A>
+<B> Previous:</B> <A NAME="tex2html914"
+  HREF="node53.html">First Derivative Reverse Sweep</A>
+ &nbsp; <B>  <A NAME="tex2html920"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000122200000000000000">
+Second Derivative Reverse Sweep Calculations</A>
+</H3>
+
+<P>
+In order to calculate second derivatives using <TT>reverseAD</TT> forward sweeps of order 0 and 1 must have been completed.  The call to <TT>reverseAD(2, vlambda)</TT> will return a vector of dimension <IMG
+ WIDTH="23" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img130.png"
+ ALT="$ 2n$"> where <IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img131.png"
+ ALT="$ n$"> is the number of variables.  If the zero-order forward sweep is <TT>forward(0,x0)</TT> and the first-order forward sweep is <TT>forwardAD(1, x1)</TT> where <TT>x1</TT> <!-- MATH
+ $= e^{(i)},$
+ -->
+<IMG
+ WIDTH="52" HEIGHT="40" ALIGN="MIDDLE" BORDER="0"
+ SRC="img132.png"
+ ALT="$ = e^{(i)},$"> then the return vector <TT>z = reverseAD(2,  vlambda)</TT> is
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray}
+z[2j - 2]  =  \frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{j}} , \quad j = 1, \ldots, n
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="311" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img133.png"
+ ALT="$\displaystyle z[2j - 2] = \frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{j}} , \quad j = 1, \ldots, n$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(28)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray}
+z[2j - 1]  =  \frac{\partial^2 L(x^{(0)}, \lambda^{(0)})}{\partial x_{i} \partial x_{j}} , \quad j = 1, \ldots, n
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="318" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img134.png"
+ ALT="$\displaystyle z[2j - 1] = \frac{\partial^2 L(x^{(0)}, \lambda^{(0)})}{\partial x_{i} \partial x_{j}} , \quad j = 1, \ldots, n$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(29)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+where
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray}
+L (x, \lambda) = \sum_{k = 1}^{m} \lambda_{k} f_{k}(x)
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="167" HEIGHT="68" ALIGN="MIDDLE" BORDER="0"
+ SRC="img135.png"
+ ALT="$\displaystyle L (x, \lambda) = \sum_{k = 1}^{m} \lambda_{k} f_{k}(x)$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(30)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+For example, the  following calls will calculate the third row (column) of the Hessian of the Lagrangian.
+<PRE>
+x0[0] = 1;
+x0[1] = 5; 	
+x0[2] = 5;
+osinstance-&gt;forwardAD(0, x0);	
+x1[0] = 0;
+x1[1] = 0;
+x1[2] = 1;
+osinstance-&gt;forwardAD(1, x1);
+vlambda[0] = 1;
+vlambda[1] = 2;
+vlambda[2] = 1;
+osinstance-&gt;reverseAD(2, vlambda);
+</PRE>
+This returns
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+\frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{0}}  = 3, \quad   \frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{1}}  = 2.74, \quad   \frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{3}}  = 4.2
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="497" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img136.png"
+ ALT="$\displaystyle \frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{0}} = 3, \...
+... = 2.74, \quad \frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{3}} = 4.2$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<BR>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{eqnarray*}
+\frac{\partial^2 L(x^{(0)}, \lambda^{(0)})}{\partial x_{3} \partial x_{0}}  =0, \quad   \frac{\partial^2 L(x^{(0)}, \lambda^{(0)})}{\partial x_{3} \partial x_{0}}  = 0, \quad    \frac{\partial^2 L(x^{(0)}, \lambda^{(0)})}{\partial x_{3} \partial x_{3}}  =  -.04
+\end{eqnarray*}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="511" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img137.png"
+ ALT="$\displaystyle \frac{\partial^2 L(x^{(0)}, \lambda^{(0)})}{\partial x_{3} \parti...
+...rac{\partial^2 L(x^{(0)}, \lambda^{(0)})}{\partial x_{3} \partial x_{3}} = -.04$"></TD>
+<TD>&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+The reason that
+<!-- MATH
+ \begin{displaymath}
+\frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{1}}  = 2 \times 1.37 = 2.74
+\end{displaymath}
+ -->
+<P></P>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="246" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img138.png"
+ ALT="$\displaystyle \frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{1}} = 2 \times 1.37 = 2.74
+$">
+</DIV><P></P>
+and not
+<!-- MATH
+ \begin{displaymath}
+\frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{1}}  = 1 \times  9 + 2 \times 6.37 = 9 + 12.74 = 21.74
+\end{displaymath}
+ -->
+<P></P>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="408" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img139.png"
+ ALT="$\displaystyle \frac{\partial L (x^{(0)}, \lambda^{(0)})}{\partial x_{1}} = 1 \times 9 + 2 \times 6.37 = 9 + 12.74 = 21.74
+$">
+</DIV><P></P>
+is that the terms <IMG
+ WIDTH="30" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img140.png"
+ ALT="$ 9x_1$"> in the objective and <IMG
+ WIDTH="30" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img141.png"
+ ALT="$ 5x_1$"> in the first constraint
+are captured in the linear section of the OSiL input and therefore do not  appear as a nonlinear term in <TT>&lt;nonlinearExpressions&gt;</TT>. Again, <TT>forwardAD</TT> and <TT>reverseAD</TT> only operate on variables and terms in either the <TT>&lt;quadraticCoefficients&gt;</TT> or <TT>&lt;nonlinearExpressions&gt;</TT> sections.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html921"
+  HREF="node55.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html917"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html913"
+  HREF="node53.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html919"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html922"
+  HREF="node55.html">Using OSInstance Methods: High</A>
+<B> Up:</B> <A NAME="tex2html918"
+  HREF="node52.html">Using OSInstance Methods: Low</A>
+<B> Previous:</B> <A NAME="tex2html914"
+  HREF="node53.html">First Derivative Reverse Sweep</A>
+ &nbsp; <B>  <A NAME="tex2html920"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

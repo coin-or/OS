@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+
+\begin{document}
+
+%\section{}
+%\subsection{}
+\begin{center}
+{\bf December 7 Meeting}
+\end{center}
+
+\begin{itemize}
+
+\item Revise Solutions Manual per Gus' suggestions -- Kipp
+
+
+\item  Come up with a way to "stamp" the stages of our Schema.
+experiment, proposal, recommendation, finalization, v1, v1.1, v1.2, v2, etc. 
+
+\item The (future) supportfor other computational paradigms. I am thinking about robust optimization inparticular, but also about fuzzy optimization and interval arithmetic.
+
+\item Support for Modeling Languages
+
+\begin{itemize}
+\item  add support to FlopCpp so that it can generate OSiL (even for nonlinear models)
+
+\item help GAMS people so that GAMS can output OSiL -- ideally work with Stefan so that this can be done through COIN-OR GAMSlinks. -- Wayne
+
+
+\item convert the LINGO postfix instruction list into a postfix vector of OSnLNodes and then create the OSExpressionTree -- this will allow the LINGO modeling language to directly output OSiL -- Kipp
+
+\item can we do anything with Glpk Mathprog?
+
+\item Other open source modeling languages
+\end{itemize}
+
+
+
+\item Modify existing OS build system
+
+\begin{itemize}
+
+\item modify the current build so that we can create a lightweight libOS that does not require anything in the Externals except perhaps CppAD -- this will encourage use from developers who don't want to incorporate OS into their software without including a ton of other CoinOR software -- for example, what would be minimal system that GAMS/LINGO developers might want  -- DONE
+
+\item treating examples properly -- create  a Makefile.in for osTestCode so the user can edit a simple Makefile for his or her system.  -- DONE
+
+\end{itemize}
+\item  add support for stochastic programming --  modify existing parser to parse a subset of the stochastic nodes  -- Gus and Jun
+
+\item we currently throw an exception if there is an AMPL definitional variable -- treat the AMPL definitional variable correctly  -- Bob
+
+\item use David Gay's idea so that there is no loss of accuracy when writing/reading an OSiL  file  -- Bob
+
+
+\item talk to Joe Young about Cone programming support -- Joe
+
+
+
+\item Project Management and User Support
+
+\begin{itemize}
+
+\item respond to bug reports
+
+\item respond to posts to newsgroups such as Coin-discuss
+
+\item manage release of binaries, stable, and release versions of OS
+
+\item when we need to test who builds what on which platforms?
+
+\end{itemize}
+
+
+
+
+\item Suggestions from Seattle
+
+\begin{itemize}
+\item put in the Xpath support so that data is updated in real time
+
+\item support for definitional variables
+
+\item support for a simulation node
+\end{itemize}
+
+
+
+
+
+
+
+
+\end{itemize}
+
+
+\end{document}  

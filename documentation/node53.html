@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>First Derivative Reverse Sweep Calculations</TITLE>
+<META NAME="description" CONTENT="First Derivative Reverse Sweep Calculations">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node54.html">
+<LINK REL="previous" HREF="node52.html">
+<LINK REL="up" HREF="node52.html">
+<LINK REL="next" HREF="node54.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html911"
+  HREF="node54.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html907"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html901"
+  HREF="node52.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html909"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html912"
+  HREF="node54.html">Second Derivative Reverse Sweep</A>
+<B> Up:</B> <A NAME="tex2html908"
+  HREF="node52.html">Using OSInstance Methods: Low</A>
+<B> Previous:</B> <A NAME="tex2html902"
+  HREF="node52.html">Using OSInstance Methods: Low</A>
+ &nbsp; <B>  <A NAME="tex2html910"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000122100000000000000">
+First Derivative Reverse Sweep Calculations</A>
+</H3>
+
+<P>
+In order to calculate first derivatives execute the following sequence of calls.
+<PRE>
+x0[0] = 1;
+x0[1] = 5;
+x0[2] = 5;
+std::vector&lt;double&gt; vlambda(3);
+vlambda[0] = 0;
+vlambda[1] = 0;
+vlambda[2] = 1;
+osinstance-&gt;forwardAD(0, x0);
+osinstance-&gt;reverseAD(1, vlambda);
+</PRE>
+Since <TT>vlambda</TT> only includes
+the third function <IMG
+ WIDTH="20" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img128.png"
+ ALT="$ f_3$">, this sequence of calls will produce the third row of the
+Jacobian <IMG
+ WIDTH="23" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img97.png"
+ ALT="$ J_f$">, i.e
+<!-- MATH
+ \begin{displaymath}
+\frac{\partial f_{3}(x^{(0)})}{\partial x_{0}}   = 1,  \quad  \frac{\partial f_{3}(x^{(0)})}{\partial x_{1}}   = 0, \quad   \frac{\partial f_{3}(x^{(0)})}{\partial x_{3}}   = .2
+\end{displaymath}
+ -->
+<P></P>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="370" HEIGHT="64" ALIGN="MIDDLE" BORDER="0"
+ SRC="img129.png"
+ ALT="$\displaystyle \frac{\partial f_{3}(x^{(0)})}{\partial x_{0}} = 1, \quad \frac{\...
+...\partial x_{1}} = 0, \quad \frac{\partial f_{3}(x^{(0)})}{\partial x_{3}} = .2
+$">
+</DIV><P></P>
+
+<P>
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

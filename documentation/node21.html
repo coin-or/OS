@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Cplex</TITLE>
+<META NAME="description" CONTENT="Cplex">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node22.html">
+<LINK REL="previous" HREF="node20.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node22.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html505"
+  HREF="node22.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html501"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html495"
+  HREF="node20.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html503"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html506"
+  HREF="node22.html">GLPK</A>
+<B> Up:</B> <A NAME="tex2html502"
+  HREF="node19.html">Other third-Party Software</A>
+<B> Previous:</B> <A NAME="tex2html496"
+  HREF="node20.html">AMPL</A>
+ &nbsp; <B>  <A NAME="tex2html504"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00075200000000000000">
+Cplex</A>
+</H3>
+
+<P>
+Cplex is a linear, integer, and quadratic solver. See <TT><A NAME="tex2html37"
+  HREF="http://www.ilog.com/products/cplex/">http://www.ilog.com/products/cplex/</A></TT>.  Cplex does not provide source code and you can only download the platform dependent binaries. After installing the binaries and include files in an appropriate directory, run configure to point to the include and library directory. An example is given below:
+
+<P>
+<PRE>
+configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
+ $(CPLEX_LIBS)" --with-cplex-incdir= $(CPLEXDIR)/include
+</PRE>
+
+<P>
+You may also need the following environment variables (if they are not already set). The following are values we used in a working implementation.
+<PRE>
+SYSTEM =i86_linux2_glibc2.3_gcc3.2
+LIBFORMAT =static_pic_mt
+CPLEXDIR =/usr/local/ilog/cplex81/include/ilcplex
+CPLEXLIBPATH= -L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
+CPLEXINCDIR = $(CPLEXDIR)/include
+CPLEX_LIBS=-lcplex -lilocplex -lm -lpthread
+ILOG_HOME=/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2
+ILOG_LICENSE_FILE=/usr/local/ilog/ilm/access.ilm
+PATH=***:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:***
+CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

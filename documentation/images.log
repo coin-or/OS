@@ -1,0 +1,1363 @@
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2007.5.18)  16 JAN 2008 10:51
+entering extended mode
+ %&-line parsing enabled.
+**./images.tex
+(./images.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, arabic, basque, bulgarian, coptic, welsh, czech, slovak, german, ng
+erman, danish, esperanto, spanish, catalan, galician, estonian, farsi, finnish,
+ french, greek, monogreek, ancientgreek, croatian, hungarian, interlingua, ibyc
+us, indonesian, icelandic, italian, latin, mongolian, dutch, norsk, polish, por
+tuguese, pinyin, romanian, russian, slovenian, uppersorbian, serbian, swedish, 
+turkish, ukenglish, ukrainian, loaded.
+
+(/usr/local/texlive/2007/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2005/09/16 v1.4f Standard LaTeX document class
+(/usr/local/texlive/2007/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (/usr/local/texlive/2007/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+) (/usr/local/texlive/2007/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2007/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+) (/usr/local/texlive/2007/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: dvips.def on input line 90.
+(/usr/local/texlive/2007/texmf-dist/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+)) (/usr/local/texlive/2007/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2007/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+) (/usr/local/texlive/2007/texmf-dist/tex/latex/ltxmisc/boxedminipage.sty) (/us
+r/local/texlive/2007/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip43
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+(/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks15
+\ex@=\dimen105
+)) (/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen106
+) (/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count87
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count88
+\leftroot@=\count89
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count90
+\DOTSCASE@=\count91
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen107
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count92
+\c@MaxMatrixCols=\count93
+\dotsspace@=\muskip10
+\c@parentequation=\count94
+\dspbrk@lvl=\count95
+\tag@help=\toks16
+\row@=\count96
+\column@=\count97
+\maxfields@=\count98
+\andhelp@=\toks17
+\eqnshift@=\dimen108
+\alignsep@=\dimen109
+\tagshift@=\dimen110
+\tagwidth@=\dimen111
+\totwidth@=\dimen112
+\lineht@=\dimen113
+\@envbody=\toks18
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+) (/usr/local/texlive/2007/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2001/10/25 v2.2f
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 132.
+) (/usr/local/texlive/2007/texmf/tex/latex/html/url.sty
+Package: url 1999/03/02  ver 1.4  Verb mode for urls, email addresses, and file
+ names
+) (/usr/local/texlive/2007/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks20
+\verbatim@line=\toks21
+\verbatim@in@stream=\read1
+) (/usr/local/texlive/2007/texmf-dist/tex/latex/moreverb/moreverb.sty
+Package: moreverb 1997/12/07 v2.2d.2 `more' verbatim facilities
+\verbatim@out=\write3
+\tab@position=\count99
+\tab@size=\count100
+\listing@line=\count101
+)
+\c@theorem=\count102
+\c@Fig=\count103
+\extopskip=\skip46
+\exbottomskip=\skip47
+(/usr/local/texlive/2007/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+(/usr/local/texlive/2007/texmf/tex/latex/config/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: dvips.def on input line 130.
+(/usr/local/texlive/2007/texmf-dist/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+)) (/usr/local/texlive/2007/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2006/05/05 v1.1b Input encoding file
+\inpenc@prehook=\toks22
+\inpenc@posthook=\toks23
+(/usr/local/texlive/2007/texmf-dist/tex/latex/base/latin1.def
+File: latin1.def 2006/05/05 v1.1b Input encoding file
+))
+\sizebox=\box28
+\lthtmlwrite=\write4
+(./images.aux
+
+LaTeX Warning: Label `subsection:exampleOSInstanceGeneration' multiply defined.
+
+
+)
+\openout1 = `images.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 243.
+LaTeX Font Info:    ... okay on input line 243.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 243.
+LaTeX Font Info:    ... okay on input line 243.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 243.
+LaTeX Font Info:    ... okay on input line 243.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 243.
+LaTeX Font Info:    ... okay on input line 243.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 243.
+LaTeX Font Info:    ... okay on input line 243.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 243.
+LaTeX Font Info:    ... okay on input line 243.
+
+latex2htmlLength hsize=349.0pt
+
+latex2htmlLength vsize=680.43pt
+
+latex2htmlLength hoffset=0.0pt
+
+latex2htmlLength voffset=0.0pt
+
+latex2htmlLength topmargin=0.0pt
+
+latex2htmlLength topskip=0.00003pt
+
+latex2htmlLength headheight=0.0pt
+
+latex2htmlLength headsep=0.0pt
+
+latex2htmlLength parskip=0.0pt plus 1.0pt
+
+latex2htmlLength oddsidemargin=0.0pt
+
+latex2htmlLength evensidemargin=0.0pt
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 302.
+(/usr/local/texlive/2007/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2002/01/19 v2.2g AMS font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 302.
+(/usr/local/texlive/2007/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2002/01/19 v2.2g AMS font definitions
+)
+l2hSize :tex2html_wrap_indisplay8621:10.17673pt::10.17673pt::162.97232pt.
+[1
+
+
+
+]
+l2hSize :tex2html_wrap_indisplay8622:10.17673pt::10.17673pt::151.09718pt.
+[2
+
+
+]
+l2hSize :tex2html_wrap_indisplay8623:7.57185pt::7.57185pt::23.05585pt.
+[3
+
+
+]
+l2hSize :tex2html_wrap_indisplay8624:8.7125pt::8.7125pt::122.4473pt.
+[4
+
+
+]
+l2hSize :tex2html_wrap_indisplay8625:7.57185pt::7.57185pt::23.05585pt.
+[5
+
+
+]
+l2hSize :tex2html_wrap_indisplay8626:7.57185pt::7.57185pt::27.43074pt.
+[6
+
+
+]
+l2hSize :tex2html_wrap_indisplay8627:7.57185pt::7.57185pt::17.58084pt.
+[7
+
+
+]
+l2hSize :tex2html_wrap_inline8629:7.57185pt::7.57185pt::11.55582pt.
+[8
+
+
+]
+l2hSize :tex2html_wrap_inline8631:7.57185pt::7.57185pt::11.55582pt.
+[9
+
+
+]
+l2hSize :figure761:73.59998pt::0.0pt::349.0pt.
+[10
+
+
+]
+l2hSize :figure773:109.59998pt::0.0pt::349.0pt.
+[11
+
+
+]
+l2hSize :figure812:157.59998pt::0.0pt::349.0pt.
+[12
+
+
+]
+l2hSize :figure823:85.59998pt::0.0pt::349.0pt.
+[13
+
+
+]
+l2hSize :figure833:313.59998pt::0.0pt::349.0pt.
+[14
+
+
+]
+l2hSize :figure903:67.92084pt::0.0pt::349.0pt.
+[15
+
+
+]
+l2hSize :figure925:103.59998pt::0.0pt::349.0pt.
+[16
+
+
+]
+Overfull \hbox (11.84702pt too wide) in paragraph at lines 506--507
+ [][] 
+ []
+
+l2hSize :figure933:152.59998pt::0.0pt::349.0pt.
+[17
+
+
+]
+Overfull \hbox (129.60658pt too wide) in paragraph at lines 557--557
+ [][] 
+ []
+
+l2hSize :figure941:432.09935pt::0.0pt::349.0pt.
+[18
+
+
+]
+l2hSize :tex2html_wrap_inline8677:7.07185pt::0.0pt::6.02254pt.
+[19
+
+
+]
+l2hSize :figure1031:89.59998pt::0.0pt::349.0pt.
+[20
+
+
+]
+l2hSize :tex2html_wrap_inline8702:7.07185pt::0.0pt::9.06422pt.
+[21
+
+
+]
+l2hSize :tex2html_wrap_inline8706:8.7125pt::8.7125pt::6.02254pt.
+[22
+
+
+]
+l2hSize :tex2html_wrap_indisplay8720:7.57185pt::7.57185pt::63.32242pt.
+[23
+
+
+]
+l2hSize :tex2html_wrap_indisplay8721:7.57185pt::7.57185pt::55.41408pt.
+[24
+
+
+]
+l2hSize :tex2html_wrap_indisplay8722:7.57185pt::7.57185pt::28.53085pt.
+[25
+
+
+]
+l2hSize :tex2html_wrap_indisplay8723:8.7125pt::8.7125pt::69.40576pt.
+[26
+
+
+]
+l2hSize :tex2html_wrap_indisplay8724:7.57185pt::7.57185pt::28.53085pt.
+[27
+
+
+]
+l2hSize :tex2html_wrap_indisplay8725:8.7125pt::8.7125pt::60.88908pt.
+[28
+
+
+]
+l2hSize :tex2html_wrap_indisplay8726:7.57185pt::7.57185pt::28.53085pt.
+[29
+
+
+]
+l2hSize :tex2html_wrap_indisplay8727:7.57185pt::7.57185pt::58.45573pt.
+[30
+
+
+]
+l2hSize :tex2html_wrap_indisplay8728:7.57185pt::7.57185pt::28.53085pt.
+[31
+
+
+]
+l2hSize :tex2html_wrap_indisplay8729:7.57185pt::7.57185pt::27.43074pt.
+[32
+
+
+]
+l2hSize :tex2html_wrap_inline8741:8.10416pt::8.10416pt::51.96674pt.
+[33
+
+
+]
+l2hSize :tex2html_wrap_inline8743:7.54332pt::0.0pt::14.11334pt.
+[34
+
+
+]
+l2hSize :tex2html_wrap_inline8745:7.54332pt::0.0pt::19.51616pt.
+[35
+
+
+]
+l2hSize :tex2html_wrap_inline8747:8.7125pt::8.7125pt::51.96687pt.
+[36
+
+
+]
+l2hSize :tex2html_wrap_inline8749:7.07185pt::0.0pt::4.50171pt.
+[37
+
+
+]
+l2hSize :tex2html_wrap_indisplay8752:11.02116pt::11.02116pt::129.83278pt.
+[38
+
+
+]
+l2hSize :tex2html_wrap_inline8754:10.47366pt::10.47366pt::21.2087pt.
+[39
+
+
+]
+l2hSize :tex2html_wrap_inline8756:10.47366pt::10.47366pt::21.2087pt.
+[40
+
+
+]
+l2hSize :tex2html_wrap_inline8758:9.97366pt::0.0pt::18.16702pt.
+[41
+
+
+]
+l2hSize :tex2html_wrap_inline8764:10.47366pt::10.47366pt::43.69482pt.
+[42
+
+
+]
+l2hSize :tex2html_wrap_indisplay8769:8.7125pt::8.7125pt::24.47026pt.
+[43
+
+
+]
+l2hSize :tex2html_wrap_indisplay8771:7.57185pt::7.57185pt::9.06422pt.
+[44
+
+
+]
+l2hSize :tex2html_wrap_indisplay8773:11.02116pt::11.02116pt::18.16702pt.
+[45
+
+
+]
+l2hSize :tex2html_wrap_indisplay8775:9.46562pt::9.46562pt::27.27582pt.
+[46
+
+
+]
+l2hSize :tex2html_wrap_indisplay8779:11.02116pt::11.02116pt::18.16702pt.
+[47
+
+
+]
+l2hSize :tex2html_wrap_indisplay8781:9.46562pt::9.46562pt::29.58138pt.
+[48
+
+
+]
+l2hSize :tex2html_wrap_indisplay8785:11.02116pt::11.02116pt::23.64203pt.
+[49
+
+
+]
+l2hSize :tex2html_wrap_inline8787:9.97366pt::0.0pt::18.55591pt.
+[50
+
+
+]
+l2hSize :tex2html_wrap_inline8789:7.60416pt::0.0pt::16.85596pt.
+[51
+
+
+]
+l2hSize :tex2html_wrap_indisplay8792:14.9644pt::14.9644pt::142.93588pt.
+[52
+
+
+]
+l2hSize :tex2html_wrap_inline8794:8.7125pt::8.7125pt::73.86694pt.
+[53
+
+
+]
+l2hSize :tex2html_wrap_inline8796:9.12923pt::0.0pt::13.20593pt.
+[54
+
+
+]
+l2hSize :tex2html_wrap_inline8798:7.54332pt::0.0pt::16.47449pt.
+[55
+
+
+]
+l2hSize :tex2html_wrap_indisplay8801:11.02116pt::11.02116pt::163.11374pt.
+[56
+
+
+]
+l2hSize :tex2html_wrap_indisplay8804:14.9644pt::14.9644pt::141.2985pt.
+[57
+
+
+]
+l2hSize :tex2html_wrap_indisplay8807:11.02116pt::11.02116pt::64.94595pt.
+[58
+
+
+]
+l2hSize :tex2html_wrap_inline8809:9.97366pt::0.0pt::15.65129pt.
+[59
+
+
+]
+l2hSize :tex2html_wrap_inline8811:7.60416pt::0.0pt::14.58305pt.
+[60
+
+
+]
+l2hSize :tex2html_wrap_inline8813:9.97366pt::0.0pt::47.8707pt.
+[61
+
+
+]
+l2hSize :tex2html_wrap_inline8815:10.47366pt::10.47366pt::17.67024pt.
+[62
+
+
+]
+l2hSize :tex2html_wrap_inline8819:8.7125pt::8.7125pt::21.86206pt.
+[63
+
+
+]
+l2hSize :tex2html_wrap_inline8821:9.97366pt::0.0pt::21.2087pt.
+[64
+
+
+]
+l2hSize :tex2html_wrap_indisplay8824:15.5119pt::15.5119pt::79.92189pt.
+[65
+
+
+]
+l2hSize :tex2html_wrap_inline8828:9.97366pt::0.0pt::38.24194pt.
+[66
+
+
+]
+l2hSize :tex2html_wrap_inline8830:8.7125pt::8.7125pt::28.86403pt.
+[67
+
+
+]
+l2hSize :tex2html_wrap_inline8834:8.10416pt::8.10416pt::7.08714pt.
+[68
+
+
+]
+l2hSize :tex2html_wrap_indisplay8837:17.88141pt::17.88141pt::90.35301pt.
+[69
+
+
+]
+l2hSize :tex2html_wrap_inline8839:10.47366pt::10.47366pt::77.36237pt.
+[70
+
+
+]
+l2hSize :tex2html_wrap_inline8841:9.97366pt::0.0pt::41.28362pt.
+[71
+
+
+]
+l2hSize :tex2html_wrap_indisplay8846:19.66264pt::19.66264pt::300.28891pt.
+[72
+
+
+]
+l2hSize :tex2html_wrap_indisplay8849:19.66264pt::19.66264pt::236.69778pt.
+[73
+
+
+]
+l2hSize :tex2html_wrap_indisplay8851:10.17673pt::10.17673pt::52.3724pt.
+[74
+
+
+]
+l2hSize :tex2html_wrap_indisplay8852:7.57185pt::7.57185pt::144.8972pt.
+[75
+
+
+]
+l2hSize :tex2html_wrap_indisplay8853:7.57185pt::7.57185pt::23.05585pt.
+[76
+
+
+]
+l2hSize :tex2html_wrap_indisplay8854:8.7125pt::8.7125pt::70.07237pt.
+[77
+
+
+]
+l2hSize :tex2html_wrap_indisplay8856:7.57185pt::7.57185pt::59.18059pt.
+[78
+
+
+]
+l2hSize :tex2html_wrap_inline8859:7.57185pt::7.57185pt::14.59749pt.
+[79
+
+
+]
+l2hSize :tex2html_wrap_inline8861:7.57185pt::7.57185pt::17.03082pt.
+[80
+
+
+]
+l2hSize :tex2html_wrap_inline8863:7.57185pt::7.57185pt::17.03082pt.
+[81
+
+
+]
+l2hSize :tex2html_wrap_inline8865:7.57185pt::7.57185pt::31.0225pt.
+[82
+
+
+]
+l2hSize :tex2html_wrap_inline8867:7.57185pt::7.57185pt::17.03082pt.
+[83
+
+
+]
+l2hSize :tex2html_wrap_inline8871:7.57185pt::7.57185pt::11.55582pt.
+[84
+
+
+]
+l2hSize :tex2html_wrap_inline8877:9.12923pt::0.0pt::13.20593pt.
+[85
+
+
+]
+l2hSize :tex2html_wrap_inline8879:9.12923pt::0.0pt::16.2476pt.
+[86
+
+
+]
+l2hSize :displaymath8882:48.29997pt::0.0pt::349.0pt.
+[87
+
+
+]
+l2hSize :displaymath8886:48.29997pt::0.0pt::349.0pt.
+[88
+
+
+]
+l2hSize :displaymath8890:48.29997pt::0.0pt::349.0pt.
+[89
+
+
+]
+l2hSize :displaymath8893:48.29997pt::0.0pt::349.0pt.
+[90
+
+
+]
+l2hSize :tex2html_wrap_inline8897:9.12923pt::0.0pt::13.20593pt.
+[91
+
+
+]
+l2hSize :tex2html_wrap_inline8903:7.60416pt::0.0pt::6.59285pt.
+[92
+
+
+]
+l2hSize :tex2html_wrap_inline8907:7.07185pt::0.0pt::17.7936pt.
+[93
+
+
+]
+l2hSize :tex2html_wrap_inline8909:8.04332pt::8.04332pt::17.15501pt.
+[94
+
+
+]
+l2hSize :tex2html_wrap_inline8919:10.47366pt::10.47366pt::18.05913pt.
+[95
+
+
+]
+l2hSize :displaymath8924:48.29997pt::0.0pt::349.0pt.
+[96
+
+
+]
+l2hSize :tex2html_wrap_inline8926:7.98248pt::7.98248pt::12.08476pt.
+[97
+
+
+]
+l2hSize :tex2html_wrap_indisplay8928:23.63748pt::23.63748pt::134.668pt.
+[98
+
+
+]
+l2hSize :tex2html_wrap_inline8930:7.57185pt::7.57185pt::34.67241pt.
+[99
+
+
+]
+l2hSize :tex2html_wrap_inline8932:7.57185pt::7.57185pt::34.67241pt.
+[100
+
+
+]
+l2hSize :tex2html_wrap_inline8934:7.57185pt::7.57185pt::40.14742pt.
+[101
+
+
+]
+l2hSize :tex2html_wrap_inline8936:7.57185pt::7.57185pt::31.63074pt.
+[102
+
+
+]
+l2hSize :displaymath8941:48.29997pt::0.0pt::349.0pt.
+[103
+
+
+]
+l2hSize :tex2html_wrap_inline8943:7.60416pt::0.0pt::26.66777pt.
+[104
+
+
+]
+l2hSize :tex2html_wrap_inline8945:7.57185pt::7.57185pt::14.59749pt.
+[105
+
+
+]
+l2hSize :tex2html_wrap_indisplay8948:17.88141pt::17.88141pt::111.55061pt.
+[106
+
+
+]
+l2hSize :tex2html_wrap_inline8952:7.57185pt::7.57185pt::11.55582pt.
+[107
+
+
+]
+l2hSize :tex2html_wrap_inline8954:9.97366pt::0.0pt::18.16702pt.
+[108
+
+
+]
+l2hSize :tex2html_wrap_inline8956:9.97366pt::0.0pt::17.0074pt.
+[109
+
+
+]
+l2hSize :tex2html_wrap_inline8958:9.97366pt::0.0pt::17.0074pt.
+[110
+
+
+]
+l2hSize :tex2html_wrap_indisplay8963:12.27165pt::12.27165pt::160.80713pt.
+[111
+
+
+]
+l2hSize :tex2html_wrap_indisplay8966:17.88141pt::17.88141pt::50.3665pt.
+[112
+
+
+]
+l2hSize :tex2html_wrap_indisplay8970:7.57185pt::7.57185pt::6.02254pt.
+[113
+
+
+]
+l2hSize :tex2html_wrap_indisplay8972:17.88141pt::17.88141pt::50.3665pt.
+[114
+
+
+]
+l2hSize :tex2html_wrap_indisplay8977:17.88141pt::17.88141pt::50.3665pt.
+[115
+
+
+]
+l2hSize :tex2html_wrap_indisplay8981:7.57185pt::7.57185pt::14.53923pt.
+[116
+
+
+]
+l2hSize :tex2html_wrap_indisplay8983:17.88141pt::17.88141pt::50.3665pt.
+[117
+
+
+]
+l2hSize :tex2html_wrap_indisplay8988:17.88141pt::17.88141pt::50.3665pt.
+[118
+
+
+]
+l2hSize :tex2html_wrap_indisplay8993:17.88141pt::17.88141pt::50.3665pt.
+[119
+
+
+]
+l2hSize :tex2html_wrap_indisplay8997:7.57185pt::7.57185pt::23.05591pt.
+[120
+
+
+]
+l2hSize :tex2html_wrap_indisplay9000:17.88141pt::17.88141pt::50.3665pt.
+[121
+
+
+]
+l2hSize :tex2html_wrap_indisplay9004:19.66264pt::19.66264pt::265.75922pt.
+[122
+
+
+]
+l2hSize :tex2html_wrap_indisplay9006:17.88141pt::17.88141pt::50.3665pt.
+[123
+
+
+]
+l2hSize :tex2html_wrap_indisplay9010:19.66264pt::19.66264pt::265.75922pt.
+[124
+
+
+]
+l2hSize :tex2html_wrap_indisplay9012:17.88141pt::17.88141pt::50.3665pt.
+[125
+
+
+]
+l2hSize :tex2html_wrap_indisplay9016:19.66264pt::19.66264pt::299.82596pt.
+[126
+
+
+]
+l2hSize :tex2html_wrap_inline9020:8.10416pt::8.10416pt::25.45113pt.
+[127
+
+
+]
+l2hSize :tex2html_wrap_inline9023:8.10416pt::8.10416pt::10.65855pt.
+[128
+
+
+]
+l2hSize :tex2html_wrap_indisplay9027:17.88141pt::17.88141pt::230.65402pt.
+[129
+
+
+]
+l2hSize :tex2html_wrap_inline9030:7.07185pt::0.0pt::12.59511pt.
+[130
+
+
+]
+l2hSize :tex2html_wrap_inline9032:7.07185pt::0.0pt::7.1201pt.
+[131
+
+
+]
+l2hSize :tex2html_wrap_inline9034:10.47366pt::10.47366pt::30.25127pt.
+[132
+
+
+]
+l2hSize :tex2html_wrap_indisplay9037:17.88141pt::17.88141pt::193.23283pt.
+[133
+
+
+]
+l2hSize :tex2html_wrap_indisplay9040:17.88141pt::17.88141pt::197.9829pt.
+[134
+
+
+]
+l2hSize :tex2html_wrap_indisplay9043:18.72697pt::18.72697pt::103.07155pt.
+[135
+
+
+]
+l2hSize :tex2html_wrap_indisplay9046:17.88141pt::17.88141pt::309.99016pt.
+[136
+
+
+]
+l2hSize :tex2html_wrap_indisplay9049:17.88141pt::17.88141pt::318.76535pt.
+[137
+
+
+]
+l2hSize :tex2html_wrap_indisplay9051:17.88141pt::17.88141pt::152.5644pt.
+[138
+
+
+]
+l2hSize :tex2html_wrap_indisplay9053:17.88141pt::17.88141pt::254.15585pt.
+[139
+
+
+]
+l2hSize :tex2html_wrap_inline9055:7.57185pt::7.57185pt::17.03082pt.
+[140
+
+
+]
+l2hSize :tex2html_wrap_inline9057:7.57185pt::7.57185pt::17.03082pt.
+[141
+
+
+]
+Overfull \hbox (82.15158pt too wide) in paragraph at lines 1392--1392
+[]    \OT1/cmtt/m/n/10.95 std::cout << "number constant terms in constraint "  
+ <<  idx << " is "[] 
+ []
+
+
+Overfull \hbox (116.6437pt too wide) in paragraph at lines 1394--1394
+[]    \OT1/cmtt/m/n/10.95 for(k = *(sparseJac->starts + idx); k < *(sparseJac->
+starts + idx + 1); k++){[] 
+ []
+
+
+Overfull \hbox (1.66995pt too wide) in paragraph at lines 1396--1396
+[]        \OT1/cmtt/m/n/10.95 col idx = "<< *(sparseJac->indexes + k) << std::e
+ndl;[] 
+ []
+
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1399.
+
+
+l2hSize :verbatimtab1830:154.00418pt::0.0pt::349.0pt.
+[142
+
+
+]
+l2hSize :tex2html_wrap_inline9061:7.57185pt::7.57185pt::17.03082pt.
+[143
+
+
+]
+l2hSize :tex2html_wrap_inline9067:7.57185pt::7.57185pt::14.59749pt.
+[144
+
+
+]
+l2hSize :tex2html_wrap_inline9077:9.52922pt::0.0pt::10.78508pt.
+[145
+
+
+]
+l2hSize :tex2html_wrap_inline9081:9.26236pt::0.0pt::9.04008pt.
+[146
+
+
+]
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1444.
+
+
+l2hSize :verbatimtab2081:126.80417pt::0.0pt::349.0pt.
+[147
+
+
+]
+Overfull \hbox (151.13583pt too wide) in paragraph at lines 1456--1456
+[]         \OT1/cmtt/m/n/10.95 <instanceLocation locationType="local">c:\parinc
+Linear.osil</instanceLocation>[] 
+ []
+
+
+Overfull \hbox (82.15158pt too wide) in paragraph at lines 1457--1457
+[]         \OT1/cmtt/m/n/10.95 <contact transportType="smtp">kipp.martin@chicag
+ogsb.edu</contact>[] 
+ []
+
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1463.
+
+
+l2hSize :verbatimtab2125:154.00418pt::0.0pt::349.0pt.
+[148
+
+
+]
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1483.
+
+
+l2hSize :verbatimtab2187:181.2042pt::0.0pt::349.0pt.
+[149
+
+
+]
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1497.
+
+
+l2hSize :verbatimtab2202:99.60416pt::0.0pt::349.0pt.
+[150
+
+
+]
+Overfull \hbox (122.3924pt too wide) in paragraph at lines 1509--1509
+[]    \OT1/cmtt/m/n/10.95 <serviceURI>http://localhost:8080/os/ossolver/CGSolve
+rService.jws</serviceURI>[] 
+ []
+
+
+Overfull \hbox (122.3924pt too wide) in paragraph at lines 1520--1520
+[]        \OT1/cmtt/m/n/10.95 <timeServiceStarted>2006-05-10T10:49:24.9700000-0
+5:00</timeServiceStarted>[] 
+ []
+
+
+Overfull \hbox (191.37665pt too wide) in paragraph at lines 1525--1525
+[]            \OT1/cmtt/m/n/10.95 <serviceURI>http://gsbkip.chicagogsb.edu/ipop
+t/IPOPTSolverService.jws</serviceURI>[] 
+ []
+
+
+Overfull \hbox (30.41339pt too wide) in paragraph at lines 1526--1526
+[]            \OT1/cmtt/m/n/10.95 <submitTime>2007-06-16T14:57:36.678-05:00</su
+bmitTime>[] 
+ []
+
+
+Overfull \hbox (18.91602pt too wide) in paragraph at lines 1527--1527
+[]            \OT1/cmtt/m/n/10.95 <startTime>2007-06-16T14:57:36.678-05:00</sta
+rtTime>[] 
+ []
+
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1535.
+
+
+l2hSize :verbatimtab2247:413.92517pt::0.0pt::349.0pt.
+[151
+
+
+]
+
+LaTeX Warning: File `./figures/osCommunicationMethods.pdf' not found on input l
+ine 1543.
+
+
+! LaTeX Error: File `./figures/osCommunicationMethods.pdf' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1543 ...5]{./figures/osCommunicationMethods.pdf}
+                                                  %
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Cannot determine size of graphic in ./figures/osCommunicationMet
+hods.pdf (no BoundingBox).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1543 ...5]{./figures/osCommunicationMethods.pdf}
+                                                  %
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: ./figures/osCommunicationMethods.pdf Graphic file (type eps)
+<./figures/osCommunicationMethods.pdf>
+l2hSize :tex2html_wrap9134:36.135pt::0.0pt::349.0pt.
+[152
+
+
+]
+l2hSize :tex2html_wrap_inline9166:7.57185pt::7.57185pt::9.06422pt.
+[153
+
+
+]
+l2hSize :tex2html_wrap_inline9168:7.57185pt::7.57185pt::9.06422pt.
+[154
+
+
+]
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1576.
+
+
+l2hSize :verbatimtab2483:154.00418pt::0.0pt::349.0pt.
+[155
+
+
+]
+l2hSize :tex2html_wrap_inline9179:7.57185pt::7.57185pt::25.48924pt.
+[156
+
+
+]
+l2hSize :tex2html_wrap_inline9181:7.07185pt::0.0pt::16.97255pt.
+[157
+
+
+]
+l2hSize :tex2html_wrap_inline9185:7.57185pt::7.57185pt::32.90569pt.
+[158
+
+
+]
+l2hSize :tex2html_wrap_inline9190:7.57185pt::7.57185pt::10.1997pt.
+[159
+
+
+]
+l2hSize :tex2html_wrap_inline9192:7.22179pt::0.0pt::4.31995pt.
+[160
+
+
+]
+l2hSize :tex2html_wrap_inline9194:7.07185pt::0.0pt::9.06422pt.
+[161
+
+
+]
+l2hSize :tex2html_wrap_inline9196:7.57185pt::7.57185pt::9.06422pt.
+[162
+
+
+]
+l2hSize :tex2html_wrap_indisplay9199:7.57185pt::7.57185pt::60.33893pt.
+[163
+
+
+]
+l2hSize :tex2html_wrap_indisplay9203:7.57185pt::7.57185pt::6.02254pt.
+[164
+
+
+]
+l2hSize :tex2html_wrap_indisplay9205:7.57185pt::7.57185pt::151.58904pt.
+[165
+
+
+]
+l2hSize :tex2html_wrap_indisplay9207:7.57185pt::7.57185pt::9.06422pt.
+[166
+
+
+]
+l2hSize :tex2html_wrap_indisplay9209:7.57185pt::7.57185pt::14.53922pt.
+[167
+
+
+]
+l2hSize :tex2html_wrap_indisplay9212:10.17673pt::10.17673pt::256.33885pt.
+[168
+
+
+]
+l2hSize :tex2html_wrap_indisplay9214:7.57185pt::7.57185pt::165.0306pt.
+[169
+
+
+]
+l2hSize :tex2html_wrap_inline9216:7.98248pt::7.98248pt::9.2041pt.
+[170
+
+
+]
+Overfull \hbox (64.90552pt too wide) in paragraph at lines 1686--1686
+[]          \OT1/cmtt/m/n/10.95 <description>Rosenbrock problem with constraint
+s</description>[] 
+ []
+
+
+Overfull \hbox (53.40814pt too wide) in paragraph at lines 1694--1694
+[]               \OT1/cmtt/m/n/10.95 <obj maxOrMin="min" name="minCost" numberO
+fObjCoef="1">[] 
+ []
+
+
+Overfull \hbox (24.6647pt too wide) in paragraph at lines 1714--1714
+[]               \OT1/cmtt/m/n/10.95 <qTerm idx="0" idxOne="0" idxTwo="0" coef=
+"10.5"/>[] 
+ []
+
+
+Overfull \hbox (24.6647pt too wide) in paragraph at lines 1715--1715
+[]               \OT1/cmtt/m/n/10.95 <qTerm idx="0" idxOne="1" idxTwo="1" coef=
+"11.7"/>[] 
+ []
+
+
+Overfull \hbox (13.16733pt too wide) in paragraph at lines 1716--1716
+[]               \OT1/cmtt/m/n/10.95 <qTerm idx="0" idxOne="0" idxTwo="1" coef=
+"3."/>[] 
+ []
+
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1718.
+
+
+l2hSize :verbatimtab2604:522.72522pt::0.0pt::349.0pt.
+[171
+
+
+]
+Overfull \hbox (24.6647pt too wide) in paragraph at lines 1725--1725
+[]          \OT1/cmtt/m/n/10.95 <nonlinearExpressions numberOfNonlinearExpressi
+ons="2">[] 
+ []
+
+
+Overfull \hbox (41.91077pt too wide) in paragraph at lines 1730--1730
+[]                                   \OT1/cmtt/m/n/10.95 <number type="real" va
+lue="1.0"/>[] 
+ []
+
+
+Overfull \hbox (24.6647pt too wide) in paragraph at lines 1731--1731
+[]                                   \OT1/cmtt/m/n/10.95 <variable coef="1.0" i
+dx="0"/>[] 
+ []
+
+
+Overfull \hbox (13.16733pt too wide) in paragraph at lines 1733--1733
+[]                              \OT1/cmtt/m/n/10.95 <number type="real" value="
+2.0"/>[] 
+ []
+
+
+Overfull \hbox (53.40814pt too wide) in paragraph at lines 1738--1738
+[]                                        \OT1/cmtt/m/n/10.95 <variable coef="1
+.0" idx="0"/>[] 
+ []
+
+
+Overfull \hbox (82.15158pt too wide) in paragraph at lines 1740--1740
+[]                                             \OT1/cmtt/m/n/10.95 <variable co
+ef="1.0" idx="1"/>[] 
+ []
+
+
+Overfull \hbox (99.39764pt too wide) in paragraph at lines 1741--1741
+[]                                             \OT1/cmtt/m/n/10.95 <number type
+="real" value="2.0"/>[] 
+ []
+
+
+Overfull \hbox (41.91077pt too wide) in paragraph at lines 1744--1744
+[]                                   \OT1/cmtt/m/n/10.95 <number type="real" va
+lue="2.0"/>[] 
+ []
+
+
+Overfull \hbox (13.16733pt too wide) in paragraph at lines 1746--1746
+[]                              \OT1/cmtt/m/n/10.95 <number type="real" value="
+100"/>[] 
+ []
+
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1761.
+
+
+l2hSize :verbatimtab2606:507.60434pt::0.0pt::349.0pt.
+[172
+
+
+]
+Overfull \hbox (162.63321pt too wide) in paragraph at lines 1775--1775
+[]                \OT1/cmtt/m/n/10.95 <description>A test problem for Algorithm
+ic Differentiation</description>[] 
+ []
+
+
+Overfull \hbox (105.14633pt too wide) in paragraph at lines 1785--1785
+[]                        \OT1/cmtt/m/n/10.95 <obj maxOrMin="min" name="minCost
+" numberOfObjCoef="1">[] 
+ []
+
+
+Overfull \hbox (24.6647pt too wide) in paragraph at lines 1793--1793
+[]                \OT1/cmtt/m/n/10.95 <linearConstraintCoefficients numberOfVal
+ues="2">[] 
+ []
+
+
+Overfull \hbox (59.15683pt too wide) in paragraph at lines 1810--1810
+[]                \OT1/cmtt/m/n/10.95 <nonlinearExpressions numberOfNonlinearEx
+pressions="3">[] 
+ []
+
+
+Overfull \hbox (99.39764pt too wide) in paragraph at lines 1814--1814
+[]                                                \OT1/cmtt/m/n/10.95 <variable
+ coef="1.0" idx="0"/>[] 
+ []
+
+
+Overfull \hbox (99.39764pt too wide) in paragraph at lines 1815--1815
+[]                                                \OT1/cmtt/m/n/10.95 <variable
+ coef="1.0" idx="3"/>[] 
+ []
+
+
+Overfull \hbox (76.4029pt too wide) in paragraph at lines 1821--1821
+[]                                        \OT1/cmtt/m/n/10.95 <number type="rea
+l" value="-105"/>[] 
+ []
+
+
+Overfull \hbox (59.15683pt too wide) in paragraph at lines 1822--1822
+[]                                        \OT1/cmtt/m/n/10.95 <variable coef="1
+.37" idx="1"/>[] 
+ []
+
+
+Overfull \hbox (41.91077pt too wide) in paragraph at lines 1823--1823
+[]                                        \OT1/cmtt/m/n/10.95 <variable coef="2
+" idx="3"/>[] 
+ []
+
+
+Overfull \hbox (53.40814pt too wide) in paragraph at lines 1828--1828
+[]                                        \OT1/cmtt/m/n/10.95 <variable coef="1
+.0" idx="0"/>[] 
+ []
+
+
+Overfull \hbox (70.6542pt too wide) in paragraph at lines 1829--1829
+[]                                        \OT1/cmtt/m/n/10.95 <number type="rea
+l" value="2.0"/>[] 
+ []
+
+
+LaTeX Warning: Characters dropped after `\end{verbatimtab}' on input line 1835.
+
+
+l2hSize :verbatimtab2612:915.60452pt::0.0pt::349.0pt.
+[173
+
+
+]
+Overfull \vbox (235.17453pt too high) has occurred while \output is active []
+
+[174] (./images.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 1814 strings out of 94074
+ 23783 string characters out of 1163007
+ 88506 words of memory out of 1500000
+ 5083 multiletter control sequences out of 10000+50000
+ 11262 words of font info for 46 fonts, out of 1200000 for 2000
+ 646 hyphenation exceptions out of 8191
+ 27i,11n,22p,349b,337s stack positions out of 5000i,500n,6000p,200000b,5000s
+
+Output written on images.dvi (174 pages, 57116 bytes).

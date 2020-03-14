@@ -1,0 +1,18 @@
+No implementation found for style `graphicx'
+No implementation found for style `url'
+No implementation found for style `moreverb'
+
+redefining command \theFig 
+
+osUsersManual_1.tex is newer than osUsersManual_1.aux: Please rerun latex.
+
+osUsersManual_1.tex is newer than osUsersManual_1.lof: Please rerun latex.
+
+osUsersManual_1.tex is newer than osUsersManual_1.lot: Please rerun latex.
+couldn't convert character .dot into available encodings
+
+ ...set $ACCENT_IMAGES  to get an image 
+Unrecognized option  to \includegraphics
+{eqnarray} does not have 3 columns, inserting blank cell
+
+osUsersManual_1.tex is newer than osUsersManual_1.bbl: Please rerun latex and bibtex.

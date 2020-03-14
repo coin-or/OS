@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The kill Service Method</TITLE>
+<META NAME="description" CONTENT="The kill Service Method">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node70.html">
+<LINK REL="previous" HREF="node68.html">
+<LINK REL="up" HREF="node63.html">
+<LINK REL="next" HREF="node70.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1116"
+  HREF="node70.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1112"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1106"
+  HREF="node68.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1114"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1117"
+  HREF="node70.html">Summary</A>
+<B> Up:</B> <A NAME="tex2html1113"
+  HREF="node63.html">Solving Problems Remotely with</A>
+<B> Previous:</B> <A NAME="tex2html1107"
+  HREF="node68.html">The knock Service Method</A>
+ &nbsp; <B>  <A NAME="tex2html1115"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION000133600000000000000">
+The  <TT>kill</TT>   Service Method</A>
+</H3>
+
+<P>
+If the user submits a job that is taking too long or is a mistake, it is possible to kill the job on the remote server using the <TT>kill</TT> service method. For example to kill job <TT>123456abcd</TT>, at the command line type
+<PRE>
+./OSSolverService -config  ../data/configFiles/kill.config
+</PRE>
+where the configure file <TT>kill.config</TT> is
+<PRE>
+-osol ../data/osolFiles/kill.osol
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+-serviceMethod kill
+</PRE>
+and the <TT>kill.osol</TT> file is
+<BR>
+<IMG
+ WIDTH="382" HEIGHT="120" ALIGN="BOTTOM" BORDER="0"
+ SRC="img150.png"
+ ALT="\begin{verbatimtab}[4]
+&lt;?xml version=''1.0'' encoding=''UTF-8''?&gt;
+&lt;osol xmlns=''...
+...g''&gt;
+&lt;general&gt;
+&lt;jobID&gt;123456abcd&lt;/jobID&gt;
+&lt;/general&gt;
+&lt;/osol&gt;
+\end{verbatimtab}">
+<BR>
+
+<P>
+The result is returned in  <TT>OSpL</TT>.
+<BR><HR>
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>

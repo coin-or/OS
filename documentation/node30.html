@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The OS Project Components</TITLE>
+<META NAME="description" CONTENT="The OS Project Components">
+<META NAME="keywords" CONTENT="osUsersManual_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="osUsersManual_1.css">
+
+<LINK REL="next" HREF="node31.html">
+<LINK REL="previous" HREF="node10.html">
+<LINK REL="up" HREF="osUsersManual_1.html">
+<LINK REL="next" HREF="node31.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html609"
+  HREF="node31.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html605"
+  HREF="osUsersManual_1.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html599"
+  HREF="node29.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html607"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html610"
+  HREF="node31.html">OS Protocols</A>
+<B> Up:</B> <A NAME="tex2html606"
+  HREF="osUsersManual_1.html">Optimization Services 1.0 User's</A>
+<B> Previous:</B> <A NAME="tex2html600"
+  HREF="node29.html">Platforms</A>
+ &nbsp; <B>  <A NAME="tex2html608"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00080000000000000000"></A><A NAME="section:projectcomponents"></A>
+<BR>
+The OS Project Components
+</H1>
+
+<P>
+The directories in the  project root  are outlined in Figure  <A HREF="node7.html#figure:osprojectrootdir">1</A>.
+
+<P>
+If you download the OS package, you get these additional COIN-OR projects. The links to the project home pages are provided below and give more information on these projects.
+
+<UL>
+<LI><TT>BuildTools</TT> - <TT><A NAME="tex2html44"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>Cbc</TT> - <TT><A NAME="tex2html45"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>Cgl</TT> - <TT><A NAME="tex2html46"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>Clp</TT>  - <TT><A NAME="tex2html47"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>CoinUtils</TT> - <TT><A NAME="tex2html48"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>CppAD</TT> - <TT><A NAME="tex2html49"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>Dylp</TT> - <TT><A NAME="tex2html50"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>Ipopt</TT> - <TT><A NAME="tex2html51"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>Osi</TT> - <TT><A NAME="tex2html52"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>SYMPHONY</TT>   - <TT><A NAME="tex2html53"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+<LI><TT>Vol</TT>   - <TT><A NAME="tex2html54"
+  HREF="projects.coin-or.org">projects.coin-or.org</A></TT>
+</LI>
+</UL>
+
+<P>
+The following directories are also in the project root.
+
+<UL>
+<LI><TT>bin</TT> - after executing <TT>make install</TT> the bin directory will contain <TT>OSSolverService</TT>, <TT>clp</TT>, <TT>cbc</TT>,  <TT>cbc-generic</TT> and <TT>symphony</TT>.
+
+<P>
+</LI>
+<LI><TT>Data</TT> - this directory contains numerous test problems that are used by  the <TT>unitTest</TT> for many  COIN-OR projects.
+
+<P>
+</LI>
+<LI><TT>doxydoc</TT> - is a folder for documentation.
+
+<P>
+</LI>
+<LI><TT>include</TT> - is a directory for header files. If the user wishes to write code to link against any of the libraries in the <TT>lib</TT> directory, it may be necessary to include these header files.
+
+<P>
+</LI>
+<LI><TT>lib</TT> - is a directory of libraries. After running <TT>make install</TT> the OS library along with all other COIN-OR libraries are installed in <TT>lib</TT>.
+
+<P>
+</LI>
+<LI><TT>ThirdParty</TT> - is a  directory for third party software. For example, if AMPL related software  such as <TT>OSAmplClient</TT> is used, then certain AMPL libraries need to be present. This should go into the <TT>ASL</TT> directory in <TT>ThirdParty.</TT>
+</LI>
+</UL>
+
+<P>
+The directories in the OS directory are outlined in Figure <A HREF="#figure:osdirectory">3</A>.  The OS directories include the following:
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="figure:osdirectory"></A><A NAME="677"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 3:</STRONG>
+The OS directory.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER"><IMG
+  WIDTH="300" HEIGHT="614" ALIGN="BOTTOM" BORDER="0"
+ SRC="./OSDirectory.png"
+ ALT="Image OSDirectory">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<UL>
+<LI><TT>applications</TT> - is a directory that holds  the <TT>OSAmplClient</TT> and <TT>fileUpload</TT>  applications.  See Section <A HREF="node72.html#section:applications">12</A>.
+
+<P>
+</LI>
+<LI><TT>data</TT> - is a directory that holds test problems. These test problems are used by the <TT>unitTest</TT>. Many of these files are also used to illustrate how the <TT>OSSolverService</TT> works. See Section <A HREF="node60.html#section:ossolverservice">10</A>.
+
+<P>
+</LI>
+<LI><TT>doc</TT> - is the directory with documentation, including this <I>OS User's Manual.</I>
+
+<P>
+</LI>
+<LI><TT>examples</TT> - is a directory with code examples that illustrate various aspects of the OS project.    These are described in Section <A HREF="node75.html#section:examples">13</A>.
+
+<P>
+</LI>
+<LI><TT>inc</TT> - is the directory with the config&#5;Fos.h file which has information about which projects are included in the distribution.
+
+<P>
+</LI>
+<LI><TT>m4</TT> - is a directory that  contains macro scripts written in the m4 language for auto configuration.
+
+<P>
+</LI>
+<LI><TT>MSVisualStudio</TT> - is a directory that  contains solution files for the Microsoft Visual Studio IDE.  The subdirectories are organized by the version of Visual Studio. We currently provide a solution file for Version 7 and 8.
+
+<P>
+</LI>
+<LI><TT>schemas</TT> - is the directory that contains the W3C XSD (see <TT><A NAME="tex2html56"
+  HREF="www.w3c.org">www.w3c.org</A></TT>) schemas that are behind the OS standards. These are described in more detail in Section <A HREF="node31.html#section:schemadescriptions">6</A>.
+
+<P>
+</LI>
+<LI><TT>src</TT> - is the directory with all of the source code for the OS Library and for the executable <TT>OSSolverService</TT>. The OS Library components are described in Section <A HREF="node32.html#section:oslibrary">7</A>.
+
+<P>
+</LI>
+<LI><TT>stylesheets</TT> - this directory contains the XSLT stylesheet that is used to transform the solution instance in OSrL format into HTML so that it can be displayed in a browser.
+
+<P>
+</LI>
+<LI><TT>test</TT> - this directory contains the <TT>unitTest</TT>.
+
+<P>
+</LI>
+<LI><TT>wsdl</TT> - is a directory of WSDL (Web Services Discovery Language) files. These are used to specify the inputs and outputs for the methods and other invocation details provided by a Web service. The most relevant file for the current version of the OS project is <TT>OShL.wsdl</TT>.  This describes the set of inputs and outputs for the methods implemented in the <TT>OSSolverService</TT>. See Section <A HREF="node60.html#section:ossolverservice">10</A>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html609"
+  HREF="node31.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html605"
+  HREF="osUsersManual_1.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html599"
+  HREF="node29.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html607"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html610"
+  HREF="node31.html">OS Protocols</A>
+<B> Up:</B> <A NAME="tex2html606"
+  HREF="osUsersManual_1.html">Optimization Services 1.0 User's</A>
+<B> Previous:</B> <A NAME="tex2html600"
+  HREF="node29.html">Platforms</A>
+ &nbsp; <B>  <A NAME="tex2html608"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Kipp Martin
+2008-01-16
+</ADDRESS>
+</BODY>
+</HTML>
