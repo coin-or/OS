@@ -41,7 +41,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 } //end addErrorMsg
 
 
-void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw (ErrorClass) {
+void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) {
     try {
         parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
         parseInstanceData( &osil, osinstance, &parserData->osillineno);    

@@ -64,11 +64,7 @@ public:
      * @param osrl an OSrL string.
      * @return the OSResult object corresponding to the OSrL string.
      */
-    OSResult *readOSrL(const std::string& posrl)
-#if __cplusplus < 201100
-     throw(ErrorClass)
-#endif
-     ;
+    OSResult *readOSrL(const std::string& posrl);
 
 private:
     /** m_osresult is the OSResult object returned by

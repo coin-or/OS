@@ -156,17 +156,17 @@ public:
      *  \brief The implementation of the virtual functions.
      *  \return void.
      */
-    virtual void  buildSolverInstance() throw(ErrorClass);
+    virtual void  buildSolverInstance();
 
     /*! \fn void setSolverOptions()
      *  \brief The implementation of the virtual functions.
      *  \return void.
      */
-    virtual void  setSolverOptions() throw(ErrorClass);
+    virtual void  setSolverOptions();
 
     /** solve results in an instance being read into the Knitro
      * data structrues and optimized */
-    virtual void  solve() throw (ErrorClass) ;
+    virtual void  solve();
 
     /**
      * use this for debugging, print out the instance that

@@ -65,13 +65,13 @@ public:
      *  \brief The implementation of the virtual functions.
      *  \return void.
      */
-    virtual void  buildSolverInstance() throw(ErrorClass);
+    virtual void  buildSolverInstance();
 
     /*! \fn void setSolverOptions()
      *  \brief The implementation of the virtual functions.
      *  \return void.
      */
-    virtual void  setSolverOptions() throw(ErrorClass);
+    virtual void  setSolverOptions();
 
     // Lindo specific methods
 

@@ -20,7 +20,7 @@
 
 
 
-void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass);
+void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData);
 int osrllex_init(void** ptr_yy_globals);
 int osrllex_destroy (void* scanner );
 void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
@@ -95,9 +95,6 @@ OSrLReader::~OSrLReader()
 }
 
 OSResult* OSrLReader::readOSrL(const std::string& posrl)
-#if __cplusplus < 201100
-    throw(ErrorClass)
-#endif
 {
     if (posrl.length() > 0)
     {

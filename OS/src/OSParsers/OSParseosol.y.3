@@ -54,7 +54,7 @@ void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, 
 } //end osolerror
 
 void  yygetOSOption(const char *parsestring, OSOption *osoption, 
-      OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass)
+      OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
 {
     try{
         osol_scan_string( parsestring, scanner);

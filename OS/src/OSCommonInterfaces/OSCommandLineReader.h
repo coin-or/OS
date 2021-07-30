@@ -66,7 +66,7 @@ public:
      *         calls method parseString two more times (with the config file contents
      *         and again with the original command line) 
      */
-    OSCommandLine *readCommandLine(const std::string& osss) throw(ErrorClass);
+    OSCommandLine *readCommandLine(const std::string& osss);
 
 
     /**
@@ -75,7 +75,7 @@ public:
      * @param osss a command line string.
      * @return the OSCommandLine object corresponding to the command line string.
      */
-    OSCommandLine *parseString(const std::string& osss) throw(ErrorClass);
+    OSCommandLine *parseString(const std::string& osss);
 
 private:
     /** m_oscommandline is the OSCommandLine object returned by

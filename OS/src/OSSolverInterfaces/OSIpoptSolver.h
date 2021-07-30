@@ -181,32 +181,20 @@ public:
 
     /** solve results in an instance being read into the Ipopt
      * data structures and optimize */
-    virtual void  solve()
-#if __cplusplus < 201100  
-    throw(ErrorClass)
-#endif
-    ;
+    virtual void  solve();
 
 
     /*! \fn void buildSolverInstance()
      *  \brief The implementation of the virtual functions.
      *  \return void.
      */
-    virtual void  buildSolverInstance()
-#if __cplusplus < 201100  
-    throw(ErrorClass)
-#endif
-    ;
+    virtual void  buildSolverInstance();
 
     /*! \fn void setSolverOptions()
      *  \brief The implementation of the virtual functions.
      *  \return void.
      */
-    virtual void  setSolverOptions()
-#if __cplusplus < 201100  
-    throw(ErrorClass)
-#endif
-    ;
+    virtual void  setSolverOptions();
 
     /**
      * use this for debugging, print out the instance that

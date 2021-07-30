@@ -248,19 +248,19 @@ public:
 
     /** solve results in an instance being read into the Bonmin
      * data structrues and optimized */
-    virtual void  solve() throw (ErrorClass) ;
+    virtual void  solve();
 
     /*! \fn void CoinSolver::buildSolverInstance()
      *  \brief The implementation of the virtual functions.
      *  \return void.
      */
-    virtual void  buildSolverInstance() throw(ErrorClass);
+    virtual void  buildSolverInstance();
 
     /*! \fn void setSolverOptions()
      *  \brief The implementation of the virtual functions.
      *  \return void.
      */
-    virtual void  setSolverOptions() throw(ErrorClass);
+    virtual void  setSolverOptions();
 
     /**
      * use this for debugging, print out the instance that

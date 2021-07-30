@@ -657,7 +657,7 @@ void BonminProblem::finalize_solution(TMINLP::SolverReturn status_,
 }
 
 
-void BonminSolver::buildSolverInstance() throw (ErrorClass)
+void BonminSolver::buildSolverInstance()
 {
     try
     {
@@ -690,7 +690,7 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass)
 
 
 
-void BonminSolver::setSolverOptions() throw (ErrorClass)
+void BonminSolver::setSolverOptions()
 {
     std::ostringstream outStr;
     try
@@ -837,8 +837,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
 }//end setSolverOptions()
 
 
-//void BonminSolver::solve() throw (ErrorClass) {
-void BonminSolver::solve() throw (ErrorClass)
+void BonminSolver::solve()
 {
     if( this->bCallbuildSolverInstance == false) buildSolverInstance();
     if( this->bSetSolverOptions == false) setSolverOptions();

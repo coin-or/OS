@@ -100,7 +100,7 @@ void osilset_extra (OSiLParserData* parserData , void* yyscanner );
 int osilget_lineno( void* yyscanner);
 char *osilget_text (void* yyscanner );
 void osilset_lineno (int line_number , void* yyscanner );
-void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass);
+void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData);
 void osil_empty_vectors( OSiLParserData* parserData);
 void osgl_empty_vectors( OSgLParserData* osglData);
 void osnl_empty_vectors( OSnLParserData* osnlData);
@@ -5825,7 +5825,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 } //end addErrorMsg
 
 
-void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw (ErrorClass) {
+void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) {
     try {
         parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
         parseInstanceData( &osil, osinstance, &parserData->osillineno);    

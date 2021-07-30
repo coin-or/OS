@@ -40,7 +40,7 @@ OSCommandLineReader::OSCommandLineReader( )
     m_oscommandline = new OSCommandLine();
 }
 
-OSCommandLine* OSCommandLineReader::readCommandLine(const std::string& osss) throw(ErrorClass)
+OSCommandLine* OSCommandLineReader::readCommandLine(const std::string& osss)
 {
     ostringstream outStr; 
     // parse the command line once
@@ -73,7 +73,7 @@ OSCommandLine* OSCommandLineReader::readCommandLine(const std::string& osss) thr
     return m_oscommandline;
 }
 
-OSCommandLine* OSCommandLineReader::parseString(const std::string& osss) throw(ErrorClass)
+OSCommandLine* OSCommandLineReader::parseString(const std::string& osss)
 {
     void* scanner;
     bool scannerActive;

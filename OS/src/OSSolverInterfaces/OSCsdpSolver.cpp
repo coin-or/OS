@@ -82,7 +82,7 @@ CsdpSolver::~CsdpSolver()
 #endif
 }
 
-void CsdpSolver::buildSolverInstance() throw (ErrorClass)
+void CsdpSolver::buildSolverInstance()
 {
     std::ostringstream outStr;
     ScalarExpressionTree* tempTree;
@@ -518,7 +518,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 }// end buildSolverInstance()
 
 
-void  CsdpSolver::setSolverOptions() throw(ErrorClass)
+void  CsdpSolver::setSolverOptions()
 {
 /**
  * Since CSDP provides no user interface for solver options 
@@ -598,7 +598,7 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
 
 
 #if 0
-void  CsdpSolver::setInitialValues() throw (ErrorClass)
+void  CsdpSolver::setInitialValues()
 {
     std::ostringstream outStr;
     try
@@ -714,7 +714,7 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
 #endif
 
  
-void  CsdpSolver::solve() throw (ErrorClass)
+void  CsdpSolver::solve()
 {
     std::ostringstream outStr;
 

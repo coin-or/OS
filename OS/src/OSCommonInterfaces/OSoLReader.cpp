@@ -23,7 +23,7 @@
 
 
 //bison function
-void yygetOSOption(const char *osil, OSOption* osoption, OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass);
+void yygetOSOption(const char *osil, OSOption* osoption, OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData);
 //lex functions
 int osollex_init(void** ptr_yy_globals);
 int osollex_destroy (void* scanner );
@@ -74,9 +74,6 @@ OSoLReader::~OSoLReader()
 }
 
 OSOption* OSoLReader::readOSoL(const std::string& posol)
-#if __cplusplus < 201100  
-    throw(ErrorClass)
-#endif
 {
     if (posol.length() > 0)
     {

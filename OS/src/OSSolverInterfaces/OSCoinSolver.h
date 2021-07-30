@@ -53,19 +53,19 @@ public:
      *  \brief The implementation of the corresponding virtual function.
      *  \return void.
      */
-    virtual void  solve() throw(ErrorClass);
+    virtual void  solve();
 
     /*! \fn void CoinSolver::buildSolverInstance()
      *  \brief The implementation of the corresponding virtual function.
      *  \return void.
      */
-    virtual void  buildSolverInstance() throw(ErrorClass);
+    virtual void  buildSolverInstance();
 
     /*! \fn void setSolverOptions()
      *  \brief The implementation of the corresponding virtual function.
      *  \return void.
      */
-    virtual void  setSolverOptions() throw(ErrorClass);
+    virtual void  setSolverOptions();
 
 
     /*! \fn bool CoinSolver::setCoinPackedMatrix()

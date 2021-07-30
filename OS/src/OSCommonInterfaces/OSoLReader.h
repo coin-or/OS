@@ -57,11 +57,7 @@ public:
      * @return the instance as an OSOption object.
      * </p>
      */
-    OSOption *readOSoL(const std::string& osol) 
-#if __cplusplus < 201100  
-    throw(ErrorClass)
-#endif
-    ;
+    OSOption *readOSoL(const std::string& osol);
 
 private:
     /** m_osoption is the OSOption object returned by
