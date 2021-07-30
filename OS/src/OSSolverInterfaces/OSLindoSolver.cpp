@@ -145,7 +145,7 @@ LindoSolver::~LindoSolver()
 }
 
 
-void LindoSolver::buildSolverInstance() throw (ErrorClass)
+void LindoSolver::buildSolverInstance()
 {
     try
     {
@@ -220,7 +220,7 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass)
 
 
 
-void LindoSolver::setSolverOptions() throw (ErrorClass)
+void LindoSolver::setSolverOptions()
 {
     try
     {

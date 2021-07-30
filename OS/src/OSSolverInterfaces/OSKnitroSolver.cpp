@@ -577,7 +577,7 @@ KnitroSolver::KnitroSolver()
 }
 
 
-void KnitroSolver::buildSolverInstance() throw (ErrorClass)
+void KnitroSolver::buildSolverInstance()
 {
     try
     {
@@ -596,7 +596,7 @@ void KnitroSolver::buildSolverInstance() throw (ErrorClass)
 
 
 
-void Knitro::setSolverOptions() throw (ErrorClass)
+void Knitro::setSolverOptions()
 {
     try
     {
@@ -628,7 +628,7 @@ KnitroSolver::~KnitroSolver()
 #endif
 }
 
-void KnitroSolver::solve() throw (ErrorClass)
+void KnitroSolver::solve()
 {
     try
     {

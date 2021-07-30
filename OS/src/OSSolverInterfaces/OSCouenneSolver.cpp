@@ -138,7 +138,7 @@ CouenneSolver::~CouenneSolver()
 }
 
 
-void CouenneSolver::buildSolverInstance() throw (ErrorClass)
+void CouenneSolver::buildSolverInstance()
 {
     // Much of the following is taken from Stefan Vigerske
     try
@@ -451,7 +451,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node)
 }
 
 
-void CouenneSolver::setSolverOptions() throw (ErrorClass)
+void CouenneSolver::setSolverOptions()
 {
     std::ostringstream outStr;
 
@@ -527,7 +527,7 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass)
 using namespace Ipopt;
 
 
-void CouenneSolver::solve() throw (ErrorClass)
+void CouenneSolver::solve()
 {
 #define PRINTED_PRECISION 1e-5
     const int infeasible = 1;

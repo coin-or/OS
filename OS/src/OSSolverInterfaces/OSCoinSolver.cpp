@@ -143,7 +143,7 @@ CoinSolver::~CoinSolver()
 }
 
 
-void CoinSolver::buildSolverInstance() throw (ErrorClass)
+void CoinSolver::buildSolverInstance()
 {
     std::ostringstream outStr;
     try
@@ -467,7 +467,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
 
 
 
-void CoinSolver::setSolverOptions() throw (ErrorClass)
+void CoinSolver::setSolverOptions()
 {
     std::ostringstream outStr;
 
@@ -1101,7 +1101,7 @@ bool CoinSolver::setCoinPackedMatrix()
     }
 } // end setCoinPackedMatrix
 
-void CoinSolver::solve() throw (ErrorClass)
+void CoinSolver::solve()
 {
     std::ostringstream outStr;
     if(osresult != NULL) delete osresult;

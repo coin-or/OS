@@ -106,7 +106,7 @@ int osolget_lineno( void* yyscanner);
 char *osolget_text (void* yyscanner );
 void osolset_lineno (int line_number , void* yyscanner );
 void osolset_extra (OSoLParserData* parserData , void* yyscanner );
-void  yygetOSOption(const char *ch, OSOption* m_osoption, OSoLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData ) throw(ErrorClass);
+void  yygetOSOption(const char *ch, OSOption* m_osoption, OSoLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData );
 void osol_empty_vectors( OSoLParserData* parserData);
 void osgl_empty_vectors( OSgLParserData* osglData);
 void osnl_empty_vectors( OSnLParserData* osnlData);
@@ -13331,7 +13331,7 @@ void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, 
 } //end osolerror
 
 void  yygetOSOption(const char *parsestring, OSOption *osoption, 
-      OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass)
+      OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
 {
     try{
         osol_scan_string( parsestring, scanner);

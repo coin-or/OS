@@ -133,7 +133,7 @@ public:
      * if the str contains text or is in anyway not a valid number
      * str should be null terminated
      */
-    //double os_strtod_wrap(const char *str) throw(ErrorClass);
+    //double os_strtod_wrap(const char *str);
 
     /**
      *
@@ -143,7 +143,7 @@ public:
      * David Gay version of strtod) and will throw an exception
      * if the str contains text or is in anyway not a valid number
      */
-    //double os_strtod_wrap(const char *str,  const char *strEnd) throw(ErrorClass);
+    //double os_strtod_wrap(const char *str,  const char *strEnd);
 
 
 

@@ -17,7 +17,7 @@
 
 
 //bison function
-void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass);
+void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData);
 //lex functions
 int osillex_init(void** ptr_yy_globals);
 int osillex_destroy (void* scanner );
@@ -51,9 +51,6 @@ OSiLReader::~OSiLReader()
 }
 
 OSInstance* OSiLReader::readOSiL(const std::string& posil)
-#if __cplusplus < 201100  
-    throw(ErrorClass)
-#endif
 {
     try
     {

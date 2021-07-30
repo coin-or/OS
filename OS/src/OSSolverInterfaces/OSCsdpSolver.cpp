@@ -165,7 +165,7 @@ CsdpSolver::~CsdpSolver()
     }
 }
 
-void CsdpSolver::buildSolverInstance() throw (ErrorClass)
+void CsdpSolver::buildSolverInstance()
 {
     std::ostringstream outStr;
     RealValuedExpressionTree* tempTree;
@@ -626,7 +626,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 }// end buildSolverInstance()
 
 
-void  CsdpSolver::setSolverOptions() throw(ErrorClass)
+void  CsdpSolver::setSolverOptions()
 {
 /**
  * Since CSDP provides no user interface for solver options 
@@ -791,7 +791,7 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
  */
 void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a, 
     struct constraintmatrix *constraints, struct blockmatrix *pX0,
-    double **py0, struct blockmatrix *pZ0)  throw(ErrorClass)
+    double **py0, struct blockmatrix *pZ0)
 {
     try
     {
@@ -1191,7 +1191,7 @@ void CsdpSolver::setInitialValues(int n, int k, struct blockmatrix C, double *a,
 }//end setInitialValues()
 
  
-void  CsdpSolver::solve() throw (ErrorClass)
+void  CsdpSolver::solve()
 {
     std::ostringstream outStr;
     double* mdObjValues = NULL;
