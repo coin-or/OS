@@ -33,6 +33,7 @@
 
 #include "OsiClpSolverInterface.hpp"
 #include "CoinWarmStartBasis.hpp"
+#include "CbcSolver.hpp"
 
 #ifdef COIN_HAS_SYMPHONY
 #include "OsiSymSolverInterface.hpp"
