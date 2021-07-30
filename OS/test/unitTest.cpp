@@ -9937,8 +9937,9 @@ std::cout << std::endl << std::endl << nl2osil->osol << std::endl << std::endl;
 
         for (int j=0; j < nVars; j++)
         {
-            if (!osresult->setOtherVariableResultVar(0, nOther, j, 
-                    static_cast<ostringstream*>( &(ostringstream() << (2*j - 2)) )->str()))
+            ostringstream oss;
+            oss << 2*j - 2;
+            if (!osresult->setOtherVariableResultVar(0, nOther, j, oss.str()))
                 throw ErrorClass(" Fail setting OtherVariableResult <var> array in AMPL suffix handler");
             if (!osresult->setOtherVariableResultVarIdx(0, nOther, j, j))
                 throw ErrorClass(" Fail setting OtherVariableResult <var> array in AMPL suffix handler");
