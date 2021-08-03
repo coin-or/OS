@@ -4624,7 +4624,6 @@ ExpandedMatrixBlocks* OSOption::getInitialMatrixVarBlocks(int mtxVarIdx, OSMatri
                                                     int* colPartition, int colPartitionSize,
                                                     ENUM_MATRIX_TYPE convertTo_,
                                                     ENUM_MATRIX_SYMMETRY symmetry_ )
-                                                throw (ErrorClass)
 {
     ExpandedMatrixBlocks* tmpBlocks = NULL;
     try
@@ -4682,7 +4681,6 @@ ExpandedMatrixBlocks* OSOption::getInitialMatrixDualVarBlocks(int mtxVarIdx, OSM
                                                     int* colPartition, int colPartitionSize,
                                                     ENUM_MATRIX_TYPE convertTo_,
                                                     ENUM_MATRIX_SYMMETRY symmetry_ )
-                                                throw (ErrorClass)
 {
     ExpandedMatrixBlocks* tmpBlocks = NULL;
     try

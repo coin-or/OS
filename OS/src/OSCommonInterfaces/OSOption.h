@@ -5772,7 +5772,7 @@ public:
      *  @param  mtxVarIdx is the index of the matrix variable to be retrieved
      *  @return a pointer to a matrix expanded into GeneralSparseMatrix form
      */
-    GeneralSparseMatrix* getInitialMatrixVar(int mtxVarIdx) throw (ErrorClass);
+    GeneralSparseMatrix* getInitialMatrixVar(int mtxVarIdx);
 
     /**
      *  Get the initial values for a particular dual matrix variable 
@@ -5781,7 +5781,7 @@ public:
      *  @param  mtxVarIdx is the index of the matrix variable to be retrieved
      *  @return a pointer to a matrix expanded into GeneralSparseMatrix form
      */
-    GeneralSparseMatrix* getInitialMatrixDualVar(int mtxVarIdx) throw (ErrorClass);
+    GeneralSparseMatrix* getInitialMatrixDualVar(int mtxVarIdx);
 
     /**
      *  Get the initial values for a particular matrix variable in block form
@@ -5801,8 +5801,7 @@ public:
                                   int* rowPartition, int rowPartitionSize,
                                   int* colPartition, int colPartitionSize,
                                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown)
-                              throw (ErrorClass);
+                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      *  Get the initial values for a particular dual matrix variable in block form
@@ -5822,8 +5821,7 @@ public:
                                   int* rowPartition, int rowPartitionSize,
                                   int* colPartition, int colPartitionSize,
                                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
-                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown)
-                              throw (ErrorClass);
+                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_unknown);
 
     /**
      * Get the options associated with a given solver
