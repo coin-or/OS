@@ -9178,9 +9178,10 @@ if( THOROUGH == true){
         std::cout << std::endl << std::endl << "Here is osrl2: " << std::endl << std::endl;
         std::cout << osrl2 << std::endl;
 #endif
-
+#ifndef NDEBUG
         ok &= osresult2->IsEqual(osresult3);
         if (!ok) throw ErrorClass("OSrL reader/writer loses information in matrix extensions");
+#endif
 
 //        delete osresult2;
 //        osresult2 = NULL;
