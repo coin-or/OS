@@ -176,7 +176,6 @@ void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 void doWriteOSiLFile(OSCommandLine *oscommandline);
 void doWriteOSoLFile(OSCommandLine *oscommandline);
 
-extern const OSSmartPtr<OSOutput> osoutput;
 
 int main(int argC, const char* argV[])
 {

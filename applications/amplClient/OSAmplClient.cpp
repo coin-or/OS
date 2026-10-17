@@ -156,7 +156,6 @@ void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 void reportResults(OSCommandLine *oscommandline, std::string osrl,  OSnl2OS *osnl2OS);
 void reportErrors(OSCommandLine *oscommandline, std::string errMsg, OSnl2OS *osnl2OS);
 
-extern const OSSmartPtr<OSOutput> osoutput;
 
 
 int main(int argc, char **argv)
