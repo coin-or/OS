@@ -32,7 +32,7 @@ AC_DEFUN([AC_COIN_OS_SOCKET_LIBS],
   saveLIBS="$LIBS"
   ac_coin_found_socket_libraries=no
   case "$CXX" in
-    cl* | */cl* | CL* | */CL* | icl* | */icl*)
+    cl | cl.exe | */cl | */cl.exe | CL* | */CL* | icl* | */icl*)
       if test x$ac_cv_header_winsock_h = xyes ; then
         LIBS="wsock32.lib"
         AC_MSG_CHECKING(with "$LIBS")
