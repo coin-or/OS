@@ -35,39 +35,39 @@
 #include "CoinWarmStartBasis.hpp"
 #include "CbcSolver.hpp"
 
-#ifdef COIN_HAS_SYMPHONY
+#ifdef OS_HAS_SYMPHONY
 #include "OsiSymSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_VOL
+#ifdef OS_HAS_VOL
 #include "OsiVolSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_DYLP
+#ifdef OS_HAS_DYLP
 #include "OsiDylpSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_GLPK
+#ifdef OS_HAS_GLPK
 #include "OsiGlpkSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_CPX
+#ifdef OS_HAS_CPX
 #include "OsiCpxSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_GRB
+#ifdef OS_HAS_GRB
 #include "OsiGrbSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_MSK
+#ifdef OS_HAS_MSK
 #include "OsiMskSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_SOPLEX
+#ifdef OS_HAS_SOPLEX
 #include "OsiSpxSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_XPR
+#ifdef OS_HAS_XPR
 #include "OsiXprSolverInterface.hpp"
 #endif
 
@@ -177,63 +177,63 @@ void CoinSolver::buildSolverInstance()
             osiSolver = new OsiClpSolverInterface();
 
         else if (sSolverName == "vol")
-            #ifdef COIN_HAS_VOL
+            #ifdef OS_HAS_VOL
                 osiSolver = new OsiVolSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver vol");
             #endif
 
         else if (sSolverName == "cplex")
-            #ifdef COIN_HAS_CPX
+            #ifdef OS_HAS_CPX
                 osiSolver = new OsiCpxSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver cplex");
             #endif
 
         else if (sSolverName == "gurobi")
-            #ifdef COIN_HAS_GRB
+            #ifdef OS_HAS_GRB
                 osiSolver = new OsiGrbSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver gurobi");
             #endif
 
         else if (sSolverName == "mosek")
-            #ifdef COIN_HAS_MSK
+            #ifdef OS_HAS_MSK
                 osiSolver = new OsiMskSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver mosek");
             #endif
 
         else if (sSolverName == "soplex")
-            #ifdef COIN_HAS_SOPLEX
+            #ifdef OS_HAS_SOPLEX
                 osiSolver = new OsiSpxSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver soplex");
             #endif
 
         else if (sSolverName == "xpress")
-            #ifdef COIN_HAS_XPR
+            #ifdef OS_HAS_XPR
                 osiSolver = new OsiXprSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver xpress");
             #endif
 
         else if (sSolverName == "glpk")
-            #ifdef COIN_HAS_GLPK
+            #ifdef OS_HAS_GLPK
                 osiSolver = new OsiGlpkSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver glpk");
             #endif
 
         else if (sSolverName == "dylp")
-            #ifdef COIN_HAS_DYLP
+            #ifdef OS_HAS_DYLP
                 osiSolver = new OsiDylpSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver dylp");
             #endif
 
         else if (sSolverName == "symphony")
-            #ifdef COIN_HAS_SYMPHONY
+            #ifdef OS_HAS_SYMPHONY
                 osiSolver = new OsiSymSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver symphony");
@@ -529,7 +529,7 @@ void CoinSolver::setSolverOptions()
     osiSolver->setDblParam(OsiObjOffset, -osinstance->getObjectiveConstants()[0]);
 
     // Set SYMPHONY default print level
-#ifdef COIN_HAS_SYMPHONY
+#ifdef OS_HAS_SYMPHONY
     if( sSolverName.find( "symphony") != std::string::npos)
     {
         OsiSymSolverInterface * si =
@@ -776,7 +776,7 @@ void CoinSolver::setSolverOptions()
 
                 else if( sSolverName.find( "symphony") != std::string::npos)
                 {
-#ifdef COIN_HAS_SYMPHONY
+#ifdef OS_HAS_SYMPHONY
                     if(optionsVector.size() > 0) optionsVector.clear();
                     //first the number of processors -- applies only to SYMPHONY
                     OsiSymSolverInterface * si =

@@ -3,6 +3,9 @@
 #ifndef __CONFIG_OS_H__
 #define __CONFIG_OS_H__
 
+/* Library Visibility Attribute */
+#undef OSLIB_EXPORT
+
 /* Version number of project */
 #undef OS_VERSION
 

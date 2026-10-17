@@ -170,56 +170,56 @@
 #include "CoinHelperFunctions.hpp"
 #include "OsiSolverInterface.hpp"
 
-#ifdef COIN_HAS_GLPK
+#ifdef OS_HAS_GLPK
 #include <OsiGlpkSolverInterface.hpp>
 #endif
 
-#ifdef COIN_HAS_COUENNE    
+#ifdef OS_HAS_COUENNE    
 #include "OSCouenneSolver.h"
 #endif
 
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
 #include "OSnl2OS.h"
 #include "OSosrl2ampl.h"
 #endif
 
-#ifdef COIN_HAS_LINDO    
+#ifdef OS_HAS_LINDO    
 #include "OSLindoSolver.h"
 #endif  
 
-#ifdef COIN_HAS_IPOPT    
+#ifdef OS_HAS_IPOPT    
 #include "OSIpoptSolver.h"
 #endif 
 
-#ifdef COIN_HAS_BONMIN    
+#ifdef OS_HAS_BONMIN    
 #include "OSBonminSolver.h"
 #endif 
 
-#ifdef COIN_HAS_CSDP   
+#ifdef OS_HAS_CSDP   
 #include "OSCsdpSolver.h"
 #endif 
 
-#ifdef COIN_HAS_CPX
+#ifdef OS_HAS_CPX
 #include "OsiCpxSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_GRB
+#ifdef OS_HAS_GRB
 #include "OsiGrbSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_MSK
+#ifdef OS_HAS_MSK
 #include "OsiMskSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_SOPLEX
+#ifdef OS_HAS_SOPLEX
 #include "OsiSpxSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_XPR
+#ifdef OS_HAS_XPR
 #include "OsiXprSolverInterface.hpp"
 #endif
 
-#ifdef COIN_HAS_GAMSUTILS
+#ifdef OS_HAS_GAMSUTILS
 #include "OSgams2osil.hpp"
 #endif
 
@@ -255,7 +255,7 @@
 //#include <windows.h>
 //#endif
 
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
 #include <asl.h>
 #endif
 
@@ -364,7 +364,7 @@ int main(int argC, char* argV[])
      *  memory management (i.e., new and delete)
      */
     FileUtil *fileUtil = NULL;  
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
     OSnl2OS *nl2osil = NULL;
 #endif 
     OSmps2OS *mps2osil = NULL;
@@ -6944,7 +6944,7 @@ if( THOROUGH == true){
     }
 }    // end of if(THOROUGH)
 
-#ifdef COIN_HAS_SYMPHONY
+#ifdef OS_HAS_SYMPHONY
     try{
         cout << endl << "TEST " << ++nOfTest << ": SYMPHONY solver on p0033.osil" << endl << endl;
 
@@ -7007,7 +7007,7 @@ if( THOROUGH == true){
     
 
 
-#ifdef COIN_HAS_DYLP
+#ifdef OS_HAS_DYLP
     try{
         cout << endl << "TEST " << ++nOfTest << ": DyLP solver on parincLinear.osil" << endl << endl;
 
@@ -7069,7 +7069,7 @@ if( THOROUGH == true){
 #endif
     
 
-#ifdef COIN_HAS_VOL
+#ifdef OS_HAS_VOL
     try{
         cout << endl << "TEST " << ++nOfTest << ": Vol solver on volumeTest.osil" << endl << endl;
 
@@ -7131,7 +7131,7 @@ if( THOROUGH == true){
     }    
 #endif
     
-#ifdef COIN_HAS_GLPK
+#ifdef OS_HAS_GLPK
     try{
         cout << endl << "TEST " << ++nOfTest << ": GLPK solver on p0033.osil" << endl << endl;
 
@@ -7198,7 +7198,7 @@ if( THOROUGH == true){
     }    
 #endif
 
-#ifdef COIN_HAS_CPX
+#ifdef OS_HAS_CPX
     try{
         cout << endl << "TEST " << ++nOfTest << ": Cplex solver on p0033.osil" << endl << endl;
 
@@ -7310,10 +7310,10 @@ if( THOROUGH == true){
         fileUtil = NULL;
     }
 #endif //if 0
-#endif //ifdef COIN_HAS_CPX
+#endif //ifdef OS_HAS_CPX
     
 
-#ifdef COIN_HAS_GRB
+#ifdef OS_HAS_GRB
     try{
         cout << endl << "TEST " << ++nOfTest << ": Gurobi solver on p0033.osil" << endl << endl;
 
@@ -7425,9 +7425,9 @@ if( THOROUGH == true){
         fileUtil = NULL;
     }
 #endif //if 0
-#endif //ifdef COIN_HAS_GRB
+#endif //ifdef OS_HAS_GRB
 
-#ifdef COIN_HAS_MSK
+#ifdef OS_HAS_MSK
     try{
         cout << endl << "TEST " << ++nOfTest << ": MOSEK solver on p0033.osil" << endl << endl;
 
@@ -7539,9 +7539,9 @@ if( THOROUGH == true){
         fileUtil = NULL;
     }
 #endif //if 0
-#endif //ifdef COIN_HAS_MSK
+#endif //ifdef OS_HAS_MSK
 
-#ifdef COIN_HAS_SOPLEX
+#ifdef OS_HAS_SOPLEX
     try{
         cout << endl << "TEST " << ++nOfTest << ": SoPlex solver on parincLinear.osil" << endl << endl;
 
@@ -7595,7 +7595,7 @@ if( THOROUGH == true){
     }    
 #endif
 
-#ifdef COIN_HAS_XPR
+#ifdef OS_HAS_XPR
     try{
         cout << endl << "TEST " << ++nOfTest << ": XPRESS solver on p0033.osil" << endl << endl;
 
@@ -7707,10 +7707,10 @@ if( THOROUGH == true){
         fileUtil = NULL;
     }
 #endif //if 0
-#endif //ifdef COIN_HAS_XPR
+#endif //ifdef OS_HAS_XPR
 
 
-#ifdef COIN_HAS_IPOPT
+#ifdef OS_HAS_IPOPT
     IpoptSolver *ipoptSolver  =  NULL;    
     try{
         cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with avion2.osil" << endl << endl;
@@ -8397,10 +8397,10 @@ if(THOROUGH == true){
 
 
 } // end  if (THOROUGH)
-#endif // end  #ifdef COIN_HAS_IPOPT
+#endif // end  #ifdef OS_HAS_IPOPT
 
 
-#ifdef COIN_HAS_BONMIN
+#ifdef OS_HAS_BONMIN
     try{
         cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on bonminEx1.osil" << endl << endl;
 
@@ -8696,10 +8696,10 @@ if (THOROUGH == true){
         fileUtil = NULL;
     }
 }   // end of if( THOROUGH )
-#endif   // end of #ifdef COIN_HAS_BONMIN
+#endif   // end of #ifdef OS_HAS_BONMIN
 
 
-#ifdef COIN_HAS_COUENNE
+#ifdef OS_HAS_COUENNE
 //    CouenneSolver *solver = NULL;
     try{
         cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
@@ -9124,10 +9124,10 @@ if( THOROUGH == true){
         fileUtil = NULL;
     }    
 } //end of if (THOROUGH)
-#endif // end of #ifdef COIN_HAS_COUENNE
+#endif // end of #ifdef OS_HAS_COUENNE
 
 
-#ifdef COIN_HAS_CSDP
+#ifdef OS_HAS_CSDP
     try{
         cout << endl << "TEST " << ++nOfTest << ": CSDP solver on SDPA_ex.osil" << endl << endl;
 
@@ -9296,10 +9296,10 @@ if (THOROUGH == true){
         fileUtil = NULL;
     }
 } // if THOROUGH
-#endif // if COIN_HAS_CSDP
+#endif // if OS_HAS_CSDP
 
     
-#ifdef COIN_HAS_LINDO
+#ifdef OS_HAS_LINDO
     try{
         cout << endl << "TEST " << ++nOfTest << ": Lindo solver on lindoapiaddins.osil" << endl << endl;
 
@@ -9526,7 +9526,7 @@ if (THOROUGH == true){
     }    
         */
 } // end of if( THOROUGH)
-#endif // end of #ifdef COIN_HAS_LINDO
+#endif // end of #ifdef OS_HAS_LINDO
 } // end of if(SOLVER_TESTS)
 
 
@@ -9593,7 +9593,7 @@ if (OTHER_TESTS)
         mps2osil = NULL;
     }
     
-#ifdef COIN_HAS_IPOPT
+#ifdef OS_HAS_IPOPT
     try{
         // solve another problem
         // a problem that is a pure quadratic
@@ -9652,12 +9652,12 @@ if (OTHER_TESTS)
             delete mps2osil; 
         mps2osil = NULL;
     }
-#endif //end of #ifdef COIN_HAS_IPOPT
+#endif //end of #ifdef OS_HAS_IPOPT
     
 // test reading a GAMS file
 
 #if  0
-#ifdef COIN_HAS_GAMSUTILS
+#ifdef OS_HAS_GAMSUTILS
     OSgams2osil *gams2osil;
     try{
         std::cout  << "Working with GAMSIO " << std::endl;
@@ -9685,7 +9685,7 @@ if (OTHER_TESTS)
 #endif
 
 // now solve with an OSInstance created from an AMPL nl file
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
     try{
         cout << endl << "TEST " << ++nOfTest << ": AMPL solver interface" << endl << endl;
 
@@ -10405,7 +10405,7 @@ extern const OSSmartPtr<OSOutput> osoutput;
         IBS = NULL;
    }
 
-#endif // end of ifdef COIN_HAS_ASL
+#endif // end of ifdef OS_HAS_ASL
 
     //
     // Now read an mps file and write in b64 format to test the b64 feature 

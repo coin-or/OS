@@ -2,13 +2,10 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id: Makefile.am 506 2006-06-01 20:11:24Z andreasw $
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
 # Modifications by Horand Gassmann, Jun Ma and Kipp Martin
-
-AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
 #                             libOSSolverInterfaces                           #
@@ -60,33 +57,20 @@ libOSSolverInterfaces_la_SOURCES += 	OSKnitroSolver.cpp \
 	OSKnitroSolver.h
 endif
 
-# This is for libtool (on Windows)
-libOSSolverInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
-
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = \
-	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../OSCommonInterfaces \
+	-I$(srcdir)/../OSParsers \
+	-I$(srcdir)/../OSUtils \
+	-I$(srcdir)/../OSAgent \
 	$(OSLIB_CFLAGS)
 	
-if COIN_HAS_LINDO
-  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-endif
 	
 if COIN_HAS_CSDP
-  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
+  AM_CPPFLAGS += -DNOSHORTS
 endif
-
-if COIN_HAS_KNITRO
-  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-endif
-
-# This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 
 ########################################################################
 #                Headers that need to be installed                     #
@@ -94,7 +78,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'include/coin'
-includecoindir = $(includedir)/coin
+includecoindir = $(includedir)/coin-or
 includecoin_HEADERS = \
 	OSDefaultSolver.h \
 	OSCoinSolver.h \

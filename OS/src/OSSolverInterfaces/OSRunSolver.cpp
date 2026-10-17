@@ -22,32 +22,32 @@
 #include "OSDefaultSolver.h"
 #include "OSErrorClass.h"
 
-#ifdef COIN_HAS_KNITRO
+#ifdef OS_HAS_KNITRO
 #include "OSKnitroSolver.h"
 #endif
 
-#ifdef COIN_HAS_LINDO
+#ifdef OS_HAS_LINDO
 #include "OSLindoSolver.h"
 #endif
 
-#ifdef COIN_HAS_IPOPT
-# ifndef COIN_HAS_ASL
+#ifdef OS_HAS_IPOPT
+# ifndef OS_HAS_ASL
 #  include "OSIpoptSolver.h"
-#  undef COIN_HAS_ASL
+#  undef OS_HAS_ASL
 # else
 #  include "OSIpoptSolver.h"
 # endif
 #endif
 
-#ifdef COIN_HAS_BONMIN
+#ifdef OS_HAS_BONMIN
 #include "OSBonminSolver.h"
 #endif
 
-#ifdef COIN_HAS_COUENNE
+#ifdef OS_HAS_COUENNE
 #include "OSCouenneSolver.h"
 #endif
 
-#ifdef COIN_HAS_CSDP
+#ifdef OS_HAS_CSDP
 #include "OSCsdpSolver.h"
 #endif
 
@@ -257,7 +257,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
         if (solverName.find("ipopt") != std::string::npos)
         {
             // we are requesting the Ipopt solver
-#ifdef COIN_HAS_IPOPT
+#ifdef OS_HAS_IPOPT
             solverType = new IpoptSolver();
             solverType->sSolverName = "ipopt";
 #else
@@ -268,7 +268,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
         else if (solverName.find("lindo") != std::string::npos)
         {
             // we are requesting the Lindo solver
-#ifdef COIN_HAS_LINDO
+#ifdef OS_HAS_LINDO
             solverType = new LindoSolver();
             solverType->sSolverName = "lindo";
 #else
@@ -284,7 +284,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("cplex") != std::string::npos)
         {
-#ifdef COIN_HAS_CPX
+#ifdef OS_HAS_CPX
             solverType = new CoinSolver();
             solverType->sSolverName = "cplex";
 #else
@@ -294,7 +294,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("glpk") != std::string::npos)
         {
-#ifdef COIN_HAS_GLPK
+#ifdef OS_HAS_GLPK
             solverType = new CoinSolver();
             solverType->sSolverName = "glpk";
 #else
@@ -304,7 +304,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("dylp") != std::string::npos)
         {
-#ifdef COIN_HAS_DYLP
+#ifdef OS_HAS_DYLP
             solverType = new CoinSolver();
             solverType->sSolverName = "dylp";
 #else
@@ -314,7 +314,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("symphony") != std::string::npos)
         {
-#ifdef COIN_HAS_SYMPHONY
+#ifdef OS_HAS_SYMPHONY
             solverType = new CoinSolver();
             solverType->sSolverName = "symphony";
 #else
@@ -324,7 +324,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("knitro") != std::string::npos)
         {
-#ifdef COIN_HAS_KNITRO
+#ifdef OS_HAS_KNITRO
             solverType = new KnitroSolver();
             solverType->sSolverName = "knitro";
 #else
@@ -334,7 +334,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("vol") != std::string::npos)
         {
-#ifdef COIN_HAS_VOL
+#ifdef OS_HAS_VOL
             solverType = new CoinSolver();
             solverType->sSolverName = "vol";
 #else
@@ -345,7 +345,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
         else if (solverName.find("bonmin") != std::string::npos)
         {
             // we are requesting the Bonmin solver
-#ifdef COIN_HAS_BONMIN
+#ifdef OS_HAS_BONMIN
             solverType = new BonminSolver();
             solverType->sSolverName = "bonmin";
 #else
@@ -356,7 +356,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
         else if (solverName.find("couenne") != std::string::npos)
         {
              // we are requesting the Couenne solver
-#ifdef COIN_HAS_COUENNE
+#ifdef OS_HAS_COUENNE
             solverType = new CouenneSolver();
             solverType->sSolverName = "couenne";
 #else
@@ -372,7 +372,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("gurobi") != std::string::npos)
         {
-#ifdef COIN_HAS_GRB
+#ifdef OS_HAS_GRB
             solverType = new CoinSolver();
             solverType->sSolverName = "gurobi";
 #else
@@ -382,7 +382,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("mosek") != std::string::npos)
         {
-#ifdef COIN_HAS_MSK
+#ifdef OS_HAS_MSK
             solverType = new CoinSolver();
             solverType->sSolverName = "mosek";
 #else
@@ -392,7 +392,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("soplex") != std::string::npos)
         {
-#ifdef COIN_HAS_SOPLEX
+#ifdef OS_HAS_SOPLEX
             solverType = new CoinSolver();
             solverType->sSolverName = "soplex";
 #else
@@ -402,7 +402,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("xpress") != std::string::npos)
         {
-#ifdef COIN_HAS_XPR
+#ifdef OS_HAS_XPR
             solverType = new CoinSolver();
             solverType->sSolverName = "xpress";
 #else
@@ -412,7 +412,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 
         else if (solverName.find("csdp") != std::string::npos)
         {
-#ifdef COIN_HAS_CSDP
+#ifdef OS_HAS_CSDP
             solverType = new CsdpSolver();
             solverType->sSolverName = "csdp";
 //            throw ErrorClass( "the CSDP solver requested is not yet supported");

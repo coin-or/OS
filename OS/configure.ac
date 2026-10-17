@@ -2,18 +2,11 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id$
-
 #############################################################################
 #                       Names and other basic things                        #
 #############################################################################
 
-AC_PREREQ(2.59)
-
-# use this to provide a package name, version number --- make sure it is "trunk" for trunk versions
-# an email address for bug reports, and a shortened version of the package name for the tarball
-# Note that there is a second configure.ac file in root directory --- make sure to synchronize!
-AC_INIT([OS],[trunk],[coin-os@lists.coin-or.org])
+AC_INIT([OS],[devel],[https://github.com/coin-or/OS/issues/new],[coin-or-os],[https://github.com/coin-or/OS])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -25,232 +18,109 @@ under the Eclipse Public License.])
 # whether the package is actually there
 AC_CONFIG_SRCDIR(src/OSConfig.h)
 
-# Where should everything be installed by default?  Here, we want it
-# to be installed directly in 'bin', 'lib', 'include' subdirectories
-# of the directory where configure is run.  The default would be
-# /usr/local.
-AC_PREFIX_DEFAULT([`pwd`])
+# Do some initialization work (version numbers, change prefix default, ...)
+AC_COIN_INITIALIZE
 
-############################################################################
+#############################################################################
 #                         Standard build tool stuff                         #
 #############################################################################
-
-# Get the system type
-AC_CANONICAL_BUILD
-
-# Initialise projectdir
-AC_COIN_PROJECTDIR_INIT(OS)
-
-# Check if user wants to produce debugging code
-AC_COIN_DEBUG_COMPILE(OS)
 
 # Get the name of the C++ compiler and appropriate compiler options
 AC_COIN_PROG_CXX
 
-# Initialize automake and libtool
-AC_COIN_INIT_AUTO_TOOLS
+# This is a C++ package, set the language accordingly.
+AC_LANG_PUSH(C++)
 
-# And determine whether we're big-endian or little-endian. This is necessary to
-# define the correct patterns for IEEE infinity and quiet_nan, in the event
-# that we can't get them any other way. This will define WORDS_BIGENDIAN if
-# we're on a big-endian machine, and do nothing otherwise. Also necessary for
-# the David Gay dtoa
+# Initialize libtool
+AC_COIN_PROG_LIBTOOL
 
+# set RPATH_FLAGS to the compiler link flags required to hardcode location
+# of the shared objects (expanded_libdir is set somewhere in configure before)
+AC_COIN_RPATH_FLAGS([$expanded_libdir])
+
+# Determine whether we're big-endian or little-endian. This defines
+# WORDS_BIGENDIAN on a big-endian machine, which the David Gay dtoa needs.
 AC_C_BIGENDIAN
 
-# We also need to worry about long long 
-# if -pedantic used for OSdtoa then we crash without
-# the following was added to autoconf 2.60 -- put in when build tools switches over
-# this will define HAVE_LONG_LONG_INT
-#AC_TYPE_LONG_LONG_INT 
-#for now assume C++
-#AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure SIZEOF_LONG_LONG is less than 8])
-#KIPP deal with the above
-
-AC_LANG_PUSH(C)
-
-# the following does not work for cached variables
-#AC_CHECK_SIZEOF( long long)
-AC_CHECK_SIZEOF( int)
-AC_CHECK_SIZEOF( double)
-AC_CHECK_SIZEOF( long)
-
-AC_LANG_POP(C)
-
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([double])
+AC_CHECK_SIZEOF([long])
 
 #############################################################################
 #                           COIN-OR components                              #
 #############################################################################
 
-AC_COIN_CHECK_PACKAGE(CoinUtils,[coinutils],[OSLib])
-if test $coin_has_coinutils != yes ; then
-  AC_MSG_ERROR([Required package CoinUtils not available.])
-fi
-AC_COIN_CHECK_PACKAGE(Ipopt,    [ipopt cppad],  [OSLib])
-AC_COIN_CHECK_PACKAGE(Clp,      [osi-clp],      [OSLib])
-AC_COIN_CHECK_PACKAGE(DyLP,     [osi-dylp],     [OSLib])
-AC_COIN_CHECK_PACKAGE(Vol,      [osi-vol],      [OSLib])
-AC_COIN_CHECK_PACKAGE(SYMPHONY, [osi-sym],      [OSLib])
-AC_COIN_CHECK_PACKAGE(Cpx,      [osi-cplex],    [OSLib])
-AC_COIN_CHECK_PACKAGE(Glpk,     [osi-glpk],     [OSLib])
-AC_COIN_CHECK_PACKAGE(Grb,      [osi-gurobi],   [OSLib])
-AC_COIN_CHECK_PACKAGE(Msk,      [osi-mosek],    [OSLib])
-AC_COIN_CHECK_PACKAGE(SoPlex,   [osi-soplex],   [OSLib])
-AC_COIN_CHECK_PACKAGE(Xpr,      [osi-xpress],   [OSLib])
-AC_COIN_CHECK_PACKAGE(Cbc,      [cbc],          [OSLib])
-AC_COIN_CHECK_PACKAGE(Bonmin,   [bonmin cppad], [OSLib])
-AC_COIN_CHECK_PACKAGE(Couenne,  [couenne cppad],[OSLib])
-AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],          [OSLib])
-AC_COIN_CHECK_PACKAGE(ASL,      [coinasl],      [OSLib])
-AC_COIN_CHECK_PACKAGE(cppad,    [cppad],        [OSLib])
+# The COIN-OR solver interface (OSCoinSolver) uses Cbc, Cgl, Clp, and Osi
+# unconditionally.
+m4_foreach_w([myvar],[CoinUtils Osi Clp Cgl Cbc],
+  [ AC_COIN_CHK_PKG(myvar,[OSLib],m4_case(myvar,[Clp],[osi-clp]))
+    if test $coin_has_[]m4_tolower(myvar) != yes ; then
+      AC_MSG_ERROR([Required package myvar is not available.])
+    fi
+  ])
 
-# The COIN_HAS_CPPAD symbol should not go into the public configuration
-# header file (config_os.h).
-# However, we need to distinguish in OS' public headers files whether
-# CppAD is available or not, so we define an additional symbol.
-if test $coin_has_cppad = yes ; then
-  AC_DEFINE(OS_HAS_CPPAD, [1], [Define to 1 if OS uses CppAD])
-fi
+AC_COIN_CHK_PKG(Ipopt,    [OSLib],[ipopt])
+AC_COIN_CHK_PKG(Bonmin,   [OSLib],[bonmin])
+AC_COIN_CHK_PKG(Couenne,  [OSLib],[couenne])
+AC_COIN_CHK_PKG(DyLP,     [OSLib],[osi-dylp])
+AC_COIN_CHK_PKG(Vol,      [OSLib],[osi-vol])
+AC_COIN_CHK_PKG(SYMPHONY, [OSLib],[osi-sym])
+AC_COIN_CHK_PKG(Glpk,     [OSLib],[osi-glpk])
+AC_COIN_CHK_PKG(Cpx,      [OSLib],[osi-cplex])
+AC_COIN_CHK_PKG(Grb,      [OSLib],[osi-gurobi])
+AC_COIN_CHK_PKG(Msk,      [OSLib],[osi-mosek])
+AC_COIN_CHK_PKG(SoPlex,   [OSLib],[osi-soplex])
+AC_COIN_CHK_PKG(Xpr,      [OSLib],[osi-xpress])
+AC_COIN_CHK_PKG(ASL,      [OSLib],[coinasl])
+AC_COIN_CHK_PKG(CppAD,    [OSLib],[cppad])
 
-# Ipopt is available or not, so we define an additional symbol.
-if test $coin_has_ipopt = yes ; then
-  AC_DEFINE(OS_HAS_IPOPT, [1], [Define to 1 if OS uses Ipopt])
+# Bonmin and Couenne are used through their Ipopt interface.
+if test $coin_has_bonmin = yes && test $coin_has_ipopt != yes ; then
+  AC_MSG_ERROR([Found Bonmin, but not Ipopt.])
 fi
-
-# Bonmin is available or not, so we define an additional symbol.
-if test $coin_has_bonmin = yes ; then
-  AC_DEFINE(OS_HAS_BONMIN, [1], [Define to 1 if OS uses Bonmin])
-fi
-
-# Couenne is available or not, so we define an additional symbol.
-if test $coin_has_couenne = yes ; then
-  AC_DEFINE(OS_HAS_COUENNE, [1], [Define to 1 if OS uses Couenne])
-fi
-
-# SYMPHONY is available or not, so we define an additional symbol.
-if test $coin_has_symphony = yes ; then
-  AC_DEFINE(OS_HAS_SYMPHONY, [1], [Define to 1 if OS uses SYMPHONY])
-fi
-
-# Vol is available or not, so we define an additional symbol.
-if test $coin_has_vol = yes ; then
-  AC_DEFINE(OS_HAS_VOL, [1], [Define to 1 if OS uses Vol])
-fi
-
-# Glpk is available or not, so we define an additional symbol.
-if test $coin_has_glpk = yes ; then
-  AC_DEFINE(OS_HAS_GLPK, [1], [Define to 1 if OS uses Glpk])
-fi
-
-#Dylp is available or not, so we define an additional symbol.
-if test $coin_has_dylp = yes ; then
-  AC_DEFINE(OS_HAS_DYLP, [1], [Define to 1 if OS uses DyLP])
-fi
-
-# ASL is available or not, so we define an additional symbol.
-if test $coin_has_asl = yes ; then
-  AC_DEFINE(OS_HAS_ASL, [1], [Define to 1 if OS uses ASL])
+if test $coin_has_couenne = yes && test $coin_has_bonmin != yes ; then
+  AC_MSG_ERROR([Found Couenne, but not Bonmin.])
 fi
 
 #############################################################################
 #                             Third party solvers                           #
 #############################################################################
 
-AC_COIN_CHECK_USER_LIBRARY([Lindo], [LINDO], [lindo.h],,, [OSLib])
-AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],,, [OSLib])
-AC_COIN_CHECK_USER_LIBRARY([Csdp],  [CSDP],  [blockmat.h],,, [OSLib])
-
+AC_COIN_CHK_LIBHDR(Lindo, [OSLib],[],[],[],[],[#include "lindo.h"],[default_skip])
+AC_COIN_CHK_LIBHDR(Knitro,[OSLib],[],[],[],[],[#include "knitro.h"],[default_skip])
+AC_COIN_CHK_LIBHDR(Csdp,  [OSLib],[],[],[],[],[#include "blockmat.h"],[default_skip])
 
 #############################################################################
 #                         OS-specific configuration                         #
 #############################################################################
 
-
-  case $host in
-     *-mingw*)
-         AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
-      *-cygwin*)
-         AC_DEFINE([WIN_],[1],[use if OS is Windows])
-		   case $CXX in
-		    g*)
-		      AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and compiler is gnu]);;
-		     *)
-		     AC_MSG_WARN("DONT HAVE GCC COMPILER WITH GYGWIN");;   
-		  esac   
-		  AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]);;
-       *-win*)
-         AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
-    *-linux-*)
-	 ;;
-    *-darwin*)
-        AC_DEFINE([MACOSX_],[1],[use if OS is MACOSX])
-        mac_osx=yes ;;
-    *-ibm-*)
-         ;;
-    *-hp-*)
-         ;;
-    *-sun-*)
-	 ;;
-    *)
-	 ;;
-  esac
-
-##############################################################################
-#                            OPENMP defs                                     #
-##############################################################################
-
-AC_ARG_ENABLE([openmp],
-[AC_HELP_STRING([--enable-openmp],
-                [compile in OpenMP features])],
-[case "${enableval}" in
-   yes) os_openmp=true
-   ;;
-   no)  os_openmp=false
-   ;;
-   *) AC_MSG_ERROR(Bad value ${enableval} for --enable-openmp)
-   ;;
-esac],
-[os_openmp=auto])
-
-if test $os_openmp = auto; then 
-   AC_MSG_CHECKING([whether compiler supports OpenMP])
-   case "$CXX" in
-     clang*) 
-       AC_MSG_RESULT([no])
-       os_openmp=false
-       ;;
-     cl* | *\cl* | */cl*)
-       AC_MSG_RESULT([yes])
-       os_openmp=true
-       ;;
-     g++*)
-        os_openmp=true
-   	fopenmp_version=4.2
-   	gcc_required_version=`echo ${fopenmp_version} | sed -e 's/\./0/g'`
-   	get_gcc_version=`$CXX -dumpversion`
-   	gcc_version=`echo ${get_gcc_version} | sed -e 's/\./0/g'`
-   	major_gcc_version=`echo ${gcc_version:0:3}`
-   	#AC_MSG_RESULT([$get_gcc_version])
-   	if test ${major_gcc_version} -lt ${gcc_required_version}; then
-       	   AC_MSG_RESULT([no])
-           os_openmp=false
-        else
-       	   AC_MSG_RESULT([yes])
-           os_openmp=true
-	fi
+case $host in
+  *-mingw* | *-win*)
+    AC_DEFINE([WIN_],[1],[use if OS is Windows])
+    ;;
+  *-cygwin*)
+    AC_DEFINE([WIN_],[1],[use if OS is Windows])
+    case $CXX in
+      g*)
+        AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and compiler is gnu])
         ;;
-   esac
-fi
-
-AM_CONDITIONAL(OPENMP, [test $os_openmp = true])
+      *)
+        AC_MSG_WARN("DONT HAVE GCC COMPILER WITH GYGWIN")
+        ;;
+    esac
+    AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin])
+    ;;
+  *-darwin*)
+    AC_DEFINE([MACOSX_],[1],[use if OS is MACOSX])
+    ;;
+esac
 
 ###########################################################################
 # check to see if we turn off dtoa
 ###########################################################################
- 	
 
 AC_ARG_ENABLE([nodtoa],
-[AC_HELP_STRING([--enable-nodtoa],
+[AS_HELP_STRING([--enable-nodtoa],
                 [do not use dtoa use the C and C++ for string to decimal and back])],
 [case "${enableval}" in
   yes) nodtoa=true ;;
@@ -262,43 +132,12 @@ if test $nodtoa = false; then
    AC_DEFINE([USE_DTOA],[1],[use to get lossless IO])
 fi
 
-#the above make the below unnecessary
-#AM_CONDITIONAL(USE_DTOA, test x$nodtoa = xfalse)
-
-
-############################################################################
-############################################################################
-#                   Stuff that we need for C++ programs                    #
-############################################################################
-############################################################################
-
 ################
 # Header Files #
 ################
 
-AC_LANG_PUSH(C++)
-
-AC_COIN_CHECK_CXX_CHEADER(math)
-AC_COIN_CHECK_CXX_CHEADER(ctype)
-AC_COIN_CHECK_CXX_CHEADER(assert)
-AC_COIN_CHECK_CXX_CHEADER(stdio)
-AC_COIN_CHECK_CXX_CHEADER(stdlib)
-AC_COIN_CHECK_CXX_CHEADER(stdarg)
-AC_COIN_CHECK_CXX_CHEADER(string)
-AC_COIN_CHECK_CXX_CHEADER(float)
-AC_COIN_CHECK_CXX_CHEADER(time)
-AC_COIN_CHECK_CXX_CHEADER(ieeefp)
-AC_COIN_CHECK_HEADER(stdint.h)
-
-#AC_CHECK_HEADERS([windows.h])
-
-AC_LANG_POP(C++)
-
-###################
-# Function isnan  #
-###################
-
-AC_COIN_CHECK_ISNAN
+AC_CHECK_HEADERS([cassert cctype cfloat cieeefp cmath cstdarg cstdio cstdlib cstring ctime])
+AC_CHECK_HEADERS([assert.h ctype.h float.h ieeefp.h math.h stdarg.h stdint.h stdio.h stdlib.h string.h time.h])
 
 ###################
 # Sockets library #
@@ -310,9 +149,7 @@ AC_COIN_OS_SOCKET_LIBS
 if test x$ac_coin_found_socket_libraries = xno ; then
   AC_MSG_ERROR([Can't build OS without socket libraries!])
 fi
-  
-AM_CONDITIONAL(USEMULTIPLYDEFINED, test x$mac_osx = xyes)
- 
+
 #############################################################################
 #                                 Parser stuff                              #
 #############################################################################
@@ -324,149 +161,83 @@ if test "x$YACC" = xyacc ; then
   AC_CHECK_PROG(YACC, yacc, yacc)
 fi
 
-AC_PROG_LEX
+AC_PROG_LEX([noyywrap])
 # if lex and flex are not found, LEX is set to :
 
 AC_MSG_CHECKING([whether user wants to run flex and bison])
 AC_ARG_WITH([flex-bison],
-[AC_HELP_STRING([--with-flex-bison],
+[AS_HELP_STRING([--with-flex-bison],
                 [use flex and bison])],
 		[os_flex_bison=$withval],[os_flex_bison=no])
 AC_MSG_RESULT([$os_flex_bison])
 
-AM_CONDITIONAL(HAVE_LEXYACC, test -n "`$LEX --version`" && test -n "$YACC" && 
+AM_CONDITIONAL(HAVE_LEXYACC, test -n "`$LEX --version`" && test -n "$YACC" &&
 			     test $os_flex_bison = yes)
-
 
 AC_MSG_CHECKING([whether to use 64-bit integers in XML parser])
 AC_ARG_ENABLE([xml-long-integer],
-[AC_HELP_STRING([--enable-xml-long-integer],
+[AS_HELP_STRING([--enable-xml-long-integer],
                 [use 64 bit integers])],
-		[os_xml_long_integer=$withval],[os_xml_long_integer=no])
+		[os_xml_long_integer=$enableval],[os_xml_long_integer=no])
 AC_MSG_RESULT([$os_xml_long_integer])
 
-#make sure that OS and compilers support 64-bit integers
+# make sure that OS and compilers support 64-bit integers
 if test x$os_xml_long_integer = xyes ; then
-
-# Check for 64-bit integer support again; CoinInt64 is not available,
-# but the code can be reused and modified
   OsXmlInt64=
   OsXmlUInt64=
 
 # try int64_t
-  AC_CHECK_TYPE([int64_t],[OsXmlInt64=int64_t ; OsXmlUInt64=uint64_t],[],[])
+  AC_CHECK_TYPE([int64_t],[OsXmlInt64=int64_t ; OsXmlUInt64=uint64_t],[],[#include <cstdint>])
 
 # try int_least64_t
   if test x"$OsXmlInt64" = x; then
     AC_CHECK_TYPE([int_least64_t],[OsXmlInt64=int_least64_t ; OsXmlUInt64=uint_least64_t],
-      [],[])
+      [],[#include <cstdint>])
   fi
 
-# We need to use the C compiler in the AC_CHECK_SIZEOF since otherwise the
-# MSCV compiler complains about redefinition of "exit". ac_cv_sizeof_<type>
-# sometimes adds `^M' to the number, hence the check for `8?'.
-  AC_LANG_PUSH(C)
 # try long long
   if test x"$OsXmlInt64" = x; then
     AC_CHECK_SIZEOF([long long])
     case $ac_cv_sizeof_long_long in
       8 | 8?) OsXmlInt64="long long"
-    	    OsXmlUInt64="unsigned long long"
-	    ;;
+              OsXmlUInt64="unsigned long long"
+              ;;
     esac
   fi
 
-#try long
+# try long
   if test x"$OsXmlInt64" = x; then
-    AC_CHECK_SIZEOF([long])
     case $ac_cv_sizeof_long in
       8 | 8?) OsXmlInt64="long"
-    	    OsXmlUInt64="unsigned long"
-	    ;;
+              OsXmlUInt64="unsigned long"
+              ;;
     esac
   fi
 
-#try int
+# try int
   if test x"$OsXmlInt64" = x; then
-    AC_CHECK_SIZEOF([int])
     case $ac_cv_sizeof_int in
       8 | 8?) OsXmlInt64="int"
-    	    OsXmlUInt64="unsigned int"
-	    ;;
+              OsXmlUInt64="unsigned int"
+              ;;
     esac
   fi
-  AC_LANG_POP(C)
 
   if test x"$OsXmlInt64" != x; then
     AC_DEFINE(OS_USE_XML_LONG_INTEGER, [1], [use 64 bit integers])
     AC_DEFINE_UNQUOTED([OS_XML_INT64],[$OsXmlInt64],[Define to 64-bit integer type])
     AC_DEFINE_UNQUOTED([OS_XML_UINT64],[$OsXmlUInt64],
-  		   [Define to 64-bit unsigned integer type])
+                       [Define to 64-bit unsigned integer type])
   else
     AC_MSG_ERROR([Can't use 64-bit integers without architecture support!])
   fi
-#else
-#  AC_LANG_PUSH(C)
-#use default type int but make sure to select the right size
-#    AC_CHECK_SIZEOF([int])
-#    case $ac_cv_sizeof_long_long in
-#      8 | 8?) AC_DEFINE(OS_INT_SIZE, [8], [use 64 bit integers])
-#	    ;;
-#      4 | 4?) AC_DEFINE(OS_INT_SIZE, [4], [use 32 bit integers])
-#	    ;;
-#      2 | 2?) AC_DEFINE(OS_INT_SIZE, [2], [use 16 bit integers])
-#	    ;;
-#    esac
-#  AC_LANG_POP(C)
 fi
-
-
-#############################################################################
-# Define the root of the OS project                                         #
-#############################################################################
-
-AC_SUBST(OSROOT_DIR)
-OSROOT_DIR=`pwd`
-AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
-    [Define the path to the OS root])
-
-# The following one is for the example makefiles
-case "$CXX" in
-  clang*) 
-     if test $os_openmp = true; then
-         CXXFLAGS="$CXXFLAGS -fopenmp"
-     fi
-     oslib="-L\$(INSTALLIBDIR) -lOS"
-  ;; 
-  cl* | *\cl* | */cl*)
-     oslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOS.lib'
-     if test $os_openmp = true; then
-         CXXFLAGS="$CXXFLAGS -openmp"
-     fi
-  ;;
-  g++* | *\g++* | */g++*)
-     if test $os_openmp = true; then
-         CXXFLAGS="$CXXFLAGS -fopenmp"
-     fi
-     oslib="-L\$(INSTALLIBDIR) -lOS"
-   ;; 
-esac
-
-AC_SUBST(oslib)
-
-#############################################################################
-#  See if we are disabling shared libs                                      #
-#############################################################################
-
 
 #############################################################################
 #  Create links for VPATH config of certain files                           #
 #############################################################################
 
-##
-## the help file
-##
-#AC_COIN_VPATH_LINK(src/help.txt)
+AC_COIN_CHECK_VPATH
 
 ##
 ## osil test files
@@ -477,7 +248,6 @@ AC_COIN_VPATH_LINK(data/osilFiles/bonminEx1_Nonlinear.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/callBackTest.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/callBackTestRowMajor.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/CppADTestLag.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/finplan1.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/gamstrnsport.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/genAssign.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLP.osil)
@@ -604,7 +374,6 @@ AC_COIN_VPATH_LINK(data/configFiles/kill.config)
 AC_COIN_VPATH_LINK(data/configFiles/testLocal.config)
 AC_COIN_VPATH_LINK(data/configFiles/testLocalMPS.config)
 AC_COIN_VPATH_LINK(data/configFiles/testLocalNL.config)
-AC_COIN_VPATH_LINK(data/configFiles/testbrowser.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocalclp.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocalosol.config)
 AC_COIN_VPATH_LINK(data/configFiles/testmps.config)
@@ -650,8 +419,6 @@ AC_COIN_VPATH_LINK(data/amplFiles/LP_unbounded.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/LP_unbounded.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.nl)
-AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.mod)
-AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.nl)
 
 ##
 ## GAMS test files
@@ -746,39 +513,39 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 
 ##
 
-
 #############################################################################
 #                  Check for doxygen                                        #
 #############################################################################
 
-AC_COIN_DOXYGEN(CoinUtils Osi Clp CyLP Vol Bcp Cgl Cbc Ipopt Bonmin Couenne)
+AC_COIN_DOXYGEN([CoinUtils Osi Clp Cgl Cbc Vol DyLP SYMPHONY Ipopt Bonmin Couenne])
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #
 ##############################################################################
 
+AC_COIN_FINALIZE_FLAGS([OSLib])
+
 # Here list all the files that configure should create (except for the
 # configuration header file)
 AC_CONFIG_FILES([Makefile
-          src/Makefile
-          src/OSAgent/Makefile
-          src/OSUtils/Makefile
-          src/OSCommonInterfaces/Makefile
-          src/OSSolverInterfaces/Makefile
-          src/OSModelInterfaces/Makefile
-          src/OSParsers/Makefile
-          test/Makefile
-          applications/Makefile
-          applications/amplClient/Makefile
-          applications/fileUpload/Makefile
-          applications/columnGen/code/Makefile
-          applications/parsingTest/Makefile
-          os.pc
-	  os-uninstalled.pc
-	  doxydoc/doxygen.conf])
+                 src/Makefile
+                 src/OSAgent/Makefile
+                 src/OSUtils/Makefile
+                 src/OSCommonInterfaces/Makefile
+                 src/OSSolverInterfaces/Makefile
+                 src/OSModelInterfaces/Makefile
+                 src/OSParsers/Makefile
+                 test/Makefile
+                 applications/Makefile
+                 applications/amplClient/Makefile
+                 applications/fileUpload/Makefile
+                 applications/columnGen/code/Makefile
+                 applications/parsingTest/Makefile
+                 os.pc])
+AC_CONFIG_FILES([doxydoc/doxygen.conf])
 
 # Here put the location and name of the configuration header file
-AC_CONFIG_HEADER([src/config.h src/config_os.h])
+AC_CONFIG_HEADERS([src/config.h src/config_os.h])
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE

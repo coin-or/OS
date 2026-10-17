@@ -25,17 +25,7 @@
 #include <limits>
 
 #ifdef OS_XML_INT64
-  #ifdef HAVE_CSTDINT
-        #include <cstdint> 
-  #else
-    #ifdef HAVE_CINTTYPES
-        #include <cinttypes>
-    #else
-      #ifdef HAVE_INTTYPES_H
-        #include <inttypes.h>
-      #endif
-    #endif
-  #endif
+#include <cstdint>
 #endif
 
 

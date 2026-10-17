@@ -68,7 +68,7 @@ using namespace Couenne;
 #include "BonCouenneSetup.hpp"
 
 
-#ifdef COIN_HAS_FILTERSQP
+#ifdef OS_HAS_FILTERSQP
 #include "BonFilterSolver.hpp"
 #endif
 

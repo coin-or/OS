@@ -2,6 +2,15 @@
 /* include the COIN-OR-wide system specific configure header */
 #include "configall_system.h"
 
+/* this needs to come before the include of config_os_default.h */
+#ifndef OSLIB_EXPORT
+#if defined(_WIN32) && defined(DLL_EXPORT)
+#define OSLIB_EXPORT __declspec(dllexport)
+#else
+#define OSLIB_EXPORT
+#endif
+#endif
+
 /* include the public project specific macros */
 #include "config_os_default.h"
 
@@ -11,82 +20,49 @@
 /***************************************************************************/
 
 /* Define to the debug sanity check level (0 is no test) */
-#define COIN_OS_CHECKLEVEL 0
+#define OS_CHECKLEVEL 0
 
 /* Define to the debug verbosity level (0 is no output) */
-#define COIN_OS_VERBOSITY 0
-
-/* Define to 1 if the ASL package is available */
-#undef COIN_HAS_ASL
-
-/* Define to 1 if the Bcp package is available */
-#undef COIN_HAS_BCP
-
-/* Define to 1 if the Bonmin package is available */
-#undef COIN_HAS_BONMIN
+#define OS_VERBOSITY 0
 
 /* Define to 1 if the Cbc package is available */
-#define COIN_HAS_CBC 1
+#define OS_HAS_CBC 1
 
 /* Define to 1 if the Cgl package is used */
-#define COIN_HAS_CGL 1
+#define OS_HAS_CGL 1
 
 /* Define to 1 if the Clp package is used */
-#define COIN_HAS_CLP 1
+#define OS_HAS_CLP 1
 
 /* Define to 1 if the CoinUtils package is used */
-#define COIN_HAS_COINUTILS 1
-
-/* Define to 1 if the Couenne package is available */
-#undef COIN_HAS_COUENNE
-
-/* Define to 1 if the cppad package is available */
-#undef COIN_HAS_CPPAD
+#define OS_HAS_COINUTILS 1
 
 /* Define to 1 if the Cpx package is available */
-#undef COIN_HAS_CPX
+#undef OS_HAS_CPX
 
 /* Define to 1 if the Csdp package is available */
-#undef COIN_HAS_CSDP
-
-/* Define to 1 if the DyLP package is available */
-#undef COIN_HAS_DYLP
-
-/* Define to 1 if the Glpk package is available */
-#undef COIN_HAS_GLPK
+#undef OS_HAS_CSDP
 
 /* Define to 1 if the Grb package is available */
-#undef COIN_HAS_GRB
-
-/* Define to 1 if the Ipopt package is available */
-#undef COIN_HAS_IPOPT
+#undef OS_HAS_GRB
 
 /* Define to 1 if the Knitro package is available */
-#undef COIN_HAS_KNITRO
+#undef OS_HAS_KNITRO
 
 /* Define to 1 if the Lindo package is available */
-#undef COIN_HAS_LINDO
+#undef OS_HAS_LINDO
 
 /* Define to 1 if the Msk package is available */
-#undef COIN_HAS_MSK
+#undef OS_HAS_MSK
 
 /* Define to 1 if the OSI package is used */
-#define COIN_HAS_OSI 1
+#define OS_HAS_OSI 1
 
 /* Define to 1 if the SoPlex package is available */
-#undef COIN_HAS_SOPLEX
-
-/* Define to 1 if the SYMPHONY package is used */
-#define COIN_HAS_SYMPHONY 1
-
-/* Define to 1 if the Vol package is used */
-#define COIN_HAS_VOL 1
+#undef OS_HAS_SOPLEX
 
 /* Define to 1 if the Xpr package is available */
-#undef COIN_HAS_XPR
-
-/* Define to 1 if the CppAD package is used */
-/* #define COIN_HAS_CPPAD 1 */
+#undef OS_HAS_XPR
 
 #ifdef _MSC_VER
 /* Define to be the name of C-function for NaN check */

@@ -28,11 +28,11 @@
 
 
 
-#ifdef COIN_HAS_COUENNE    
+#ifdef OS_HAS_COUENNE    
 #include "OSCouenneSolver.h"
 #endif
 
-#ifdef COIN_HAS_IPOPT    
+#ifdef OS_HAS_IPOPT    
 #include "OSIpoptSolver.h"
 #endif
 

@@ -88,40 +88,40 @@
 #include "OSBase64.h"
 #include "OSRunSolver.h"
 
-#ifdef COIN_HAS_KNITRO
+#ifdef OS_HAS_KNITRO
 #include "OSKnitroSolver.h"
 #endif
 
-#ifdef COIN_HAS_LINDO
+#ifdef OS_HAS_LINDO
 #include "OSLindoSolver.h"
 #endif
 
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
 #include "OSnl2OS.h"
 #endif
 
-#ifdef COIN_HAS_GAMSUTILS
+#ifdef OS_HAS_GAMSUTILS
 #include "OSgams2osil.hpp"
 #endif
 
-#ifdef COIN_HAS_IPOPT
-#ifndef COIN_HAS_ASL
+#ifdef OS_HAS_IPOPT
+#ifndef OS_HAS_ASL
 #include "OSIpoptSolver.h"
-#undef COIN_HAS_ASL
+#undef OS_HAS_ASL
 #else
 #include "OSIpoptSolver.h"
 #endif
 #endif
 
-#ifdef COIN_HAS_BONMIN
+#ifdef OS_HAS_BONMIN
 #include "OSBonminSolver.h"
 #endif
 
-#ifdef COIN_HAS_COUENNE
+#ifdef OS_HAS_COUENNE
 #include "OSCouenneSolver.h"
 #endif
 
-#ifdef COIN_HAS_CSDP
+#ifdef OS_HAS_CSDP
 #include "OSCsdpSolver.h"
 #endif
 
@@ -701,10 +701,10 @@ void solve(OSCommandLine *oscommandline)
     std::string osrl = "";
     OSiLReader *osilreader = NULL;
     OSmps2OS *mps2osil = NULL;
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
     OSnl2OS *nl2os = NULL;
 #endif
-#ifdef COIN_HAS_GAMSUTILS
+#ifdef OS_HAS_GAMSUTILS
     OSgams2osil *gams2osil = NULL;
 #endif
     OSSolverAgent* osagent = NULL;
@@ -776,7 +776,7 @@ void solve(OSCommandLine *oscommandline)
                 //we better have an nl file present or mps file or osol file
                 if (oscommandline->nlFile != "")
                 {
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
                     //nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
                     nl2os = new OSnl2OS();
                     nl2os->readNl(oscommandline->nlFile);
@@ -816,7 +816,7 @@ void solve(OSCommandLine *oscommandline)
                     {
                         if (oscommandline->gamsControlFile != "")
                         {
-#ifdef COIN_HAS_GAMSUTILS
+#ifdef OS_HAS_GAMSUTILS
                             gams2osil = new OSgams2osil( oscommandline->gamsControlFile);
                             gams2osil->createOSInstance();
                             osinstance = gams2osil->osinstance;
@@ -877,7 +877,7 @@ void solve(OSCommandLine *oscommandline)
         if(nl2os != NULL) delete nl2os;
         nl2os = NULL;
 #endif
-#ifdef COIN_HAS_GAMSUTILS
+#ifdef OS_HAS_GAMSUTILS
         if(gams2osil != NULL) delete gams2osil;
         gams2osil = NULL;
 #endif
@@ -927,11 +927,11 @@ void solve(OSCommandLine *oscommandline)
         if (mps2osil != NULL)
             delete mps2osil;
         mps2osil = NULL;
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
         if(nl2os != NULL) delete nl2os;
         nl2os = NULL;
 #endif
-#ifdef COIN_HAS_GAMSUTILS
+#ifdef OS_HAS_GAMSUTILS
         if(gams2osil != NULL) delete gams2osil;
         gams2osil = NULL;
 #endif
@@ -1450,7 +1450,7 @@ void getOSFromNl(OSCommandLine *oscommandline)
 {
     try
     {
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
         OSnl2OS *nl2os = NULL;
         OSiLWriter *osilwriter = NULL;
 
@@ -1483,7 +1483,7 @@ void getOSFromGams(OSCommandLine *oscommandline)
 {
     try
     {
-#ifdef COIN_HAS_GAMSIO
+#ifdef OS_HAS_GAMSIO
         OSgams2osil *gams2osil = NULL;
         gams2osil = new OSgams2osil( oscommandline->gamsControlFile);
         gams2osil->createOSInstance();
@@ -2434,103 +2434,103 @@ std::string get_solverlist()
     std::string header = "This OSSolverService is configured with the following solvers:";
     bool writeheader = true;
 
-#ifdef COIN_HAS_CLP
+#ifdef OS_HAS_CLP
         if (writeheader) temp << header << std::endl;
         temp << "    Clp" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_CBC
+#ifdef OS_HAS_CBC
         if (writeheader) temp << header << std::endl;
         temp << "    Cbc" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_DYLP
+#ifdef OS_HAS_DYLP
         if (writeheader) temp << header << std::endl;
         temp << "    DyLP" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_SYMPHONY
+#ifdef OS_HAS_SYMPHONY
         if (writeheader) temp << header << std::endl;
         temp << "    SYMPHONY" << std::endl;
         writeheader = false;
 #endif
  
-#ifdef COIN_HAS_VOL
+#ifdef OS_HAS_VOL
         if (writeheader) temp << header << std::endl;
         temp << "    Vol" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_IPOPT
+#ifdef OS_HAS_IPOPT
         if (writeheader) temp << header << std::endl;
         temp << "    Ipopt" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_BONMIN
+#ifdef OS_HAS_BONMIN
         if (writeheader) temp << header << std::endl;
         temp << "    Bonmin" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_COUENNE
+#ifdef OS_HAS_COUENNE
         if (writeheader) temp << header << std::endl;
         temp << "    Couenne" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_GLPK
+#ifdef OS_HAS_GLPK
         if (writeheader) temp << header << std::endl;
         temp << "    GLPK" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_CSDP
+#ifdef OS_HAS_CSDP
         if (writeheader) temp << header << std::endl;
         temp << "    CSDP" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_CPX
+#ifdef OS_HAS_CPX
         if (writeheader) temp << header << std::endl;
         temp << "    CPLEX" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_GRB
+#ifdef OS_HAS_GRB
         if (writeheader) temp << header << std::endl;
         temp << "    Gurobi" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_KNITRO
+#ifdef OS_HAS_KNITRO
         if (writeheader) temp << header << std::endl;
         temp << "    Knitro" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_LINDO
+#ifdef OS_HAS_LINDO
         if (writeheader) temp << header << std::endl;
         temp << "    Lindo" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_MSK
+#ifdef OS_HAS_MSK
         if (writeheader) temp << header << std::endl;
         temp << "    Mosek" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_SOPLEX
+#ifdef OS_HAS_SOPLEX
         if (writeheader) temp << header << std::endl;
         temp << "    SoPlex" << std::endl;
         writeheader = false;
 #endif
 
-#ifdef COIN_HAS_XPR
+#ifdef OS_HAS_XPR
         if (writeheader) temp << header << std::endl;
         temp << "    XPRESS" << std::endl;
         writeheader = false;
@@ -2612,7 +2612,7 @@ void doPrintModel(OSCommandLine *oscommandline)
         }
         else if (oscommandline->nlFile != "")
         {
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
             OSnl2OS *nl2os;    
 //            nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
             nl2os = new OSnl2OS();
@@ -2685,7 +2685,7 @@ void doPrintRow(OSCommandLine *oscommandline)
             }
             else if (oscommandline->nlFile != "")
             {
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
                 OSnl2OS *nl2os;    
 //                nl2os = new OSnl2OS(oscommandline->nlFile, oscommandline->osol);
                 nl2os = new OSnl2OS();
@@ -2765,7 +2765,7 @@ void doWriteOSiLFile(OSCommandLine *oscommandline)
         }
         else if (oscommandline->nlFile != "")
         {
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
             OSnl2OS *nl2os;
             OSiLWriter *osilwriter = new OSiLWriter();
 //            nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
@@ -2832,7 +2832,7 @@ void doWriteOSoLFile(OSCommandLine *oscommandline)
         }
         else if (oscommandline->nlFile != "")
         {
-#ifdef COIN_HAS_ASL
+#ifdef OS_HAS_ASL
             OSnl2OS *nl2os;
 //            nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
             nl2os = new OSnl2OS();
