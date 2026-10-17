@@ -17,6 +17,8 @@
 #ifndef OSHL_H
 #define OSHL_H
 
+#include "OSConfig.h"
+
 #include <string>
 
 
@@ -29,7 +31,7 @@
  *
  *
  */
-class OShL
+class OSLIB_EXPORT OShL
 {
 public:
 

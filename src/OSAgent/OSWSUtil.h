@@ -17,6 +17,8 @@
 #ifndef WSUTIL_H
 #define WSUTIL_H
 
+#include "OSConfig.h"
+
 #include <iostream>
 
 
@@ -39,7 +41,7 @@
  *
  *
  */
-class WSUtil
+class OSLIB_EXPORT WSUtil
 {
 
 public:

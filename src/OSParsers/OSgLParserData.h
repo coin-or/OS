@@ -14,6 +14,8 @@
 #ifndef OSGLPARSERDATA_H
 #define OSGLPARSERDATA_H
 
+#include "OSConfig.h"
+
 #include "OSGeneral.h"
 #include "OSMatrix.h"
 
@@ -30,7 +32,7 @@
  * hold data found in parsing the OSgL data structures.
  * we do this so we can write reusable code.
  */
-class OSgLParserData
+class OSLIB_EXPORT OSgLParserData
 {
 public:
 

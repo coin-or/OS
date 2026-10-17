@@ -14,6 +14,8 @@
 #ifndef OSILPARSERDATA_H
 #define OSILPARSERDATA_H
 
+#include "OSConfig.h"
+
 #include "OSnLNode.h"
 #include <vector>
 
@@ -31,7 +33,7 @@
  * have to store the linear part because we do not use flex/bison
  * to parse the linear part of the problem.
  */
-class OSiLParserData
+class OSLIB_EXPORT OSiLParserData
 {
 public:
     /** the OSiLParserData class constructor */

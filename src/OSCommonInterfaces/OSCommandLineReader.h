@@ -15,6 +15,8 @@
 #ifndef _OSCOMMANDLINEREADER_H
 #define _OSCOMMANDLINEREADER_H
 
+#include "OSConfig.h"
+
 #include "OSCommandLine.h"
 #include "OSErrorClass.h"
 #include <string>
@@ -31,7 +33,7 @@
  * This method can be used in OSSolverService, OSAmplClient, 
  * as well as the interactive shell 
  */
-class OSCommandLineReader
+class OSLIB_EXPORT OSCommandLineReader
 {
 public:
     /**

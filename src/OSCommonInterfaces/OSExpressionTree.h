@@ -15,6 +15,8 @@
 #ifndef EXPRESSIONTREE_H
 #define EXPRESSIONTREE_H
 
+#include "OSConfig.h"
+
 #include "OSnLNode.h"
 #include <vector>
 #include <map>
@@ -36,7 +38,7 @@ class OSnLMNode;
  * from this class. 
  */
 
-class OSExpressionTree
+class OSLIB_EXPORT OSExpressionTree
 {
 public:
 
@@ -101,7 +103,7 @@ public:
  * This class stores the OSiL instance in memory as
  * an expression tree.
  */
-class RealValuedExpressionTree : public OSExpressionTree
+class OSLIB_EXPORT RealValuedExpressionTree : public OSExpressionTree
 {
 public:
     /**
@@ -181,7 +183,7 @@ private:
  * This class stores the OSiL instance in memory as
  * an expression tree.
  */
-class ComplexValuedExpressionTree : public OSExpressionTree
+class OSLIB_EXPORT ComplexValuedExpressionTree : public OSExpressionTree
 {
 public:
 
@@ -257,7 +259,7 @@ private:
  *
  */
 
-class MatrixExpressionTree : public OSExpressionTree
+class OSLIB_EXPORT MatrixExpressionTree : public OSExpressionTree
 {
 public:
     /**
@@ -331,7 +333,7 @@ private:
  * A utility method to convert an expression tree into its ASCII representation in infix notation.
  * This is useful in printModel (OSInstance) as well as matrix handling (OSMatrix).
  */
-std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec);
+OSLIB_EXPORT std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec);
 
 #endif
 

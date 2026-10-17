@@ -17,6 +17,8 @@
 #ifndef OSOLREADER_H
 #define OSOLREADER_H
 
+#include "OSConfig.h"
+
 #include <string>
 
 #include "OSErrorClass.h"
@@ -34,7 +36,7 @@
  * the parser an OSoL string and is returned an OSOption
  * object. </p>
  */
-class OSoLReader
+class OSLIB_EXPORT OSoLReader
 {
 
 public:

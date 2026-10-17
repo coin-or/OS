@@ -67,7 +67,7 @@ class OSMatrixWithMatrixConIdx;
  * \brief a data structure that holds general information about files
  * that conform to one of the OSxL schemas
  */
-class GeneralFileHeader
+class OSLIB_EXPORT GeneralFileHeader
 {
 public:
 
@@ -153,7 +153,7 @@ public:
 /*! \class SparseVector
  * \brief a sparse vector data structure
  */
-class SparseVector
+class OSLIB_EXPORT SparseVector
 {
 public:
 
@@ -202,7 +202,7 @@ public:
 /*! \class SparseIntVector
  * \brief a sparse vector data structure for integer vectors
  */
-class SparseIntVector
+class OSLIB_EXPORT SparseIntVector
 {
 public:
 
@@ -254,7 +254,7 @@ public:
 /*! \class SparseMatrix
  * \brief a sparse matrix data structure
  */
-class SparseMatrix
+class OSLIB_EXPORT SparseMatrix
 {
 public:
     /**
@@ -331,7 +331,7 @@ public:
 /*! \class SparseJacobianMatrix
  * \brief a sparse Jacobian matrix data structure
  */
-class SparseJacobianMatrix
+class OSLIB_EXPORT SparseJacobianMatrix
 {
 public:
 
@@ -407,7 +407,7 @@ public:
  *
  *
  */
-class SparseHessianMatrix
+class OSLIB_EXPORT SparseHessianMatrix
 {
 public:
 
@@ -462,7 +462,7 @@ public:
 /*! \class QuadraticTerms
  * \brief a data structure for holding quadratic terms
  */
-class QuadraticTerms
+class OSLIB_EXPORT QuadraticTerms
 {
 
 public:
@@ -500,7 +500,7 @@ public:
 /*! \class IntVector
  * \brief an integer Vector data structure
  */
-class IntVector
+class OSLIB_EXPORT IntVector
 {
 public:
     IntVector();
@@ -578,7 +578,7 @@ public:
 /*! \class DoubleVector
  * \brief a double vector data structure
  */
-class DoubleVector
+class OSLIB_EXPORT DoubleVector
 {
 public:
     DoubleVector();
@@ -599,7 +599,7 @@ public:
 /*! \struct IndexValuePair
  *  \brief A commonly used structure holding an index-value pair
  */
-struct IndexValuePair
+struct OSLIB_EXPORT IndexValuePair
 {
     /** idx holds the index of an entity (such as a variable, constraint, objective)
      *  that is part of a sparse vector
@@ -614,7 +614,7 @@ struct IndexValuePair
  * \brief a data structure to represent an LP basis on both input and output
  *
  */
-class BasisStatus
+class OSLIB_EXPORT BasisStatus
 {
 public:
     IntVector* basic;
@@ -723,7 +723,7 @@ public:
  * the OSgL schema.
 
  */
-class StorageCapacity
+class OSLIB_EXPORT StorageCapacity
 {
 
 public:
@@ -781,7 +781,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSgL schema.
  */
-class CPUSpeed
+class OSLIB_EXPORT CPUSpeed
 {
 
 public:
@@ -840,7 +840,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSgL schema.
  */
-class CPUNumber
+class OSLIB_EXPORT CPUNumber
 {
 
 public:
@@ -893,7 +893,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSgL schema.
  */
-class TimeSpan
+class OSLIB_EXPORT TimeSpan
 {
 public:
     /** the unit in which time is measured */
@@ -940,7 +940,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrices></b> element.
  */
-class Matrices
+class OSLIB_EXPORT Matrices
 {
 public:
 
@@ -994,7 +994,7 @@ public:
  * \remarks
  * A class that implements an xml schema element
  */
-class OtherOptionOrResultElementString
+class OSLIB_EXPORT OtherOptionOrResultElementString
 {
 public:
     /** the index of the variable or constraint associated with this option or result */
@@ -1067,7 +1067,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherObjOptionOrResultElementString
+class OSLIB_EXPORT OtherObjOptionOrResultElementString
 {
 
 public:
@@ -1135,7 +1135,7 @@ public:
  *
  *  This class extends IntVector by adding two string-valued elements, value and description
  */
-class OtherOptionOrResultEnumeration : public IntVector
+class OSLIB_EXPORT OtherOptionOrResultEnumeration : public IntVector
 {
 public:
     std::string value;
@@ -1200,7 +1200,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherVariableOptionOrResult
+class OSLIB_EXPORT OtherVariableOptionOrResult
 {
 
 public:
@@ -1307,7 +1307,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherObjOptionOrResult
+class OSLIB_EXPORT OtherObjOptionOrResult
 {
 
 public:
@@ -1369,7 +1369,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherObjectiveOptionOrResult
+class OSLIB_EXPORT OtherObjectiveOptionOrResult
 {
 public:
     /** name of the option */
@@ -1476,7 +1476,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherConOptionOrResult
+class OSLIB_EXPORT OtherConOptionOrResult
 {
 
 public:
@@ -1538,7 +1538,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherConstraintOptionOrResult
+class OSLIB_EXPORT OtherConstraintOptionOrResult
 {
 
 public:
@@ -1646,7 +1646,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherSOSOptionOrResult
+class OSLIB_EXPORT OtherSOSOptionOrResult
 {
 public:
     /** the index of the special ordered set to which this option pertains */
@@ -1748,7 +1748,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherSpecialOrderedSetsOptionOrResult
+class OSLIB_EXPORT OtherSpecialOrderedSetsOptionOrResult
 {
 
 public:
@@ -1842,7 +1842,7 @@ public:
 /*! \class OtherMatrixVariableOptionOrResult
  *  brief a data structure used in OSOption and OSResult
  */
-class OtherMatrixVariableOptionOrResult
+class OSLIB_EXPORT OtherMatrixVariableOptionOrResult
 {
 public:
     /** name of the option */
@@ -1932,7 +1932,7 @@ public:
 /*! \class OtherMatrixObjectiveOptionOrResult
  *  brief a data structure used in OSOption and OSResult
  */
-class OtherMatrixObjectiveOptionOrResult : public IntVector
+class OSLIB_EXPORT OtherMatrixObjectiveOptionOrResult : public IntVector
 {
 public:
     /** name of the option */
@@ -2022,7 +2022,7 @@ public:
 /*! \class OtherMatrixConstraintOptionOrResult
  *  brief a data structure used in OSOption and OSResult
  */
-class OtherMatrixConstraintOptionOrResult : public IntVector
+class OSLIB_EXPORT OtherMatrixConstraintOptionOrResult : public IntVector
 {
 public:
     /** name of the option */
@@ -2120,7 +2120,7 @@ public:
  * \remarks
  * A class that implements an xml schema element
  */
-class OtherOptionOrResult
+class OSLIB_EXPORT OtherOptionOrResult
 {
 public:
     /** the name of the option or result the user is defining */
@@ -2179,7 +2179,7 @@ public:
  * A class that allows arbitrary input or output communication with the solver
  * concerning an option or result associated with the solution.
  */
-class SolverOptionOrResult
+class OSLIB_EXPORT SolverOptionOrResult
 {
 public:
     /** the name of the option or result the user is defining */
@@ -2249,7 +2249,7 @@ public:
     bool deepCopyFrom(SolverOptionOrResult *that);
 };//SolverOptionOrResult
 
-class OSGeneral
+class OSLIB_EXPORT OSGeneral
 {
 
 };

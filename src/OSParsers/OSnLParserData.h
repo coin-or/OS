@@ -14,6 +14,8 @@
 #ifndef OSNLPARSERDATA_H
 #define OSNLPARSERDATA_H
 
+#include "OSConfig.h"
+
 #include "OSnLNode.h"
 #include <vector>
 
@@ -26,7 +28,7 @@
  * hold data found in parsing the OSnL schema elements.
  * We do this so we can have a reentrant parser.
  */
-class OSnLParserData
+class OSLIB_EXPORT OSnLParserData
 {
 public:
 

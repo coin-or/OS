@@ -12,13 +12,15 @@
 #ifndef OSREFERENCED_HPP
 #define OSREFERENCED_HPP
 
+#include "OSConfig.h"
+
 #include <list>
 #include <assert.h>
 
   /** Pseudo-class, from which everything has to inherit that wants to
    *  use be registered as a Referencer for a ReferencedObject.
    */
-  class OSReferencer
+  class OSLIB_EXPORT OSReferencer
     {}
   ;
 
@@ -157,7 +159,7 @@
    * technique where the reference count is stored in the object being
    * referenced. 
    */
-  class OSReferencedObject
+  class OSLIB_EXPORT OSReferencedObject
   {
   public:
     OSReferencedObject()

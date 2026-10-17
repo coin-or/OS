@@ -16,6 +16,8 @@
 #ifndef OSRL2AMPL_H
 #define OSRL2AMPL_H
 
+#include "OSConfig.h"
+
 
 
 #include "OSResult.h"
@@ -41,7 +43,7 @@ struct ASL;
 struct expr;
 
 
-class OSosrl2ampl
+class OSLIB_EXPORT OSosrl2ampl
 {
 public:
     /** the OSosrl2ampl class constructor */

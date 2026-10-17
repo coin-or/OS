@@ -17,6 +17,8 @@
 #ifndef OSoLWRITER_H
 #define OSoLWRITER_H
 
+#include "OSConfig.h"
+
 #include "OSOption.h"
 #include <string>
 
@@ -26,7 +28,7 @@
  *
  *
  */
-class OSoLWriter
+class OSLIB_EXPORT OSoLWriter
 {
 private:
     /**

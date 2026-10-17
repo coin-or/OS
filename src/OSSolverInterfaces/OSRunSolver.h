@@ -15,6 +15,8 @@
 #ifndef OSRUNSOLVER_H
 #define OSRUNSOLVER_H
 
+#include "OSConfig.h"
+
 #include "OSDefaultSolver.h"
 
 /**
@@ -29,7 +31,7 @@
  *  @param osinstance: A pointer to an OSInstance object containing the instance to be optimized
  *  @return the solution (or error message) in OSrL format
  */
-std::string runSolver(std::string solverName, 
+OSLIB_EXPORT std::string runSolver(std::string solverName, 
                       std::string osol, OSInstance *osinstance);
 
 /**
@@ -40,7 +42,7 @@ std::string runSolver(std::string solverName,
  *  @param osil: A string containing the instance to be optimized
  *  @return the solution (or error message) in OSrL format
  */
-std::string runSolver(std::string solverName, 
+OSLIB_EXPORT std::string runSolver(std::string solverName, 
                       OSOption *osoption, std::string osil);
 
 /**
@@ -51,7 +53,7 @@ std::string runSolver(std::string solverName,
  *  @param osil: A string containing the instance to be optimized
  *  @return the solution (or error message) in OSrL format
  */
-std::string runSolver(std::string solverName, 
+OSLIB_EXPORT std::string runSolver(std::string solverName, 
                       std::string osol, std::string osil);
 
 /**
@@ -62,7 +64,7 @@ std::string runSolver(std::string solverName,
  *  @param osinstance: A pointer to an OSInstance object containing the instance to be optimized
  *  @return the solution (or error message) in OSrL format
  */
-std::string runSolver(std::string solverName, 
+OSLIB_EXPORT std::string runSolver(std::string solverName, 
                       OSOption *osoption, OSInstance *osinstance);
 
 /**
@@ -72,6 +74,6 @@ std::string runSolver(std::string solverName,
  *  @param osinstance: A pointer to an OSInstance object containing the instance to be optimized
  *  @return a pointer to the selected solver or NULL if no such solver exists on the system
  */
-DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance);
+OSLIB_EXPORT DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance);
 
 #endif

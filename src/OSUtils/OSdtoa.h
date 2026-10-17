@@ -27,9 +27,9 @@
 extern "C" {
 #endif
 
-    double os_strtod(const char *str, char **strEnd );
-    char *os_dtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve);
-    void os_freedtoa(char *s);
+    OSLIB_EXPORT double os_strtod(const char *str, char **strEnd );
+    OSLIB_EXPORT char *os_dtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve);
+    OSLIB_EXPORT void os_freedtoa(char *s);
 
 #ifdef __cplusplus
 }

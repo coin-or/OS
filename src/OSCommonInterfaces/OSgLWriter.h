@@ -18,6 +18,8 @@
 #ifndef OSgLWRITER_H
 #define OSgLWRITER_H
 
+#include "OSConfig.h"
+
 #include "OSGeneral.h"
 #include "OSiLWriter.h"
 #include "OSInstance.h"
@@ -37,7 +39,7 @@
  * @param writeBase64 controls whether the IntVector is to be output in base64 format
  *        or as a sequence of <el> (including mult and incr attributes)
  */
-std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase64);
+OSLIB_EXPORT std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase64);
 
 
 /*! \brief Take a GeneralFileHeader object and write
@@ -46,7 +48,7 @@ std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase6
  * @param v is the header to be output
  * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
  */
-std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace);
+OSLIB_EXPORT std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace);
 
 /*! \brief Take an OtherOptionOrResultEnumeration object and write
  * a string that validates against the OSgL schema.
@@ -56,7 +58,7 @@ std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace);
  * @param writeBase64 controls whether the embedded integer array is to be output in base64 format
  *        or as a sequence of <el> (including mult and incr attributes)
  */
-std::string writeOtherOptionOrResultEnumeration(OtherOptionOrResultEnumeration *e, bool addWhiteSpace, bool writeBase64);
+OSLIB_EXPORT std::string writeOtherOptionOrResultEnumeration(OtherOptionOrResultEnumeration *e, bool addWhiteSpace, bool writeBase64);
 
 
 /*! \brief Take a DoubleVector object and write
@@ -67,7 +69,7 @@ std::string writeOtherOptionOrResultEnumeration(OtherOptionOrResultEnumeration *
  * @param writeBase64 controls whether the IntVector is to be output in base64 format
  *        or as a sequence of <el> (including mult and incr attributes)
  */
-std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBase64);
+OSLIB_EXPORT std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBase64);
 
 
 /*! \brief Take a BasisStatus object and write
@@ -78,6 +80,6 @@ std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBa
  * @param writeBase64 controls whether the IntVectors contained in the enumerations are to be output in base64 format
  *        or as a sequence of <el> (including mult and incr attributes)
  */
-std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase64);
+OSLIB_EXPORT std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase64);
 
 #endif

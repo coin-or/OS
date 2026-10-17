@@ -83,7 +83,7 @@ class ExpandedMatrixBlocks;
  *              OSMatrixWithObjIdx
  *              OSMatrixWithConIdx
  */
-class MatrixNode
+class OSLIB_EXPORT MatrixNode
 {
 public:
     /**
@@ -264,7 +264,7 @@ public:
  *  6 - OSMatrix
  *  Most of the logic of this representation is derived from the OSnLNode class.
  */
-class MatrixConstructor : public MatrixNode
+class OSLIB_EXPORT MatrixConstructor : public MatrixNode
 {
 public:
     /** constructor */
@@ -311,7 +311,7 @@ public:
  *     ConReferenceMatrixElements (elements of the form c_i - return values associated with i'th constraint)
  *     StringValuedMatrixElements (elements can be general or symbolic strings)
  */
-class MatrixElements: public MatrixConstructor
+class OSLIB_EXPORT MatrixElements: public MatrixConstructor
 {
 public:
     /**
@@ -391,7 +391,7 @@ public:
  * From this we derive concrete classes that are used to store specific types of values,
  * such as constant values, variable references, general nonlinear expressions, etc.
  */
-class MatrixElementValues
+class OSLIB_EXPORT MatrixElementValues
 {
 public:
     /** each type of value is stored as an array named "el". 
@@ -443,7 +443,7 @@ public:
  *  A term has the form c*x_{k}, where c defaults to 1 and k is a valid index for a variable
  *  This is essentially an index-value pair, but with the presence of a default value
  */
-class LinearMatrixElementTerm
+class OSLIB_EXPORT LinearMatrixElementTerm
 {
 public:
     int idx;
@@ -481,7 +481,7 @@ public:
  *  with an optional additive constant
  * @param numberOfVarIdx gives the number of terms in the expression
  */
-class LinearMatrixElement
+class OSLIB_EXPORT LinearMatrixElement
 {
 public:
     int numberOfVarIdx;
@@ -523,7 +523,7 @@ public:
  *  A MixedRowReferenceMatrix is obtained by combining ObjReferenceMatrix elements
  *  and ConReferenceMatrix elements into a single matrix constructor.
  */
-class ConReferenceMatrixElement
+class OSLIB_EXPORT ConReferenceMatrixElement
 {
 public:
     /** 
@@ -572,7 +572,7 @@ public:
  *  \brief a data structure to represent an entry in a complexMatrix element,
  *  which consists of a real and an imaginary part.
  */
-class ComplexMatrixElement
+class OSLIB_EXPORT ComplexMatrixElement
 {
 public:
     /** 
@@ -615,7 +615,7 @@ public:
 /*! \class ConstantMatrixValues
  *  \brief to represent the nonzeros in a constantMatrix element
  */
-class ConstantMatrixValues : public MatrixElementValues
+class OSLIB_EXPORT ConstantMatrixValues : public MatrixElementValues
 {
 public:
     double *el;
@@ -676,7 +676,7 @@ public:
 /*! \class ComplexMatrixValues
  *  \brief to represent the nonzeros in a complexConstantMatrix element
  */
-class ComplexMatrixValues : public MatrixElementValues
+class OSLIB_EXPORT ComplexMatrixValues : public MatrixElementValues
 {
 public:
     std::complex<double> *el;
@@ -738,7 +738,7 @@ public:
  * \brief A concrete class that is used to store a specific type of matrix values,
  * references to variable indexes defined in the core section.
  */
-class VarReferenceMatrixValues : public MatrixElementValues
+class OSLIB_EXPORT VarReferenceMatrixValues : public MatrixElementValues
 {
 public:
     /**
@@ -777,7 +777,7 @@ public:
 /*! \class LinearMatrixValues
  * \brief a data structure to represent the linear expressions in a LinearMatrixElement object
  */
-class LinearMatrixValues : public MatrixElementValues
+class OSLIB_EXPORT LinearMatrixValues : public MatrixElementValues
 {
 public:
     LinearMatrixElement **el;     
@@ -814,7 +814,7 @@ public:
 /*! \class RealValuedExpressionArray
  * \brief a data structure to represent the nonzeros in a matrix of real-valued expressions
  */
-class RealValuedExpressionArray : public MatrixElementValues
+class OSLIB_EXPORT RealValuedExpressionArray : public MatrixElementValues
 {
 public:
     RealValuedExpressionTree **el;
@@ -850,7 +850,7 @@ public:
 /*! \class ComplexValuedExpressionArray
  * \brief a data structure to represent nonzero expressions in an OSMatrix element
  */
-class ComplexValuedExpressionArray : public MatrixElementValues
+class OSLIB_EXPORT ComplexValuedExpressionArray : public MatrixElementValues
 {
 public:
     ComplexValuedExpressionTree **el;
@@ -886,7 +886,7 @@ public:
 /*! \class ObjReferenceMatrixValues
  *  \brief to represent the nonzeros in an objReferenceMatrix element
  */
-class ObjReferenceMatrixValues : public MatrixElementValues
+class OSLIB_EXPORT ObjReferenceMatrixValues : public MatrixElementValues
 {
 public:
     int *el;
@@ -922,7 +922,7 @@ public:
 /*! \class ConReferenceMatrixValues
  *  \brief a data structure to represent the nonzeros in a conReferenceMatrix element
  */
-class ConReferenceMatrixValues : public MatrixElementValues
+class OSLIB_EXPORT ConReferenceMatrixValues : public MatrixElementValues
 {
 public:
     /** 
@@ -960,7 +960,7 @@ public:
 /*! \class StringValuedMatrixValues
  *  \brief to represent the nonzeros in a stringValuedMatrix element
  */
-class StringValuedMatrixValues : public MatrixElementValues
+class OSLIB_EXPORT StringValuedMatrixValues : public MatrixElementValues
 {
 public:
     std::string *el;
@@ -1021,7 +1021,7 @@ public:
 /*! \class ConstantMatrixElements
  * \brief a data structure to represent the constant elements in a MatrixType object
  */
-class ConstantMatrixElements: public MatrixElements
+class OSLIB_EXPORT ConstantMatrixElements: public MatrixElements
 {
 public:
     /** The value array of the (nonzero) constant elements */
@@ -1106,7 +1106,7 @@ public:
 /*! \class ComplexMatrixElements
  * \brief a data structure to represent the complex-valued constant elements in a MatrixType object
  */
-class ComplexMatrixElements: public MatrixElements
+class OSLIB_EXPORT ComplexMatrixElements: public MatrixElements
 {
 public:
     /** The value array of the (nonzero) complex elements */
@@ -1192,7 +1192,7 @@ public:
  * \brief a data structure to represent variable reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of a variable
  */
-class VarReferenceMatrixElements: public MatrixElements
+class OSLIB_EXPORT VarReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The variable references (indexes of core variables) of the elements */
@@ -1274,7 +1274,7 @@ public:
 /*! \class LinearMatrixElements
  * \brief a data structure to represent the nonzero values in a linearMatrix element
  */
-class LinearMatrixElements: public MatrixElements
+class OSLIB_EXPORT LinearMatrixElements: public MatrixElements
 {
 public:
     /**
@@ -1371,7 +1371,7 @@ public:
 /*! \class RealValuedExpressions
  * \brief a data structure to represent the nonzero values in a matrix of real-valued expressions
  */
-class RealValuedExpressions: public MatrixElements
+class OSLIB_EXPORT RealValuedExpressions: public MatrixElements
 {
 public:
     /**
@@ -1456,7 +1456,7 @@ public:
 /*! \class ComplexValuedExpressions
  * \brief a data structure to represent nonzero values in the form of complex-valued expression trees
  */
-class ComplexValuedExpressions: public MatrixElements
+class OSLIB_EXPORT ComplexValuedExpressions: public MatrixElements
 {
 public:
     /**
@@ -1542,7 +1542,7 @@ public:
  * \brief a data structure to represent objective reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of an objective (i.e., less than zero)
  */
-class ObjReferenceMatrixElements: public MatrixElements
+class OSLIB_EXPORT ObjReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The objective references (indexes of core objectives) of the elements */
@@ -1628,7 +1628,7 @@ public:
  * \brief a data structure to represent row reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of a constraint
  */
-class ConReferenceMatrixElements: public MatrixElements
+class OSLIB_EXPORT ConReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The constraint references (indexes of core constraints and value types) of the elements */
@@ -1723,7 +1723,7 @@ public:
  *  Each nonzero element references a row (if index is negative) or constraint (otherwise)
  *  This class allows the combining of row and constraint references in a single matrix constructor.
  */
-class MixedRowReferenceMatrixElements: public MatrixElements
+class OSLIB_EXPORT MixedRowReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The row references (indexes of core rows plus value type) of the elements.
@@ -1816,7 +1816,7 @@ public:
 /*! \class StringValuedMatrixElements
  * \brief a data structure to represent the string-valued elements in a MatrixType object
  */
-class StringValuedMatrixElements: public MatrixElements
+class OSLIB_EXPORT StringValuedMatrixElements: public MatrixElements
 {
 public:
     /** The value array of the (nonzero) constant elements */
@@ -1918,7 +1918,7 @@ public:
  * \brief a data structure to represent the nonzeroes of a matrix 
  *  by transformation from other (previously defined) matrices 
  */
-class MatrixTransformation : public MatrixConstructor
+class OSLIB_EXPORT MatrixTransformation : public MatrixConstructor
 {
 public:
     /**
@@ -2020,7 +2020,7 @@ public:
  *  in a blockwise fashion. Each block can be given elementwise, 
  *  through transformation, or by nested blocks, and so on, recursively.
  */
-class MatrixBlocks : public MatrixConstructor
+class OSLIB_EXPORT MatrixBlocks : public MatrixConstructor
 {
 public:
     /**
@@ -2119,7 +2119,7 @@ public:
  * \brief a data structure to represent a point of departure for
  *  constructing a matrix by modifying parts of a previously defined matrix 
  */
-class BaseMatrix : public MatrixConstructor
+class OSLIB_EXPORT BaseMatrix : public MatrixConstructor
 {
 public:
     /**
@@ -2250,7 +2250,7 @@ public:
 /*! \class GeneralSparseMatrix
  * \brief a sparse matrix data structure for matrices that can hold nonconstant values
  */
-class GeneralSparseMatrix
+class OSLIB_EXPORT GeneralSparseMatrix
 {
 public:
     /**
@@ -2503,7 +2503,7 @@ public:
  *  In addition it is assumed that all nesting of blocks
  *  has been resolved.
  */
-class ExpandedMatrixBlocks
+class OSLIB_EXPORT ExpandedMatrixBlocks
 {
 public:
     /**
@@ -2620,7 +2620,7 @@ public:
  * \brief a data structure to represent a MatrixType object (from which we derive OSMatrix and MatrixBlock)
  *
  */
-class MatrixType : public MatrixNode
+class OSLIB_EXPORT MatrixType : public MatrixNode
 {
 public:
     /**
@@ -3136,7 +3136,7 @@ public:
  * \brief a data structure to represent a matrix object (derived from MatrixType)
  *
  */
-class OSMatrix : public MatrixType
+class OSLIB_EXPORT OSMatrix : public MatrixType
 {
 public:
     int idx;
@@ -3299,7 +3299,7 @@ public:
  * \brief this class extends OSMatrix for use, e.g., in the matrixVar section of OSoL and OSrL
  *
  */
-class OSMatrixWithMatrixVarIdx : public OSMatrix
+class OSLIB_EXPORT OSMatrixWithMatrixVarIdx : public OSMatrix
 {
 public:
     int matrixVarIdx;
@@ -3354,7 +3354,7 @@ public:
  * \brief this class extends OSMatrix for use, e.g., in the matrixObj section of OSoL and OSrL
  *
  */
-class OSMatrixWithMatrixObjIdx : public OSMatrix
+class OSLIB_EXPORT OSMatrixWithMatrixObjIdx : public OSMatrix
 {
 public:
     int matrixObjIdx;
@@ -3408,7 +3408,7 @@ public:
  * \brief this class extends OSMatrix for use, e.g., in the matrixCon section of OSoL and OSrL
  *
  */
-class OSMatrixWithMatrixConIdx : public OSMatrix
+class OSLIB_EXPORT OSMatrixWithMatrixConIdx : public OSMatrix
 {
 public:
     int matrixConIdx;
@@ -3465,7 +3465,7 @@ public:
  * to bring the treatment of matrices and matrix variables in OSoL and OSrL in line with OSiL
  *
  */
-class MatrixVarValueReference 
+class OSLIB_EXPORT MatrixVarValueReference 
 {
 public:
     /**     
@@ -3541,7 +3541,7 @@ public:
  * to bring the treatment of matrices and matrix variables in OSoL and OSrL in line with OSiL
  *
  */
-class MatrixObjValueReference 
+class OSLIB_EXPORT MatrixObjValueReference 
 {
 public:
     /**     
@@ -3616,7 +3616,7 @@ public:
  * to bring the treatment of matrices and matrix variables in OSoL and OSrL in line with OSiL
  *
  */
-class MatrixConValueReference 
+class OSLIB_EXPORT MatrixConValueReference 
 {
 public:
     /**     
@@ -3691,7 +3691,7 @@ public:
  * \brief a data structure to represent a MatrixBlock object (derived from MatrixType)
  *
  */
-class MatrixBlock : public MatrixType
+class OSLIB_EXPORT MatrixBlock : public MatrixType
 {
 public:
     int blockRowIdx;
@@ -3797,27 +3797,27 @@ public:
 /**
  *  Some methods to convert one type of matrix element into another
  */
-LinearMatrixElement* convertToLinearMatrixElement(double val);
-LinearMatrixElement* convertToLinearMatrixElement(int varref);
-RealValuedExpressionTree* convertToRealExpressionTree(double val);
-RealValuedExpressionTree* convertToRealExpressionTree(int idx, bool varref); // use for varRef and objRef
-RealValuedExpressionTree* convertToRealExpressionTree(LinearMatrixElement* val);
-RealValuedExpressionTree* convertToRealExpressionTree(ConReferenceMatrixElement* val);
-ConReferenceMatrixElement* convertToConReferenceMatrixElement(int objRef);
-std::complex<double> convertToComplexMatrixElement(double val);
-ComplexValuedExpressionTree* convertToComplexExpressionTree(double val);
-ComplexValuedExpressionTree* convertToComplexExpressionTree(int idx, bool varref); // for varRef and objRef
-ComplexValuedExpressionTree* convertToComplexExpressionTree(LinearMatrixElement* val);
-ComplexValuedExpressionTree* convertToComplexExpressionTree(ConReferenceMatrixElement* val);
-ComplexValuedExpressionTree* convertToComplexExpressionTree(std::complex<double> val);
-ComplexValuedExpressionTree* convertToComplexExpressionTree(RealValuedExpressionTree* val);
-std::string convertToString(double val);
-std::string convertToString(int idx, bool varref); // use for varRef and objRef
-std::string convertToString(LinearMatrixElement* val);
-std::string convertToString(ConReferenceMatrixElement* val);
-std::string convertToString(std::complex<double> val);
-std::string convertToString(RealValuedExpressionTree* val);
-std::string convertToString(ComplexValuedExpressionTree* val);
+OSLIB_EXPORT LinearMatrixElement* convertToLinearMatrixElement(double val);
+OSLIB_EXPORT LinearMatrixElement* convertToLinearMatrixElement(int varref);
+OSLIB_EXPORT RealValuedExpressionTree* convertToRealExpressionTree(double val);
+OSLIB_EXPORT RealValuedExpressionTree* convertToRealExpressionTree(int idx, bool varref); // use for varRef and objRef
+OSLIB_EXPORT RealValuedExpressionTree* convertToRealExpressionTree(LinearMatrixElement* val);
+OSLIB_EXPORT RealValuedExpressionTree* convertToRealExpressionTree(ConReferenceMatrixElement* val);
+OSLIB_EXPORT ConReferenceMatrixElement* convertToConReferenceMatrixElement(int objRef);
+OSLIB_EXPORT std::complex<double> convertToComplexMatrixElement(double val);
+OSLIB_EXPORT ComplexValuedExpressionTree* convertToComplexExpressionTree(double val);
+OSLIB_EXPORT ComplexValuedExpressionTree* convertToComplexExpressionTree(int idx, bool varref); // for varRef and objRef
+OSLIB_EXPORT ComplexValuedExpressionTree* convertToComplexExpressionTree(LinearMatrixElement* val);
+OSLIB_EXPORT ComplexValuedExpressionTree* convertToComplexExpressionTree(ConReferenceMatrixElement* val);
+OSLIB_EXPORT ComplexValuedExpressionTree* convertToComplexExpressionTree(std::complex<double> val);
+OSLIB_EXPORT ComplexValuedExpressionTree* convertToComplexExpressionTree(RealValuedExpressionTree* val);
+OSLIB_EXPORT std::string convertToString(double val);
+OSLIB_EXPORT std::string convertToString(int idx, bool varref); // use for varRef and objRef
+OSLIB_EXPORT std::string convertToString(LinearMatrixElement* val);
+OSLIB_EXPORT std::string convertToString(ConReferenceMatrixElement* val);
+OSLIB_EXPORT std::string convertToString(std::complex<double> val);
+OSLIB_EXPORT std::string convertToString(RealValuedExpressionTree* val);
+OSLIB_EXPORT std::string convertToString(ComplexValuedExpressionTree* val);
 
 /** other potential conversions: (do not implement for now)
  *      string to constant
@@ -3837,8 +3837,8 @@ std::string convertToString(ComplexValuedExpressionTree* val);
      *  @param nvalues is the number of matrix elements that are to be converted
      *  @return true if the conversion was successful
      */
-    bool convertFromConstant(ConstantMatrixValues*   _values, int nvalues);
-    bool convertFromVarRef(VarReferenceMatrixValues* _values, int nvalues);
+    OSLIB_EXPORT bool convertFromConstant(ConstantMatrixValues*   _values, int nvalues);
+    OSLIB_EXPORT bool convertFromVarRef(VarReferenceMatrixValues* _values, int nvalues);
     /**
      *  Some methods to convert one type of matrix elements into another
      *  @param _values is the array  of matrix elements that are to be converted

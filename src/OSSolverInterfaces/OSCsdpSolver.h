@@ -68,7 +68,7 @@ extern "C"
  *
  */
 
-class CsdpSolver : public DefaultSolver
+class OSLIB_EXPORT CsdpSolver : public DefaultSolver
 {
 // These declarations are taken from the main method csdp.c
     int nC_rows;                            // number of rows/columns in each matrix

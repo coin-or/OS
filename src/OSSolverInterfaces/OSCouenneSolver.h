@@ -64,7 +64,7 @@ class expression;
  *
  */
 
-class CouenneSolver : public DefaultSolver
+class OSLIB_EXPORT CouenneSolver : public DefaultSolver
 {
 public:
 

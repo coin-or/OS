@@ -16,6 +16,8 @@
 #ifndef	OSSOLVERAGENT_H
 #define OSSOLVERAGENT_H
 
+#include "OSConfig.h"
+
 #include "OShL.h"
 
 /*! \class OSSolverAgent OSSolverAgent.h "OSSolverAgent.h"
@@ -38,7 +40,7 @@
  *
  */
 
-class OSSolverAgent : public OShL
+class OSLIB_EXPORT OSSolverAgent : public OShL
 {
 public:
 

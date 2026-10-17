@@ -68,7 +68,7 @@
 
 
 
-class KnitroProblem : public NlpProblemDef
+class OSLIB_EXPORT KnitroProblem : public NlpProblemDef
 {
 public:
 
@@ -125,7 +125,7 @@ public:
  * the Knitro solver
  *
  */
-class KnitroSolver : public DefaultSolver
+class OSLIB_EXPORT KnitroSolver : public DefaultSolver
 {
 
 public:

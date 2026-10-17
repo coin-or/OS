@@ -50,7 +50,7 @@
 #include "BonBonminSetup.hpp"
 
 // for Stefan
-class BonminProblem : public Bonmin::TMINLP
+class OSLIB_EXPORT BonminProblem : public Bonmin::TMINLP
 {
 
 public:
@@ -208,7 +208,7 @@ private:
  */
 
 
-class BonminSolver : public DefaultSolver
+class OSLIB_EXPORT BonminSolver : public DefaultSolver
 {
 public:
 

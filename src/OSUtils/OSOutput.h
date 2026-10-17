@@ -30,7 +30,7 @@
  * \brief a class that holds information about one output channel
  * (file, device, stream, peripheral, etc.)
  */
-class OSOutputChannel
+class OSLIB_EXPORT OSOutputChannel
 {
 private:
     /**
@@ -135,7 +135,7 @@ public:
  *  private methods must be defined in the header but must *never*
  *  be implemented: a copy constructor, and an equality operator.
  */
-class OSOutput : public OSReferencedObject
+class OSLIB_EXPORT OSOutput : public OSReferencedObject
 {
 private:
     OSOutput(const OSOutput&);
@@ -225,6 +225,6 @@ private:
 // It is declared here as a global variable 
 // so as to minimize the changes to the API
 
-extern const OSSmartPtr<OSOutput> osoutput;
+extern OSLIB_EXPORT const OSSmartPtr<OSOutput> osoutput;
 
 #endif

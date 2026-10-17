@@ -17,6 +17,8 @@
 #ifndef _OSRLREADER_H
 #define _OSRLREADER_H
 
+#include "OSConfig.h"
+
 
 #include "OSResult.h"
 #include "OSrLParserData.h"
@@ -39,7 +41,7 @@
  * A class for parsing an OSrL string and creating an
  * OSResult object from the string.
  */
-class OSrLReader
+class OSLIB_EXPORT OSrLReader
 {
 
 

@@ -14,6 +14,8 @@
 
 #ifndef OSMATLAB_H
 #define OSMATLAB_H
+
+#include "OSConfig.h"
 //
 //OS headers
 #include "OSCoinSolver.h"
@@ -46,7 +48,7 @@
  * quadratic programming problems, not general
  * nonlinear problems
  */
-class OSMatlab
+class OSLIB_EXPORT OSMatlab
 {
 
 public:

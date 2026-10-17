@@ -19,6 +19,8 @@
 #ifndef MATHUTIL_H
 #define MATHUTIL_H
 
+#include "OSConfig.h"
+
 #include "OSParameters.h"
 #include "OSdtoa.h"
 #include "OSErrorClass.h"
@@ -29,14 +31,14 @@
 #include <complex>
 
 #ifdef __cplusplus
-extern std::string os_dtoa_format(double  x);
+extern OSLIB_EXPORT std::string os_dtoa_format(double  x);
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    double os_strtod_wrap(const char *str,   char **strEnd);
+    OSLIB_EXPORT double os_strtod_wrap(const char *str,   char **strEnd);
 
 #ifdef __cplusplus
 }
@@ -54,7 +56,7 @@ extern "C" {
  * OS classes. Right now it has a routine to change the column/row
  * storage of a sparse matrix
  */
-class MathUtil
+class OSLIB_EXPORT MathUtil
 {
 public:
 
@@ -349,7 +351,7 @@ inline int getMult(std::string* a, int size)
  * @notes The random number generator used, rand(), is not very good
  * and should be replaced by a serious random number generator for serious work.
  */
-double OSRand();
+OSLIB_EXPORT double OSRand();
 
 
 /**
@@ -359,7 +361,7 @@ double OSRand();
  * @notes The random number generator used, rand(), is not very good
  * and should be replaced by a serious random number generator for serious work.
  */
-double OSiRand(int iMin, int iMax);
+OSLIB_EXPORT double OSiRand(int iMin, int iMax);
 
 /**
  * OS_a_to_xml_int(std::string inStr)
@@ -367,7 +369,7 @@ double OSiRand(int iMin, int iMax);
  * @return the integer represented by the string instr
  * @notes checks ranges and throws exception if ranges are violated
  */
-OsXmlInt OS_a_to_xml_int(std::string inStr);
+OSLIB_EXPORT OsXmlInt OS_a_to_xml_int(std::string inStr);
 
 /**
  * OS_a_to_xml_uint(std::string inStr)
@@ -375,6 +377,6 @@ OsXmlInt OS_a_to_xml_int(std::string inStr);
  * @return the unsigned integer represented by the string instr
  * @notes checks ranges and throws exception if ranges are violated
  */
-OsXmlUInt OS_a_to_xml_uint(std::string inStr);
+OSLIB_EXPORT OsXmlUInt OS_a_to_xml_uint(std::string inStr);
 
 #endif

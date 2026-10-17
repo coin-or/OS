@@ -17,6 +17,8 @@
 #ifndef OSILREADER_H
 #define OSILREADER_H
 
+#include "OSConfig.h"
+
 #include "OSInstance.h"
 #include "OSiLParserData.h"
 #include "OSgLParserData.h"
@@ -34,7 +36,7 @@
  * the parser an OSiL string and is returned an OSInstance
  * object. </p>
  */
-class OSiLReader
+class OSLIB_EXPORT OSiLReader
 {
 
 public:
