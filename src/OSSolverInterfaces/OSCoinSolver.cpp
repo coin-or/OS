@@ -1150,7 +1150,8 @@ void CoinSolver::solve()
                 // just use simple branch and bound for anything but cbc
                 CbcModel model(  *osiSolver);
 
-                CbcMain0(  model);
+                CbcParameters cbcParams;
+                CbcMain0(  model, cbcParams);
 
                 // make sure we define cbc_argv if not done already when reading options
                 if(num_cbc_argv <= 0)
@@ -1197,7 +1198,7 @@ void CoinSolver::solve()
                 }
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-                CbcMain1( num_cbc_argv, cbc_argv, model);
+                CbcMain1( num_cbc_argv, cbc_argv, model, cbcParams);
 
                 //do the garbage collection on cbc_argv
                 for(i = 0; i < num_cbc_argv; i++)
