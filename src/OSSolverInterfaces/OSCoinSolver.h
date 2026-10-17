@@ -34,7 +34,7 @@ class CoinPackedMatrix;
  * This class implements a solve method for the Coin solvers
  * It reads an OSInstance object and puts into the Coin OSI format
  */
-class CoinSolver : public DefaultSolver
+class OSLIB_EXPORT CoinSolver : public DefaultSolver
 {
 
 public:

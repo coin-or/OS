@@ -15,6 +15,8 @@
 #ifndef DEFAULTSOLVER
 #define DEFAULTSOLVER
 
+#include "OSConfig.h"
+
 #include "OSInstance.h"
 #include "OSOption.h"
 #include "OSResult.h"
@@ -29,7 +31,7 @@
  * @since   OS1.0
  *
  */
-class DefaultSolver
+class OSLIB_EXPORT DefaultSolver
 {
 
 public:

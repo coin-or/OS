@@ -38,7 +38,7 @@
  * the Lindo API
  *
  */
-class LindoSolver : public DefaultSolver
+class OSLIB_EXPORT LindoSolver : public DefaultSolver
 {
 
 public:

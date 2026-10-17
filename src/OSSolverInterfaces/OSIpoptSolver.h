@@ -49,7 +49,7 @@
 #include "IpIpoptApplication.hpp"
 
 // for Stefan
-class IpoptProblem : public Ipopt::TNLP
+class OSLIB_EXPORT IpoptProblem : public Ipopt::TNLP
 {
 public:
 
@@ -164,7 +164,7 @@ private:
  */
 //class IpoptSolver : public DefaultSolver, public TNLP{
 
-class IpoptSolver : public DefaultSolver
+class OSLIB_EXPORT IpoptSolver : public DefaultSolver
 {
 public:
 

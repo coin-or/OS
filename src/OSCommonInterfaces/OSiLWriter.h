@@ -17,6 +17,8 @@
 #ifndef OSiLWRITER_H
 #define OSiLWRITER_H
 
+#include "OSConfig.h"
+
 #include <string>
 #include "OSInstance.h"
 
@@ -26,7 +28,7 @@
  *
  *
  */
-class OSiLWriter
+class OSLIB_EXPORT OSiLWriter
 {
 private:
     /**

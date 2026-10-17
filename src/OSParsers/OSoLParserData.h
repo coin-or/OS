@@ -14,6 +14,8 @@
 #ifndef OSOLPARSERDATA_H
 #define OSOLPARSERDATA_H
 
+#include "OSConfig.h"
+
 #include "OSnLNode.h"
 #include <vector>
 
@@ -30,7 +32,7 @@
  * hold data found in parsing the OSoL instance
  * we do this so we can have a reentrant parser.
  */
-class OSoLParserData
+class OSLIB_EXPORT OSoLParserData
 {
 public:
     /** track which child elements are present */

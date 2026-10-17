@@ -18,6 +18,7 @@
  * in other specific schema writers, such as OSiLWriter, etc.
  */
 
+#include "OSConfig.h"
 #include <sstream>
 
 /**
@@ -31,7 +32,7 @@
  * @return the prepared string, ready to be printed
  *
  */
-std::string writeStringData(std::string str);
+OSLIB_EXPORT std::string writeStringData(std::string str);
 
-std::string makeStringFromInt(std::string theString, int theInt);
+OSLIB_EXPORT std::string makeStringFromInt(std::string theString, int theInt);
 

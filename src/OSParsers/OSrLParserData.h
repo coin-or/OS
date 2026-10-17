@@ -14,6 +14,8 @@
 #ifndef OSRLPARSERDATA_H
 #define OSRLPARSERDATA_H
 
+#include "OSConfig.h"
+
 #include "OSnLNode.h"
 #include "OSGeneral.h"
 
@@ -26,7 +28,7 @@
  * \brief A structure to information about an OtherVariableResult
  * element
  */
-struct OtherVariableResultStruct
+struct OSLIB_EXPORT OtherVariableResultStruct
 {
     /** name holds the text of the name attribute of the
      * OtherVariableResult element
@@ -80,7 +82,7 @@ struct OtherVariableResultStruct
  * hold data found in parsing the OSrL instance
  * we do this so we can have a reentrant parser.
  */
-class OSrLParserData
+class OSLIB_EXPORT OSrLParserData
 {
 public:
 

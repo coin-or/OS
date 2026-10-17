@@ -16,6 +16,8 @@
 #ifndef OSMPS2OS_H
 #define OSMPS2OS_H
 
+#include "OSConfig.h"
+
 
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
@@ -36,7 +38,7 @@
  * and possibly an OSOption object in OSoL format (if the MPS file
  * contains nonstandard sections such as SOS)
  */
-class OSmps2OS
+class OSLIB_EXPORT OSmps2OS
 {
 public:
     /** the OSmps2OS class constructor */

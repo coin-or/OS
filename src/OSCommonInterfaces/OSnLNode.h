@@ -59,7 +59,7 @@ class GeneralSparseMatrix;
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  * @version 2.9, 10/Sep/2014
  */
-class ExprNode
+class OSLIB_EXPORT ExprNode
 {
 public:
 
@@ -283,7 +283,7 @@ public:
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  * @version 2.9, 10/Sep/2015
  */
-class ScalarNode : public ExprNode
+class OSLIB_EXPORT ScalarNode : public ExprNode
 {
 public:
     /**
@@ -336,7 +336,7 @@ public:
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  */
-class OSnLNode: public ScalarNode
+class OSLIB_EXPORT OSnLNode: public ScalarNode
 {
 public:
     /**
@@ -476,7 +476,7 @@ public:
  * The in-memory representation of the OSnL element <plus>
  *
  */
-class OSnLNodePlus : public OSnLNode
+class OSLIB_EXPORT OSnLNodePlus : public OSnLNode
 {
 public:
     /**
@@ -524,7 +524,7 @@ public:
  * The in-memory representation of the OSnL element <sum>
  *
  */
-class OSnLNodeSum : public OSnLNode
+class OSLIB_EXPORT OSnLNodeSum : public OSnLNode
 {
 public:
     /**
@@ -572,7 +572,7 @@ public:
  * The in-memory representation of the OSnL element <max>
  *
  */
-class OSnLNodeMax : public OSnLNode
+class OSLIB_EXPORT OSnLNodeMax : public OSnLNode
 {
 public:
     /**
@@ -620,7 +620,7 @@ public:
  * The in-memory representation of the OSnL element <min>
  *
  */
-class OSnLNodeMin : public OSnLNode
+class OSLIB_EXPORT OSnLNodeMin : public OSnLNode
 {
 public:
     /**
@@ -669,7 +669,7 @@ public:
  * The in-memory representation of the OSnL element <minus>
  *
  */
-class OSnLNodeMinus : public OSnLNode
+class OSLIB_EXPORT OSnLNodeMinus : public OSnLNode
 {
 public:
     /**
@@ -718,7 +718,7 @@ public:
  * The in-memory representation of the OSnL element <negate>
  *
  */
-class OSnLNodeNegate : public OSnLNode
+class OSLIB_EXPORT OSnLNodeNegate : public OSnLNode
 {
 public:
     /**
@@ -767,7 +767,7 @@ public:
  * The in-memory representation of the OSnL element <times>
  *
  */
-class OSnLNodeTimes : public OSnLNode
+class OSLIB_EXPORT OSnLNodeTimes : public OSnLNode
 {
 public:
     /**
@@ -816,7 +816,7 @@ public:
  * The in-memory representation of the OSnL element <divide>
  *
  */
-class OSnLNodeDivide : public OSnLNode
+class OSLIB_EXPORT OSnLNodeDivide : public OSnLNode
 
 {
 public:
@@ -866,7 +866,7 @@ public:
  * The in-memory representation of the OSnL element <power>
  *
  */
-class OSnLNodePower : public OSnLNode
+class OSLIB_EXPORT OSnLNodePower : public OSnLNode
 {
 public:
     /**
@@ -915,7 +915,7 @@ public:
  * The in-memory representation of the OSnL element <product>
  *
  */
-class OSnLNodeProduct : public OSnLNode
+class OSLIB_EXPORT OSnLNodeProduct : public OSnLNode
 {
 public:
     /**
@@ -964,7 +964,7 @@ public:
  * The in-memory representation of the OSnL element <ln>
  *
  */
-class OSnLNodeLn : public OSnLNode
+class OSLIB_EXPORT OSnLNodeLn : public OSnLNode
 {
 public:
     /**
@@ -1013,7 +1013,7 @@ public:
  * The in-memory representation of the OSnL element <sqrt>
  *
  */
-class OSnLNodeSqrt : public OSnLNode
+class OSLIB_EXPORT OSnLNodeSqrt : public OSnLNode
 {
 public:
     /**
@@ -1062,7 +1062,7 @@ public:
  * The in-memory representation of the OSnL element <square>
  *
  */
-class OSnLNodeSquare : public OSnLNode
+class OSLIB_EXPORT OSnLNodeSquare : public OSnLNode
 {
 public:
     /**
@@ -1111,7 +1111,7 @@ public:
  * The in-memory representation of the OSnL element <cos>
  *
  */
-class OSnLNodeCos : public OSnLNode
+class OSLIB_EXPORT OSnLNodeCos : public OSnLNode
 {
 public:
     /**
@@ -1160,7 +1160,7 @@ public:
  * The in-memory representation of the OSnL element <sin>
  *
  */
-class OSnLNodeSin : public OSnLNode
+class OSLIB_EXPORT OSnLNodeSin : public OSnLNode
 {
 public:
     /**
@@ -1209,7 +1209,7 @@ public:
  * The in-memory representation of the OSnL element <exp>
  *
  */
-class OSnLNodeExp : public OSnLNode
+class OSLIB_EXPORT OSnLNodeExp : public OSnLNode
 {
 public:
     /**
@@ -1258,7 +1258,7 @@ public:
  * The in-memory representation of the OSnL element <abs>
  *
  */
-class OSnLNodeAbs : public OSnLNode
+class OSLIB_EXPORT OSnLNodeAbs : public OSnLNode
 {
 public:
     /**
@@ -1308,7 +1308,7 @@ public:
  * The in-memory representation of the OSnL element <ln>
  *
  */
-class OSnLNodeErf : public OSnLNode
+class OSLIB_EXPORT OSnLNodeErf : public OSnLNode
 {
 public:
     /**
@@ -1357,7 +1357,7 @@ public:
  * The in-memory representation of the OSnL element <if>
  *
  */
-class OSnLNodeIf : public OSnLNode
+class OSLIB_EXPORT OSnLNodeIf : public OSnLNode
 {
 public:
     /**
@@ -1406,7 +1406,7 @@ public:
  * The in-memory representation of the OSnL element <number>
  *
  */
-class OSnLNodeNumber : public OSnLNode
+class OSLIB_EXPORT OSnLNodeNumber : public OSnLNode
 {
 public:
     /** value is the value of the number */
@@ -1490,7 +1490,7 @@ public:
  * The in-memory representation of the OSnL element <E>
  *
  */
-class OSnLNodeE : public OSnLNode
+class OSLIB_EXPORT OSnLNodeE : public OSnLNode
 {
 public:
 
@@ -1550,7 +1550,7 @@ public:
  * The in-memory representation of the OSnL element <pi>
  *
  */
-class OSnLNodePI : public OSnLNode
+class OSLIB_EXPORT OSnLNodePI : public OSnLNode
 {
 public:
 
@@ -1610,7 +1610,7 @@ public:
  * The in-memory representation of the OSnL element <variable>
  *
  */
-class OSnLNodeVariable : public OSnLNode
+class OSLIB_EXPORT OSnLNodeVariable : public OSnLNode
 {
 public:
 
@@ -1694,7 +1694,7 @@ public:
  * The in-memory representation of the OSnL element <alldiff>
  *
  */
-class OSnLNodeAllDiff : public OSnLNode
+class OSLIB_EXPORT OSnLNodeAllDiff : public OSnLNode
 {
 public:
     /**
@@ -1745,7 +1745,7 @@ public:
  * The in-memory representation of the OSnL element <matrixDeterminant>
  *
  */
-class OSnLNodeMatrixDeterminant : public OSnLNode
+class OSLIB_EXPORT OSnLNodeMatrixDeterminant : public OSnLNode
 {
 public:
     /**
@@ -1793,7 +1793,7 @@ public:
  * The in-memory representation of the OSnL element <matrixTrace>
  *
  */
-class OSnLNodeMatrixTrace : public OSnLNode
+class OSLIB_EXPORT OSnLNodeMatrixTrace : public OSnLNode
 {
 public:
     /**
@@ -1841,7 +1841,7 @@ public:
  * The in-memory representation of the OSnL element <matrixToScalar>
  *
  */
-class OSnLNodeMatrixToScalar : public OSnLNode
+class OSLIB_EXPORT OSnLNodeMatrixToScalar : public OSnLNode
 {
 public:
     /**
@@ -1886,7 +1886,7 @@ public:
  * @date    11/06/2014
  * @since   OS2.8
  */
-class OSnLMNode: public ExprNode
+class OSLIB_EXPORT OSnLMNode: public ExprNode
 {
 private:
 #if 0
@@ -2028,7 +2028,7 @@ public:
     bool IsEqual(OSnLMNode *that);
 };//end OSnLMNode
 
-class OSnLMNodeMatrixPlus : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixPlus : public OSnLMNode
 {
 public:
     /**
@@ -2078,7 +2078,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixPlus
 
-class OSnLMNodeMatrixSum : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixSum : public OSnLMNode
 {
 public:
     /**
@@ -2127,7 +2127,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixSum
 
-class OSnLMNodeMatrixMinus : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixMinus : public OSnLMNode
 {
 public:
     /**
@@ -2176,7 +2176,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixMinus
 
-class OSnLMNodeMatrixNegate : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixNegate : public OSnLMNode
 {
 public:
     /**
@@ -2225,7 +2225,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixNegate
 
-class OSnLMNodeMatrixTimes : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixTimes : public OSnLMNode
 {
 public:
     /**
@@ -2293,7 +2293,7 @@ public:
  * The in-memory representation of the OSnL element <matrixProduct>
  *
  */
-class OSnLMNodeMatrixProduct : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixProduct : public OSnLMNode
 {
 public:
     /**
@@ -2320,7 +2320,7 @@ public:
 };//end OSnLMNodeMatrixProduct
 #endif
 
-class OSnLMNodeMatrixInverse : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixInverse : public OSnLMNode
 {
 public:
     /**
@@ -2369,7 +2369,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixInverse
 
-class OSnLMNodeMatrixTranspose : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixTranspose : public OSnLMNode
 {
 public:
     /**
@@ -2425,7 +2425,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixTranspose
 
-class OSnLMNodeMatrixScalarTimes : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixScalarTimes : public OSnLMNode
 {
 public:
     /**
@@ -2474,7 +2474,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixScalarTimes
 
-class OSnLMNodeMatrixDotTimes : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixDotTimes : public OSnLMNode
 {
 public:
     /**
@@ -2523,7 +2523,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixDotTimes
 
-class OSnLMNodeIdentityMatrix : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeIdentityMatrix : public OSnLMNode
 {
 public:
     /**
@@ -2572,7 +2572,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeIdentityMatrix
 
-class OSnLMNodeMatrixLowerTriangle : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixLowerTriangle : public OSnLMNode
 {
 public:
     /**
@@ -2631,7 +2631,7 @@ public:
     virtual bool IsEqual(OSnLMNodeMatrixLowerTriangle *that);
 };//end OSnLMNodeMatrixLowerTriangle
 
-class OSnLMNodeMatrixUpperTriangle : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixUpperTriangle : public OSnLMNode
 {
 public:
     /**
@@ -2691,7 +2691,7 @@ public:
 };//end OSnLMNodeMatrixUpperTriangle
 
 
-class OSnLMNodeMatrixDiagonal : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixDiagonal : public OSnLMNode
 {
 public:
     /**
@@ -2740,7 +2740,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLMNodeMatrixDiagonal
 
-class OSnLMNodeDiagonalMatrixFromVector : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeDiagonalMatrixFromVector : public OSnLMNode
 {
 public:
     /**
@@ -2790,7 +2790,7 @@ public:
 };//end OSnLMNodeDiagonalMatrixFromVector
 
 
-class OSnLMNodeMatrixSubmatrixAt : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixSubmatrixAt : public OSnLMNode
 {
 public:
     /**
@@ -2840,7 +2840,7 @@ public:
 };//end OSnLMNodeMatrixSubmatrixAt
 
 
-class OSnLMNodeMatrixReference : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixReference : public OSnLMNode
 {
 public:
     /**
@@ -2921,7 +2921,7 @@ public:
 };//end OSnLMNodeMatrixReference
 
 
-class OSnLMNodeMatrixVar : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixVar : public OSnLMNode
 {
 public:
     /**
@@ -2981,7 +2981,7 @@ public:
 };//end OSnLMNodeMatrixVar
 
 
-class OSnLMNodeMatrixObj : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixObj : public OSnLMNode
 {
 public:
     /**
@@ -3041,7 +3041,7 @@ public:
 };//end OSnLMNodeMatrixObj
 
 
-class OSnLMNodeMatrixCon : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixCon : public OSnLMNode
 {
 public:
     /**
@@ -3113,7 +3113,7 @@ public:
  * The in-memory representation of the OSnL element <matrixProduct>
  *
  */
-class OSnLMNodeMatrixProduct : public OSnLMNode
+class OSLIB_EXPORT OSnLMNodeMatrixProduct : public OSnLMNode
 {
 public:
     /**
@@ -3173,7 +3173,7 @@ public:
  * @version 1.0, 28/Sep/2015
  * @since   OS2.9
  */
-class OSnLCNode: public ScalarNode
+class OSLIB_EXPORT OSnLCNode: public ScalarNode
 {
 public:
     /**
@@ -3299,7 +3299,7 @@ public:
  * The in-memory representation of the OSnL element <complexCreate>
  *
  */
-class OSnLCNodeCreate : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodeCreate : public OSnLCNode
 {
 public:
     /**
@@ -3342,7 +3342,7 @@ public:
  * The in-memory representation of the OSnL element <complexPlus>
  *
  */
-class OSnLCNodePlus : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodePlus : public OSnLCNode
 {
 public:
     /**
@@ -3385,7 +3385,7 @@ public:
  * The in-memory representation of the OSnL element <complexMinus>
  *
  */
-class OSnLCNodeMinus : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodeMinus : public OSnLCNode
 {
 public:
     /**
@@ -3429,7 +3429,7 @@ public:
  * The in-memory representation of the OSnL element <complexNegate>
  *
  */
-class OSnLCNodeNegate : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodeNegate : public OSnLCNode
 {
 public:
     /**
@@ -3472,7 +3472,7 @@ public:
  * The in-memory representation of the OSnL element <complexConjugate>
  *
  */
-class OSnLCNodeConjugate : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodeConjugate : public OSnLCNode
 {
 public:
     /**
@@ -3515,7 +3515,7 @@ public:
  * The in-memory representation of the OSnL element <complexSum>
  *
  */
-class OSnLCNodeSum : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodeSum : public OSnLCNode
 {
 public:
     /**
@@ -3558,7 +3558,7 @@ public:
  * The in-memory representation of the OSnL element <complexTimes>
  *
  */
-class OSnLCNodeTimes : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodeTimes : public OSnLCNode
 {
 public:
     /**
@@ -3601,7 +3601,7 @@ public:
  * The in-memory representation of the OSnL element <complexSquare>
  *
  */
-class OSnLCNodeSquare : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodeSquare : public OSnLCNode
 {
 public:
     /**
@@ -3645,7 +3645,7 @@ public:
  * The in-memory representation of the OSnL element <complexNumber>
  *
  */
-class OSnLCNodeNumber : public OSnLCNode
+class OSLIB_EXPORT OSnLCNodeNumber : public OSnLCNode
 {
 private:
     /**

@@ -41,7 +41,7 @@
 /*! \class Variable
  * \brief The in-memory representation of the <b>variable</b> element.
  */
-class Variable
+class OSLIB_EXPORT Variable
 {
 public:
     /** The Variable class constructor */
@@ -80,7 +80,7 @@ public:
 /*! \class Variables
  * \brief The in-memory representation of the <b>variables</b> element.
  */
-class Variables
+class OSLIB_EXPORT Variables
 {
 public:
 
@@ -107,7 +107,7 @@ public:
  * \brief The in-memory representation of the objective
  * function <b><coef></b> element.
  */
-class ObjCoef
+class OSLIB_EXPORT ObjCoef
 {
 public:
 
@@ -138,7 +138,7 @@ public:
  * \brief The in-memory representation of the
  * <b><obj></b> element.
  */
-class Objective
+class OSLIB_EXPORT Objective
 {
 public:
 
@@ -185,7 +185,7 @@ public:
  * \brief The in-memory representation of the
  * <b><objectives></b> element.
  */
-class Objectives
+class OSLIB_EXPORT Objectives
 {
 public:
 
@@ -215,7 +215,7 @@ public:
  * \brief The in-memory representation of the
  * <b><con></b> element.
  */
-class Constraint
+class OSLIB_EXPORT Constraint
 {
 public:
 
@@ -248,7 +248,7 @@ public:
  * \brief The in-memory representation of the
  * <b><constraints></b> element.
  */
-class Constraints
+class OSLIB_EXPORT Constraints
 {
 public:
 
@@ -285,7 +285,7 @@ public:
  * nonzero values, an array of either column or row indices
  * and then a pointer to the start of each column or row.
  */
-class LinearConstraintCoefficients
+class OSLIB_EXPORT LinearConstraintCoefficients
 {
 public:
 
@@ -337,7 +337,7 @@ public:
  * the index of each variable, the coefficient of the
  * quadratic term, and the row in which it appears
  */
-class QuadraticTerm
+class OSLIB_EXPORT QuadraticTerm
 {
 public:
 
@@ -377,7 +377,7 @@ public:
  * <b><quadraticCoefficients></b> element.
  *
  */
-class QuadraticCoefficients
+class OSLIB_EXPORT QuadraticCoefficients
 {
 public:
 
@@ -407,7 +407,7 @@ public:
  * \brief The in-memory representation of the
  * <b><nl></b> element.
  */
-class Nl
+class OSLIB_EXPORT Nl
 {
 public:
     /** idx holds the row index of the nonlinear expression */
@@ -453,7 +453,7 @@ public:
  * \brief The in-memory representation of the
  * <b><nonlinearExpressions></b> element.
  */
-class NonlinearExpressions
+class OSLIB_EXPORT NonlinearExpressions
 {
 public:
 
@@ -485,7 +485,7 @@ public:
  * \brief The in-memory representation of a generic cone 
  * Specific cone types are derived from this generic class
  */
-class Cone
+class OSLIB_EXPORT Cone
 {
 public:
 
@@ -564,7 +564,7 @@ public:
  * The in-memory representation of the OSiL element <nonnegativeCone>
  *
  */
-class NonnegativeCone : public Cone
+class OSLIB_EXPORT NonnegativeCone : public Cone
 {
 public:
     /**
@@ -622,7 +622,7 @@ public:
  * The in-memory representation of the OSiL element <nonpositiveCone>
  *
  */
-class NonpositiveCone : public Cone
+class OSLIB_EXPORT NonpositiveCone : public Cone
 {
 public:
     /**
@@ -681,7 +681,7 @@ public:
  * The in-memory representation of the OSiL element <orthantCone>
  *
  */
-class OrthantCone : public Cone
+class OSLIB_EXPORT OrthantCone : public Cone
 {
 public:
     /** For each dimension of the cone, give the upper and lower bounds
@@ -741,7 +741,7 @@ public:
 /*! \class PolyhedralCone
  * \brief The in-memory representation of a polyhedral cone 
  */
-class PolyhedralCone : public Cone
+class OSLIB_EXPORT PolyhedralCone : public Cone
 {
 public:
 
@@ -815,7 +815,7 @@ public:
 /*! \class QuadraticCone
  * \brief The in-memory representation of a quadratic cone 
  */
-class QuadraticCone : public Cone
+class OSLIB_EXPORT QuadraticCone : public Cone
 {
 public:
 
@@ -906,7 +906,7 @@ public:
 /*! \class RotatedQuadraticCone
  * \brief The in-memory representation of a rotated quadratic cone 
  */
-class RotatedQuadraticCone : public Cone
+class OSLIB_EXPORT RotatedQuadraticCone : public Cone
 {
 public:
 
@@ -1001,7 +1001,7 @@ public:
 /*! \class SemidefiniteCone
  * \brief The in-memory representation of a cone of semidefinite matrices 
  */
-class SemidefiniteCone : public Cone
+class OSLIB_EXPORT SemidefiniteCone : public Cone
 {
 public:
 
@@ -1082,7 +1082,7 @@ public:
  * The in-memory representation of the OSiL element <copositiveMatricesCone>
  *
  */
-class CopositiveMatricesCone : public Cone
+class OSLIB_EXPORT CopositiveMatricesCone : public Cone
 {
 public:
     /**
@@ -1141,7 +1141,7 @@ public:
  * The in-memory representation of the OSiL element <completelyPositiveMatricesCone>
  *
  */
-class CompletelyPositiveMatricesCone : public Cone
+class OSLIB_EXPORT CompletelyPositiveMatricesCone : public Cone
 {
 public:
     /**
@@ -1203,7 +1203,7 @@ public:
 /*! \class ProductCone
  * \brief The in-memory representation of a product cone 
  */
-class ProductCone : public Cone
+class OSLIB_EXPORT ProductCone : public Cone
 {
 public:
 
@@ -1279,7 +1279,7 @@ public:
 /*! \class IntersectionCone
  * \brief The in-memory representation of an intersection cone 
  */
-class IntersectionCone : public Cone
+class OSLIB_EXPORT IntersectionCone : public Cone
 {
 public:
 
@@ -1355,7 +1355,7 @@ public:
 /*! \class DualCone
  * \brief The in-memory representation of a dual cone 
  */
-class DualCone : public Cone
+class OSLIB_EXPORT DualCone : public Cone
 {
 public:
 
@@ -1420,7 +1420,7 @@ public:
 /*! \class PolarCone
  * \brief The in-memory representation of a polar cone 
  */
-class PolarCone : public Cone
+class OSLIB_EXPORT PolarCone : public Cone
 {
 public:
 
@@ -1487,7 +1487,7 @@ public:
  * \brief The in-memory representation of the
  * <b><cones></b> element.
  */
-class Cones
+class OSLIB_EXPORT Cones
 {
 public:
 
@@ -1534,7 +1534,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrixVar></b> element.
  */
-class MatrixVar
+class OSLIB_EXPORT MatrixVar
 {
 public:
     /** numberOfRows gives the number of rows of this matrix */
@@ -1590,7 +1590,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrixVariables></b> element.
  */
-class MatrixVariables
+class OSLIB_EXPORT MatrixVariables
 {
 public:
     /** numberOfMatrixVar gives the number of <matrixVar> children */
@@ -1616,7 +1616,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrixObj></b> element.
  */
-class MatrixObj
+class OSLIB_EXPORT MatrixObj
 {
 public:
     /** numberOfRows gives the number of rows of this matrix */
@@ -1663,7 +1663,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrixObjectives></b> element.
  */
-class MatrixObjectives
+class OSLIB_EXPORT MatrixObjectives
 {
 public:
 
@@ -1691,7 +1691,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrixCon></b> element.
  */
-class MatrixCon
+class OSLIB_EXPORT MatrixCon
 {
 public:
     /** numberOfRows gives the number of rows of this matrix */
@@ -1742,7 +1742,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrixConstraints></b> element.
  */
-class MatrixConstraints
+class OSLIB_EXPORT MatrixConstraints
 {
 public:
 
@@ -1771,7 +1771,7 @@ public:
  * the expression could be linear, so a "shape" attribute is added
  * to distinguish linear and nonlinear expressions.
  */
-class MatrixExpression
+class OSLIB_EXPORT MatrixExpression
 {
 public:
     /** idx holds the row index of the nonlinear expression */
@@ -1814,7 +1814,7 @@ public:
  * \brief The in-memory representation of the 
    <b><matrixExpressions></b> element.
  */
-class MatrixExpressions
+class OSLIB_EXPORT MatrixExpressions
 {
 public:
     /** numberOfExpr gives the number of expressions */
@@ -1841,7 +1841,7 @@ public:
  * \brief The in-memory representation of the 
    <b><matrixProgramming></b> element.
  */
-class MatrixProgramming
+class OSLIB_EXPORT MatrixProgramming
 {
 public:
     /** The MatrixProgramming class constructor */
@@ -1892,7 +1892,7 @@ public:
  * \brief The in-memory representation of the
  * <b><var></b> element.
  */
-class TimeDomainStageVar
+class OSLIB_EXPORT TimeDomainStageVar
 {
 public:
 
@@ -1910,7 +1910,7 @@ public:
  * \brief The in-memory representation of the
  * <b><variables></b> child of the <stage> element.
  */
-class TimeDomainStageVariables
+class OSLIB_EXPORT TimeDomainStageVariables
 {
 public:
 
@@ -1935,7 +1935,7 @@ public:
  * \brief The in-memory representation of the
  * <b><con></b> element.
  */
-class TimeDomainStageCon
+class OSLIB_EXPORT TimeDomainStageCon
 {
 public:
 
@@ -1953,7 +1953,7 @@ public:
  * \brief The in-memory representation of the
  * <b><constraints></b> child of the <stage> element.
  */
-class TimeDomainStageConstraints
+class OSLIB_EXPORT TimeDomainStageConstraints
 {
 public:
 
@@ -1978,7 +1978,7 @@ public:
  * \brief The in-memory representation of the
  * <b><obj></b> element.
  */
-class TimeDomainStageObj
+class OSLIB_EXPORT TimeDomainStageObj
 {
 public:
 
@@ -1996,7 +1996,7 @@ public:
  * \brief The in-memory representation of the
  * <b><objectives></b> child of the <stage> element.
  */
-class TimeDomainStageObjectives
+class OSLIB_EXPORT TimeDomainStageObjectives
 {
 public:
 
@@ -2021,7 +2021,7 @@ public:
  * \brief The in-memory representation of the
  * <b><stage></b> element.
  */
-class TimeDomainStage
+class OSLIB_EXPORT TimeDomainStage
 {
 public:
 
@@ -2050,7 +2050,7 @@ public:
  * \brief The in-memory representation of the
  * <b><stages></b> element.
  */
-class TimeDomainStages
+class OSLIB_EXPORT TimeDomainStages
 {
 public:
 
@@ -2073,7 +2073,7 @@ public:
  * \brief The in-memory representation of the
  * <b><interval></b> element.
  */
-class TimeDomainInterval
+class OSLIB_EXPORT TimeDomainInterval
 {
 public:
 
@@ -2098,7 +2098,7 @@ public:
  * \brief The in-memory representation of the
  * <b><timeDomain></b> element.
  */
-class TimeDomain
+class OSLIB_EXPORT TimeDomain
 {
 public:
 
@@ -2133,7 +2133,7 @@ public:
  * <li><b>TimeDomain/b> object</li>
  * </ul>
  */
-class InstanceData
+class OSLIB_EXPORT InstanceData
 {
 public:
 
@@ -2221,7 +2221,7 @@ public:
  *
  *
  */
-class OSInstance
+class OSLIB_EXPORT OSInstance
 {
 public:
 

@@ -16,6 +16,8 @@
 #ifndef BASE64_H
 #define BASE64_H
 
+#include "OSConfig.h"
+
 #include <string>
 
 /*! \class Base64
@@ -30,7 +32,7 @@
  * tabs by writing a long string of numbers in b64 format
  *
  */
-class Base64
+class OSLIB_EXPORT Base64
 {
 public:
 

@@ -17,6 +17,8 @@
 #ifndef OSrLWRITER_H
 #define OSrLWRITER_H
 
+#include "OSConfig.h"
+
 #include "OSResult.h"
 #include <string>
 
@@ -27,7 +29,7 @@
  *
  *
  */
-class OSrLWriter
+class OSLIB_EXPORT OSrLWriter
 {
 private:
     /**

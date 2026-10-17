@@ -16,6 +16,8 @@
 #ifndef OSCOMMANDLINE_H
 #define OSCOMMANDLINE_H
 
+#include "OSConfig.h"
+
 #include "OSInstance.h"
 #include "OSOption.h"
 
@@ -33,7 +35,7 @@
  *  options are stored in the OSCommandLine class
  */
 
-class OSCommandLine
+class OSLIB_EXPORT OSCommandLine
 {
 public:
     /** osinstance is a representation of the instance in OSInstance format
@@ -238,6 +240,16 @@ public:
      */
     void convertSolverNameToUpperCase();
 };
+
+/* The functions of the scanner for OSSolverService command lines, which is
+ * generated from OSParsers/OSParseosss.l. OSSolverService and OSAmplClient use
+ * them. They are declared here, so that they are exported from the library.
+ */
+OSLIB_EXPORT struct yy_buffer_state* osss_scan_string(const char* osss, void* scanner);
+OSLIB_EXPORT void setyyextra(OSCommandLine *oscommandline, void* scanner);
+OSLIB_EXPORT int ossslex(void* scanner);
+OSLIB_EXPORT int ossslex_init(void** ptr);
+OSLIB_EXPORT int ossslex_destroy(void* scanner);
 
 #endif
 

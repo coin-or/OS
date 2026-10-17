@@ -15,6 +15,8 @@
 #ifndef FILEUTIL_H
 #define FILEUTIL_H
 
+#include "OSConfig.h"
+
 
 #include <iostream>
 #include <sstream>
@@ -34,7 +36,7 @@
  * Optimization Services (OS) framework. </p>
  *
  */
-class FileUtil
+class OSLIB_EXPORT FileUtil
 {
 public:
 public:

@@ -14,6 +14,8 @@
 
 #ifndef OSRESULT_H
 #define OSRESULT_H
+
+#include "OSConfig.h"
 #include <string>
 #include <vector>
 #include "OSGeneral.h"
@@ -26,7 +28,7 @@
  *  \brief A commonly used structure holding an index-string pair
  *  This definition is based on the definition of IndexValuePair in OSGeneral.h
  */
-struct IndexStringPair
+struct OSLIB_EXPORT IndexStringPair
 {
     /** idx holds the index of a string-valued entity (such as a variable, constraint, objective)
      *  that is part of a sparse vector
@@ -51,7 +53,7 @@ struct IndexStringPair
  * A data structure class that corresponds to an xml element in
  * the OSrL schema.
  */
-class GeneralSubstatus
+class OSLIB_EXPORT GeneralSubstatus
 {
 
 public:
@@ -102,7 +104,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSrL schema.
  */
-class GeneralStatus
+class OSLIB_EXPORT GeneralStatus
 {
 
 public:
@@ -159,7 +161,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSrL schema.
  */
-class OtherResult
+class OSLIB_EXPORT OtherResult
 {
 
 public:
@@ -213,7 +215,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSrL schema.
  */
-class OtherResults
+class OSLIB_EXPORT OtherResults
 {
 
 public:
@@ -263,7 +265,7 @@ public:
  * A class that provides the general information
  * that is defined in the OSrL schema.
  */
-class GeneralResult
+class OSLIB_EXPORT GeneralResult
 {
 public:
 
@@ -347,7 +349,7 @@ public:
  * A class that provides the system information
  * that is defined in the OSrL schema.
  */
-class SystemResult
+class OSLIB_EXPORT SystemResult
 {
 public:
 
@@ -413,7 +415,7 @@ public:
  * A class that provides the system information
  * that is defined in the OSrL schema.
  */
-class ServiceResult
+class OSLIB_EXPORT ServiceResult
 {
 public:
 
@@ -476,7 +478,7 @@ public:
  * as defined in the OSrL schema.
  * This class is superseded by class TimeMeasurement since version 2.3
  */
-class Time
+class OSLIB_EXPORT Time
 {
 public:
 
@@ -544,7 +546,7 @@ public:
  * type, category and description.
  * This class supersedes the old class Time since version 2.3.
  */
-class TimeMeasurement : public TimeSpan
+class OSLIB_EXPORT TimeMeasurement : public TimeSpan
 {
 public:
 
@@ -602,7 +604,7 @@ public:
  * A class that provides the timer information
  * that is defined in the OSrL schema.
  */
-class TimingInformation
+class OSLIB_EXPORT TimingInformation
 {
 public:
 
@@ -657,7 +659,7 @@ public:
  * A class that provides the system information
  * that is defined in the OSrL schema.
  */
-class JobResult
+class OSLIB_EXPORT JobResult
 {
 public:
 
@@ -741,7 +743,7 @@ public:
  * A class for holding various attributes of a solution
  * status
  */
-class OptimizationSolutionSubstatus
+class OSLIB_EXPORT OptimizationSolutionSubstatus
 {
 public:
 
@@ -790,7 +792,7 @@ public:
  * A class for holding various attributes of a solution
  * status
  */
-class OptimizationSolutionStatus
+class OSLIB_EXPORT OptimizationSolutionStatus
 {
 public:
 
@@ -845,7 +847,7 @@ public:
  * A class that is used to provide the value and index
  * associated with the variables in the solution.
  */
-class VarValue
+class OSLIB_EXPORT VarValue
 {
 public:
 
@@ -899,7 +901,7 @@ public:
  * \remarks
  * A class that contains values for all the variables
  */
-class VariableValues
+class OSLIB_EXPORT VariableValues
 {
 public:
 
@@ -954,7 +956,7 @@ public:
  * A class that is used to provide the value and index
  * associated with the string-valued variables in the solution.
  */
-class VarValueString
+class OSLIB_EXPORT VarValueString
 {
 public:
 
@@ -1009,7 +1011,7 @@ public:
  * \remarks
  * A class that contains values for all the string-valued variables
  */
-class VariableValuesString
+class OSLIB_EXPORT VariableValuesString
 {
 public:
 
@@ -1063,7 +1065,7 @@ public:
  * \remarks A class used to provide solution information
  * associated with the variables.
  */
-class OtherVarResult
+class OSLIB_EXPORT OtherVarResult
 {
 public:
 
@@ -1122,7 +1124,7 @@ public:
  * A class that allows the solver to report an
  * arbitrary result associated with variables
  */
-class OtherVariableResult
+class OSLIB_EXPORT OtherVariableResult
 {
 public:
 
@@ -1215,7 +1217,7 @@ public:
  * A class for reporting all of the types of solution values
  * associated with variables.
  */
-class VariableSolution
+class OSLIB_EXPORT VariableSolution
 {
 public:
 
@@ -1279,7 +1281,7 @@ public:
  * A class that provides the value of an objective
  * function
  */
-class ObjValue
+class OSLIB_EXPORT ObjValue
 {
 public:
 
@@ -1330,7 +1332,7 @@ public:
  * \remarks
  * A class for reporting objective function values
  */
-class ObjectiveValues
+class OSLIB_EXPORT ObjectiveValues
 {
 public:
 
@@ -1385,7 +1387,7 @@ public:
  * A class that provides general result information
  * for objective functions.
  */
-class OtherObjResult
+class OSLIB_EXPORT OtherObjResult
 {
 public:
 
@@ -1441,7 +1443,7 @@ public:
  * A class that allows the solver to report an
  * arbitrary result associated with objective functions
  */
-class OtherObjectiveResult
+class OSLIB_EXPORT OtherObjectiveResult
 {
 public:
 
@@ -1535,7 +1537,7 @@ public:
  * A class for reporting all of the types of solution values
  * associated with objective functions.
  */
-class ObjectiveSolution
+class OSLIB_EXPORT ObjectiveSolution
 {
 public:
 
@@ -1596,7 +1598,7 @@ public:
  * \remarks
  * A class that provides the dual value of a constraint
  */
-class DualVarValue
+class OSLIB_EXPORT DualVarValue
 {
 public:
 
@@ -1652,7 +1654,7 @@ public:
  * \remarks
  * A class for reporting dual variable values
  */
-class DualVariableValues
+class OSLIB_EXPORT DualVariableValues
 {
 public:
 
@@ -1707,7 +1709,7 @@ public:
  * A class that provides general result information
  * for constraints.
  */
-class OtherConResult
+class OSLIB_EXPORT OtherConResult
 {
 public:
 
@@ -1765,7 +1767,7 @@ public:
  * A class that allows the solver to report an
  * arbitrary result associated with constraints.
  */
-class OtherConstraintResult
+class OSLIB_EXPORT OtherConstraintResult
 {
 public:
 
@@ -1858,7 +1860,7 @@ public:
  * A class for reporting all of the types of solution values
  * associated with objective functions.
  */
-class ConstraintSolution
+class OSLIB_EXPORT ConstraintSolution
 {
 
 public:
@@ -1912,7 +1914,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrixVariables></b> element.
  */
-class MatrixVariableValues
+class OSLIB_EXPORT MatrixVariableValues
 {
 public:
     /** numberOfMatrixVar gives the number of <matrixVar> children */
@@ -1937,7 +1939,7 @@ public:
  * \brief The in-memory representation of the
  * <b><matrixVariables> <other></b> element.
  */
-class OtherMatrixVariableResult
+class OSLIB_EXPORT OtherMatrixVariableResult
 {
 public:
     /** Gives a name to this result. This is s mandatory data element */
@@ -1990,7 +1992,7 @@ public:
  * \brief The in-memory representation of the
  * <b><MatrixVariableSolution></b> element.
  */
-class MatrixVariableSolution
+class OSLIB_EXPORT MatrixVariableSolution
 {
 public:
     /** numberOfOtherMatrixVariableResults gives the number of <other> children */
@@ -2019,7 +2021,7 @@ public:
  * \brief The in-memory representation of the
  * <b><MatrixVariableSolution></b> element.
  */
-class MatrixObjectiveSolution
+class OSLIB_EXPORT MatrixObjectiveSolution
 {
 public:
     /** numberOfOtherMatrixObjectiveResults gives the number of <other> children */
@@ -2045,7 +2047,7 @@ public:
  * \brief The in-memory representation of the
  * <b><MatrixConstraintSolution></b> element.
  */
-class MatrixConstraintSolution
+class OSLIB_EXPORT MatrixConstraintSolution
 {
 public:
     /** numberOfOtherMatrixConstraintResults gives the number of <other> children */
@@ -2073,7 +2075,7 @@ class OtherSolutionResult; //forward declaration
  * \brief The in-memory representation of the 
    <b><MatrixProgrammingSolution></b> element.
  */
-class MatrixProgrammingSolution
+class OSLIB_EXPORT MatrixProgrammingSolution
 {
 public:
     /** the number of <other> child elements> */
@@ -2134,7 +2136,7 @@ public:
  * A class that allows the solver to report an
  * arbitrary result associated with the solution.
  */
-class OtherSolutionResult
+class OSLIB_EXPORT OtherSolutionResult
 {
 public:
 
@@ -2203,7 +2205,7 @@ public:
  * A class that allows the solver to report an
  * arbitrary result associated with the solution.
  */
-class OtherSolutionResults
+class OSLIB_EXPORT OtherSolutionResults
 {
 public:
 
@@ -2256,7 +2258,7 @@ public:
  * A class for reporting the various components of
  * an optimization solution.
  */
-class OptimizationSolution
+class OSLIB_EXPORT OptimizationSolution
 {
 public:
 
@@ -2349,7 +2351,7 @@ public:
  * A class that allows the solver to report an
  * arbitrary result associated with the solution.
  */
-class SolverOutput
+class OSLIB_EXPORT SolverOutput
 {
 public:
 
@@ -2414,7 +2416,7 @@ public:
  * A class that allows the solver to report an
  * arbitrary result associated with the solution.
  */
-class OtherSolverOutput
+class OSLIB_EXPORT OtherSolverOutput
 {
 public:
 
@@ -2468,7 +2470,7 @@ public:
  * A class for holding information that might be associated
  * with an optimization solution.
  */
-class OptimizationResult
+class OSLIB_EXPORT OptimizationResult
 {
 public:
 
@@ -2543,7 +2545,7 @@ public:
  * \remarks
  * A class for holding all the solution information.
  */
-class OSResult
+class OSLIB_EXPORT OSResult
 {
 
 public:

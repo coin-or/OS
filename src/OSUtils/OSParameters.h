@@ -154,11 +154,11 @@ const double OSDBL_MAX = std::numeric_limits<double>::max();
 const int    OSINT_MAX = std::numeric_limits<int>::max();
 
 /** checks whether a given double is NaN */
-extern "C" bool OSIsnan(double x);
+extern "C" OSLIB_EXPORT bool OSIsnan(double x);
 /** returns the value for NaN used in OS */
-extern "C" double OSNaN();
+extern "C" OSLIB_EXPORT double OSNaN();
 
-std::string OSgetVersionInfo();
+OSLIB_EXPORT std::string OSgetVersionInfo();
 
 /**
  *  Enumeration for the different verbosity levels that can be used in producing output.

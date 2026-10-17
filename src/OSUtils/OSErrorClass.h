@@ -15,6 +15,8 @@
 #ifndef ERRORCLASS_H
 #define ERRORCLASS_H
 
+#include "OSConfig.h"
+
 #include <string>
 
 /*! \class ErrorClass
@@ -28,7 +30,7 @@
  * when an error is encountered in a try-catch block
  * we throw an ErrorClass with the errormsg_
  */
-class ErrorClass
+class OSLIB_EXPORT ErrorClass
 {
 public:
 

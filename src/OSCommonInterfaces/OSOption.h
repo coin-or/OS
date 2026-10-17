@@ -15,6 +15,8 @@
 #ifndef OSOPTION_H
 #define OSOPTION_H
 
+#include "OSConfig.h"
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -44,7 +46,7 @@
  * A data structure class that corresponds to the instanceLocation
  * element in the OSoL schema.
  */
-class InstanceLocationOption
+class OSLIB_EXPORT InstanceLocationOption
 {
 
 public:
@@ -97,7 +99,7 @@ public:
  * A data structure class that corresponds to the contact method
  * in the OSoL schema.
  */
-class ContactOption
+class OSLIB_EXPORT ContactOption
 {
 
 public:
@@ -153,7 +155,7 @@ public:
  * A data structure class that corresponds to the OtherOption
  * element in the OSoL schema.
  */
-class OtherOption
+class OSLIB_EXPORT OtherOption
 {
 
 public:
@@ -213,7 +215,7 @@ public:
  * A data structure class that corresponds to the OtherOptions
  * element in the OSoL schema.
  */
-class OtherOptions
+class OSLIB_EXPORT OtherOptions
 {
 
 public:
@@ -285,7 +287,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class GeneralOption
+class OSLIB_EXPORT GeneralOption
 {
 
 public:
@@ -371,7 +373,7 @@ public:
  * This class has been superseded as of version 2.3
  * by the class StorageCapacity (see OSGeneral.h)
  */
-class MinDiskSpace
+class OSLIB_EXPORT MinDiskSpace
 {
 
 public:
@@ -417,7 +419,7 @@ public:
  * This class has been superseded as of version 2.3
  * by the class StorageCapacity (see OSGeneral.h)
  */
-class MinMemorySize
+class OSLIB_EXPORT MinMemorySize
 {
 
 public:
@@ -463,7 +465,7 @@ public:
  * This class has been superseded as of version 2.3
  * by the class CPUSpeed (see OSGeneral.h)
  */
-class MinCPUSpeed
+class OSLIB_EXPORT MinCPUSpeed
 {
 
 public:
@@ -509,7 +511,7 @@ public:
  * This class has been superseded as of version 2.3
  * by the class CPUNumber (see OSGeneral.h)
  */
-class MinCPUNumber
+class OSLIB_EXPORT MinCPUNumber
 {
 
 public:
@@ -551,7 +553,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class SystemOption
+class OSLIB_EXPORT SystemOption
 {
 
 public:
@@ -617,7 +619,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class ServiceOption
+class OSLIB_EXPORT ServiceOption
 {
 
 public:
@@ -676,7 +678,7 @@ public:
  * This class has been superseded as of version 2.3
  * by the class TimeSpan (see OSGeneral.h)
  */
-class MaxTime
+class OSLIB_EXPORT MaxTime
 {
 
 public:
@@ -718,7 +720,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class JobDependencies
+class OSLIB_EXPORT JobDependencies
 {
 
 public:
@@ -790,7 +792,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class DirectoriesAndFiles
+class OSLIB_EXPORT DirectoriesAndFiles
 {
 
 public:
@@ -862,7 +864,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class PathPair
+class OSLIB_EXPORT PathPair
 {
 
 public:
@@ -922,7 +924,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class PathPairs
+class OSLIB_EXPORT PathPairs
 {
 
 public:
@@ -1006,7 +1008,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class Processes
+class OSLIB_EXPORT Processes
 {
 
 public:
@@ -1078,7 +1080,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class JobOption
+class OSLIB_EXPORT JobOption
 {
 
 public:
@@ -1170,7 +1172,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitVarValue
+class OSLIB_EXPORT InitVarValue
 {
 
 public:
@@ -1230,7 +1232,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitVariableValues
+class OSLIB_EXPORT InitVariableValues
 {
 
 public:
@@ -1333,7 +1335,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitVarValueString
+class OSLIB_EXPORT InitVarValueString
 {
 
 public:
@@ -1393,7 +1395,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitVariableValuesString
+class OSLIB_EXPORT InitVariableValuesString
 {
 
 public:
@@ -1496,7 +1498,7 @@ public:
  * the OSoL schema.
  * This class has been made redundant since OS version 2.3.
  */
-class InitBasStatus
+class OSLIB_EXPORT InitBasStatus
 {
 
 public:
@@ -1555,7 +1557,7 @@ public:
  * As of OS version 2.3 this class has been superseded by
  * the class BasisStatus (see OSGeneral.h)
  */
-class InitialBasisStatus
+class OSLIB_EXPORT InitialBasisStatus
 {
 
 public:
@@ -1627,7 +1629,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class BranchingWeight
+class OSLIB_EXPORT BranchingWeight
 {
 
 public:
@@ -1688,7 +1690,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class IntegerVariableBranchingWeights
+class OSLIB_EXPORT IntegerVariableBranchingWeights
 {
 
 public:
@@ -1788,7 +1790,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class SOSWeights
+class OSLIB_EXPORT SOSWeights
 {
 
 public:
@@ -1866,7 +1868,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class SOSVariableBranchingWeights
+class OSLIB_EXPORT SOSVariableBranchingWeights
 {
 
 public:
@@ -1940,7 +1942,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherVarOption
+class OSLIB_EXPORT OtherVarOption
 {
 
 public:
@@ -2003,7 +2005,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherVariableOption
+class OSLIB_EXPORT OtherVariableOption
 {
 
 public:
@@ -2111,7 +2113,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class VariableOption
+class OSLIB_EXPORT VariableOption
 {
 
 public:
@@ -2198,7 +2200,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitObjValue
+class OSLIB_EXPORT InitObjValue
 {
 
 public:
@@ -2258,7 +2260,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitObjectiveValues
+class OSLIB_EXPORT InitObjectiveValues
 {
 
 public:
@@ -2361,7 +2363,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitObjBound
+class OSLIB_EXPORT InitObjBound
 {
 
 public:
@@ -2424,7 +2426,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitObjectiveBounds
+class OSLIB_EXPORT InitObjectiveBounds
 {
 
 public:
@@ -2529,7 +2531,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherObjOption
+class OSLIB_EXPORT OtherObjOption
 {
 
 public:
@@ -2596,7 +2598,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherObjectiveOption
+class OSLIB_EXPORT OtherObjectiveOption
 {
 
 public:
@@ -2704,7 +2706,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class ObjectiveOption
+class OSLIB_EXPORT ObjectiveOption
 {
 
 public:
@@ -2783,7 +2785,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitConValue
+class OSLIB_EXPORT InitConValue
 {
 
 public:
@@ -2843,7 +2845,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitConstraintValues
+class OSLIB_EXPORT InitConstraintValues
 {
 
 public:
@@ -2946,7 +2948,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitDualVarValue
+class OSLIB_EXPORT InitDualVarValue
 {
 
 public:
@@ -3009,7 +3011,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitDualVariableValues
+class OSLIB_EXPORT InitDualVariableValues
 {
 
 public:
@@ -3114,7 +3116,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherConOption
+class OSLIB_EXPORT OtherConOption
 {
 
 public:
@@ -3180,7 +3182,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherConstraintOption
+class OSLIB_EXPORT OtherConstraintOption
 {
 
 public:
@@ -3288,7 +3290,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class ConstraintOption
+class OSLIB_EXPORT ConstraintOption
 {
 
 public:
@@ -3371,7 +3373,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitMatrixVariableValues
+class OSLIB_EXPORT InitMatrixVariableValues
 {
 
 public:
@@ -3471,7 +3473,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherMatrixVarOption
+class OSLIB_EXPORT OtherMatrixVarOption
 {
 
 public:
@@ -3526,7 +3528,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherMatrixVariableOption
+class OSLIB_EXPORT OtherMatrixVariableOption
 {
 
 public:
@@ -3637,7 +3639,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class MatrixVariableOption
+class OSLIB_EXPORT MatrixVariableOption
 {
 
 public:
@@ -3717,7 +3719,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitMatrixObjectiveValues
+class OSLIB_EXPORT InitMatrixObjectiveValues
 {
 
 public:
@@ -3812,7 +3814,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherMatrixObjOption
+class OSLIB_EXPORT OtherMatrixObjOption
 {
 
 public:
@@ -3872,7 +3874,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherMatrixObjectiveOption
+class OSLIB_EXPORT OtherMatrixObjectiveOption
 {
 
 public:
@@ -3981,7 +3983,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class MatrixObjectiveOption
+class OSLIB_EXPORT MatrixObjectiveOption
 {
 
 public:
@@ -4053,7 +4055,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class InitMatrixConstraintValues
+class OSLIB_EXPORT InitMatrixConstraintValues
 {
 
 public:
@@ -4152,7 +4154,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherMatrixConOption
+class OSLIB_EXPORT OtherMatrixConOption
 {
 
 public:
@@ -4213,7 +4215,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OtherMatrixConstraintOption
+class OSLIB_EXPORT OtherMatrixConstraintOption
 {
 
 public:
@@ -4322,7 +4324,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class MatrixConstraintOption
+class OSLIB_EXPORT MatrixConstraintOption
 {
 
 public:
@@ -4390,7 +4392,7 @@ public:
  * \brief The in-memory representation of the 
    <b><matrixProgramming></b> element.
  */
-class MatrixProgrammingOption
+class OSLIB_EXPORT MatrixProgrammingOption
 {
 public:
     /** The number of other matrixProgramming options */
@@ -4451,7 +4453,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class SolverOption
+class OSLIB_EXPORT SolverOption
 {
 
 public:
@@ -4526,7 +4528,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class SolverOptions
+class OSLIB_EXPORT SolverOptions
 {
 
 public:
@@ -4604,7 +4606,7 @@ public:
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
-class OptimizationOption
+class OSLIB_EXPORT OptimizationOption
 {
 
 public:
@@ -4692,7 +4694,7 @@ public:
  * \remarks
  * A class for holding all the solver options information.
  */
-class OSOption
+class OSLIB_EXPORT OSOption
 {
 
 public:

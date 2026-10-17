@@ -16,6 +16,8 @@
 #ifndef OSNL2OS_H
 #define OSNL2OS_H
 
+#include "OSConfig.h"
+
 
 #include "OSoLReader.h"
 #include "OSOption.h"
@@ -67,7 +69,7 @@ enum OS_AMPL_SUFFIX_DIRECTION
     OS_AMPL_SUFFIX_DIRECTION_local
 };
 
-struct OS_AMPL_SUFFIX
+struct OSLIB_EXPORT OS_AMPL_SUFFIX
 {
     std::string name;
     OS_AMPL_SUFFIX_TYPE type;
@@ -75,7 +77,7 @@ struct OS_AMPL_SUFFIX
     OS_AMPL_SUFFIX_DIRECTION direction;
 };
 
-class OSnl2OS
+class OSLIB_EXPORT OSnl2OS
 {
 public:
     /** the OSnl2OS class constructor */
