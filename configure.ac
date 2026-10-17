@@ -59,6 +59,18 @@ m4_foreach_w([myvar],[CoinUtils Osi Clp Cgl Cbc],
     fi
   ])
 
+# OS computes the derivatives for its nonlinear solver interfaces (Ipopt,
+# Bonmin, Couenne) with CppAD, so these are skipped if CppAD isn't available.
+# OS uses only the headers of CppAD, so only the compiler flags from cppad.pc
+# are used: linking with CppAD's library is not needed, and in static builds
+# it would fail if only a shared library of CppAD is available.
+AC_COIN_CHK_PKG(CppAD,    [],[cppad])
+if test $coin_has_cppad = yes ; then
+  OSLIB_CFLAGS="`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags cppad` $OSLIB_CFLAGS"
+else
+  AC_MSG_NOTICE([CppAD is not available, so Ipopt, Bonmin, and Couenne are skipped.])
+  COIN_SKIP_PROJECTS="$COIN_SKIP_PROJECTS ipopt bonmin couenne"
+fi
 AC_COIN_CHK_PKG(Ipopt,    [OSLib],[ipopt])
 AC_COIN_CHK_PKG(Bonmin,   [OSLib],[bonmin])
 AC_COIN_CHK_PKG(Couenne,  [OSLib],[couenne])
@@ -72,7 +84,6 @@ AC_COIN_CHK_PKG(Msk,      [OSLib],[osi-mosek])
 AC_COIN_CHK_PKG(SoPlex,   [OSLib],[osi-soplex])
 AC_COIN_CHK_PKG(Xpr,      [OSLib],[osi-xpress])
 AC_COIN_CHK_PKG(ASL,      [OSLib],[coinasl])
-AC_COIN_CHK_PKG(CppAD,    [OSLib],[cppad])
 
 # Bonmin and Couenne are used through their Ipopt interface.
 if test $coin_has_bonmin = yes && test $coin_has_ipopt != yes ; then
