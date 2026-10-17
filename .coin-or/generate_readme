@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+# Exit when command fails
+set -e
+#Attempt to use undefined variable outputs error message, and forces an exit
+set -u
+#Causes a pipeline to return the exit status of the last command in the pipe
+#that returned a non-zero return value.
+set -o pipefail
+#set -x
+
+source $COINBREW_HOME/scripts/generate_readme
+
+pushd . > /dev/null
+cd $(dirname $0)
+SCRIPT_DIR=$PWD
+popd > /dev/null
+
+create_variables $SCRIPT_DIR/config.yml
+
+make_header
+
+echo "The objective of Optimization Services (OS) is to provide a set of
+standards for representing optimization instances, results, solver options,
+and communication between clients and solvers in a distributed environment
+using Web Services. This COIN-OR project provides source code for libraries
+and executable programs that implement OS standards.
+
+OS consists of
+ * the library \`libOS\`, which reads and writes optimization instances
+   (OSiL), solver options (OSoL), and results (OSrL) in the OS XML formats,
+   converts instances from MPS and AMPL nl files, and provides a common
+   interface to the COIN-OR solvers (Clp, Cbc, SYMPHONY, DyLP, Vol, Ipopt,
+   Bonmin, Couenne) and to commercial solvers,
+ * \`OSSolverService\`, which solves an instance with a local or remote solver,
+ * \`OSAmplClient\` (if ASL is available), which lets AMPL use the solvers
+   through OS.
+
+OS computes derivatives for its interfaces to Ipopt, Bonmin, and Couenne with
+[CppAD](https://github.com/coin-or/CppAD), so these interfaces are only built
+if CppAD is installed (e.g., \`libcppad-dev\` on Debian and Ubuntu, \`cppad\` in
+Homebrew)."
+
+# There are no up-to-date binary packages of OS in the official repositories
+# of any distribution.
+make_build_info_no_packages
+
+echo "### Using OS
+
+After building and installing OS, an instance can be solved with, e.g.,
+\`\`\`
+OSSolverService -osil OS/data/osilFiles/parincLinear.osil -solver clp
+\`\`\`
+Run \`OSSolverService -h\` for the other options. The unit test is run with
+\`make test\` in the build directory.
+"
+
+make_doxygen_info
+
+echo "## Documentation
+
+ * [OS User's Manual](OS/doc/osUsersManual.pdf)
+ * [Optimization Services home page](http://www.optimizationservices.org)
+"
+
+make_links
