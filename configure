@@ -687,8 +687,6 @@ COIN_HAS_KNITRO_FALSE
 COIN_HAS_KNITRO_TRUE
 COIN_HAS_LINDO_FALSE
 COIN_HAS_LINDO_TRUE
-COIN_HAS_CPPAD_FALSE
-COIN_HAS_CPPAD_TRUE
 COIN_HAS_ASL_FALSE
 COIN_HAS_ASL_TRUE
 COIN_HAS_XPR_FALSE
@@ -715,6 +713,8 @@ COIN_HAS_BONMIN_FALSE
 COIN_HAS_BONMIN_TRUE
 COIN_HAS_IPOPT_FALSE
 COIN_HAS_IPOPT_TRUE
+COIN_HAS_CPPAD_FALSE
+COIN_HAS_CPPAD_TRUE
 COIN_HAS_CBC_FALSE
 COIN_HAS_CBC_TRUE
 COIN_HAS_CGL_FALSE
@@ -905,6 +905,9 @@ with_cgl_cflags
 with_cbc
 with_cbc_lflags
 with_cbc_cflags
+with_cppad
+with_cppad_lflags
+with_cppad_cflags
 with_ipopt
 with_ipopt_lflags
 with_ipopt_cflags
@@ -944,9 +947,6 @@ with_xpr_cflags
 with_asl
 with_asl_lflags
 with_asl_cflags
-with_cppad
-with_cppad_lflags
-with_cppad_cflags
 with_lindo
 with_lindo_lflags
 with_lindo_cflags
@@ -1693,6 +1693,16 @@ Optional Packages:
   --with-cbc-cflags       Compiler flags for Cbc appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
+  --without-cppad         Do not use CppAD. If an argument is given to
+                          --with-cppad, then 'yes' is equivalent
+                          to --with-cppad, 'no' is equivalent to
+                          --without-cppad and any other argument is applied as
+                          for --with-cppad-lflags.
+  --with-cppad-lflags     Linker flags for CppAD appropriate for your
+                          environment. (Most often, -l specs for libraries.)
+  --with-cppad-cflags     Compiler flags for CppAD appropriate for your
+                          environment. (Most often, -I specs for header file
+                          directories.)
   --without-ipopt         Do not use Ipopt. If an argument is given to
                           --with-ipopt, then 'yes' is equivalent
                           to --with-ipopt, 'no' is equivalent to
@@ -1821,16 +1831,6 @@ Optional Packages:
   --with-asl-lflags       Linker flags for ASL appropriate for your
                           environment. (Most often, -l specs for libraries.)
   --with-asl-cflags       Compiler flags for ASL appropriate for your
-                          environment. (Most often, -I specs for header file
-                          directories.)
-  --without-cppad         Do not use CppAD. If an argument is given to
-                          --with-cppad, then 'yes' is equivalent
-                          to --with-cppad, 'no' is equivalent to
-                          --without-cppad and any other argument is applied as
-                          for --with-cppad-lflags.
-  --with-cppad-lflags     Linker flags for CppAD appropriate for your
-                          environment. (Most often, -l specs for libraries.)
-  --with-cppad-cflags     Compiler flags for CppAD appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
   --without-lindo         Do not use Lindo. If an argument is given to
@@ -21478,6 +21478,254 @@ printf "%s\n" "#define OS_HAS_CBC 1" >>confdefs.h
     fi
 
 
+# OS computes the derivatives for its nonlinear solver interfaces (Ipopt,
+# Bonmin, Couenne) with CppAD, so these are skipped if CppAD isn't available.
+# OS uses only the headers of CppAD, so only the compiler flags from cppad.pc
+# are used: linking with CppAD's library is not needed, and in static builds
+# it would fail if only a shared library of CppAD is available.
+
+
+
+
+
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for package CppAD" >&5
+printf %s "checking for package CppAD... " >&6; }
+
+
+
+
+
+  coin_has_cppad=noInfo
+  if test x"$COIN_SKIP_PROJECTS" != x ; then
+    for pkg in `echo $COIN_SKIP_PROJECTS | tr '[:upper:]' '[:lower:]'` ; do
+      if test "$pkg" = "cppad" ; then
+        coin_has_cppad=skipping
+      fi
+    done
+  fi
+
+
+  if test "$coin_has_cppad" != skipping ; then
+
+
+
+
+# Check whether --with-cppad was given.
+if test ${with_cppad+y}
+then :
+  withval=$with_cppad;
+fi
+
+
+
+# Check whether --with-cppad-lflags was given.
+if test ${with_cppad_lflags+y}
+then :
+  withval=$with_cppad_lflags;
+fi
+
+
+
+# Check whether --with-cppad-cflags was given.
+if test ${with_cppad_cflags+y}
+then :
+  withval=$with_cppad_cflags;
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+  coin_has_cppad=requested
+
+  cppad_lflags=
+  cppad_cflags=
+  cppad_data=
+  cppad_pcfiles="cppad"
+
+
+  withval="$with_cppad"
+  if test -n "$withval" ; then
+    case "$withval" in
+      no )
+        coin_has_cppad=skipping
+        cppad_failmode='command line'
+        ;;
+      yes )
+        coin_has_cppad=requested
+        cppad_failmode=''
+        ;;
+      build )
+        coin_has_cppad=requested
+        cppad_build=yes
+        cppad_failmode=''
+        ;;
+      * )
+        coin_has_cppad=requested
+        cppad_failmode=''
+        cppad_lflags="$withval"
+        cppad_pcfiles=''
+        ;;
+    esac
+  else
+    if test -n "$with_cppad_lflags" ||
+       test -n "$with_cppad_cflags" ||
+       test -n "$with_cppad_data" ; then
+      coin_has_cppad=requested
+      cppad_failmode=''
+      cppad_pcfiles=''
+    fi
+  fi
+
+
+  if test "$coin_has_cppad" != skipping ; then
+       withval="$with_cppad_lflags"
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not useful here; please specify link flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_cppad=yes
+             cppad_lflags="$withval"
+             cppad_pcfiles=''
+             ;;
+         esac
+       fi
+
+       withval="$with_cppad_cflags"
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not useful here; please specify compile flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_cppad=yes
+             cppad_cflags="$withval"
+             cppad_pcfiles=''
+             ;;
+         esac
+       fi
+     fi
+
+
+
+
+
+  if test $coin_has_cppad = requested ; then
+    if test -n "$PKG_CONFIG" ; then
+      if test x"$cppad_build" = xyes ; then
+        pcfile="coin$cppad_pcfiles"
+
+
+
+  if test -n "$PKG_CONFIG" ; then
+    if PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --exists "$pcfile" ; then
+      CPPAD_VERSIONS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --modversion "$pcfile" 2>/dev/null | tr '\n' ' '`
+      coin_has_cppad=yes
+    else
+      CPPAD_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "$pcfile"`
+      coin_has_cppad=no
+    fi
+  else
+    as_fn_error $? "\"Cannot check for existence of module cppad without pkgconf\"" "$LINENO" 5
+  fi
+
+      fi
+      if ! test $coin_has_cppad = yes ; then
+        pcfile="$cppad_pcfiles"
+
+
+
+  if test -n "$PKG_CONFIG" ; then
+    if PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --exists "$pcfile" ; then
+      CPPAD_VERSIONS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --modversion "$pcfile" 2>/dev/null | tr '\n' ' '`
+      coin_has_cppad=yes
+    else
+      CPPAD_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "$pcfile"`
+      coin_has_cppad=no
+    fi
+  else
+    as_fn_error $? "\"Cannot check for existence of module cppad without pkgconf\"" "$LINENO" 5
+  fi
+
+      fi
+      if test $coin_has_cppad = yes ; then
+        cppad_data=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --variable=datadir "$pcfile" 2>/dev/null`
+        cppad_pcfiles="$pcfile"
+      fi
+    else
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: Check for cppad via pkg-config could not be performed as there is no pkg-config available. Consider installing pkg-config or provide appropriate values for --with-cppad-lflags and --with-cppad-cflags." >&5
+printf "%s\n" "$as_me: WARNING: Check for cppad via pkg-config could not be performed as there is no pkg-config available. Consider installing pkg-config or provide appropriate values for --with-cppad-lflags and --with-cppad-cflags." >&2;}
+      coin_has_cppad=no
+    fi
+  fi
+
+
+  if test "$BUILDTOOLS_DEBUG" = 1 ; then
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: FIND_PRIM_PKG result for cppad: \"$coin_has_cppad\"" >&5
+printf "%s\n" "$as_me: FIND_PRIM_PKG result for cppad: \"$coin_has_cppad\"" >&6;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: Collected values for package 'cppad'" >&5
+printf "%s\n" "$as_me: Collected values for package 'cppad'" >&6;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cppad_lflags is \"$cppad_lflags\"" >&5
+printf "%s\n" "$as_me: cppad_lflags is \"$cppad_lflags\"" >&6;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cppad_cflags is \"$cppad_cflags\"" >&5
+printf "%s\n" "$as_me: cppad_cflags is \"$cppad_cflags\"" >&6;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cppad_data is \"$cppad_data\"" >&5
+printf "%s\n" "$as_me: cppad_data is \"$cppad_data\"" >&6;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cppad_pcfiles is \"$cppad_pcfiles\"" >&5
+printf "%s\n" "$as_me: cppad_pcfiles is \"$cppad_pcfiles\"" >&6;}
+  fi
+
+
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $coin_has_cppad" >&5
+printf "%s\n" "$coin_has_cppad" >&6; }
+  else
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $coin_has_cppad (COIN_SKIP_PROJECTS)" >&5
+printf "%s\n" "$coin_has_cppad (COIN_SKIP_PROJECTS)" >&6; }
+  fi
+
+
+  if test "$coin_has_cppad" != yes ; then
+    coin_has_cppad=no
+  fi
+
+
+   if test $coin_has_cppad = yes; then
+  COIN_HAS_CPPAD_TRUE=
+  COIN_HAS_CPPAD_FALSE='#'
+else
+  COIN_HAS_CPPAD_TRUE='#'
+  COIN_HAS_CPPAD_FALSE=
+fi
+
+
+
+  if test $coin_has_cppad = yes ; then
+
+printf "%s\n" "#define OS_HAS_CPPAD 1" >>confdefs.h
+
+
+
+
+  fi
+
+if test $coin_has_cppad = yes ; then
+  OSLIB_CFLAGS="`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags cppad` $OSLIB_CFLAGS"
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: CppAD is not available, so Ipopt, Bonmin, and Couenne are skipped." >&5
+printf "%s\n" "$as_me: CppAD is not available, so Ipopt, Bonmin, and Couenne are skipped." >&6;}
+  COIN_SKIP_PROJECTS="$COIN_SKIP_PROJECTS ipopt bonmin couenne"
+fi
 
 
 
@@ -24625,248 +24873,6 @@ printf "%s\n" "#define OS_HAS_ASL 1" >>confdefs.h
   fi
 
 
-
-
-
-
-
-
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for package CppAD" >&5
-printf %s "checking for package CppAD... " >&6; }
-
-
-
-
-
-
-
-
-  coin_has_cppad=noInfo
-  if test x"$COIN_SKIP_PROJECTS" != x ; then
-    for pkg in `echo $COIN_SKIP_PROJECTS | tr '[:upper:]' '[:lower:]'` ; do
-      if test "$pkg" = "cppad" ; then
-        coin_has_cppad=skipping
-      fi
-    done
-  fi
-
-
-  if test "$coin_has_cppad" != skipping ; then
-
-
-
-
-# Check whether --with-cppad was given.
-if test ${with_cppad+y}
-then :
-  withval=$with_cppad;
-fi
-
-
-
-# Check whether --with-cppad-lflags was given.
-if test ${with_cppad_lflags+y}
-then :
-  withval=$with_cppad_lflags;
-fi
-
-
-
-# Check whether --with-cppad-cflags was given.
-if test ${with_cppad_cflags+y}
-then :
-  withval=$with_cppad_cflags;
-fi
-
-
-
-
-
-
-
-
-
-
-
-
-  coin_has_cppad=requested
-
-  cppad_lflags=
-  cppad_cflags=
-  cppad_data=
-  cppad_pcfiles="cppad"
-
-
-  withval="$with_cppad"
-  if test -n "$withval" ; then
-    case "$withval" in
-      no )
-        coin_has_cppad=skipping
-        cppad_failmode='command line'
-        ;;
-      yes )
-        coin_has_cppad=requested
-        cppad_failmode=''
-        ;;
-      build )
-        coin_has_cppad=requested
-        cppad_build=yes
-        cppad_failmode=''
-        ;;
-      * )
-        coin_has_cppad=requested
-        cppad_failmode=''
-        cppad_lflags="$withval"
-        cppad_pcfiles=''
-        ;;
-    esac
-  else
-    if test -n "$with_cppad_lflags" ||
-       test -n "$with_cppad_cflags" ||
-       test -n "$with_cppad_data" ; then
-      coin_has_cppad=requested
-      cppad_failmode=''
-      cppad_pcfiles=''
-    fi
-  fi
-
-
-  if test "$coin_has_cppad" != skipping ; then
-       withval="$with_cppad_lflags"
-       if test -n "$withval" ; then
-         case "$withval" in
-           build | no | yes )
-             as_fn_error $? "\"$withval\" is not useful here; please specify link flags appropriate for your environment." "$LINENO" 5
-             ;;
-           * )
-             coin_has_cppad=yes
-             cppad_lflags="$withval"
-             cppad_pcfiles=''
-             ;;
-         esac
-       fi
-
-       withval="$with_cppad_cflags"
-       if test -n "$withval" ; then
-         case "$withval" in
-           build | no | yes )
-             as_fn_error $? "\"$withval\" is not useful here; please specify compile flags appropriate for your environment." "$LINENO" 5
-             ;;
-           * )
-             coin_has_cppad=yes
-             cppad_cflags="$withval"
-             cppad_pcfiles=''
-             ;;
-         esac
-       fi
-     fi
-
-
-
-
-
-  if test $coin_has_cppad = requested ; then
-    if test -n "$PKG_CONFIG" ; then
-      if test x"$cppad_build" = xyes ; then
-        pcfile="coin$cppad_pcfiles"
-
-
-
-  if test -n "$PKG_CONFIG" ; then
-    if PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --exists "$pcfile" ; then
-      CPPAD_VERSIONS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --modversion "$pcfile" 2>/dev/null | tr '\n' ' '`
-      coin_has_cppad=yes
-    else
-      CPPAD_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "$pcfile"`
-      coin_has_cppad=no
-    fi
-  else
-    as_fn_error $? "\"Cannot check for existence of module cppad without pkgconf\"" "$LINENO" 5
-  fi
-
-      fi
-      if ! test $coin_has_cppad = yes ; then
-        pcfile="$cppad_pcfiles"
-
-
-
-  if test -n "$PKG_CONFIG" ; then
-    if PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --exists "$pcfile" ; then
-      CPPAD_VERSIONS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --modversion "$pcfile" 2>/dev/null | tr '\n' ' '`
-      coin_has_cppad=yes
-    else
-      CPPAD_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "$pcfile"`
-      coin_has_cppad=no
-    fi
-  else
-    as_fn_error $? "\"Cannot check for existence of module cppad without pkgconf\"" "$LINENO" 5
-  fi
-
-      fi
-      if test $coin_has_cppad = yes ; then
-        cppad_data=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --variable=datadir "$pcfile" 2>/dev/null`
-        cppad_pcfiles="$pcfile"
-      fi
-    else
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: Check for cppad via pkg-config could not be performed as there is no pkg-config available. Consider installing pkg-config or provide appropriate values for --with-cppad-lflags and --with-cppad-cflags." >&5
-printf "%s\n" "$as_me: WARNING: Check for cppad via pkg-config could not be performed as there is no pkg-config available. Consider installing pkg-config or provide appropriate values for --with-cppad-lflags and --with-cppad-cflags." >&2;}
-      coin_has_cppad=no
-    fi
-  fi
-
-
-  if test "$BUILDTOOLS_DEBUG" = 1 ; then
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: FIND_PRIM_PKG result for cppad: \"$coin_has_cppad\"" >&5
-printf "%s\n" "$as_me: FIND_PRIM_PKG result for cppad: \"$coin_has_cppad\"" >&6;}
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: Collected values for package 'cppad'" >&5
-printf "%s\n" "$as_me: Collected values for package 'cppad'" >&6;}
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cppad_lflags is \"$cppad_lflags\"" >&5
-printf "%s\n" "$as_me: cppad_lflags is \"$cppad_lflags\"" >&6;}
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cppad_cflags is \"$cppad_cflags\"" >&5
-printf "%s\n" "$as_me: cppad_cflags is \"$cppad_cflags\"" >&6;}
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cppad_data is \"$cppad_data\"" >&5
-printf "%s\n" "$as_me: cppad_data is \"$cppad_data\"" >&6;}
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cppad_pcfiles is \"$cppad_pcfiles\"" >&5
-printf "%s\n" "$as_me: cppad_pcfiles is \"$cppad_pcfiles\"" >&6;}
-  fi
-
-
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $coin_has_cppad" >&5
-printf "%s\n" "$coin_has_cppad" >&6; }
-  else
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $coin_has_cppad (COIN_SKIP_PROJECTS)" >&5
-printf "%s\n" "$coin_has_cppad (COIN_SKIP_PROJECTS)" >&6; }
-  fi
-
-
-  if test "$coin_has_cppad" != yes ; then
-    coin_has_cppad=no
-  fi
-
-
-   if test $coin_has_cppad = yes; then
-  COIN_HAS_CPPAD_TRUE=
-  COIN_HAS_CPPAD_FALSE='#'
-else
-  COIN_HAS_CPPAD_TRUE='#'
-  COIN_HAS_CPPAD_FALSE=
-fi
-
-
-
-  if test $coin_has_cppad = yes ; then
-
-printf "%s\n" "#define OS_HAS_CPPAD 1" >>confdefs.h
-
-    OSLIB_PCFILES="$cppad_pcfiles $OSLIB_PCFILES"
-       OSLIB_LFLAGS="$cppad_lflags $OSLIB_LFLAGS"
-       OSLIB_CFLAGS="$cppad_cflags $OSLIB_CFLAGS"
-
-
-
-  fi
-
-
 # Bonmin and Couenne are used through their Ipopt interface.
 if test $coin_has_bonmin = yes && test $coin_has_ipopt != yes ; then
   as_fn_error $? "Found Bonmin, but not Ipopt." "$LINENO" 5
@@ -27738,6 +27744,10 @@ if test -z "${COIN_HAS_CBC_TRUE}" && test -z "${COIN_HAS_CBC_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_CBC\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
+if test -z "${COIN_HAS_CPPAD_TRUE}" && test -z "${COIN_HAS_CPPAD_FALSE}"; then
+  as_fn_error $? "conditional \"COIN_HAS_CPPAD\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
 if test -z "${COIN_HAS_IPOPT_TRUE}" && test -z "${COIN_HAS_IPOPT_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_IPOPT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
@@ -27788,10 +27798,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_ASL\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${COIN_HAS_CPPAD_TRUE}" && test -z "${COIN_HAS_CPPAD_FALSE}"; then
-  as_fn_error $? "conditional \"COIN_HAS_CPPAD\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_LINDO_TRUE}" && test -z "${COIN_HAS_LINDO_FALSE}"; then

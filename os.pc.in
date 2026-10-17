@@ -8,7 +8,7 @@ Name: OS
 Description: COIN-OR Optimization Services
 URL: @PACKAGE_URL@
 Version: @PACKAGE_VERSION@
-Cflags: -I${includedir}
+Cflags: -I${includedir} @OSLIB_CFLAGS_NOPC@
 @COIN_STATIC_BUILD_FALSE@Libs: -L${libdir} -lOS
 @COIN_STATIC_BUILD_FALSE@Requires.private: @OSLIB_PCFILES@
 @COIN_STATIC_BUILD_TRUE@Libs: -L${libdir} -lOS @OSLIB_LFLAGS_NOPC@

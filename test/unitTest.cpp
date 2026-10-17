@@ -614,6 +614,7 @@ if(BASIC_TESTS == true){
 
     
     // Automatic differentiation
+#ifdef OS_HAS_CPPAD
     try{
         cout << endl << "TEST " << ++nOfTest << ": Automatic differentiation" << endl << endl;
 
@@ -692,6 +693,7 @@ if(BASIC_TESTS == true){
             delete fileUtil;
         fileUtil = NULL;
     }
+#endif // end of #ifdef OS_HAS_CPPAD
 } // end of if (BASIC_TESTS)
 
 
