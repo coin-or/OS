@@ -10307,7 +10307,6 @@ std::cout << std::endl << std::endl << nl2osil->osol << std::endl << std::endl;
 
         std::cout << std::endl << "write AMPL solution file" << std::endl << std::endl;
 
-extern const OSSmartPtr<OSOutput> osoutput;
         osoutput->SetPrintLevel("stdout", 
             (ENUM_OUTPUT_LEVEL)
                 (100*ENUM_OUTPUT_AREA_OSModelInterfaces + 
