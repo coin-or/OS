@@ -2,11 +2,8 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id: Makefile.am 806 2006-06-12 01:47:32Z andreasw $ 
 
 # Author:  Andreas Waechter           IBM    2006-04-13
-
-AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
 #                          unitTest  program                           #
@@ -20,8 +17,7 @@ noinst_PROGRAMS = unitTest
 unitTest_SOURCES = unitTest.cpp 
 
 # List all additionally required libraries
-unitTest_LDADD =  ../src/libOS.la $(OSLIB_LIBS)
-unitTest_DEPENDENCIES =  ../src/libOS.la $(OSLIB_DEPENDENCIES)
+unitTest_LDADD =  ../src/libOS.la $(OSLIB_LFLAGS)
 
 ########################################################################
 #                            Additional flags                          #
@@ -30,29 +26,19 @@ unitTest_DEPENDENCIES =  ../src/libOS.la $(OSLIB_DEPENDENCIES)
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = \
-	-I`$(CYGPATH_W) $(srcdir)/../src` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSAgent` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSParsers` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSCommonInterfaces` \
+	-I$(srcdir)/../src \
+	-I$(srcdir)/../src/OSAgent \
+	-I$(srcdir)/../src/OSParsers \
+	-I$(srcdir)/../src/OSUtils \
+	-I$(srcdir)/../src/OSSolverInterfaces \
+	-I$(srcdir)/../src/OSModelInterfaces \
+	-I$(srcdir)/../src/OSCommonInterfaces \
 	$(OSLIB_CFLAGS)
 	
-if COIN_HAS_LINDO
-  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-endif
 	
 if COIN_HAS_CSDP
-  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
+  AM_CPPFLAGS += -DNOSHORTS
 endif
-
-if COIN_HAS_KNITRO
-  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-endif
-
-# This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src
 
 DISTCLEANFILES = ipopt.out bonmin.out
 

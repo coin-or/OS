@@ -5,7 +5,7 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define OS_VERSION      "trunk"
+#define OS_VERSION      "devel"
 
 /* Major Version number of project */
 #define OS_VERSION_MAJOR   9999
@@ -55,3 +55,10 @@
 /* Define to 64-bit unsigned integer type */
 #undef OS_XML_UINT64
 
+#ifndef OSLIB_EXPORT
+#if defined(_WIN32) && defined(DLL_EXPORT)
+#define OSLIB_EXPORT __declspec(dllimport)
+#else
+#define OSLIB_EXPORT
+#endif
+#endif

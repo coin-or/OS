@@ -74,23 +74,23 @@
 #include "OSDefaultSolver.h"
 #include "OSCoinSolver.h"
 
-#ifndef COIN_HAS_ASL
+#ifndef OS_HAS_ASL
 # error do not have ASL
 #endif
 
-#ifdef COIN_HAS_LINDO
+#ifdef OS_HAS_LINDO
 # include "OSLindoSolver.h"
 #endif
 
-#ifdef COIN_HAS_IPOPT
+#ifdef OS_HAS_IPOPT
 # include "OSIpoptSolver.h"
 #endif
 
-#ifdef COIN_HAS_BONMIN
+#ifdef OS_HAS_BONMIN
 # include "OSBonminSolver.h"
 #endif
 
-#ifdef COIN_HAS_COUENNE
+#ifdef OS_HAS_COUENNE
 # include "OSCouenneSolver.h"
 #endif
 

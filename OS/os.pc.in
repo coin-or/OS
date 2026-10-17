@@ -1,12 +1,15 @@
-prefix=@prefix@
+@COIN_RELOCATABLE_FALSE@prefix=@prefix@
+@COIN_RELOCATABLE_TRUE@prefix=${pcfiledir}/../..
 exec_prefix=@exec_prefix@
 libdir=@libdir@
-includedir=@includedir@/coin
+includedir=@includedir@/coin-or
 
 Name: OS
 Description: COIN-OR Optimization Services
-URL: https://projects.coin-or.org/OS
+URL: @PACKAGE_URL@
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lOS @OSLIB_PCLIBS@
 Cflags: -I${includedir}
-Requires: @OSLIB_PCREQUIRES@
+@COIN_STATIC_BUILD_FALSE@Libs: -L${libdir} -lOS
+@COIN_STATIC_BUILD_FALSE@Requires.private: @OSLIB_PCFILES@
+@COIN_STATIC_BUILD_TRUE@Libs: -L${libdir} -lOS @OSLIB_LFLAGS_NOPC@
+@COIN_STATIC_BUILD_TRUE@Requires: @OSLIB_PCFILES@

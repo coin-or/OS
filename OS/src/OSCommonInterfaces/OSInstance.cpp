@@ -400,7 +400,7 @@ OSInstance::~OSInstance()
     {
         try
         {
-#ifdef COIN_HAS_CPPAD
+#ifdef OS_HAS_CPPAD
             delete Fad;
             Fad = NULL;
 #else
@@ -6678,7 +6678,7 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
         std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
         unsigned int i;
         size_t n = vdX.size();
-#ifdef COIN_HAS_CPPAD
+#ifdef OS_HAS_CPPAD
         // declare a CppAD vector and fill it in
         CppAD::vector< CppAD::AD<double> > vdaX( n );
         for(i = 0; i < n; i++)
@@ -6735,7 +6735,7 @@ std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX)
         // adjust the order of the Taylor coefficient
         m_iHighestTaylorCoeffOrder = p;
         m_iHighestOrderEvaluated = p;
-#ifdef COIN_HAS_CPPAD
+#ifdef OS_HAS_CPPAD
         return (*Fad).Forward(p, vdX);
 #else
         throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
@@ -6753,7 +6753,7 @@ std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda)
 {
     try
     {
-#ifndef COIN_HAS_CPPAD
+#ifndef OS_HAS_CPPAD
         throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
 #endif
         if(p == 0) throw
@@ -6761,7 +6761,7 @@ std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda)
         if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw
             ErrorClass( "trying to calculate a p order reverse when p-1 Taylor coefficient not available");
         m_iHighestOrderEvaluated = p;
-#ifdef COIN_HAS_CPPAD
+#ifdef OS_HAS_CPPAD
         return (*Fad).Reverse(p, vdlambda);
 #endif
 
@@ -6790,7 +6790,7 @@ int  OSInstance::getADSparsityHessian()
         }
         // compute sparsity pattern for J(x) = F^{(1)} (x)
         //should only be here if we have CppAD
-#ifdef COIN_HAS_CPPAD
+#ifdef OS_HAS_CPPAD
         (*Fad).ForSparseJac(m_iNumberOfNonlinearVariables, r);
 #else
         throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
@@ -6805,7 +6805,7 @@ int  OSInstance::getADSparsityHessian()
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Computing Sparse Hessian"); 
 #endif
         //m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
-#ifdef COIN_HAS_CPPAD
+#ifdef OS_HAS_CPPAD
         m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
 #endif
 

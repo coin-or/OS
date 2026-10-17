@@ -2,11 +2,8 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id: Makefile.am 506 2006-06-01 20:11:24Z andreasw $
 
 # Author:  Andreas Waechter           IBM    2006-04-13
-
-AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
 #                             libOSParsers                         #
@@ -184,23 +181,18 @@ endif
 .PHONY: run_parsers osil osol osrl osss
 
 
-libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
-
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = \
-	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../OSUtils \
+	-I$(srcdir)/../OSSolverInterfaces \
+	-I$(srcdir)/../OSCommonInterfaces \
 	$(OSLIB_CFLAGS)
 
 #if USE_DTOA
 #AM_CPPFLAGS += -DUSE_DTOA=1
 #endif
-
-# This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 
 ########################################################################
 #                Headers that need to be installed                     #
@@ -208,7 +200,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'include/coin'
-includecoindir = $(includedir)/coin
+includecoindir = $(includedir)/coin-or
 includecoin_HEADERS = \
 	OSParseosil.tab.hpp \
 	OSParseosrl.tab.hpp \

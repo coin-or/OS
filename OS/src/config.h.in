@@ -1,76 +1,10 @@
 /* src/config.h.in.  Generated from configure.ac by autoheader.  */
 
-/* Define to be the name of C-function for NaN check */
-#undef COIN_C_ISNAN
+/* Define if building universal (internal helper macro) */
+#undef AC_APPLE_UNIVERSAL_BUILD
 
-/* Define to 1 if the ASL package is available */
-#undef COIN_HAS_ASL
-
-/* Define to 1 if the Bcp package is available */
-#undef COIN_HAS_BCP
-
-/* Define to 1 if the Bonmin package is available */
-#undef COIN_HAS_BONMIN
-
-/* Define to 1 if the Cbc package is available */
-#undef COIN_HAS_CBC
-
-/* Define to 1 if the Clp package is available */
-#undef COIN_HAS_CLP
-
-/* Define to 1 if the CoinUtils package is available */
-#undef COIN_HAS_COINUTILS
-
-/* Define to 1 if the Couenne package is available */
-#undef COIN_HAS_COUENNE
-
-/* Define to 1 if the cppad package is available */
-#undef COIN_HAS_CPPAD
-
-/* Define to 1 if the Cpx package is available */
-#undef COIN_HAS_CPX
-
-/* Define to 1 if the Csdp package is available */
-#undef COIN_HAS_CSDP
-
-/* Define to 1 if the DyLP package is available */
-#undef COIN_HAS_DYLP
-
-/* Define to 1 if the Glpk package is available */
-#undef COIN_HAS_GLPK
-
-/* Define to 1 if the Grb package is available */
-#undef COIN_HAS_GRB
-
-/* Define to 1 if the Ipopt package is available */
-#undef COIN_HAS_IPOPT
-
-/* Define to 1 if the Knitro package is available */
-#undef COIN_HAS_KNITRO
-
-/* Define to 1 if the Lindo package is available */
-#undef COIN_HAS_LINDO
-
-/* Define to 1 if the Msk package is available */
-#undef COIN_HAS_MSK
-
-/* Define to 1 if the SoPlex package is available */
-#undef COIN_HAS_SOPLEX
-
-/* Define to 1 if the SYMPHONY package is available */
-#undef COIN_HAS_SYMPHONY
-
-/* Define to 1 if the Vol package is available */
-#undef COIN_HAS_VOL
-
-/* Define to 1 if the Xpr package is available */
-#undef COIN_HAS_XPR
-
-/* Define to the debug sanity check level (0 is no test) */
-#undef COIN_OS_CHECKLEVEL
-
-/* Define to the debug verbosity level (0 is no output) */
-#undef COIN_OS_VERBOSITY
+/* Define to 1 if your C++ compiler doesn't accept -c and -o together. */
+#undef CXX_NO_MINUS_C_MINUS_O
 
 /* Define to 1 if you have the <assert.h> header file. */
 #undef HAVE_ASSERT_H
@@ -123,9 +57,6 @@
 /* Define to 1 if you have the <math.h> header file. */
 #undef HAVE_MATH_H
 
-/* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
-
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
 
@@ -162,44 +93,83 @@
 /* Define to 1 if you have the <winsock.h> header file. */
 #undef HAVE_WINSOCK_H
 
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
+#undef LT_OBJDIR
+
 /* use if OS is MACOSX */
 #undef MACOSX_
 
 /* use if OS is Cygwin */
 #undef NOMINMAX
 
-/* Define the path to the OS root */
-#undef OSROOT_DIR
+/* Library Visibility Attribute */
+#undef OSLIB_EXPORT
 
-/* Define to 1 if OS uses ASL */
+/* Define to 1 if ASL is available. */
 #undef OS_HAS_ASL
 
-/* Define to 1 if OS uses Bonmin */
+/* Define to 1 if Bonmin is available. */
 #undef OS_HAS_BONMIN
 
-/* Define to 1 if OS uses Couenne */
+/* Define to 1 if Cbc is available. */
+#undef OS_HAS_CBC
+
+/* Define to 1 if Cgl is available. */
+#undef OS_HAS_CGL
+
+/* Define to 1 if Clp is available. */
+#undef OS_HAS_CLP
+
+/* Define to 1 if CoinUtils is available. */
+#undef OS_HAS_COINUTILS
+
+/* Define to 1 if Couenne is available. */
 #undef OS_HAS_COUENNE
 
-/* Define to 1 if OS uses CppAD */
+/* Define to 1 if CppAD is available. */
 #undef OS_HAS_CPPAD
 
-/* Define to 1 if OS uses DyLP */
+/* Define to 1 if Cpx is available. */
+#undef OS_HAS_CPX
+
+/* Define to 1 if the Csdp package is available */
+#undef OS_HAS_CSDP
+
+/* Define to 1 if DyLP is available. */
 #undef OS_HAS_DYLP
 
-/* Define to 1 if OS uses Glpk */
+/* Define to 1 if Glpk is available. */
 #undef OS_HAS_GLPK
 
-/* Define to 1 if OS uses Ipopt */
+/* Define to 1 if Grb is available. */
+#undef OS_HAS_GRB
+
+/* Define to 1 if Ipopt is available. */
 #undef OS_HAS_IPOPT
 
-/* Define to 1 if OS uses SYMPHONY */
+/* Define to 1 if the Knitro package is available */
+#undef OS_HAS_KNITRO
+
+/* Define to 1 if the Lindo package is available */
+#undef OS_HAS_LINDO
+
+/* Define to 1 if Msk is available. */
+#undef OS_HAS_MSK
+
+/* Define to 1 if Osi is available. */
+#undef OS_HAS_OSI
+
+/* Define to 1 if SoPlex is available. */
+#undef OS_HAS_SOPLEX
+
+/* Define to 1 if SYMPHONY is available. */
 #undef OS_HAS_SYMPHONY
 
-/* Define to 1 if OS uses Vol */
+/* Define to 1 if Vol is available. */
 #undef OS_HAS_VOL
 
-/* SVN revision number of project */
-#undef OS_SVN_REV
+/* Define to 1 if Xpr is available. */
+#undef OS_HAS_XPR
 
 /* use 64 bit integers */
 #undef OS_USE_XML_LONG_INTEGER
@@ -207,13 +177,13 @@
 /* Version number of project */
 #undef OS_VERSION
 
-/* Major Version number of project */
+/* Major version number of project. */
 #undef OS_VERSION_MAJOR
 
-/* Minor Version number of project */
+/* Minor version number of project. */
 #undef OS_VERSION_MINOR
 
-/* Release Version number of project */
+/* Release version number of project. */
 #undef OS_VERSION_RELEASE
 
 /* Define to 64-bit integer type */
@@ -221,9 +191,6 @@
 
 /* Define to 64-bit unsigned integer type */
 #undef OS_XML_UINT64
-
-/* Name of package */
-#undef PACKAGE
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
@@ -237,22 +204,27 @@
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* The size of a `double', as computed by sizeof. */
+/* The size of 'double', as computed by sizeof. */
 #undef SIZEOF_DOUBLE
 
-/* The size of a `int', as computed by sizeof. */
+/* The size of 'int', as computed by sizeof. */
 #undef SIZEOF_INT
 
-/* The size of a `long', as computed by sizeof. */
+/* The size of 'long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
-/* The size of a `long long', as computed by sizeof. */
+/* The size of 'long long', as computed by sizeof. */
 #undef SIZEOF_LONG_LONG
 
-/* Define to 1 if you have the ANSI C header files. */
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
 #undef STDC_HEADERS
 
 /* use to get lossless IO */
@@ -261,16 +233,21 @@
 /* use if OS is Cygwin and compiler is gnu */
 #undef USE_OLD_UNISTD
 
-/* Version number of package */
-#undef VERSION
-
 /* use if OS is Windows */
 #undef WIN_
 
-/* Define to 1 if your processor stores words with the most significant byte
-   first (like Motorola and SPARC, unlike Intel and VAX). */
-#undef WORDS_BIGENDIAN
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
+#endif
 
-/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
-   `char[]'. */
+/* Define to 1 if 'lex' declares 'yytext' as a 'char *' by default, not a
+   'char[]'. */
 #undef YYTEXT_POINTER

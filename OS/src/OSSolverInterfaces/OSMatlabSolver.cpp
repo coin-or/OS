@@ -20,11 +20,11 @@
 #include "OSConfig.h"
 #include "OSOutput.h"
 
-#ifdef COIN_HAS_LINDO
+#ifdef OS_HAS_LINDO
 #include "OSLindoSolver.h"
 #endif
 
-#ifdef COIN_HAS_IPOPT
+#ifdef OS_HAS_IPOPT
 #include "OSIpoptSolver.h"
 #endif
 
@@ -87,7 +87,7 @@ std::string OSMatlab::solve()
             {
                 // we are requesting the Lindo solver
                 bool bLindoIsPresent = false;
-#ifdef COIN_HAS_LINDO
+#ifdef OS_HAS_LINDO
                 bLindoIsPresent = true;
                 solverType = new LindoSolver();
 #endif
@@ -132,7 +132,7 @@ std::string OSMatlab::solve()
                                     bool bIpoptIsPresent = false;
                                     if(sAgentAddress == "" )
                                     {
-#ifdef COIN_HAS_IPOPT
+#ifdef OS_HAS_IPOPT
                                         bIpoptIsPresent = true;
                                         IpoptSolver *ipoptSolver  = new IpoptSolver();
                                         ipoptSolver->osol = osol;

@@ -56,26 +56,10 @@
 #include<iostream>
 
 
-#ifdef HAVE_CTIME
-# include <ctime>
-#else
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# else
-#  error "don't have header file for time"
-# endif
-#endif
+#include <ctime>
 
 
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
+#include <cmath>
 
 
 
