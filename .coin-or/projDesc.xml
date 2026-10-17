@@ -93,8 +93,8 @@
 		<!--                                                           -->
 		<!--Fill in your text below (outside the comment block).       -->
 
-		<projectLicense>Eclipse Public License 1.0 </projectLicense>
-		<projectLicenseURL> http://www.opensource.org/licenses/eclipse-1.0</projectLicenseURL>
+		<projectLicense>Eclipse Public License 2.0 </projectLicense>
+		<projectLicenseURL> http://www.opensource.org/licenses/EPL-2.0</projectLicenseURL>
 
 		<!-- Below, you can list other COIN projects your project      -->
 		<!-- depends on. These are listed one by one, as in the        -->
