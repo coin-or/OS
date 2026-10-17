@@ -12,6 +12,14 @@
  * 
  */
 
+%top{
+/* OSCommandLine.h declares the scanner functions that OSSolverService and
+ * OSAmplClient call, with OSLIB_EXPORT. It has to come before flex's own
+ * declarations of these functions, as MSVC doesn't accept adding the
+ * __declspec(dllexport) in a later declaration (error C2375). */
+#include "OSCommandLine.h"
+}
+
 %{
 
 
