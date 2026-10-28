@@ -6682,6 +6682,52 @@ if (SOLVER_TESTS){
         fileUtil = NULL;
     }
 
+    // an integer program whose continuous relaxation is unbounded
+    try{
+        cout << endl << "TEST " << ++nOfTest << ": Cbc solver on IP_unbounded.osil" << endl << endl;
+
+        fileUtil = new FileUtil();
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "IP_unbounded.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        solver->sSolverName ="cbc";
+        solver->osil = osil;
+        solver->osol = "";
+        solver->osinstance = NULL;
+        solver->osoption   = NULL;
+        cout << "call the COIN - Cbc Solver for IP_unbounded" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        // the problem is unbounded; CBC stops at the unbounded relaxation, so
+        // the result is "unsure" unless the point CBC stops at is feasible
+        ok = (solver->osrl.find("<status type=\"unbounded\"") != std::string::npos) ||
+             (solver->osrl.find("<status type=\"unsure\"") != std::string::npos);
+        if (ok == false)
+        {
+            cout << "Coin cbc solution for IP_unbounded in error:" << endl;
+            cout << solver->osrl << endl;
+            throw ErrorClass(" Cbc does not report IP_unbounded.osil as unbounded or unsure");
+        }
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem IP_unbounded.osil with Cbc" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing Cbc Solver:"
+                              << endl << eclass.errormsg<< endl;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+
 if( THOROUGH == true){
 
     // now solve the same problem with a different instance representation --- using mult and incr
