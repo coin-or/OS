@@ -12,9 +12,8 @@
 	<job>
 	</job>	
 	<optimization>
-		<solverOptions numberOfSolverOptions="5">
+		<solverOptions numberOfSolverOptions="4">
 
-			<solverOption name="reslim" solver="cbc" type="numeric" value="1"/>
 			<solverOption name="maxN" solver="cbc" value="1" />
 			<solverOption name="sec" solver="cbc" value="3600" />
 			<solverOption name="cuts" solver="cbc" value="off" />
