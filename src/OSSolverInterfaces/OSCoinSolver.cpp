@@ -76,6 +76,9 @@
 #include "OSMathUtil.h"
 
 #include <map>
+#include <vector>
+#include <cmath>
+#include <algorithm>
 
 #include <iostream>
 #ifdef HAVE_CTIME
@@ -92,6 +95,39 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
+
+/**
+ * Check whether x satisfies the bounds, the integrality requirements and the
+ * constraints of the problem in solver. CbcModel::feasibleSolution() only
+ * checks integrality.
+ */
+static bool isFeasiblePoint(const OsiSolverInterface *solver, const double *x,
+                            double integerTolerance)
+{
+    double primalTolerance;
+    solver->getDblParam(OsiPrimalTolerance, primalTolerance);
+    int numCols = solver->getNumCols();
+    int numRows = solver->getNumRows();
+    const double *colLower = solver->getColLower();
+    const double *colUpper = solver->getColUpper();
+    for (int i = 0; i < numCols; i++)
+    {
+        if (x[i] < colLower[i] - primalTolerance*std::max(1.0, fabs(colLower[i]))) return false;
+        if (x[i] > colUpper[i] + primalTolerance*std::max(1.0, fabs(colUpper[i]))) return false;
+        if (solver->isInteger(i) && fabs(x[i] - floor(x[i] + 0.5)) > integerTolerance) return false;
+    }
+    if (numRows == 0) return true;
+    std::vector<double> rowActivity(numRows);
+    solver->getMatrixByRow()->times(x, &rowActivity[0]);
+    const double *rowLower = solver->getRowLower();
+    const double *rowUpper = solver->getRowUpper();
+    for (int i = 0; i < numRows; i++)
+    {
+        if (rowActivity[i] < rowLower[i] - primalTolerance*std::max(1.0, fabs(rowLower[i]))) return false;
+        if (rowActivity[i] > rowUpper[i] + primalTolerance*std::max(1.0, fabs(rowUpper[i]))) return false;
+    }
+    return true;
+}//isFeasiblePoint
 
 
 CoinSolver::CoinSolver() :
@@ -1870,12 +1906,12 @@ void CoinSolver::writeResult(CbcModel *model)
 
     osresult->setServiceName( OSgetVersionInfo() );
 
-    //first determine if we are feasible
-    int numberIntegerInfeasibilities = 0;
-    int numberObjectInfeasibilities = 0;
+    //first determine if we are feasible: when CBC has a solution, the solver
+    //holds it; otherwise check the point the solver stopped at
     bool isFeasible = false;
-    isFeasible = model->feasibleSolution( numberIntegerInfeasibilities,
-                                          numberObjectInfeasibilities);
+    isFeasible = (model->bestSolution() != NULL) ||
+                 isFeasiblePoint(model->solver(), model->getColSolution(),
+                                 model->getIntegerTolerance());
     std::string statusMsg;
     if(isFeasible == true)
     {
@@ -1897,31 +1933,34 @@ void CoinSolver::writeResult(CbcModel *model)
             osresult->setSolutionStatus(solIdx, "infeasible", "the integer program is infeasible");
         else
         {
-            if(model->isProvenDualInfeasible() == true)
-                osresult->setSolutionStatus(solIdx, "infeasible", "the continuous relaxation is dual infeasible");
+            //CBC stops when the continuous relaxation is unbounded (dual
+            //infeasible). The integer program is then unbounded if it has a
+            //feasible solution, but it can also be infeasible.
+            if(model->isContinuousUnbounded() == true)
+            {
+                if(isFeasible == true)
+                    osresult->setSolutionStatus(solIdx, "unbounded", "the continuous relaxation is unbounded and the integer program has a feasible solution");
+                else
+                    osresult->setSolutionStatus(solIdx, "unsure", "the continuous relaxation is unbounded, so the integer program is unbounded or infeasible");
+            }
             else
             {
-                if(model->isContinuousUnbounded() == true)
-                    osresult->setSolutionStatus(solIdx, statusMsg, "the continuous relaxation is unbounded");
+                if(model->isNodeLimitReached() == true)
+                    osresult->setSolutionStatus(solIdx, statusMsg, "node limit reached");
                 else
                 {
-                    if(model->isNodeLimitReached() == true)
-                        osresult->setSolutionStatus(solIdx, statusMsg, "node limit reached");
+                    if(model->isSecondsLimitReached() == true)
+                        osresult->setSolutionStatus(solIdx, statusMsg, "time limit reached");
                     else
                     {
-                        if(model->isSecondsLimitReached() == true)
-                            osresult->setSolutionStatus(solIdx, statusMsg, "time limit reached");
+                        if(model->isSolutionLimitReached() == true)
+                            osresult->setSolutionStatus(solIdx, statusMsg, "solution limit reached");
                         else
                         {
-                            if(model->isSolutionLimitReached() == true)
-                                osresult->setSolutionStatus(solIdx, statusMsg, "solution limit reached");
+                            if(model->isAbandoned() == true)
+                                osresult->setSolutionStatus(solIdx, statusMsg, "there are numerical difficulties");
                             else
-                            {
-                                if(model->isAbandoned() == true)
-                                    osresult->setSolutionStatus(solIdx, statusMsg, "there are numerical difficulties");
-                                else
-                                    osresult->setSolutionStatus(solIdx, statusMsg,"unknown");
-                            }
+                                osresult->setSolutionStatus(solIdx, statusMsg,"unknown");
                         }
                     }
                 }
@@ -1931,6 +1970,15 @@ void CoinSolver::writeResult(CbcModel *model)
 
     /* Retrieve the solution -- of course it may not be optimal */
     if(numOfIntVars > 0) *(z + 0)  =  model->getObjValue();
+    //without a solution from CBC, use the objective value of the feasible point
+    if(numOfIntVars > 0 && isFeasible == true && model->bestSolution() == NULL)
+    {
+        double objOffset;
+        model->solver()->getDblParam(OsiObjOffset, objOffset);
+        *(z + 0) = -objOffset;
+        for(i=0; i < model->getNumCols(); i++)
+            *(z + 0) += model->solver()->getObjCoefficients()[i]*model->getColSolution()[i];
+    }
     osresult->setObjectiveValuesDense(solIdx, z);
     for(i=0; i < model->getNumCols(); i++)
     {
